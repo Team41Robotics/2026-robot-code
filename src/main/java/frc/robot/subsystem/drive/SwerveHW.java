@@ -1,4 +1,4 @@
-package frc.robot.drive;
+package frc.robot.subsystem.drive;
 
 import static java.lang.Math.*;
 
@@ -8,10 +8,8 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.MathUtil;
 import frc.robot.Robot;
-
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
 
@@ -39,7 +37,7 @@ public class SwerveHW {
 		logRoot = "SwerveHW/" + config.name;
 		angleOffset = config.angleOffset;
 
-		if(!Robot.isReal()) return;
+		if (!Robot.isReal()) return;
 
 		driveTalonFX = new TalonFX(config.drive_motor_id, "Ducky");
 		TalonFXConfiguration driveConfig = new TalonFXConfiguration();
@@ -83,7 +81,7 @@ public class SwerveHW {
 	public double turnAbsPos;
 
 	public void sense() {
-		if(!Robot.isReal()) return;
+		if (!Robot.isReal()) return;
 
 		drivePos = driveTalonFX.getPosition().getValueAsDouble() * 2 * PI * DRIVE_RATIO * SWERVE_WHEEL_RAD;
 		driveVel = driveTalonFX.getVelocity().getValueAsDouble() * 2 * PI * DRIVE_RATIO * SWERVE_WHEEL_RAD;
@@ -106,7 +104,7 @@ public class SwerveHW {
 		Logger.recordOutput(logRoot + "/actuatedTurnPos", turnPosition);
 		Logger.recordOutput(logRoot + "/actuatedTurnFF", turnFF);
 
-		if(!Robot.isReal()) return;
+		if (!Robot.isReal()) return;
 
 		driveTalonFX.setControl(new VelocityVoltage(driveVelocity / (DRIVE_RATIO * 2 * PI * SWERVE_WHEEL_RAD))
 				.withFeedForward(driveFF)

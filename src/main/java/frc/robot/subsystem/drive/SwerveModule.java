@@ -1,4 +1,4 @@
-package frc.robot.drive;
+package frc.robot.subsystem.drive;
 
 import static java.lang.Math.*;
 
@@ -26,10 +26,12 @@ public class SwerveModule {
 	public static double VELOCITY_DEADBAND = 0.01;
 
 	public SwerveHW hw;
+	public String name;
 
 	public void init(SwerveModuleConfiguration config) {
 		hw.init(config);
 		hw.sense();
+		name = config.name;
 		setpointState = new TrapezoidProfile.State(hw.turnPos, hw.turnVel);
 	}
 

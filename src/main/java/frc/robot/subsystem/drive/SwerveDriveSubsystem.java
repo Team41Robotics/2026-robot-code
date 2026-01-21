@@ -1,4 +1,4 @@
-package frc.robot.drive;
+package frc.robot.subsystem.drive;
 
 import static java.lang.Math.*;
 
@@ -14,20 +14,20 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	public static double ROBOT_LENGTH = 0;
 	public static double ROBOT_WIDTH = 0;
 
-	public static SwerveModuleConfiguration[] configs = new SwerveModuleConfiguration[] {
+	public SwerveModuleConfiguration[] configs = new SwerveModuleConfiguration[] {
 		new SwerveModuleConfiguration("NW", 9, 10, 15, false, 0),
 		new SwerveModuleConfiguration("NE", 7, 8, 18, false, 0),
 		new SwerveModuleConfiguration("SW", 11, 12, 17, false, 0),
 		new SwerveModuleConfiguration("SE", 5, 6, 16, false, 0)
 	};
 
-	public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+	public SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
 			new Translation2d(ROBOT_LENGTH / 2, ROBOT_WIDTH / 2),
 			new Translation2d(ROBOT_LENGTH / 2, -ROBOT_WIDTH / 2),
 			new Translation2d(-ROBOT_LENGTH / 2, ROBOT_WIDTH / 2),
 			new Translation2d(-ROBOT_LENGTH / 2, -ROBOT_WIDTH / 2));
 
-	public static SwerveModule[] modules;
+	public SwerveModule[] modules;
 
 	public void init() {
 		modules = new SwerveModule[modules.length];

@@ -30,7 +30,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	public SwerveModule[] modules;
 
 	public void init() {
-		modules = new SwerveModule[modules.length];
+		modules = new SwerveModule[configs.length];
 		for (int i = 0; i < modules.length; i++) {
 			modules[i] = new SwerveModule();
 			modules[i].init(configs[i]);

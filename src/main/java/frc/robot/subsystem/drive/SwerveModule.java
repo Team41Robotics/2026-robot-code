@@ -25,7 +25,7 @@ public class SwerveModule {
 
 	public static double VELOCITY_DEADBAND = 0.01;
 
-	public SwerveHW hw;
+	public SwerveHW hw = new SwerveHW();
 	public String name;
 
 	public void init(SwerveModuleConfiguration config) {
@@ -35,7 +35,7 @@ public class SwerveModule {
 		setpointState = new TrapezoidProfile.State(hw.turnPos, hw.turnVel);
 	}
 
-	public SwerveModuleState currentState;
+	public SwerveModuleState currentState = new SwerveModuleState();
 	public double currentAngle;
 	public double currentVel;
 	public double currentDrivePos;
@@ -49,8 +49,8 @@ public class SwerveModule {
 		currentDrivePos = hw.drivePos;
 	}
 
-	public SwerveModuleState targetState;
-	public TrapezoidProfile.State setpointState;
+	public SwerveModuleState targetState = new SwerveModuleState();
+	public TrapezoidProfile.State setpointState = new TrapezoidProfile.State();
 
 	public void drive(SwerveModuleState state) {
 		targetState = state;

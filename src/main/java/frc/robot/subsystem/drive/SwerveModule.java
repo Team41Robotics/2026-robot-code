@@ -3,6 +3,7 @@ package frc.robot.subsystem.drive;
 import static java.lang.Math.*;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -17,6 +18,7 @@ public class SwerveModule {
 	public static double TURN_kS = 0;
 	public static double TURN_kV = 0;
 	public static double TURN_kA = 0;
+	public static SimpleMotorFeedforward TURN_FF = new SimpleMotorFeedforward(TURN_kS, TURN_kV, TURN_kA);
 
 	public static double MAX_VEL = 0;
 
@@ -67,9 +69,7 @@ public class SwerveModule {
 
 		TrapezoidProfile.State newSetpointState =
 				profile.calculate(Robot.kDefaultPeriod, setpointState, new TrapezoidProfile.State(targetAngle, 0));
-		double turnFF = TURN_kS * signum(newSetpointState.velocity)
-				+ TURN_kV * newSetpointState.velocity
-				+ TURN_kA * (newSetpointState.velocity - setpointState.velocity) / Robot.kDefaultPeriod;
+		double turnFF = TURN_FF.calculateWithVelocities(setpointState.velocity, newSetpointState.velocity);
 		setpointState = newSetpointState;
 
 		hw.actuate(targetVel, driveFF, targetAngle, turnFF);

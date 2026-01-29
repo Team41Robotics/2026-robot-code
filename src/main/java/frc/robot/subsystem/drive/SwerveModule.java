@@ -1,6 +1,9 @@
 package frc.robot.subsystem.drive;
 
-import static java.lang.Math.*;
+import static java.lang.Math.cos;
+import static java.lang.Math.signum;
+
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -8,16 +11,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Robot;
-import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule {
 
 	public static double DRIVE_kS = 0;
 	public static double DRIVE_kV = 0;
 
-	public static double TURN_kS = 0;
-	public static double TURN_kV = 0;
-	public static double TURN_kA = 0;
+	public static double TURN_kS = 0.19431;
+	public static double TURN_kV = 0.36606;
+	public static double TURN_kA = 0.044138;
 	public static SimpleMotorFeedforward TURN_FF = new SimpleMotorFeedforward(TURN_kS, TURN_kV, TURN_kA);
 
 	public static double MAX_VEL = 0;

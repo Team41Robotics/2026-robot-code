@@ -1,6 +1,9 @@
 package frc.robot.subsystem.drive;
 
-import static java.lang.Math.*;
+import static java.lang.Math.PI;
+
+import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -8,10 +11,9 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.MathUtil;
 import frc.robot.Robot;
-import org.littletonrobotics.junction.AutoLog;
-import org.littletonrobotics.junction.Logger;
 
 @AutoLog
 public class SwerveHW {
@@ -22,8 +24,8 @@ public class SwerveHW {
 
 	public static double DRIVE_kP = 0;
 
-	public static double TURN_kP = 0;
-	public static double TURN_kD = 0;
+	public static double TURN_kP = 4.0951;
+	public static double TURN_kD = 0.68251;
 
 	public TalonFX driveTalonFX;
 	public TalonFX turnTalonFX;

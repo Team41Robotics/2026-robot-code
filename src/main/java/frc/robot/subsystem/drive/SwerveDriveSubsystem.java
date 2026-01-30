@@ -1,7 +1,5 @@
 package frc.robot.subsystem.drive;
 
-import static java.lang.Math.*;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -11,8 +9,8 @@ import frc.robot.Robot;
 
 public class SwerveDriveSubsystem extends SubsystemBase {
 
-	public static double ROBOT_LENGTH = 0;
-	public static double ROBOT_WIDTH = 0;
+	public static double ROBOT_LENGTH = 28 * 2.54;
+	public static double ROBOT_WIDTH = 27 * 2.54;
 
 	public static double MAX_VEL = SwerveModule.MAX_VEL;
 	public static double MAX_OMEGA = MAX_VEL / hypot(ROBOT_LENGTH / 2, ROBOT_WIDTH / 2);
@@ -33,7 +31,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	public SwerveModule[] modules;
 
 	public void init() {
-		modules = new SwerveModule[modules.length];
+		modules = new SwerveModule[configs.length];
 		for (int i = 0; i < modules.length; i++) {
 			modules[i] = new SwerveModule();
 			modules[i].init(configs[i]);

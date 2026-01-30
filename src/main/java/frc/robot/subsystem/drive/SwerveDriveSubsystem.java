@@ -2,10 +2,18 @@ package frc.robot.subsystem.drive;
 
 import static java.lang.Math.*;
 
+import static frc.robot.RobotContainer.imu;
+
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 
@@ -32,14 +40,32 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
 	public SwerveModule[] modules;
 
-	public void init() {
+	public SwerveDrivePoseEstimator pose_est;
+
+	public void init(Pose2d init_pose) {
 		modules = new SwerveModule[configs.length];
 		for (int i = 0; i < modules.length; i++) {
 			modules[i] = new SwerveModule();
 			modules[i].init(configs[i]);
 		}
+		periodic();
+		pose_est = new SwerveDrivePoseEstimator(
+			kinematics, 
+			new Rotation2d(imu.yaw()), 
+			getPositions(), 
+			init_pose,
+			VecBuilder.fill(0.1, 0.1, 0.1),
+			VecBuilder.fill(0.75, 0.75, 0.9) 
+		);
+	}	
+	public SwerveModulePosition[] getPositions() {
+		SwerveModulePosition[] pos = new SwerveModulePosition[4];
+		for (int i = 0; i < 4; i++) {
+			pos[i] = new SwerveModulePosition(modules[i].currentDrivePos, new Rotation2d(modules[i].currentAngle));
+		}
+		return pos;
 	}
-
+	
 	public ChassisSpeeds targetSpeeds = new ChassisSpeeds(0, 0, 0);
 
 	public void drive(ChassisSpeeds speeds) {
@@ -53,11 +79,13 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 			modules[i].drive(states[i]);
 		}
 	}
+	
 
 	@Override
 	public void periodic() {
 		for (int i = 0; i < modules.length; i++) {
 			modules[i].periodic();
 		}
+		pose_est.updateWithTime(Timer.getFPGATimestamp(), new Rotation2d(imu.yaw()), getPositions());
 	}
 }

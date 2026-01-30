@@ -2,7 +2,6 @@ package frc.robot.subsystem.drive;
 
 import static java.lang.Math.*;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -63,7 +62,10 @@ public class SwerveModule {
 
 		double targetAngle = targetState.angle.getRadians();
 		double targetVel = targetState.speedMetersPerSecond * cos(currentAngle - targetAngle);
-		targetVel = MathUtil.applyDeadband(targetVel, VELOCITY_DEADBAND);
+		if (abs(targetVel) < VELOCITY_DEADBAND) {
+			targetVel = 0;
+			targetAngle = currentAngle;
+		}
 
 		double driveFF = DRIVE_kS * signum(targetVel) + DRIVE_kV * targetVel;
 

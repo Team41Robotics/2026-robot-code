@@ -1,8 +1,6 @@
 package frc.robot.commands.drive;
 
-import static frc.robot.RobotContainer.drive;
-import static frc.robot.RobotContainer.left_js;
-import static frc.robot.RobotContainer.right_js;
+import static frc.robot.RobotContainer.*;
 import static java.lang.Math.*;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;

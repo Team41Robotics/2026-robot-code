@@ -28,15 +28,19 @@ public class TurnSysID {
 	public void log(SysIdRoutineLog log) {
 		for (int i = 0; i < drive.modules.length; i++) {
 			SwerveModule module = drive.modules[i];
-			SwerveHW hw = module.hw;
+			SwerveInputsAutoLogged inputs = module.inputs;
 			log.motor(module.name)
-					.voltage(voltage.mut_replace(hw.turnVoltage, Volts))
-					.linearPosition(distance.mut_replace(hw.turnPos, Meters))
-					.linearVelocity(velocity.mut_replace(hw.turnVel, MetersPerSecond));
+					.voltage(voltage.mut_replace(inputs.turnVoltage, Volts))
+					.linearPosition(distance.mut_replace(inputs.turnPos, Meters))
+					.linearVelocity(velocity.mut_replace(inputs.turnVel, MetersPerSecond));
 		}
 	}
 
 	public void init() {
+		for (int i = 0; i < drive.modules.length; i++) {
+			drive.modules[i].hw.sysidTurn = true;
+		}
+
 		SysIdRoutine.Config config = new SysIdRoutine.Config(Volts.of(0.5).per(Second), Volts.of(5), Seconds.of(15));
 		SysIdRoutine.Mechanism mechanism = new SysIdRoutine.Mechanism(this::actuate, this::log, drive);
 		routine = new SysIdRoutine(config, mechanism);

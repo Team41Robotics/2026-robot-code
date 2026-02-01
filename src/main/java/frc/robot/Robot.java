@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.test.drive.TurnPIDTestCommand;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -24,7 +25,7 @@ public class Robot extends LoggedRobot {
 	public void robotInit() {
 		if (isReal()) {
 			Logger.addDataReceiver(new NT4Publisher());
-			Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
+			// Logger.addDataReceiver(new WPILOGWriter("/V/logs"));
 		} else {
 			setUseTiming(false);
 			String logPath = LogFileUtil.findReplayLog();
@@ -82,6 +83,7 @@ public class Robot extends LoggedRobot {
 	@Override
 	public void testInit() {
 		CommandScheduler.getInstance().cancelAll();
+		CommandScheduler.getInstance().schedule(new TurnPIDTestCommand());
 	}
 
 	@Override

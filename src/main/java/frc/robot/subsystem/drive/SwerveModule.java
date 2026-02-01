@@ -1,5 +1,6 @@
 package frc.robot.subsystem.drive;
 
+import static edu.wpi.first.math.MathUtil.angleModulus;
 import static java.lang.Math.*;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -21,19 +22,19 @@ public class SwerveModule {
 
 	public static double MAX_VEL = 0;
 
-	public static TrapezoidProfile.Constraints TURN_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
+	public static TrapezoidProfile.Constraints TURN_CONSTRAINTS = new TrapezoidProfile.Constraints(21, 250);
 	public static TrapezoidProfile profile = new TrapezoidProfile(TURN_CONSTRAINTS);
 
-	public static double VELOCITY_DEADBAND = 0.01;
-
 	public SwerveHW hw = new SwerveHW();
+	public SwerveInputsAutoLogged inputs;
 	public String name;
 
 	public void init(SwerveModuleConfiguration config) {
+		inputs = new SwerveInputsAutoLogged();
 		hw.init(config);
-		hw.sense();
+		hw.sense(inputs);
 		name = config.name;
-		setpointState = new TrapezoidProfile.State(hw.turnPos, hw.turnVel);
+		setpointState = new TrapezoidProfile.State(inputs.turnPos, inputs.turnVel);
 	}
 
 	public SwerveModuleState currentState = new SwerveModuleState();
@@ -42,12 +43,13 @@ public class SwerveModule {
 	public double currentDrivePos;
 
 	public void sense() {
-		hw.sense();
+		hw.sense(inputs);
+		Logger.processInputs(hw.logRoot, inputs);
 
-		currentState = new SwerveModuleState(hw.driveVel, new Rotation2d(hw.turnPos));
-		currentAngle = hw.turnPos;
-		currentVel = hw.driveVel;
-		currentDrivePos = hw.drivePos;
+		currentState = new SwerveModuleState(inputs.driveVel, new Rotation2d(inputs.turnPos));
+		currentAngle = inputs.turnPos;
+		currentVel = inputs.driveVel;
+		currentDrivePos = inputs.drivePos;
 	}
 
 	public SwerveModuleState targetState = new SwerveModuleState();
@@ -55,17 +57,15 @@ public class SwerveModule {
 
 	public void drive(SwerveModuleState state) {
 		targetState = state;
+		state.optimize(new Rotation2d(inputs.turnAbsPos));
 	}
 
 	public void periodic() {
 		sense();
 
 		double targetAngle = targetState.angle.getRadians();
+		targetAngle = setpointState.position + angleModulus(targetAngle - setpointState.position);
 		double targetVel = targetState.speedMetersPerSecond * cos(currentAngle - targetAngle);
-		if (abs(targetVel) < VELOCITY_DEADBAND) {
-			targetVel = 0;
-			targetAngle = currentAngle;
-		}
 
 		double driveFF = DRIVE_kS * signum(targetVel) + DRIVE_kV * targetVel;
 
@@ -74,12 +74,12 @@ public class SwerveModule {
 		double turnFF = TURN_FF.calculateWithVelocities(setpointState.velocity, newSetpointState.velocity);
 		setpointState = newSetpointState;
 
-		hw.actuate(targetVel, driveFF, targetAngle, turnFF);
+		hw.actuate(inputs, targetVel, driveFF, setpointState.position, turnFF);
 
-		Logger.recordOutput(hw.logRoot + "/targetAngle", targetAngle);
+		Logger.recordOutput(hw.logRoot + "/targetAngle", angleModulus(targetAngle));
 		Logger.recordOutput(hw.logRoot + "/targetVel", targetVel);
 		Logger.recordOutput(hw.logRoot + "/targetVelCos", targetVel);
-		Logger.recordOutput(hw.logRoot + "/turnProfiledPos", setpointState.position);
+		Logger.recordOutput(hw.logRoot + "/turnProfiledPos", angleModulus(setpointState.position));
 		Logger.recordOutput(hw.logRoot + "/turnProfiledVel", setpointState.velocity);
 		Logger.recordOutput(hw.logRoot + "/driveFF", driveFF);
 		Logger.recordOutput(hw.logRoot + "/turnFF", turnFF);

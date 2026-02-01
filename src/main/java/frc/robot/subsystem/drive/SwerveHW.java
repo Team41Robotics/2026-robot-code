@@ -1,19 +1,18 @@
 package frc.robot.subsystem.drive;
 
+import static edu.wpi.first.math.MathUtil.*;
 import static java.lang.Math.*;
 
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.math.MathUtil;
 import frc.robot.Robot;
-import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
 
-@AutoLog
 public class SwerveHW {
 
 	public static double DRIVE_RATIO = 1 / 5.36; // gear ratios are motor * gear ratio = mechanism
@@ -22,8 +21,8 @@ public class SwerveHW {
 
 	public static double DRIVE_kP = 0;
 
-	public static double TURN_kP = 4.0951;
-	public static double TURN_kD = 0.68251;
+	public static double TURN_kP = 40;
+	public static double TURN_kD = 0.8;
 
 	public TalonFX driveTalonFX;
 	public TalonFX turnTalonFX;
@@ -32,6 +31,9 @@ public class SwerveHW {
 	public String logRoot;
 
 	public double angleOffset = 0;
+
+	public boolean sysidDrive = false;
+	public boolean sysidTurn = false;
 
 	public void init(SwerveModuleConfiguration config) {
 		logRoot = "SwerveHW/" + config.name;
@@ -56,6 +58,7 @@ public class SwerveHW {
 		TalonFXConfiguration turnConfig = new TalonFXConfiguration();
 
 		turnConfig.Slot0.kP = TURN_kP * TURN_RATIO * 2 * PI;
+		turnConfig.Slot0.kD = TURN_kD * TURN_RATIO * 2 * PI;
 
 		turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		turnConfig.CurrentLimits.withStatorCurrentLimit(80);
@@ -68,50 +71,46 @@ public class SwerveHW {
 		turnAbsoluteEncoder.clearStickyFaults();
 	}
 
-	public double drivePos;
-	public double driveVel;
-	public double driveVoltage;
-	public double driveCurrent;
-
-	public double turnPos;
-	public double turnVel;
-	public double turnVoltage;
-	public double turnCurrent;
-
-	public double turnAbsPos;
-
-	public void sense() {
+	public void sense(SwerveInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		drivePos = driveTalonFX.getPosition().getValueAsDouble() * 2 * PI * DRIVE_RATIO * SWERVE_WHEEL_RAD;
-		driveVel = driveTalonFX.getVelocity().getValueAsDouble() * 2 * PI * DRIVE_RATIO * SWERVE_WHEEL_RAD;
+inputs.drivePos = driveTalonFX.getPosition().getValueAsDouble() * 2 * PI * DRIVE_RATIO * SWERVE_WHEEL_RAD;
+inputs.driveVel = driveTalonFX.getVelocity().getValueAsDouble() * 2 * PI * DRIVE_RATIO * SWERVE_WHEEL_RAD;
 
-		driveVoltage = driveTalonFX.getMotorVoltage().getValueAsDouble();
-		driveCurrent = driveTalonFX.getStatorCurrent().getValueAsDouble();
+inputs.driveVoltage = driveTalonFX.getMotorVoltage().getValueAsDouble();
+inputs.driveCurrent = driveTalonFX.getStatorCurrent().getValueAsDouble();
 
-		turnPos = turnTalonFX.getPosition().getValueAsDouble() / TURN_RATIO;
-		turnVel = turnTalonFX.getVelocity().getValueAsDouble() * 2 * PI * TURN_RATIO;
+inputs.turnPos = turnTalonFX.getPosition().getValueAsDouble() * 2 * PI * TURN_RATIO;
+inputs.turnVel = turnTalonFX.getVelocity().getValueAsDouble() * 2 * PI * TURN_RATIO;
 
-		turnVoltage = turnTalonFX.getMotorVoltage().getValueAsDouble();
-		turnCurrent = turnTalonFX.getStatorCurrent().getValueAsDouble();
+inputs.turnVoltage = turnTalonFX.getMotorVoltage().getValueAsDouble();
+inputs.turnCurrent = turnTalonFX.getStatorCurrent().getValueAsDouble();
 
-		turnAbsPos = turnAbsoluteEncoder.getAbsolutePosition().getValueAsDouble() - angleOffset;
+inputs.turnAbsPos = -turnAbsoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * PI - angleOffset;
 	}
 
-	public void actuate(double driveVelocity, double driveFF, double turnPosition, double turnFF) {
+	public void actuate(SwerveInputs inputs, double driveVelocity, double driveFF, double turnPosition, double turnFF) {
 		Logger.recordOutput(logRoot + "/actuatedDriveVel", driveVelocity);
 		Logger.recordOutput(logRoot + "/actuatedDriveFF", driveFF);
-		Logger.recordOutput(logRoot + "/actuatedTurnPos", turnPosition);
+		Logger.recordOutput(logRoot + "/actuatedTurnPos", angleModulus(turnPosition));
 		Logger.recordOutput(logRoot + "/actuatedTurnFF", turnFF);
 
 		if (!Robot.isReal()) return;
 
+if (!sysidDrive && !sysidTurn) {
 		driveTalonFX.setControl(new VelocityVoltage(driveVelocity / (DRIVE_RATIO * 2 * PI * SWERVE_WHEEL_RAD))
 				.withFeedForward(driveFF)
 				.withSlot(0));
+}
 
-		double diff = MathUtil.angleModulus(turnPosition - turnAbsPos);
-		turnTalonFX.setControl(
-				new PositionVoltage(turnPos + diff).withFeedForward(turnFF).withSlot(0));
+		double diff = angleModulus(turnPosition - inputs.turnAbsPos);
+		// Logger.recordOutput(logRoot + "/actuatedUnwrappedTurnPos", inputs.turnPos + diff);
+		Logger.recordOutput(logRoot + "/error", diff);
+
+		if (!sysidTurn) {
+			turnTalonFX.setControl(new PositionVoltage((inputs.turnPos + diff) / (2 * PI * TURN_RATIO))
+.withFeedForward(turnFF)
+.withSlot(0));
+}
 	}
 }

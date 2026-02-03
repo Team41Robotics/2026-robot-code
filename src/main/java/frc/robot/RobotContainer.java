@@ -12,8 +12,9 @@ public class RobotContainer {
 	public static CommandJoystick left_js = new CommandJoystick(3);
 	public static CommandJoystick right_js = new CommandJoystick(4);
 	public static CommandJoystick ds = new CommandJoystick(2);
-	
+
 	public static IMU imu = new IMU();
+
 	public static void init() {
 		drive.init(new Pose2d());
 

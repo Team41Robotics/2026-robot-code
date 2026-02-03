@@ -1,8 +1,7 @@
 package frc.robot.subsystem.drive;
 
+import static frc.robot.RobotContainer.*;
 import static java.lang.Math.*;
-
-import static frc.robot.RobotContainer.imu;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -48,16 +47,15 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 			modules[i] = new SwerveModule();
 			modules[i].init(configs[i]);
 		}
-		periodic();
 		pose_est = new SwerveDrivePoseEstimator(
-			kinematics, 
-			new Rotation2d(imu.yaw()), 
-			getPositions(), 
-			init_pose,
-			VecBuilder.fill(0.1, 0.1, 0.1),
-			VecBuilder.fill(0.75, 0.75, 0.9) 
-		);
-	}	
+				kinematics,
+				new Rotation2d(imu.yaw()),
+				getPositions(),
+				init_pose,
+				VecBuilder.fill(0.1, 0.1, 0.1),
+				VecBuilder.fill(0.75, 0.75, 0.9));
+	}
+
 	public SwerveModulePosition[] getPositions() {
 		SwerveModulePosition[] pos = new SwerveModulePosition[4];
 		for (int i = 0; i < 4; i++) {
@@ -65,7 +63,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		}
 		return pos;
 	}
-	
+
 	public ChassisSpeeds targetSpeeds = new ChassisSpeeds(0, 0, 0);
 
 	public void drive(ChassisSpeeds speeds) {
@@ -79,13 +77,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 			modules[i].drive(states[i]);
 		}
 	}
-	
 
 	@Override
 	public void periodic() {
 		for (int i = 0; i < modules.length; i++) {
 			modules[i].periodic();
 		}
-		pose_est.updateWithTime(Timer.getFPGATimestamp(), new Rotation2d(imu.yaw()), getPositions());
+		pose_est.updateWithTime(Timer.getTimestamp(), new Rotation2d(imu.yaw()), getPositions());
 	}
 }

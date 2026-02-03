@@ -32,7 +32,6 @@ public class DriveSysID {
 	public void log(SysIdRoutineLog log) {
 		for (int i = 0; i < drive.modules.length; i++) {
 			SwerveModule module = drive.modules[i];
-			SwerveHW hw = module.hw;
 			SwerveInputsAutoLogged inputs = module.inputs;
 			log.motor(module.name)
 					.voltage(voltage.mut_replace(inputs.driveVoltage, Volts))

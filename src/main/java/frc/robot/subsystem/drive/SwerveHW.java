@@ -16,7 +16,7 @@ public class SwerveHW {
 
 	public static double DRIVE_RATIO = 1 / 5.36; // gear ratios are motor * gear ratio = mechanism
 	public static double TURN_RATIO = 1 / 18.75;
-	public static double SWERVE_WHEEL_RAD = 2 * 2.54;
+	public static double SWERVE_WHEEL_RAD = 2 * 2.54 / 100.;
 
 	public static double DRIVE_kP = 0;
 

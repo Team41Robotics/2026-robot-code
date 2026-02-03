@@ -18,8 +18,8 @@ import frc.robot.Robot;
 
 public class SwerveDriveSubsystem extends SubsystemBase {
 
-	public static double ROBOT_LENGTH = 28 * 2.54;
-	public static double ROBOT_WIDTH = 27 * 2.54;
+	public static double ROBOT_LENGTH = 28 * 2.54 / 100.;
+	public static double ROBOT_WIDTH = 27 * 2.54 / 100.;
 
 	public static double MAX_VEL = SwerveModule.MAX_VEL;
 	public static double MAX_OMEGA = MAX_VEL / hypot(ROBOT_LENGTH / 2, ROBOT_WIDTH / 2);

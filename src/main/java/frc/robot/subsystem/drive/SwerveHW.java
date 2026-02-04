@@ -35,12 +35,12 @@ public class SwerveHW {
 	public boolean sysidTurn = false;
 
 	public void init(SwerveModuleConfiguration config) {
-		logRoot = "SwerveHW/" + config.name;
+		logRoot = "Swerve/" + config.name;
 		angleOffset = config.angleOffset;
 
 		if (!Robot.isReal()) return;
 
-		driveTalonFX = new TalonFX(config.drive_motor_id, "Ducky");
+		driveTalonFX = new TalonFX(config.drive_motor_id, "Ducky"); // TODO
 		TalonFXConfiguration driveConfig = new TalonFXConfiguration();
 
 		driveConfig.Slot0.kP = DRIVE_kP * DRIVE_RATIO * 2 * PI * SWERVE_WHEEL_RAD;

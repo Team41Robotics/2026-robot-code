@@ -7,6 +7,8 @@ import frc.robot.subsystem.drive.DriveSysID;
 import frc.robot.subsystem.drive.SwerveDriveSubsystem;
 
 public class RobotContainer {
+	public static Robot robot;
+
 	public static SwerveDriveSubsystem drive = new SwerveDriveSubsystem();
 
 	public static CommandJoystick left_js = new CommandJoystick(3);

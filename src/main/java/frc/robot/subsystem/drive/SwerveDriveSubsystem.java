@@ -14,7 +14,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
 
 public class SwerveDriveSubsystem extends SubsystemBase {
 
@@ -65,9 +64,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	}
 
 	public ChassisSpeeds targetSpeeds = new ChassisSpeeds(0, 0, 0);
+	public Pose2d pose = new Pose2d();
 
 	public void drive(ChassisSpeeds speeds) {
-		speeds = ChassisSpeeds.discretize(speeds, Robot.kDefaultPeriod);
+		speeds = ChassisSpeeds.discretize(speeds, robot.kDefaultPeriod);
 		targetSpeeds = speeds;
 
 		SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
@@ -84,5 +84,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 			modules[i].periodic();
 		}
 		pose_est.updateWithTime(Timer.getTimestamp(), new Rotation2d(imu.yaw()), getPositions());
+		pose = pose_est.getEstimatedPosition();
 	}
 }

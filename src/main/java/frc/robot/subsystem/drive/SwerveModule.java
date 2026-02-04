@@ -1,14 +1,13 @@
 package frc.robot.subsystem.drive;
 
-import static edu.wpi.first.math.MathUtil.angleModulus;
-import static java.lang.Math.cos;
-import static java.lang.Math.signum;
+import static edu.wpi.first.math.MathUtil.*;
+import static frc.robot.RobotContainer.*;
+import static java.lang.Math.*;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule {
@@ -72,7 +71,7 @@ public class SwerveModule {
 		double targetVel = targetState.speedMetersPerSecond * cos(currentAngle - targetAngle);
 
 		TrapezoidProfile.State newSetpointState =
-				profile.calculate(Robot.kDefaultPeriod, setpointState, new TrapezoidProfile.State(targetAngle, 0));
+				profile.calculate(robot.kDefaultPeriod, setpointState, new TrapezoidProfile.State(targetAngle, 0));
 		double turnFF = TURN_FF.calculateWithVelocities(setpointState.velocity, newSetpointState.velocity);
 		setpointState = newSetpointState;
 

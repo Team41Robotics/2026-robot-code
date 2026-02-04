@@ -4,19 +4,20 @@ import static edu.wpi.first.math.MathUtil.angleModulus;
 import static java.lang.Math.cos;
 import static java.lang.Math.signum;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Robot;
+import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule {
 
 	public static double DRIVE_kS = 0.093052;
 	public static double DRIVE_kV = 1.8968;
 	public static double DRIVE_kA = 0.15096;
+	public static SimpleMotorFeedforward DRIVE_FF = new SimpleMotorFeedforward(DRIVE_kS, DRIVE_kV, DRIVE_kA);
+
 	public static double TURN_kS = 0.19431;
 	public static double TURN_kV = 0.36606;
 	public static double TURN_kA = 0.044138;
@@ -56,6 +57,7 @@ public class SwerveModule {
 
 	public SwerveModuleState targetState = new SwerveModuleState();
 	public TrapezoidProfile.State setpointState = new TrapezoidProfile.State();
+	public double setpointVel = 0;
 
 	public void drive(SwerveModuleState state) {
 		targetState = state;
@@ -69,12 +71,13 @@ public class SwerveModule {
 		targetAngle = setpointState.position + angleModulus(targetAngle - setpointState.position);
 		double targetVel = targetState.speedMetersPerSecond * cos(currentAngle - targetAngle);
 
-		double driveFF = DRIVE_kS * signum(targetVel) + DRIVE_kV * targetVel;
-
 		TrapezoidProfile.State newSetpointState =
 				profile.calculate(Robot.kDefaultPeriod, setpointState, new TrapezoidProfile.State(targetAngle, 0));
 		double turnFF = TURN_FF.calculateWithVelocities(setpointState.velocity, newSetpointState.velocity);
 		setpointState = newSetpointState;
+
+		double driveFF = DRIVE_FF.calculateWithVelocities(setpointVel, targetVel);
+		setpointVel = targetVel;
 
 		hw.actuate(inputs, targetVel, driveFF, setpointState.position, turnFF);
 

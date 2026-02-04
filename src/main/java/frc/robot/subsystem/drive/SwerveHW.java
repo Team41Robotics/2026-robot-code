@@ -18,7 +18,7 @@ public class SwerveHW {
 	public static double TURN_RATIO = 1 / 18.75;
 	public static double SWERVE_WHEEL_RAD = 2 * 2.54 / 100.;
 
-	public static double DRIVE_kP = 0;
+	public static double DRIVE_kP = 1; // TODO
 
 	public static double TURN_kP = 40;
 	public static double TURN_kD = 0.8;

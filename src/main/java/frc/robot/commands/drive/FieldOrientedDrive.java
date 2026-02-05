@@ -14,6 +14,6 @@ public class FieldOrientedDrive extends Command {
 	@Override
 	public void execute() {
 		ChassisSpeeds speeds = RobotOrientedDrive.run(left_js.getY(), left_js.getX(), -right_js.getX());
-		drive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, null)); // TODO
+		drive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, drive.pose.getRotation())); // TODO
 	}
 }

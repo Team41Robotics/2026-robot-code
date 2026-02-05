@@ -17,9 +17,9 @@ public class SwerveHW {
 	public static double TURN_RATIO = 1 / 18.75;
 	public static double SWERVE_WHEEL_RAD = 2 * 2.54 / 100.;
 
-	public static double DRIVE_kP = 1; // TODO
+	public static double DRIVE_kP = 4; // TODO
 
-	public static double TURN_kP = 40;
+	public static double TURN_kP = 10;
 	public static double TURN_kD = 0.8;
 
 	public TalonFX driveTalonFX;
@@ -44,6 +44,7 @@ public class SwerveHW {
 
 		driveConfig.Slot0.kP = DRIVE_kP * DRIVE_RATIO * 2 * PI * SWERVE_WHEEL_RAD;
 
+		driveConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
 		driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		driveConfig.CurrentLimits.withStatorCurrentLimit(120);
 
@@ -58,6 +59,7 @@ public class SwerveHW {
 		turnConfig.Slot0.kP = TURN_kP * TURN_RATIO * 2 * PI;
 		turnConfig.Slot0.kD = TURN_kD * TURN_RATIO * 2 * PI;
 
+		turnConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
 		turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		turnConfig.CurrentLimits.withStatorCurrentLimit(80);
 
@@ -75,9 +77,13 @@ public class SwerveHW {
 		inputs.drivePos = driveTalonFX.getPosition().getValueAsDouble() * 2 * PI * DRIVE_RATIO * SWERVE_WHEEL_RAD;
 		inputs.driveVel = driveTalonFX.getVelocity().getValueAsDouble() * 2 * PI * DRIVE_RATIO * SWERVE_WHEEL_RAD;
 
+		inputs.driveBusVoltage = driveTalonFX.getSupplyVoltage().getValueAsDouble();
+		inputs.driveBusCurrent = driveTalonFX.getSupplyCurrent().getValueAsDouble();
 		inputs.driveVoltage = driveTalonFX.getMotorVoltage().getValueAsDouble();
 		inputs.driveCurrent = driveTalonFX.getStatorCurrent().getValueAsDouble();
 
+		inputs.turnBusVoltage = turnTalonFX.getSupplyVoltage().getValueAsDouble();
+		inputs.turnBusCurrent = turnTalonFX.getSupplyCurrent().getValueAsDouble();
 		inputs.turnPos = turnTalonFX.getPosition().getValueAsDouble() * 2 * PI * TURN_RATIO;
 		inputs.turnVel = turnTalonFX.getVelocity().getValueAsDouble() * 2 * PI * TURN_RATIO;
 
@@ -101,9 +107,10 @@ public class SwerveHW {
 					.withSlot(0));
 		}
 
+		Logger.recordOutput(logRoot + "/driveError", inputs.driveVel - driveVelocity);
+
 		double diff = angleModulus(turnPosition - inputs.turnAbsPos);
-		// Logger.recordOutput(logRoot + "/actuatedUnwrappedTurnPos", inputs.turnPos + diff);
-		Logger.recordOutput(logRoot + "/error", diff);
+		Logger.recordOutput(logRoot + "/turnError", diff);
 
 		if (!sysidTurn) {
 			turnTalonFX.setControl(new PositionVoltage((inputs.turnPos + diff) / (2 * PI * TURN_RATIO))

@@ -5,7 +5,6 @@ import static java.lang.Math.*;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class DrivePIDTestCommand extends Command {
@@ -16,8 +15,8 @@ public class DrivePIDTestCommand extends Command {
 	@Override
 	public void execute() {
 		for (int i = 0; i < drive.modules.length; i++) {
-			int t = (int) floor(Timer.getTimestamp());
-			drive.modules[i].drive(new SwerveModuleState(t % 2 == 0 ? t : -t, new Rotation2d()));
+			drive.modules[i].drive(
+					new SwerveModuleState(2 * (left_js.getHID().getRawButton(1) ? -1 : 1), new Rotation2d()));
 		}
 	}
 }

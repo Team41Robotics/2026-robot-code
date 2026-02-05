@@ -3,10 +3,13 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import frc.robot.subsystem.drive.DriveSysID;
+import frc.robot.commands.drive.FieldOrientedDrive;
 import frc.robot.subsystem.drive.SwerveDriveSubsystem;
+import frc.robot.test.drive.DrivePIDTestCommand;
+import frc.robot.test.drive.TurnPIDTestCommand;
 
 public class RobotContainer {
 	public static double LOOP_PERIOD = 0.02;
@@ -23,10 +26,16 @@ public class RobotContainer {
 
 	public static void init() {
 		drive.init(new Pose2d());
+		drive.subsystem.setDefaultCommand(new FieldOrientedDrive());
 
-		DriveSysID sysid = new DriveSysID();
+		// left_js.button(1).onTrue(new PrintSwervePos());
+
+		// DriveSysID sysid = new DriveSysID();
 		// TurnSysID sysid = new TurnSysID();
-		sysid.init();
+		// sysid.init();
+
+		SmartDashboard.putData("DrivePIDTest", new DrivePIDTestCommand());
+		SmartDashboard.putData("TurnPIDTest", new TurnPIDTestCommand());
 	}
 
 	public static Command getAutonomousCommand() {

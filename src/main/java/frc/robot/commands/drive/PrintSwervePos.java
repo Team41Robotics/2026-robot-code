@@ -16,4 +16,14 @@ public class PrintSwervePos extends Command {
 			System.out.println(drive.modules[i].inputs.turnAbsPos);
 		}
 	}
+
+	@Override
+	public boolean isFinished() {
+		return true;
+	}
+
+	@Override
+	public boolean runsWhenDisabled() {
+		return true;
+	}
 }

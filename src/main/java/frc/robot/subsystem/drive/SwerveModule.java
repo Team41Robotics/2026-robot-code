@@ -71,7 +71,7 @@ public class SwerveModule {
 		double targetVel = targetState.speedMetersPerSecond * cos(currentAngle - targetAngle);
 
 		TrapezoidProfile.State newSetpointState =
-				profile.calculate(robot.kDefaultPeriod, setpointState, new TrapezoidProfile.State(targetAngle, 0));
+				profile.calculate(LOOP_PERIOD, setpointState, new TrapezoidProfile.State(targetAngle, 0));
 		double turnFF = TURN_FF.calculateWithVelocities(setpointState.velocity, newSetpointState.velocity);
 		setpointState = newSetpointState;
 

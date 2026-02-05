@@ -7,6 +7,8 @@ import frc.robot.subsystem.drive.DriveSysID;
 import frc.robot.subsystem.drive.SwerveDriveSubsystem;
 
 public class RobotContainer {
+	public static double LOOP_PERIOD = 0.02;
+
 	public static Robot robot;
 
 	public static SwerveDriveSubsystem drive = new SwerveDriveSubsystem();
@@ -16,6 +18,8 @@ public class RobotContainer {
 	public static CommandJoystick ds = new CommandJoystick(2);
 
 	public static IMU imu = new IMU();
+
+	public static Command autonomousCommand = null;
 
 	public static void init() {
 		drive.init(new Pose2d());

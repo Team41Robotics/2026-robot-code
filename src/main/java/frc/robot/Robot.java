@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.test.drive.TurnPIDTestCommand;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -13,10 +12,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 public class Robot extends LoggedRobot {
-	private Command autonomousCommand;
-
-	public static final double kDefaultPeriod = 0.02;
-
 	public Robot() {
 		RobotContainer.robot = this;
 	}
@@ -56,10 +51,8 @@ public class Robot extends LoggedRobot {
 
 	@Override
 	public void autonomousInit() {
-		autonomousCommand = RobotContainer.getAutonomousCommand();
-
-		if (autonomousCommand != null) {
-			autonomousCommand.schedule();
+		if (RobotContainer.autonomousCommand != null) {
+			RobotContainer.autonomousCommand.schedule();
 		}
 	}
 
@@ -71,8 +64,8 @@ public class Robot extends LoggedRobot {
 
 	@Override
 	public void teleopInit() {
-		if (autonomousCommand != null) {
-			autonomousCommand.cancel();
+		if (RobotContainer.autonomousCommand != null) {
+			RobotContainer.autonomousCommand.cancel();
 		}
 	}
 
@@ -85,7 +78,7 @@ public class Robot extends LoggedRobot {
 	@Override
 	public void testInit() {
 		CommandScheduler.getInstance().cancelAll();
-		CommandScheduler.getInstance().schedule(new TurnPIDTestCommand());
+		new TurnPIDTestCommand().schedule();
 	}
 
 	@Override

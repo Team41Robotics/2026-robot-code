@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class DrivePIDTestCommand extends Command {
 
 	public DrivePIDTestCommand() {
-		addRequirements(drive);
+		addRequirements(drive.subsystem);
 	}
 
 	@Override

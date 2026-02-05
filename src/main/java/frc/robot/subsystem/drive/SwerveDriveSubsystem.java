@@ -13,9 +13,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.KongSubsystem;
 
-public class SwerveDriveSubsystem extends SubsystemBase {
+public class SwerveDriveSubsystem {
 
 	public static double ROBOT_LENGTH = 28 * 2.54 / 100.;
 	public static double ROBOT_WIDTH = 27 * 2.54 / 100.;
@@ -39,6 +39,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	public SwerveModule[] modules;
 
 	public SwerveDrivePoseEstimator pose_est;
+
+	public KongSubsystem subsystem;
 
 	public void init(Pose2d init_pose) {
 		modules = new SwerveModule[configs.length];
@@ -67,7 +69,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	public Pose2d pose = new Pose2d();
 
 	public void drive(ChassisSpeeds speeds) {
-		speeds = ChassisSpeeds.discretize(speeds, robot.kDefaultPeriod);
+		speeds = ChassisSpeeds.discretize(speeds, LOOP_PERIOD);
 		targetSpeeds = speeds;
 
 		SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
@@ -78,7 +80,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		}
 	}
 
-	@Override
 	public void periodic() {
 		for (int i = 0; i < modules.length; i++) {
 			modules[i].periodic();

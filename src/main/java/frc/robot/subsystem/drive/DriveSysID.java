@@ -46,7 +46,7 @@ public class DriveSysID {
 		}
 
 		SysIdRoutine.Config config = new SysIdRoutine.Config(Volts.of(0.5).per(Second), Volts.of(3), Seconds.of(10));
-		SysIdRoutine.Mechanism mechanism = new SysIdRoutine.Mechanism(this::actuate, this::log, drive);
+		SysIdRoutine.Mechanism mechanism = new SysIdRoutine.Mechanism(this::actuate, this::log, drive.subsystem);
 		routine = new SysIdRoutine(config, mechanism);
 
 		left_js.button(1).whileTrue(routine.quasistatic(Direction.kForward));

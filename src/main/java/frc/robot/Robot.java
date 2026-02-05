@@ -1,10 +1,12 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.test.drive.TurnPIDTestCommand;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
@@ -25,6 +27,8 @@ public class Robot extends LoggedRobot {
 			Logger.setReplaySource(new WPILOGReader(logPath));
 			Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
 		}
+
+		LoggedPowerDistribution.getInstance(7, ModuleType.kRev);
 
 		Logger.start();
 

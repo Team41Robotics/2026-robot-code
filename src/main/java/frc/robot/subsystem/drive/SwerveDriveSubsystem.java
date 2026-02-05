@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.KongSubsystem;
 
 public class SwerveDriveSubsystem {
-
 	public static double ROBOT_LENGTH = 28 * 2.54 / 100.;
 	public static double ROBOT_WIDTH = 27 * 2.54 / 100.;
 
@@ -42,6 +41,9 @@ public class SwerveDriveSubsystem {
 
 	public KongSubsystem subsystem;
 
+	public ChassisSpeeds targetSpeeds = new ChassisSpeeds(0, 0, 0);
+	public Pose2d pose = new Pose2d();
+
 	public void init(Pose2d init_pose) {
 		modules = new SwerveModule[configs.length];
 		for (int i = 0; i < modules.length; i++) {
@@ -64,9 +66,6 @@ public class SwerveDriveSubsystem {
 		}
 		return pos;
 	}
-
-	public ChassisSpeeds targetSpeeds = new ChassisSpeeds(0, 0, 0);
-	public Pose2d pose = new Pose2d();
 
 	public void drive(ChassisSpeeds speeds) {
 		speeds = ChassisSpeeds.discretize(speeds, LOOP_PERIOD);

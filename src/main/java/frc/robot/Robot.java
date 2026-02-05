@@ -1,7 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.test.drive.TurnPIDTestCommand;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -86,8 +84,4 @@ public class Robot extends LoggedRobot {
 
 	@Override
 	public void testExit() {}
-
-	public static boolean isRed() {
-		return DriverStation.getAlliance().orElse(Alliance.Blue).equals(Alliance.Red);
-	}
 }

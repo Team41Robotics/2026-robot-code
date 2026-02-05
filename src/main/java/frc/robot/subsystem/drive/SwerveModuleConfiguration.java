@@ -1,7 +1,6 @@
 package frc.robot.subsystem.drive;
 
 public class SwerveModuleConfiguration {
-
 	public String name;
 
 	public int turn_motor_id;

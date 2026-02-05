@@ -11,7 +11,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule {
-
 	public static double DRIVE_kS = 0.093052;
 	public static double DRIVE_kV = 1.8968;
 	public static double DRIVE_kA = 0.15096;
@@ -31,6 +30,15 @@ public class SwerveModule {
 	public SwerveInputsAutoLogged inputs;
 	public String name;
 
+	public SwerveModuleState currentState = new SwerveModuleState();
+	public double currentAngle;
+	public double currentVel;
+	public double currentDrivePos;
+
+	public SwerveModuleState targetState = new SwerveModuleState();
+	public TrapezoidProfile.State setpointState = new TrapezoidProfile.State();
+	public double setpointVel = 0;
+
 	public void init(SwerveModuleConfiguration config) {
 		inputs = new SwerveInputsAutoLogged();
 		hw.init(config);
@@ -38,11 +46,6 @@ public class SwerveModule {
 		name = config.name;
 		setpointState = new TrapezoidProfile.State(inputs.turnPos, inputs.turnVel);
 	}
-
-	public SwerveModuleState currentState = new SwerveModuleState();
-	public double currentAngle;
-	public double currentVel;
-	public double currentDrivePos;
 
 	public void sense() {
 		hw.sense(inputs);
@@ -53,10 +56,6 @@ public class SwerveModule {
 		currentVel = inputs.driveVel;
 		currentDrivePos = inputs.drivePos;
 	}
-
-	public SwerveModuleState targetState = new SwerveModuleState();
-	public TrapezoidProfile.State setpointState = new TrapezoidProfile.State();
-	public double setpointVel = 0;
 
 	public void drive(SwerveModuleState state) {
 		targetState = state;

@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 public class DriveSysID {
-
 	SysIdRoutine routine;
 
 	MutVoltage voltage = Volts.mutable(0);

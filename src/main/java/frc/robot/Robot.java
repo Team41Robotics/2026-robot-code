@@ -36,6 +36,8 @@ public class Robot extends LoggedRobot {
 		Logger.start();
 
 		RobotContainer.init();
+
+		enableLiveWindowInTest(false);
 	}
 
 	@Override

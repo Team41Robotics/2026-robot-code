@@ -17,11 +17,21 @@ public class FieldHeadingDrive extends Command {
 	public static double DEADBAND = 0.10;
 	public static double TURN_DEADBAND = 0.10;
 
+	public TrapezoidProfile.Constraints ROT_CONSTRAINTS =
+			new TrapezoidProfile.Constraints(drive.MAX_OMEGA, drive.MAX_OMEGA / 1);
+
+	public TrapezoidProfile profile = new TrapezoidProfile(ROT_CONSTRAINTS);
 	public PIDController pid = new PIDController(0.2, 0, 0);
+
+	public TrapezoidProfile.State setpointHeading = new TrapezoidProfile.State();
 
 	public FieldHeadingDrive() {
 		addRequirements(drive);
 		pid.enableContinuousInput(-PI, PI);
+
+		Rotation2d heading = drive.pose.getRotation();
+		if (isRed()) heading = heading.plus(Rotation2d.kPi);
+		setpointHeading = new TrapezoidProfile.State(heading.getRadians(), 0);
 	}
 
 	public ChassisSpeeds run(double vx, double vy, double tx, double ty) {
@@ -32,17 +42,27 @@ public class FieldHeadingDrive extends Command {
 		double theta = atan2(vy, vx);
 
 		double speed_mul = 1;
-		double angular_speed_mul = 1;
 
 		Rotation2d heading = drive.pose.getRotation();
 		if (isRed()) heading = heading.plus(Rotation2d.kPi);
 
 		double turn_theta = hypot(tx, ty) < DEADBAND ? heading.getRadians() : atan2(ty, tx);
+		turn_theta = inputModulus(turn_theta - setpointHeading.position, 0, 2 * PI) + setpointHeading.position;
+
+		TrapezoidProfile.State newHeading1 =
+				profile.calculate(LOOP_PERIOD, setpointHeading, new TrapezoidProfile.State(turn_theta, 0));
+		double time1 = profile.totalTime();
+		turn_theta -= 2 * PI;
+		TrapezoidProfile.State newHeading2 =
+				profile.calculate(LOOP_PERIOD, setpointHeading, new TrapezoidProfile.State(turn_theta, 0));
+		double time2 = profile.totalTime();
+
+		TrapezoidProfile.State newHeading = time1 < time2 ? newHeading1 : newHeading2;
 
 		ChassisSpeeds speeds = new ChassisSpeeds(
 				mag_curved * cos(theta) * drive.MAX_VEL * speed_mul,
 				mag_curved * sin(theta) * drive.MAX_VEL * speed_mul,
-				pid.calculate(heading.getRadians(), turn_theta));
+				pid.calculate(heading.getRadians(), newHeading.position) + newHeading.velocity);
 
 		Logger.recordOutput("/Error", pid.getError());
 

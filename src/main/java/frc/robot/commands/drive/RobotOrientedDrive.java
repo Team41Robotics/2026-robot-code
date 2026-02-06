@@ -34,7 +34,7 @@ public class RobotOrientedDrive extends Command {
 
 	@Override
 	public void execute() {
-		ChassisSpeeds speeds = run(left_js.getY(), left_js.getX(), right_js.getX());
+		ChassisSpeeds speeds = run(left_js.getY(), left_js.getX(), -right_js.getX());
 		drive.drive(speeds);
 	}
 }

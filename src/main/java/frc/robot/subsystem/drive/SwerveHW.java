@@ -30,7 +30,6 @@ public class SwerveHW {
 	public String logRoot;
 
 	public double angleOffset = 0;
-	public boolean turnInverted = false;
 
 	public boolean sysidDrive = false;
 	public boolean sysidTurn = false;
@@ -38,7 +37,6 @@ public class SwerveHW {
 	public void init(SwerveModuleConfiguration config) {
 		logRoot = "Swerve/" + config.name;
 		angleOffset = config.angleOffset;
-		turnInverted = config.turnInverted;
 
 		if (!Robot.isReal()) return;
 
@@ -50,6 +48,8 @@ public class SwerveHW {
 		driveConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
 		driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		driveConfig.CurrentLimits.withStatorCurrentLimit(120);
+
+		driveConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
 		driveTalonFX.getConfigurator().apply(driveConfig);
 		driveTalonFX.clearStickyFaults();
@@ -66,7 +66,7 @@ public class SwerveHW {
 		turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		turnConfig.CurrentLimits.withStatorCurrentLimit(80);
 
-		turnConfig.MotorOutput.Inverted = InvertedValue.values()[turnInverted ? 1 : 0];
+		turnConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
 		turnTalonFX.getConfigurator().apply(turnConfig);
 		turnTalonFX.clearStickyFaults();

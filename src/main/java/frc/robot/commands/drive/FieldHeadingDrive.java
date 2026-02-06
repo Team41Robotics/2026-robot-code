@@ -4,22 +4,22 @@ import static edu.wpi.first.math.MathUtil.*;
 import static frc.robot.RobotContainer.*;
 import static java.lang.Math.*;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Util;
+import org.littletonrobotics.junction.Logger;
 
 public class FieldHeadingDrive extends Command {
 	public static double DEADBAND = 0.10;
 	public static double TURN_DEADBAND = 0.10;
 
-	public PIDController pid = new PIDController(0.2, 0, 0);
+	public PIDController pid = new PIDController(6, 0, 0);
 
 	public FieldHeadingDrive() {
+		SmartDashboard.putData("PID", pid);
 		addRequirements(drive);
 		pid.enableContinuousInput(-PI, PI);
 	}
@@ -51,7 +51,7 @@ public class FieldHeadingDrive extends Command {
 
 	@Override
 	public void execute() {
-		ChassisSpeeds speeds = run(left_js.getY(), left_js.getX(), right_js.getY(), right_js.getX());
+		ChassisSpeeds speeds = run(left_js.getY(), left_js.getX(), -right_js.getY(), -right_js.getX());
 		drive.drive(speeds);
 	}
 }

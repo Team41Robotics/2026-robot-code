@@ -15,7 +15,7 @@ public class RobotOrientedDrive extends Command {
 		addRequirements(drive);
 	}
 
-	public static ChassisSpeeds run(double vx, double vy, double w) {
+	public ChassisSpeeds run(double vx, double vy, double w) {
 		double mag = hypot(vx, vy);
 		double mag_curved = Util.squareCurve(Util.deadband(mag, DEADBAND));
 		double w_curved = Util.squareCurve(Util.deadband(w, TURN_DEADBAND));

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
 import frc.robot.commands.drive.RobotOrientedDrive;
 import frc.robot.subsystem.drive.SwerveDriveSubsystem;
@@ -40,6 +41,7 @@ public class RobotContainer {
 
 		SmartDashboard.putData("RobotOrientedDrive", new RobotOrientedDrive());
 		SmartDashboard.putData("FieldOrientedDrive", new FieldOrientedDrive());
+		SmartDashboard.putData("FieldHeadingDrive", new FieldHeadingDrive());
 	}
 
 	public static Command getAutonomousCommand() {

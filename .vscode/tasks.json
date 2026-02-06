@@ -9,7 +9,13 @@
                                 "spotlessApply"
                         ],
                         "windows": {
-                                "command": ".\\gradlew.bat"
+                                "command": "gradlew.bat",
+                                "options": {
+                                        "shell": {
+                                                "executable": "cmd.exe",
+                                                "args": ["/c"]
+                                        }
+                                }
                         },
                         "group": "build",
                         "presentation": {

@@ -25,10 +25,10 @@ public class SwerveDriveSubsystem {
 	public static double MAX_OMEGA = MAX_VEL / hypot(ROBOT_LENGTH / 2, ROBOT_WIDTH / 2);
 
 	public SwerveModuleConfiguration[] configs = new SwerveModuleConfiguration[] {
-		new SwerveModuleConfiguration("NW", 9, 10, 15, 0.006135923151542565),
-		new SwerveModuleConfiguration("NE", 7, 8, 18, -0.006135923151542565),
-		new SwerveModuleConfiguration("SW", 11, 12, 17, -0.009203884727313847),
-		new SwerveModuleConfiguration("SE", 5, 6, 16, 0.032213596545598466)
+		new SwerveModuleConfiguration("NW", 9, 10, 15, -0.006135923151542565, true),
+		new SwerveModuleConfiguration("NE", 7, 8, 18, 0.006135923151542565, true),
+		new SwerveModuleConfiguration("SW", 11, 12, 17, 0.009203884727313847, true),
+		new SwerveModuleConfiguration("SE", 5, 6, 16, -0.032213596545598466, true)
 	};
 
 	public SwerveDriveKinematics kinematics = new SwerveDriveKinematics(

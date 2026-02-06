@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.commands.drive.FieldOrientedDrive;
+import frc.robot.commands.drive.RobotOrientedDrive;
 import frc.robot.subsystem.drive.SwerveDriveSubsystem;
 import frc.robot.test.drive.DrivePIDTestCommand;
 import frc.robot.test.drive.TurnPIDTestCommand;
@@ -36,6 +37,9 @@ public class RobotContainer {
 
 		SmartDashboard.putData("DrivePIDTest", new DrivePIDTestCommand());
 		SmartDashboard.putData("TurnPIDTest", new TurnPIDTestCommand());
+
+		SmartDashboard.putData("RobotOrientedDrive", new RobotOrientedDrive());
+		SmartDashboard.putData("FieldOrientedDrive", new FieldOrientedDrive());
 	}
 
 	public static Command getAutonomousCommand() {

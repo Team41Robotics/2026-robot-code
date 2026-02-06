@@ -8,6 +8,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
@@ -29,6 +30,7 @@ public class SwerveHW {
 	public String logRoot;
 
 	public double angleOffset = 0;
+	public boolean turnInverted = false;
 
 	public boolean sysidDrive = false;
 	public boolean sysidTurn = false;
@@ -36,6 +38,7 @@ public class SwerveHW {
 	public void init(SwerveModuleConfiguration config) {
 		logRoot = "Swerve/" + config.name;
 		angleOffset = config.angleOffset;
+		turnInverted = config.turnInverted;
 
 		if (!Robot.isReal()) return;
 
@@ -62,6 +65,8 @@ public class SwerveHW {
 		turnConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
 		turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		turnConfig.CurrentLimits.withStatorCurrentLimit(80);
+
+		turnConfig.MotorOutput.Inverted = InvertedValue.values()[turnInverted ? 1 : 0];
 
 		turnTalonFX.getConfigurator().apply(turnConfig);
 		turnTalonFX.clearStickyFaults();
@@ -90,7 +95,7 @@ public class SwerveHW {
 		inputs.turnVoltage = turnTalonFX.getMotorVoltage().getValueAsDouble();
 		inputs.turnCurrent = turnTalonFX.getStatorCurrent().getValueAsDouble();
 
-		inputs.turnAbsPos = -turnAbsoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * PI - angleOffset;
+		inputs.turnAbsPos = turnAbsoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * PI - angleOffset;
 	}
 
 	public void actuate(SwerveInputs inputs, double driveVelocity, double driveFF, double turnPosition, double turnFF) {

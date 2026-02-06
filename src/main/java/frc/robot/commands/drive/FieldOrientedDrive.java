@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class FieldOrientedDrive extends Command {
 	public FieldOrientedDrive() {
-		addRequirements(drive.subsystem);
+		addRequirements(drive);
 	}
 
 	@Override

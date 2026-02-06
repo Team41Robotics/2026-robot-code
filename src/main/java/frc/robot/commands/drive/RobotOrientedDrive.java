@@ -12,7 +12,7 @@ public class RobotOrientedDrive extends Command {
 	public static double TURN_DEADBAND = 0.10;
 
 	public RobotOrientedDrive() {
-		addRequirements(drive.subsystem);
+		addRequirements(drive);
 	}
 
 	public static ChassisSpeeds run(double vx, double vy, double w) {

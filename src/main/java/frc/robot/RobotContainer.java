@@ -27,7 +27,7 @@ public class RobotContainer {
 
 	public static void init() {
 		drive.init(new Pose2d());
-		drive.subsystem.setDefaultCommand(new FieldOrientedDrive());
+		drive.setDefaultCommand(new FieldOrientedDrive());
 
 		// left_js.button(1).onTrue(new PrintSwervePos());
 

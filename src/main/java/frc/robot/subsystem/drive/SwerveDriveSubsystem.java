@@ -14,10 +14,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.KongSubsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
-public class SwerveDriveSubsystem {
+public class SwerveDriveSubsystem extends SubsystemBase {
 	public static double ROBOT_LENGTH = 28 * 2.54 / 100.;
 	public static double ROBOT_WIDTH = 27 * 2.54 / 100.;
 
@@ -40,8 +40,6 @@ public class SwerveDriveSubsystem {
 	public SwerveModule[] modules;
 
 	public SwerveDrivePoseEstimator pose_est;
-
-	public KongSubsystem subsystem;
 
 	public SwerveModulePosition[] swervePositions = new SwerveModulePosition[configs.length];
 	public SwerveModuleState[] targetStates = new SwerveModuleState[configs.length];

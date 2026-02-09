@@ -47,9 +47,9 @@ public class DriveSysID {
 		SysIdRoutine.Mechanism mechanism = new SysIdRoutine.Mechanism(this::actuate, this::log, drive);
 		routine = new SysIdRoutine(config, mechanism);
 
-		left_js.button(1).whileTrue(routine.quasistatic(Direction.kForward));
-		left_js.button(2).whileTrue(routine.quasistatic(Direction.kReverse));
-		left_js.button(3).whileTrue(routine.dynamic(Direction.kForward));
-		left_js.button(4).whileTrue(routine.dynamic(Direction.kReverse));
+		ctrl.sysid_quasi_forward().whileTrue(routine.quasistatic(Direction.kForward));
+		ctrl.sysid_quasi_backward().whileTrue(routine.quasistatic(Direction.kReverse));
+		ctrl.sysid_dyna_forward().whileTrue(routine.dynamic(Direction.kForward));
+		ctrl.sysid_dyna_backward().whileTrue(routine.dynamic(Direction.kReverse));
 	}
 }

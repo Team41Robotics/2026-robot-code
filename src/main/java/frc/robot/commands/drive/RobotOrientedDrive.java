@@ -35,7 +35,7 @@ public class RobotOrientedDrive extends Command {
 
 	@Override
 	public void execute() {
-		ChassisSpeeds speeds = run(-xbox.getLeftY(), -xbox.getLeftX(), -xbox.getRightX());
+		ChassisSpeeds speeds = run(ctrl.leftY(), ctrl.leftX(), ctrl.rightX());
 		drive.drive(speeds);
 	}
 }

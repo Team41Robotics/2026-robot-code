@@ -76,7 +76,7 @@ public class FieldHeadingDrive extends Command {
 
 	@Override
 	public void execute() {
-		ChassisSpeeds speeds = run(-xbox.getLeftY(), -xbox.getLeftX(), -xbox.getRightY(), -xbox.getRightX());
+		ChassisSpeeds speeds = run(ctrl.leftY(), ctrl.leftX(), ctrl.rightY(), ctrl.rightX());
 		drive.drive(speeds);
 	}
 }

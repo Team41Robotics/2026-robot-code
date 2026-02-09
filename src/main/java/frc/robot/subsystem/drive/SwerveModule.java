@@ -13,18 +13,22 @@ import org.littletonrobotics.junction.Logger;
 public class SwerveModule {
 	public static double DRIVE_kS = 0.093052;
 	public static double DRIVE_kV = 1.8968;
-	public static double DRIVE_kA = 0.15096;
+	// public static double DRIVE_kA = 0.15096;
+	public static double DRIVE_kA = 0.;
 	public static SimpleMotorFeedforward DRIVE_FF = new SimpleMotorFeedforward(DRIVE_kS, DRIVE_kV, DRIVE_kA);
 
-	public static double TURN_kS = 0.19431;
-	public static double TURN_kV = 0.36606;
+	// public static double TURN_kS = 0.19431;
+	// public static double TURN_kV = 0.36606;
 	// public static double TURN_kA = 0.044138;
+	public static double TURN_kS = 0.;
+	public static double TURN_kV = 0.;
 	public static double TURN_kA = 0.;
 	public static SimpleMotorFeedforward TURN_FF = new SimpleMotorFeedforward(TURN_kS, TURN_kV, TURN_kA);
 
 	public static double MAX_VEL = 6.3;
 
-	public static TrapezoidProfile.Constraints TURN_CONSTRAINTS = new TrapezoidProfile.Constraints(21, 40);
+	// public static TrapezoidProfile.Constraints TURN_CONSTRAINTS = new TrapezoidProfile.Constraints(21, 40);
+	public static TrapezoidProfile.Constraints TURN_CONSTRAINTS = new TrapezoidProfile.Constraints(1e9, 1e9);
 	public static TrapezoidProfile profile = new TrapezoidProfile(TURN_CONSTRAINTS);
 
 	public SwerveHW hw = new SwerveHW();

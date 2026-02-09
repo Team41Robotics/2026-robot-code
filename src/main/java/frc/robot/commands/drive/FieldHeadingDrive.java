@@ -19,7 +19,8 @@ public class FieldHeadingDrive extends Command {
 	public static double TURN_DEADBAND = 0.50;
 
 	public TrapezoidProfile.Constraints ROT_CONSTRAINTS =
-			new TrapezoidProfile.Constraints(drive.MAX_OMEGA, drive.MAX_OMEGA / 1);
+			// new TrapezoidProfile.Constraints(drive.MAX_OMEGA, drive.MAX_OMEGA / 1);
+			new TrapezoidProfile.Constraints(1e9, 1e9);
 
 	public TrapezoidProfile profile = new TrapezoidProfile(ROT_CONSTRAINTS);
 	public PIDController pid = new PIDController(1, 0, 0);

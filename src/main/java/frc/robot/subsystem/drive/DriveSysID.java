@@ -2,7 +2,6 @@ package frc.robot.subsystem.drive;
 
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.RobotContainer.*;
-import static java.lang.Math.*;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;

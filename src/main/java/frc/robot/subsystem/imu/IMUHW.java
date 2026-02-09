@@ -1,6 +1,5 @@
 package frc.robot.subsystem.imu;
 
-import static edu.wpi.first.math.MathUtil.*;
 import static java.lang.Math.*;
 
 import com.studica.frc.AHRS;

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Util;
 import org.littletonrobotics.junction.Logger;
 
+@SuppressWarnings("static-access")
 public class FieldHeadingDrive extends Command {
 	public static double DEADBAND = 0.10;
 	public static double TURN_DEADBAND = 0.50;

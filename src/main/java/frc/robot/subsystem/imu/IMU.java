@@ -1,7 +1,5 @@
 package frc.robot.subsystem.imu;
 
-import static java.lang.Math.*;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 

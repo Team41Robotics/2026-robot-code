@@ -18,11 +18,10 @@ public class SwerveHW {
 	public static double TURN_RATIO = 1 / 18.75;
 	public static double SWERVE_WHEEL_RAD = 2 * 2.54 / 100.;
 
-	// public static double DRIVE_kP = 4;
-	public static double DRIVE_kP = 0;
+	public static double DRIVE_kP = 4;
 
-	public static double TURN_kP = 40;
-	public static double TURN_kD = 0.8;
+	public static double TURN_kP = 20;
+	public static double TURN_kD = 0.4;
 
 	public TalonFX driveTalonFX;
 	public TalonFX turnTalonFX;
@@ -46,15 +45,17 @@ public class SwerveHW {
 
 		driveConfig.Slot0.kP = DRIVE_kP * DRIVE_RATIO * 2 * PI * SWERVE_WHEEL_RAD;
 
-		driveConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
+		driveConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+		driveConfig.CurrentLimits.SupplyCurrentLimit = 20;
 		driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		driveConfig.CurrentLimits.StatorCurrentLimit = 120;
+		driveConfig.CurrentLimits.StatorCurrentLimit = 40;
 
 		driveConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
 		driveTalonFX.getConfigurator().apply(driveConfig);
 		driveTalonFX.clearStickyFaults();
 		driveTalonFX.setPosition(0);
+		driveTalonFX.setNeutralMode(NeutralModeValue.Coast);
 		driveTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
 		turnTalonFX = new TalonFX(config.turn_motor_id, "Ducky");
@@ -63,15 +64,16 @@ public class SwerveHW {
 		turnConfig.Slot0.kP = TURN_kP * TURN_RATIO * 2 * PI;
 		turnConfig.Slot0.kD = TURN_kD * TURN_RATIO * 2 * PI;
 
-		turnConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
+		turnConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+		turnConfig.CurrentLimits.SupplyCurrentLimit = 20;
 		turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		turnConfig.CurrentLimits.StatorCurrentLimit = 80;
+		turnConfig.CurrentLimits.StatorCurrentLimit = 40;
 
 		turnConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
 		turnTalonFX.getConfigurator().apply(turnConfig);
 		turnTalonFX.clearStickyFaults();
-		turnTalonFX.setNeutralMode(NeutralModeValue.Brake);
+		turnTalonFX.setNeutralMode(NeutralModeValue.Coast);
 
 		turnAbsoluteEncoder = new CANcoder(config.encoder_id, "Ducky");
 		turnAbsoluteEncoder.clearStickyFaults();

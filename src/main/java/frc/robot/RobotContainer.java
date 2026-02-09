@@ -53,6 +53,8 @@ public class RobotContainer {
 		imu.sense();
 		drive.sense();
 
+		CommandScheduler.getInstance().run();
+
 		drive.actuate();
 	}
 

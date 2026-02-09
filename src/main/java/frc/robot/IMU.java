@@ -14,12 +14,4 @@ public class IMU {
 	public double yaw() {
 		return -imu.getAngle() / 180 * PI;
 	}
-
-	public void zeroYaw() {
-		imu.zeroYaw();
-	}
-
-	public double getAngularVelocity() {
-		return imu.getRate();
-	}
 }

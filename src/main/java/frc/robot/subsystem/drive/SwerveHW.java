@@ -48,7 +48,7 @@ public class SwerveHW {
 
 		driveConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
 		driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		driveConfig.CurrentLimits.withStatorCurrentLimit(120);
+		driveConfig.CurrentLimits.StatorCurrentLimit = 120;
 
 		driveConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
@@ -65,7 +65,7 @@ public class SwerveHW {
 
 		turnConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
 		turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		turnConfig.CurrentLimits.withStatorCurrentLimit(80);
+		turnConfig.CurrentLimits.StatorCurrentLimit = 80;
 
 		turnConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 

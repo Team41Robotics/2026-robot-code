@@ -12,7 +12,7 @@ public class IMU extends SubsystemBase {
 	public void init() {
 		inputs = new IMUInputsAutoLogged();
 		hw.init();
-		hw.sense(inputs);
+		sense();
 	}
 
 	public void sense() {

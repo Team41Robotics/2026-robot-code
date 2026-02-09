@@ -8,6 +8,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Util;
@@ -18,14 +20,14 @@ public class FieldHeadingDrive extends Command {
 	public static double DEADBAND = 0.10;
 	public static double TURN_DEADBAND = 0.50;
 
-	public TrapezoidProfile.Constraints ROT_CONSTRAINTS =
-			// new TrapezoidProfile.Constraints(drive.MAX_OMEGA, drive.MAX_OMEGA / 1);
-			new TrapezoidProfile.Constraints(1e9, 1e9);
+	public Constraints ROT_CONSTRAINTS =
+			// new Constraints(drive.MAX_OMEGA, drive.MAX_OMEGA / 1);
+			new Constraints(1e9, 1e9);
 
 	public TrapezoidProfile profile = new TrapezoidProfile(ROT_CONSTRAINTS);
 	public PIDController pid = new PIDController(1, 0, 0);
 
-	public TrapezoidProfile.State setpointHeading = new TrapezoidProfile.State();
+	public State setpointHeading = new State();
 
 	public FieldHeadingDrive() {
 		SmartDashboard.putData("PID", pid);
@@ -34,7 +36,7 @@ public class FieldHeadingDrive extends Command {
 
 		Rotation2d heading = drive.pose.getRotation();
 		if (isRed()) heading = heading.plus(Rotation2d.kPi);
-		setpointHeading = new TrapezoidProfile.State(heading.getRadians(), 0);
+		setpointHeading = new State(heading.getRadians(), 0);
 	}
 
 	public ChassisSpeeds run(double vx, double vy, double tx, double ty) {
@@ -50,17 +52,16 @@ public class FieldHeadingDrive extends Command {
 		if (isRed()) heading = heading.plus(Rotation2d.kPi);
 
 		double turn_theta = hypot(tx, ty) < TURN_DEADBAND ? setpointHeading.position : atan2(ty, tx);
-		turn_theta = inputModulus(turn_theta - setpointHeading.position, 0, 2 * PI) + setpointHeading.position;
 
-		TrapezoidProfile.State newHeading1 =
-				profile.calculate(LOOP_PERIOD, setpointHeading, new TrapezoidProfile.State(turn_theta, 0));
+		turn_theta = inputModulus(turn_theta - setpointHeading.position, 0, 2 * PI) + setpointHeading.position;
+		State newHeading1 = profile.calculate(LOOP_PERIOD, setpointHeading, new State(turn_theta, 0));
 		double time1 = profile.totalTime();
+
 		turn_theta -= 2 * PI;
-		TrapezoidProfile.State newHeading2 =
-				profile.calculate(LOOP_PERIOD, setpointHeading, new TrapezoidProfile.State(turn_theta, 0));
+		State newHeading2 = profile.calculate(LOOP_PERIOD, setpointHeading, new State(turn_theta, 0));
 		double time2 = profile.totalTime();
 
-		TrapezoidProfile.State newHeading = time1 < time2 ? newHeading1 : newHeading2;
+		State newHeading = time1 < time2 ? newHeading1 : newHeading2;
 		setpointHeading = newHeading;
 
 		ChassisSpeeds speeds = new ChassisSpeeds(

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
 import frc.robot.commands.drive.RobotOrientedDrive;
@@ -16,7 +17,7 @@ import frc.robot.test.drive.DrivePIDTestCommand;
 import frc.robot.test.drive.TurnPIDTestCommand;
 
 public class RobotContainer {
-	public static double LOOP_PERIOD = 0.02;
+	public static double LOOP_PERIOD = 0.020;
 
 	public static Robot robot;
 	public static SwerveDriveSubsystem drive = new SwerveDriveSubsystem();
@@ -44,6 +45,8 @@ public class RobotContainer {
 		SmartDashboard.putData("RobotOrientedDrive", new RobotOrientedDrive());
 		SmartDashboard.putData("FieldOrientedDrive", new FieldOrientedDrive());
 		SmartDashboard.putData("FieldHeadingDrive", new FieldHeadingDrive());
+
+		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());
 	}
 
 	public static void periodic() {

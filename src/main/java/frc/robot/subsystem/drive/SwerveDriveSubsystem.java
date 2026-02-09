@@ -25,10 +25,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	public static double MAX_OMEGA = MAX_VEL / hypot(ROBOT_LENGTH / 2, ROBOT_WIDTH / 2);
 
 	public SwerveModuleConfiguration[] configs = new SwerveModuleConfiguration[] {
-		new SwerveModuleConfiguration("NW", 9, 10, 15, -0.006135923151542565, true),
-		new SwerveModuleConfiguration("NE", 7, 8, 18, 0.006135923151542565, true),
-		new SwerveModuleConfiguration("SW", 11, 12, 17, 0.009203884727313847, true),
-		new SwerveModuleConfiguration("SE", 5, 6, 16, -0.032213596545598466, true)
+		new SwerveModuleConfiguration("NW", 9, 10, 15, -0.006135923151542565),
+		new SwerveModuleConfiguration("NE", 7, 8, 18, 0.006135923151542565),
+		new SwerveModuleConfiguration("SW", 11, 12, 17, 0.009203884727313847),
+		new SwerveModuleConfiguration("SE", 5, 6, 16, -0.032213596545598466)
 	};
 
 	public SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
@@ -62,7 +62,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 				new Rotation2d(imu.yaw),
 				zeropos,
 				init_pose,
-				VecBuilder.fill(0.1, 0.1, 0.1),
+				VecBuilder.fill(0.1, 0.1, 0.05), // TODO
 				VecBuilder.fill(0.75, 0.75, 0.9));
 	}
 

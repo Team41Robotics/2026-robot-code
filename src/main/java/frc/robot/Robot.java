@@ -12,6 +12,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 public class Robot extends LoggedRobot {
 	public Robot() {
+		super();
 		RobotContainer.robot = this;
 	}
 
@@ -27,7 +28,7 @@ public class Robot extends LoggedRobot {
 			Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
 		}
 
-		LoggedPowerDistribution.getInstance(7, ModuleType.kRev);
+		LoggedPowerDistribution.getInstance(7, ModuleType.kRev); // TODO?
 
 		Logger.start();
 

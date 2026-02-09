@@ -8,6 +8,8 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule {
@@ -27,11 +29,11 @@ public class SwerveModule {
 
 	public static double MAX_VEL = 6.3;
 
-	public static TrapezoidProfile.Constraints DRIVE_CONSTRAINTS = new TrapezoidProfile.Constraints(1e9, 1e9);
+	public static Constraints DRIVE_CONSTRAINTS = new Constraints(1e9, 1e9);
 	public static TrapezoidProfile driveProfile = new TrapezoidProfile(DRIVE_CONSTRAINTS);
 
-	// public static TrapezoidProfile.Constraints TURN_CONSTRAINTS = new TrapezoidProfile.Constraints(21, 40);
-	public static TrapezoidProfile.Constraints TURN_CONSTRAINTS = new TrapezoidProfile.Constraints(1e9, 1e9);
+	// public static Constraints TURN_CONSTRAINTS = new Constraints(21, 40);
+	public static Constraints TURN_CONSTRAINTS = new Constraints(1e9, 1e9);
 	public static TrapezoidProfile turnProfile = new TrapezoidProfile(TURN_CONSTRAINTS);
 
 	public SwerveHW hw = new SwerveHW();
@@ -44,15 +46,16 @@ public class SwerveModule {
 	public double currentDrivePos;
 
 	public SwerveModuleState targetState = new SwerveModuleState();
-	public TrapezoidProfile.State setpointAngle = new TrapezoidProfile.State();
+	public State setpointAngle = new State();
 	public double setpointVel = 0;
 
 	public void init(SwerveModuleConfiguration config) {
+		name = config.name;
+
 		inputs = new SwerveInputsAutoLogged();
 		hw.init(config);
-		hw.sense(inputs);
-		name = config.name;
-		setpointAngle = new TrapezoidProfile.State(inputs.turnAbsPos, inputs.turnVel);
+		sense();
+		setpointAngle = new State(inputs.turnAbsPos, inputs.turnVel);
 	}
 
 	public void sense() {
@@ -75,16 +78,12 @@ public class SwerveModule {
 		targetAngle = setpointAngle.position + angleModulus(targetAngle - setpointAngle.position);
 		double targetVel = targetState.speedMetersPerSecond * cos(currentAngle - targetAngle);
 
-		TrapezoidProfile.State newSetpointAngle =
-				turnProfile.calculate(LOOP_PERIOD, setpointAngle, new TrapezoidProfile.State(targetAngle, 0));
+		State newSetpointAngle = turnProfile.calculate(LOOP_PERIOD, setpointAngle, new State(targetAngle, 0));
 		double turnFF = TURN_FF.calculateWithVelocities(setpointAngle.velocity, newSetpointAngle.velocity);
 		setpointAngle = newSetpointAngle;
 
-		double newSetpointVel = driveProfile.calculate(
-						LOOP_PERIOD,
-						new TrapezoidProfile.State(setpointVel, 0),
-						new TrapezoidProfile.State(targetVel, 0))
-				.position;
+		double newSetpointVel =
+				driveProfile.calculate(LOOP_PERIOD, new State(setpointVel, 0), new State(targetVel, 0)).position;
 		double driveFF = DRIVE_FF.calculateWithVelocities(setpointVel, newSetpointVel);
 		setpointVel = newSetpointVel;
 

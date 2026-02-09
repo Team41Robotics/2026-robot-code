@@ -40,7 +40,7 @@ public class FieldOrientedDrive extends Command {
 
 	@Override
 	public void execute() {
-		ChassisSpeeds speeds = run(left_js.getY(), left_js.getX(), -right_js.getX());
+		ChassisSpeeds speeds = run(-xbox.getLeftY(), -xbox.getLeftX(), -xbox.getRightX());
 		drive.drive(speeds);
 	}
 }

@@ -59,7 +59,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		for (int i = 0; i < configs.length; i++) zeropos[i] = new SwerveModulePosition();
 		pose_est = new SwerveDrivePoseEstimator(
 				kinematics,
-				new Rotation2d(imu.yaw()),
+				new Rotation2d(imu.yaw),
 				zeropos,
 				init_pose,
 				VecBuilder.fill(0.1, 0.1, 0.1),
@@ -78,7 +78,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		}
 	}
 
-	public void periodic() {
+	public void periodic_() {
 		for (int i = 0; i < modules.length; i++) {
 			modules[i].periodic();
 		}
@@ -91,7 +91,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		}
 		speeds = kinematics.toChassisSpeeds(swerveStates);
 
-		pose_est.updateWithTime(Timer.getTimestamp(), new Rotation2d(imu.yaw()), swervePositions);
+		pose_est.updateWithTime(Timer.getTimestamp(), new Rotation2d(imu.yaw), swervePositions);
 		pose = pose_est.getEstimatedPosition();
 
 		Logger.recordOutput("/Swerve/speeds_setpoints", targetSpeeds);
@@ -101,7 +101,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		Logger.recordOutput("/Odom/x", pose.getX());
 		Logger.recordOutput("/Odom/y", pose.getY());
 		Logger.recordOutput("/Odom/rot_raw", pose.getRotation().getRadians());
-		Logger.recordOutput("/Odom/IMU_yaw", imu.yaw());
+		Logger.recordOutput("/Odom/IMU_yaw", imu.yaw);
 		Logger.recordOutput("/Swerve/module_setpoint", targetStates);
 		Logger.recordOutput("/Swerve/module_speeds", swerveStates);
 	}

@@ -11,6 +11,7 @@ import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
 import frc.robot.commands.drive.RobotOrientedDrive;
 import frc.robot.subsystem.drive.SwerveDriveSubsystem;
+import frc.robot.subsystem.imu.IMU;
 import frc.robot.test.drive.DrivePIDTestCommand;
 import frc.robot.test.drive.TurnPIDTestCommand;
 
@@ -29,6 +30,8 @@ public class RobotContainer {
 	public static Command autonomousCommand = null;
 
 	public static void init() {
+		imu.init();
+
 		drive.init(new Pose2d());
 		drive.setDefaultCommand(new FieldOrientedDrive());
 
@@ -44,6 +47,11 @@ public class RobotContainer {
 		SmartDashboard.putData("RobotOrientedDrive", new RobotOrientedDrive());
 		SmartDashboard.putData("FieldOrientedDrive", new FieldOrientedDrive());
 		SmartDashboard.putData("FieldHeadingDrive", new FieldHeadingDrive());
+	}
+
+	public static void periodic() {
+		imu.periodic_();
+		drive.periodic_();
 	}
 
 	public static Command getAutonomousCommand() {

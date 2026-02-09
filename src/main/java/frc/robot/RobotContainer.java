@@ -50,8 +50,10 @@ public class RobotContainer {
 	}
 
 	public static void periodic() {
-		imu.periodic_();
-		drive.periodic_();
+		imu.sense();
+		drive.sense();
+
+		drive.actuate();
 	}
 
 	public static Command getAutonomousCommand() {

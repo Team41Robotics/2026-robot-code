@@ -78,9 +78,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		}
 	}
 
-	public void periodic_() {
+	public void sense() {
 		for (int i = 0; i < modules.length; i++) {
-			modules[i].periodic();
+			modules[i].sense();
 		}
 
 		for (int i = 0; i < configs.length; i++) {
@@ -104,5 +104,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		Logger.recordOutput("/Odom/IMU_yaw", imu.yaw);
 		Logger.recordOutput("/Swerve/module_setpoint", targetStates);
 		Logger.recordOutput("/Swerve/module_speeds", swerveStates);
+	}
+
+	public void actuate() {
+		for (int i = 0; i < modules.length; i++) modules[i].actuate();
 	}
 }

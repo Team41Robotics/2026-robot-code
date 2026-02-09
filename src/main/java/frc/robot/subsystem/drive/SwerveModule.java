@@ -63,9 +63,7 @@ public class SwerveModule {
 		targetState = state;
 	}
 
-	public void periodic() {
-		sense();
-
+	public void actuate() {
 		double targetAngle = targetState.angle.getRadians();
 		targetAngle = setpointAngle.position + angleModulus(targetAngle - setpointAngle.position);
 		double targetVel = targetState.speedMetersPerSecond * cos(currentAngle - targetAngle);

@@ -22,8 +22,4 @@ public class IMU extends SubsystemBase {
 
 		Logger.processInputs("/IMU", inputs);
 	}
-
-	public void periodic_() {
-		sense();
-	}
 }

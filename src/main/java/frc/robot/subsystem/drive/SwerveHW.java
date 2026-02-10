@@ -46,9 +46,9 @@ public class SwerveHW {
 		driveConfig.Slot0.kP = DRIVE_kP * DRIVE_RATIO * 2 * PI * SWERVE_WHEEL_RAD;
 
 		driveConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		driveConfig.CurrentLimits.SupplyCurrentLimit = 50;
+		driveConfig.CurrentLimits.SupplyCurrentLimit = 60;
 		driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		driveConfig.CurrentLimits.StatorCurrentLimit = 80;
+		driveConfig.CurrentLimits.StatorCurrentLimit = 30;
 
 		driveConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
@@ -64,9 +64,9 @@ public class SwerveHW {
 		turnConfig.Slot0.kD = TURN_kD * TURN_RATIO * 2 * PI;
 
 		turnConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		turnConfig.CurrentLimits.SupplyCurrentLimit = 50;
+		turnConfig.CurrentLimits.SupplyCurrentLimit = 60;
 		turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		turnConfig.CurrentLimits.StatorCurrentLimit = 80;
+		turnConfig.CurrentLimits.StatorCurrentLimit = 90;
 
 		turnConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 

@@ -24,9 +24,9 @@ public class SwerveModule {
 	public static double TURN_kA = 0.;
 	public static SimpleMotorFeedforward TURN_FF = new SimpleMotorFeedforward(TURN_kS, TURN_kV, TURN_kA);
 
-	public static double MAX_VEL = 6.3;
+	public static double MAX_VEL = 6.0;
 
-	public static Constraints DRIVE_CONSTRAINTS = new Constraints(12, 1e9);
+	public static Constraints DRIVE_CONSTRAINTS = new Constraints(45, 1e9);
 	public static TrapezoidProfile driveProfile = new TrapezoidProfile(DRIVE_CONSTRAINTS);
 
 	public static Constraints TURN_CONSTRAINTS = new Constraints(20, 80);

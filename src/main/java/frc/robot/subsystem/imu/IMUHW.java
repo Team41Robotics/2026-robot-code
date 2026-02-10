@@ -18,7 +18,8 @@ public class IMUHW {
 	public void sense(IMUInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		inputs.connected = imu.isConnected();
+		inputs.isConnected = imu.isConnected();
+		inputs.isCalibrating = imu.isCalibrating();
 		inputs.yaw = -imu.getAngle() / 180 * PI;
 	}
 }

@@ -10,13 +10,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Util;
-import org.littletonrobotics.junction.Logger;
 
 @SuppressWarnings("static-access")
-public class FieldHeadingDrive extends Command {
+public class FieldSnakeDrive extends Command {
 	public static double DEADBAND = 0.10;
 	public static double TURN_DEADBAND = 0.50;
 
@@ -27,8 +25,9 @@ public class FieldHeadingDrive extends Command {
 
 	public State setpointHeading = new State();
 
-	public FieldHeadingDrive() {
-		SmartDashboard.putData("PID", pid);
+	public double turn_theta;
+
+	public FieldSnakeDrive() {
 		addRequirements(drive);
 		pid.enableContinuousInput(-PI, PI);
 
@@ -49,7 +48,7 @@ public class FieldHeadingDrive extends Command {
 		Rotation2d heading = drive.pose.getRotation();
 		if (isRed()) heading = heading.plus(Rotation2d.kPi);
 
-		double turn_theta = hypot(tx, ty) < TURN_DEADBAND ? setpointHeading.position : atan2(ty, tx);
+		turn_theta = hypot(tx, ty) < TURN_DEADBAND ? (mag < TURN_DEADBAND ? turn_theta : theta) : atan2(ty, tx);
 
 		turn_theta = inputModulus(turn_theta - setpointHeading.position, 0, 2 * PI) + setpointHeading.position;
 		State newHeading1 = profile.calculate(LOOP_PERIOD, setpointHeading, new State(turn_theta, 0));
@@ -66,10 +65,6 @@ public class FieldHeadingDrive extends Command {
 				mag_curved * cos(theta) * drive.MAX_VEL * speed_mul,
 				mag_curved * sin(theta) * drive.MAX_VEL * speed_mul,
 				pid.calculate(heading.getRadians(), newHeading.position) + newHeading.velocity);
-
-		Logger.recordOutput("/ASDF/turn_theta", angleModulus(turn_theta));
-		Logger.recordOutput("/ASDF/turn_setpoint", angleModulus(setpointHeading.position));
-		Logger.recordOutput("/Error", pid.getError());
 
 		return ChassisSpeeds.fromFieldRelativeSpeeds(speeds, heading);
 	}

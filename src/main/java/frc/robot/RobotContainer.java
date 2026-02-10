@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
+import frc.robot.commands.drive.FieldSnakeDrive;
 import frc.robot.commands.drive.RobotOrientedDrive;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.JoystickControls;
@@ -23,6 +24,7 @@ public class RobotContainer {
 	public static SwerveDriveSubsystem drive = new SwerveDriveSubsystem();
 
 	public static Controls ctrl = new JoystickControls();
+	// public static Controls ctrl = new XboxControls();
 	public static IMU imu = new IMU();
 
 	public static Command autonomousCommand = null;
@@ -45,6 +47,7 @@ public class RobotContainer {
 		SmartDashboard.putData("RobotOrientedDrive", new RobotOrientedDrive());
 		SmartDashboard.putData("FieldOrientedDrive", new FieldOrientedDrive());
 		SmartDashboard.putData("FieldHeadingDrive", new FieldHeadingDrive());
+		SmartDashboard.putData("FieldSnakeDrive", new FieldSnakeDrive());
 
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());
 	}

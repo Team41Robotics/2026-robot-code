@@ -5,7 +5,7 @@ import static java.lang.Math.*;
 import com.studica.frc.AHRS;
 import frc.robot.Robot;
 
-public class IMUHW {
+public class IMUNavXHW {
 	public AHRS imu;
 
 	public void init() {

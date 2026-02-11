@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
 public class IMU extends SubsystemBase {
-	public IMUHW hw = new IMUHW();
+	public IMUNavXHW hw = new IMUNavXHW();
 	public IMUInputsAutoLogged inputs;
 
 	public double yaw;

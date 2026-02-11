@@ -10,10 +10,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Util;
-import org.littletonrobotics.junction.Logger;
 
 @SuppressWarnings("static-access")
 public class FieldHeadingDrive extends Command {
@@ -28,7 +26,6 @@ public class FieldHeadingDrive extends Command {
 	public State setpointHeading = new State();
 
 	public FieldHeadingDrive() {
-		SmartDashboard.putData("PID", pid);
 		addRequirements(drive);
 		pid.enableContinuousInput(-PI, PI);
 
@@ -66,10 +63,6 @@ public class FieldHeadingDrive extends Command {
 				mag_curved * cos(theta) * drive.MAX_VEL * speed_mul,
 				mag_curved * sin(theta) * drive.MAX_VEL * speed_mul,
 				pid.calculate(heading.getRadians(), newHeading.position) + newHeading.velocity);
-
-		Logger.recordOutput("/ASDF/turn_theta", angleModulus(turn_theta));
-		Logger.recordOutput("/ASDF/turn_setpoint", angleModulus(setpointHeading.position));
-		Logger.recordOutput("/Error", pid.getError());
 
 		return ChassisSpeeds.fromFieldRelativeSpeeds(speeds, heading);
 	}

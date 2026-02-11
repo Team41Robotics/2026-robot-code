@@ -12,7 +12,7 @@ import frc.robot.commands.drive.FieldSnakeDrive;
 import frc.robot.commands.drive.RobotOrientedDrive;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.JoystickControls;
-import frc.robot.subsystem.drive.SwerveDriveSubsystem;
+import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;
 import frc.robot.test.drive.DrivePIDTestCommand;
 import frc.robot.test.drive.TurnPIDTestCommand;
@@ -21,7 +21,7 @@ public class RobotContainer {
 	public static double LOOP_PERIOD = 0.020;
 
 	public static Robot robot;
-	public static SwerveDriveSubsystem drive = new SwerveDriveSubsystem();
+	public static SwerveDrive drive = new SwerveDrive();
 
 	public static Controls ctrl = new JoystickControls();
 	// public static Controls ctrl = new XboxControls();

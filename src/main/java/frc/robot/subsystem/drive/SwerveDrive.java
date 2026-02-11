@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
-public class SwerveDriveSubsystem extends SubsystemBase {
+public class SwerveDrive extends SubsystemBase {
 	public static double ROBOT_LENGTH = 28 * 2.54 / 100.;
 	public static double ROBOT_WIDTH = 27 * 2.54 / 100.;
 

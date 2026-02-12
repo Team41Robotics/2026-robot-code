@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -20,11 +21,13 @@ import frc.robot.test.drive.TurnPIDTestCommand;
 public class RobotContainer {
 	public static double LOOP_PERIOD = 0.020;
 
-	public static Robot robot;
-	public static SwerveDrive drive = new SwerveDrive();
-
 	public static Controls ctrl = new JoystickControls();
 	// public static Controls ctrl = new XboxControls();
+
+	public static Robot robot;
+	public static CANBus driveBus = new CANBus("Ducky"); // TODO
+
+	public static SwerveDrive drive = new SwerveDrive();
 	public static IMU imu = new IMU();
 
 	public static Command autonomousCommand = null;

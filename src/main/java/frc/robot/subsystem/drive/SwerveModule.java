@@ -34,7 +34,7 @@ public class SwerveModule {
 	public static TrapezoidProfile turnProfile = new TrapezoidProfile(TURN_CONSTRAINTS);
 
 	public SwerveHW hw = new SwerveHW();
-	public SwerveInputsAutoLogged inputs;
+	public SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
 	public String name;
 
 	public SwerveModuleState currentState = new SwerveModuleState();
@@ -49,7 +49,6 @@ public class SwerveModule {
 	public void init(SwerveModuleConfiguration config) {
 		name = config.name;
 
-		inputs = new SwerveInputsAutoLogged();
 		hw.init(config);
 		sense();
 		setpointAngle = new State(inputs.turnAbsPos, inputs.turnVel);

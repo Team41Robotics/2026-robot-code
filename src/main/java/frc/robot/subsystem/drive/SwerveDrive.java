@@ -37,7 +37,7 @@ public class SwerveDrive extends SubsystemBase {
 			new Translation2d(-ROBOT_LENGTH / 2, ROBOT_WIDTH / 2),
 			new Translation2d(-ROBOT_LENGTH / 2, -ROBOT_WIDTH / 2));
 
-	public SwerveModule[] modules;
+	public SwerveModule[] modules = new SwerveModule[configs.length];
 
 	public SwerveDrivePoseEstimator pose_est;
 
@@ -50,11 +50,11 @@ public class SwerveDrive extends SubsystemBase {
 	public Pose2d pose = new Pose2d();
 
 	public void init(Pose2d init_pose) {
-		modules = new SwerveModule[configs.length];
 		for (int i = 0; i < modules.length; i++) {
 			modules[i] = new SwerveModule();
 			modules[i].init(configs[i]);
 		}
+
 		SwerveModulePosition[] zeropos = new SwerveModulePosition[configs.length];
 		for (int i = 0; i < configs.length; i++) zeropos[i] = new SwerveModulePosition();
 		pose_est = new SwerveDrivePoseEstimator(
@@ -64,6 +64,8 @@ public class SwerveDrive extends SubsystemBase {
 				init_pose,
 				VecBuilder.fill(0.1, 0.1, 0.05), // TODO
 				VecBuilder.fill(0.75, 0.75, 0.9));
+
+		sense();
 	}
 
 	public void drive(ChassisSpeeds speeds) {

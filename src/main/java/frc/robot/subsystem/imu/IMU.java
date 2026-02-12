@@ -5,12 +5,11 @@ import org.littletonrobotics.junction.Logger;
 
 public class IMU extends SubsystemBase {
 	public IMUNavXHW hw = new IMUNavXHW();
-	public IMUInputsAutoLogged inputs;
+	public IMUInputsAutoLogged inputs = new IMUInputsAutoLogged();
 
 	public double yaw;
 
 	public void init() {
-		inputs = new IMUInputsAutoLogged();
 		hw.init();
 		sense();
 	}

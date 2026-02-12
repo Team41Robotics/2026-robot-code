@@ -1,6 +1,7 @@
 package frc.robot.subsystem.drive;
 
 import static edu.wpi.first.math.MathUtil.*;
+import static frc.robot.RobotContainer.*;
 import static java.lang.Math.*;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -40,7 +41,7 @@ public class SwerveHW {
 
 		if (!Robot.isReal()) return;
 
-		driveTalonFX = new TalonFX(config.drive_motor_id, "Ducky"); // TODO
+		driveTalonFX = new TalonFX(config.drive_motor_id, driveBus);
 		TalonFXConfiguration driveConfig = new TalonFXConfiguration();
 
 		driveConfig.Slot0.kP = DRIVE_kP * DRIVE_RATIO * 2 * PI * SWERVE_WHEEL_RAD;
@@ -57,7 +58,7 @@ public class SwerveHW {
 		driveTalonFX.setPosition(0);
 		driveTalonFX.setNeutralMode(NeutralModeValue.Coast);
 
-		turnTalonFX = new TalonFX(config.turn_motor_id, "Ducky");
+		turnTalonFX = new TalonFX(config.turn_motor_id, driveBus);
 		TalonFXConfiguration turnConfig = new TalonFXConfiguration();
 
 		turnConfig.Slot0.kP = TURN_kP * TURN_RATIO * 2 * PI;
@@ -72,7 +73,7 @@ public class SwerveHW {
 		turnTalonFX.clearStickyFaults();
 		turnTalonFX.setNeutralMode(NeutralModeValue.Coast);
 
-		turnAbsoluteEncoder = new CANcoder(config.encoder_id, "Ducky");
+		turnAbsoluteEncoder = new CANcoder(config.encoder_id, driveBus);
 		turnAbsoluteEncoder.clearStickyFaults();
 	}
 

@@ -23,7 +23,8 @@ public class SwerveDrive extends SubsystemBase {
 	// FIXME. tunable robot dimensions (meters)
 
 	public static double MAX_VEL = SwerveModule.MAX_VEL; // FIXME. tunable max wheel velocity
-	public static double MAX_OMEGA = MAX_VEL / hypot(ROBOT_LENGTH / 2, ROBOT_WIDTH / 2); // FIXME. derived tunable max angular vel
+	public static double MAX_OMEGA =
+			MAX_VEL / hypot(ROBOT_LENGTH / 2, ROBOT_WIDTH / 2); // FIXME. derived tunable max angular vel
 
 	public SwerveModuleConfiguration[] configs = new SwerveModuleConfiguration[] {
 		new SwerveModuleConfiguration("NW", 9, 10, 15, -0.006135923151542565), // FIXME. ports & angle offset
@@ -40,7 +41,7 @@ public class SwerveDrive extends SubsystemBase {
 
 	public SwerveModule[] modules = new SwerveModule[configs.length];
 
-	public SwerveDrivePoseEstimator pose_est;
+	public SwerveDrivePoseEstimator poseEst;
 
 	public SwerveModulePosition[] swervePositions = new SwerveModulePosition[configs.length];
 	public SwerveModuleState[] targetStates = new SwerveModuleState[configs.length];
@@ -58,7 +59,7 @@ public class SwerveDrive extends SubsystemBase {
 
 		SwerveModulePosition[] zeropos = new SwerveModulePosition[configs.length];
 		for (int i = 0; i < configs.length; i++) zeropos[i] = new SwerveModulePosition();
-		pose_est = new SwerveDrivePoseEstimator(
+		poseEst = new SwerveDrivePoseEstimator(
 				kinematics,
 				new Rotation2d(imu.yaw),
 				zeropos,
@@ -94,8 +95,8 @@ public class SwerveDrive extends SubsystemBase {
 		}
 		speeds = kinematics.toChassisSpeeds(swerveStates);
 
-		pose_est.updateWithTime(Timer.getTimestamp(), new Rotation2d(imu.yaw), swervePositions);
-		pose = pose_est.getEstimatedPosition();
+		poseEst.updateWithTime(Timer.getTimestamp(), new Rotation2d(imu.yaw), swervePositions);
+		pose = poseEst.getEstimatedPosition();
 
 		Logger.recordOutput("/Swerve/speeds_setpoints", targetSpeeds);
 		Logger.recordOutput("/Swerve/speeds", speeds);

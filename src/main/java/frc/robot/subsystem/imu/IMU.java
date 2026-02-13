@@ -16,9 +16,8 @@ public class IMU extends SubsystemBase {
 
 	public void sense() {
 		hw.sense(inputs);
+		Logger.processInputs("/IMU", inputs);
 
 		yaw = inputs.yaw;
-
-		Logger.processInputs("/IMU", inputs);
 	}
 }

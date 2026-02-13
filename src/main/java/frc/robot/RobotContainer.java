@@ -15,6 +15,7 @@ import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.JoystickControls;
 import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;
+import frc.robot.subsystem.vision.Vision;
 import frc.robot.test.drive.DrivePIDTestCommand;
 import frc.robot.test.drive.TurnPIDTestCommand;
 
@@ -29,6 +30,7 @@ public class RobotContainer {
 
 	public static SwerveDrive drive = new SwerveDrive();
 	public static IMU imu = new IMU();
+	public static Vision vision = new Vision();
 
 	public static Command autonomousCommand = null;
 
@@ -58,6 +60,7 @@ public class RobotContainer {
 	public static void periodic() {
 		imu.sense();
 		drive.sense();
+		vision.sense();
 
 		CommandScheduler.getInstance().run();
 

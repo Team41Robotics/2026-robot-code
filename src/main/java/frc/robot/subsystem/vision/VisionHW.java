@@ -4,13 +4,15 @@ import edu.wpi.first.math.geometry.Transform3d;
 import frc.robot.Robot;
 import java.util.List;
 import org.photonvision.PhotonCamera;
-import org.photonvision.common.dataflow.structures.Packet;
+import org.photonvision.common.dataflow.structures.ReusablePacket;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 public class VisionHW {
 	public PhotonCamera cam;
 	public String name;
 	public Transform3d camPos;
+
+	public ReusablePacket encodePacket = new ReusablePacket(1024);
 
 	public VisionHW(String name, Transform3d camPos) {
 		this.name = name;
@@ -29,8 +31,10 @@ public class VisionHW {
 		inputs.isConnected = cam.isConnected();
 
 		List<PhotonPipelineResult> res = cam.getAllUnreadResults();
-		Packet dat = new Packet(0);
-		dat.encodeList(res);
-		inputs.data = dat.getWrittenDataCopy();
+
+		encodePacket.reset();
+		encodePacket.encodeList(res);
+
+		inputs.data = encodePacket.getDataReference();
 	}
 }

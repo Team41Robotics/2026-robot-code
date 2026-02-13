@@ -14,13 +14,15 @@ import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.common.dataflow.structures.Packet;
+import org.photonvision.common.dataflow.structures.ReusablePacket;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 public class Vision extends SubsystemBase {
 	public VisionHW[] hws = new VisionHW[] {new VisionHW("TODO", new Transform3d())};
 	public VisionInputsAutoLogged[] inputs = new VisionInputsAutoLogged[hws.length];
 	public PhotonPoseEstimator[] poseEst = new PhotonPoseEstimator[hws.length];
+
+	public ReusablePacket[] decodePackets = new ReusablePacket[hws.length];
 
 	public static AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
@@ -31,6 +33,7 @@ public class Vision extends SubsystemBase {
 			VisionHW hw = hws[i];
 			inputs[i] = new VisionInputsAutoLogged();
 			poseEst[i] = new PhotonPoseEstimator(tagLayout, hw.camPos);
+			decodePackets[i] = new ReusablePacket(0); // Pre-allocate decode packets
 			hw.init();
 		}
 		sense();
@@ -44,8 +47,9 @@ public class Vision extends SubsystemBase {
 			hw.sense(input);
 			Logger.processInputs("/Vision/" + hw.name, input);
 
-			Packet dat = new Packet(input.data);
-			List<PhotonPipelineResult> res = dat.decodeList(PhotonPipelineResult.photonStruct);
+			decodePackets[i].setData(input.data);
+
+			List<PhotonPipelineResult> res = decodePackets[i].decodeList(PhotonPipelineResult.photonStruct);
 
 			poseEst[i].addHeadingData(Timer.getTimestamp(), drive.pose.getRotation());
 

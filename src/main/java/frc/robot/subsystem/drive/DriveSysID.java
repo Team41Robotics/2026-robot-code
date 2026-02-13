@@ -43,13 +43,14 @@ public class DriveSysID {
 			drive.modules[i].hw.sysidDrive = true;
 		}
 
-		SysIdRoutine.Config config = new SysIdRoutine.Config(Volts.of(0.5).per(Second), Volts.of(5), Seconds.of(10)); // FIXME. sysid volt ramp, max volts, duration
+		SysIdRoutine.Config config = new SysIdRoutine.Config(
+				Volts.of(0.5).per(Second), Volts.of(5), Seconds.of(10)); // FIXME. sysid volt ramp, max volts, duration
 		SysIdRoutine.Mechanism mechanism = new SysIdRoutine.Mechanism(this::actuate, this::log, drive);
 		routine = new SysIdRoutine(config, mechanism);
 
-		ctrl.sysid_quasi_forward().whileTrue(routine.quasistatic(Direction.kForward));
-		ctrl.sysid_quasi_backward().whileTrue(routine.quasistatic(Direction.kReverse));
-		ctrl.sysid_dyna_forward().whileTrue(routine.dynamic(Direction.kForward));
-		ctrl.sysid_dyna_backward().whileTrue(routine.dynamic(Direction.kReverse));
+		ctrl.sysidQuasiForward().whileTrue(routine.quasistatic(Direction.kForward));
+		ctrl.sysidQuasiBackward().whileTrue(routine.quasistatic(Direction.kReverse));
+		ctrl.sysidDynaForward().whileTrue(routine.dynamic(Direction.kForward));
+		ctrl.sysidDynaBackward().whileTrue(routine.dynamic(Direction.kReverse));
 	}
 }

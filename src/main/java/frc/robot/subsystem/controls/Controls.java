@@ -4,13 +4,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public interface Controls {
 
-	public Trigger sysid_quasi_forward();
+	public Trigger sysidQuasiForward();
 
-	public Trigger sysid_quasi_backward();
+	public Trigger sysidQuasiBackward();
 
-	public Trigger sysid_dyna_forward();
+	public Trigger sysidDynaForward();
 
-	public Trigger sysid_dyna_backward();
+	public Trigger sysidDynaBackward();
 
 	public double leftX();
 

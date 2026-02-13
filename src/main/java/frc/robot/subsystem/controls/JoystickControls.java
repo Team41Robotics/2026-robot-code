@@ -8,19 +8,19 @@ public class JoystickControls implements Controls {
 	public static CommandJoystick right_js = new CommandJoystick(4);
 	public static CommandJoystick ds = new CommandJoystick(2);
 
-	public Trigger sysid_quasi_forward() {
+	public Trigger sysidQuasiForward() {
 		return left_js.button(1);
 	}
 
-	public Trigger sysid_quasi_backward() {
+	public Trigger sysidQuasiBackward() {
 		return left_js.button(2);
 	}
 
-	public Trigger sysid_dyna_forward() {
+	public Trigger sysidDynaForward() {
 		return left_js.button(3);
 	}
 
-	public Trigger sysid_dyna_backward() {
+	public Trigger sysidDynaBackward() {
 		return left_js.button(4);
 	}
 

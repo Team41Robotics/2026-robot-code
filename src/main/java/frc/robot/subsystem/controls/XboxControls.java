@@ -8,19 +8,19 @@ public class XboxControls implements Controls {
 	public static CommandXboxController xbox = new CommandXboxController(1);
 	public static CommandJoystick ds = new CommandJoystick(2);
 
-	public Trigger sysid_quasi_forward() {
+	public Trigger sysidQuasiForward() {
 		return xbox.y();
 	}
 
-	public Trigger sysid_quasi_backward() {
+	public Trigger sysidQuasiBackward() {
 		return xbox.a();
 	}
 
-	public Trigger sysid_dyna_forward() {
+	public Trigger sysidDynaForward() {
 		return xbox.x();
 	}
 
-	public Trigger sysid_dyna_backward() {
+	public Trigger sysidDynaBackward() {
 		return xbox.b();
 	}
 

@@ -15,14 +15,14 @@ import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveHW {
-	public static double DRIVE_RATIO = 1 / 5.36; // gear ratios are motor * gear ratio = mechanism
-	public static double TURN_RATIO = 1 / 18.75;
-	public static double SWERVE_WHEEL_RAD = 2 * 2.54 / 100.;
+	public static double DRIVE_RATIO = 1 / 5.36; // gear ratios are motor * gear ratio = mechanism // FIXME.
+	public static double TURN_RATIO = 1 / 18.75; // FIXME.
+	public static double SWERVE_WHEEL_RAD = 2 * 2.54 / 100.; // FIXME.
 
-	public static double DRIVE_kP = 4;
+	public static double DRIVE_kP = 4; // FIXME. drive PID P
 
-	public static double TURN_kP = 20;
-	public static double TURN_kD = 0.4;
+	public static double TURN_kP = 20; // FIXME. turn PID P
+	public static double TURN_kD = 0.4; // FIXME. turn PID D
 
 	public TalonFX driveTalonFX;
 	public TalonFX turnTalonFX;
@@ -47,9 +47,9 @@ public class SwerveHW {
 		driveConfig.Slot0.kP = DRIVE_kP * DRIVE_RATIO * 2 * PI * SWERVE_WHEEL_RAD;
 
 		driveConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		driveConfig.CurrentLimits.SupplyCurrentLimit = 60;
+		driveConfig.CurrentLimits.SupplyCurrentLimit = 60; // FIXME. supply current limit (A)
 		driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		driveConfig.CurrentLimits.StatorCurrentLimit = 23;
+		driveConfig.CurrentLimits.StatorCurrentLimit = 23; // FIXME. stator current limit (A)
 
 		driveConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
@@ -65,7 +65,7 @@ public class SwerveHW {
 		turnConfig.Slot0.kD = TURN_kD * TURN_RATIO * 2 * PI;
 
 		turnConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		turnConfig.CurrentLimits.SupplyCurrentLimit = 30;
+		turnConfig.CurrentLimits.SupplyCurrentLimit = 30; // FIXME. supply current limit (A)
 
 		turnConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 

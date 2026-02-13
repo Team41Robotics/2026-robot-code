@@ -13,23 +13,23 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule {
-	public static double DRIVE_kS = 0.093052;
-	public static double DRIVE_kV = 1.8968;
-	public static double DRIVE_kA = 0.15096;
+	public static double DRIVE_kS = 0.093052; // FIXME. feedforward ks (tune)
+	public static double DRIVE_kV = 1.8968; // FIXME. feedforward kv (tune)
+	public static double DRIVE_kA = 0.15096; // FIXME. feedforward ka (tune)
 	public static SimpleMotorFeedforward DRIVE_FF = new SimpleMotorFeedforward(DRIVE_kS, DRIVE_kV, DRIVE_kA);
 
-	public static double TURN_kS = 0.19431;
-	public static double TURN_kV = 0.36606;
+	public static double TURN_kS = 0.19431; // FIXME. turn feedforward ks (tune)
+	public static double TURN_kV = 0.36606; // FIXME. turn feedforward kv (tune)
 	// public static double TURN_kA = 0.044138;
-	public static double TURN_kA = 0.;
+	public static double TURN_kA = 0.; // FIXME. turn feedforward ka (tune)
 	public static SimpleMotorFeedforward TURN_FF = new SimpleMotorFeedforward(TURN_kS, TURN_kV, TURN_kA);
 
-	public static double MAX_VEL = 6.0;
+	public static double MAX_VEL = 6.0; // FIXME. max wheel velocity (m/s)
 
-	public static Constraints DRIVE_CONSTRAINTS = new Constraints(45, 1e9);
+	public static Constraints DRIVE_CONSTRAINTS = new Constraints(45, 1e9); // FIXME. drive constraints (deg/s, deg/s^2)
 	public static TrapezoidProfile driveProfile = new TrapezoidProfile(DRIVE_CONSTRAINTS);
 
-	public static Constraints TURN_CONSTRAINTS = new Constraints(20, 80);
+	public static Constraints TURN_CONSTRAINTS = new Constraints(20, 80); // FIXME. turn constraints (deg/s, deg/s^2)
 	// public static Constraints TURN_CONSTRAINTS = new Constraints(1e9, 1e9);
 	public static TrapezoidProfile turnProfile = new TrapezoidProfile(TURN_CONSTRAINTS);
 

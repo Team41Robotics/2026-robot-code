@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class XboxControls implements Controls {
-	public static CommandXboxController xbox = new CommandXboxController(1);
-	public static CommandJoystick ds = new CommandJoystick(2);
+	public static CommandXboxController xbox = new CommandXboxController(1); // FIXME. controller port
+	public static CommandJoystick ds = new CommandJoystick(2); // FIXME. driver station joystick port
 
 	public Trigger sysid_quasi_forward() {
 		return xbox.y();

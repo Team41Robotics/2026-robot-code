@@ -20,15 +20,16 @@ import org.littletonrobotics.junction.Logger;
 public class SwerveDrive extends SubsystemBase {
 	public static double ROBOT_LENGTH = 28 * 2.54 / 100.;
 	public static double ROBOT_WIDTH = 27 * 2.54 / 100.;
+	// FIXME. tunable robot dimensions (meters)
 
-	public static double MAX_VEL = SwerveModule.MAX_VEL;
-	public static double MAX_OMEGA = MAX_VEL / hypot(ROBOT_LENGTH / 2, ROBOT_WIDTH / 2);
+	public static double MAX_VEL = SwerveModule.MAX_VEL; // FIXME. tunable max wheel velocity
+	public static double MAX_OMEGA = MAX_VEL / hypot(ROBOT_LENGTH / 2, ROBOT_WIDTH / 2); // FIXME. derived tunable max angular vel
 
 	public SwerveModuleConfiguration[] configs = new SwerveModuleConfiguration[] {
-		new SwerveModuleConfiguration("NW", 9, 10, 15, -0.006135923151542565),
-		new SwerveModuleConfiguration("NE", 7, 8, 18, 0.006135923151542565),
-		new SwerveModuleConfiguration("SW", 11, 12, 17, 0.009203884727313847),
-		new SwerveModuleConfiguration("SE", 5, 6, 16, -0.032213596545598466)
+		new SwerveModuleConfiguration("NW", 9, 10, 15, -0.006135923151542565), // FIXME. ports & angle offset
+		new SwerveModuleConfiguration("NE", 7, 8, 18, 0.006135923151542565), // FIXME. ports & angle offset
+		new SwerveModuleConfiguration("SW", 11, 12, 17, 0.009203884727313847), // FIXME. ports & angle offset
+		new SwerveModuleConfiguration("SE", 5, 6, 16, -0.032213596545598466) // FIXME. ports & angle offset
 	};
 
 	public SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
@@ -62,8 +63,8 @@ public class SwerveDrive extends SubsystemBase {
 				new Rotation2d(imu.yaw),
 				zeropos,
 				init_pose,
-				VecBuilder.fill(0.1, 0.1, 0.05), // TODO
-				VecBuilder.fill(0.75, 0.75, 0.9));
+				VecBuilder.fill(0.1, 0.1, 0.05), // FIXME.
+				VecBuilder.fill(0.75, 0.75, 0.9)); // FIXME. vision measurement covariance (tune)
 
 		sense();
 	}

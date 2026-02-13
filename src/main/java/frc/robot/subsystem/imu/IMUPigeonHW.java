@@ -9,7 +9,7 @@ public class IMUPigeonHW {
 	public void init() {
 		if (!Robot.isReal()) return;
 
-		imu = new Pigeon2(2);
+		imu = new Pigeon2(2); // FIXME. Pigeon2 CAN ID
 		imu.reset();
 	}
 

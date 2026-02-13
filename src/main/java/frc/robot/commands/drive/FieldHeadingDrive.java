@@ -15,13 +15,13 @@ import frc.robot.Util;
 
 @SuppressWarnings("static-access")
 public class FieldHeadingDrive extends Command {
-	public static double DEADBAND = 0.10;
-	public static double TURN_DEADBAND = 0.50;
+	public static double DEADBAND = 0.10; // FIXME. controller deadband
+	public static double TURN_DEADBAND = 0.50; // FIXME. controller turn deadband
 
-	public Constraints ROT_CONSTRAINTS = new Constraints(drive.MAX_OMEGA, drive.MAX_OMEGA);
+	public Constraints ROT_CONSTRAINTS = new Constraints(drive.MAX_OMEGA, drive.MAX_OMEGA); // FIXME. turn constraints
 
 	public TrapezoidProfile profile = new TrapezoidProfile(ROT_CONSTRAINTS);
-	public PIDController pid = new PIDController(5, 0, 0);
+	public PIDController pid = new PIDController(5, 0, 0); // FIXME. heading PID (P,I,D)
 
 	public State setpointHeading = new State();
 
@@ -41,7 +41,7 @@ public class FieldHeadingDrive extends Command {
 		// TODO: maybe angle snap?
 		double theta = atan2(vy, vx);
 
-		double speed_mul = 1;
+		double speed_mul = 1; // FIXME. speed multiplier/limiter (tune)
 
 		Rotation2d heading = drive.pose.getRotation();
 		if (isRed()) heading = heading.plus(Rotation2d.kPi);

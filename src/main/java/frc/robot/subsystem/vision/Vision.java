@@ -58,28 +58,28 @@ public class Vision extends SubsystemBase {
 						false,
 						1);
 				if (!camPose.isEmpty()) {
-					drive.pose_est.addVisionMeasurement(
-							camPose.get().estimatedPose.toPose2d(),
-							res.get(j).getTimestampSeconds(),
-							VecBuilder.fill(0.75, 0.75, 0.9));
+						drive.pose_est.addVisionMeasurement(
+								camPose.get().estimatedPose.toPose2d(),
+								res.get(j).getTimestampSeconds(),
+								VecBuilder.fill(0.75, 0.75, 0.9)); // FIXME. vision measurement covariance (tune)
 					continue;
 				}
 
 				camPose = poseEst[i].estimateCoprocMultiTagPose(res.get(j));
 				if (!camPose.isEmpty() && res.get(j).targets.size() >= 2) {
-					drive.pose_est.addVisionMeasurement(
+						drive.pose_est.addVisionMeasurement(
 							camPose.get().estimatedPose.toPose2d(),
 							res.get(j).getTimestampSeconds(),
-							VecBuilder.fill(0.75, 0.75, 0.9));
+							VecBuilder.fill(0.75, 0.75, 0.9)); // FIXME. vision measurement covariance (tune)
 					continue;
 				}
 
 				camPose = poseEst[i].estimatePnpDistanceTrigSolvePose(res.get(j));
 				if (!camPose.isEmpty()) {
-					drive.pose_est.addVisionMeasurement(
+						drive.pose_est.addVisionMeasurement(
 							camPose.get().estimatedPose.toPose2d(),
 							res.get(j).getTimestampSeconds(),
-							VecBuilder.fill(0.75, 0.75, 0.9));
+							VecBuilder.fill(0.75, 0.75, 0.9)); // FIXME. vision measurement covariance (tune)
 					continue;
 				}
 			}

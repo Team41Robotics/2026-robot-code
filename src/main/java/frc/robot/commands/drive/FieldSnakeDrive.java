@@ -15,17 +15,17 @@ import frc.robot.Util;
 
 @SuppressWarnings("static-access")
 public class FieldSnakeDrive extends Command {
-	public static double DEADBAND = 0.10; // FIXME. controller deadband
-	public static double TURN_DEADBAND = 0.50; // FIXME. controller turn deadband
+	public static final double DEADBAND = 0.10; // FIXME. controller deadband
+	public static final double TURN_DEADBAND = 0.50; // FIXME. controller turn deadband
 
-	public Constraints ROT_CONSTRAINTS = new Constraints(drive.MAX_OMEGA, drive.MAX_OMEGA); // FIXME. turn constraints
+	public static final Constraints ROT_CONSTRAINTS = new Constraints(drive.MAX_W, drive.MAX_W); // FIXME. turn constraints
 
 	public TrapezoidProfile profile = new TrapezoidProfile(ROT_CONSTRAINTS);
 	public PIDController pid = new PIDController(5, 0, 0); // FIXME. heading PID (P,I,D)
 
 	public State setpointHeading = new State();
 
-	public double turn_theta;
+	public double targetTheta;
 
 	public FieldSnakeDrive() {
 		addRequirements(drive);
@@ -38,32 +38,31 @@ public class FieldSnakeDrive extends Command {
 
 	public ChassisSpeeds run(double vx, double vy, double tx, double ty) {
 		double mag = hypot(vx, vy);
-		double mag_curved = Util.squareCurve(Util.deadband(mag, DEADBAND));
+		double v = Util.squareCurve(Util.deadband(mag, DEADBAND));
 
-		// TODO: maybe angle snap?
 		double theta = atan2(vy, vx);
 
-		double speed_mul = 1; // FIXME. speed multiplier/limiter (tune)
+		double speedMul = 1; // FIXME. speed multiplier/limiter (tune)
 
 		Rotation2d heading = drive.pose.getRotation();
 		if (isRed()) heading = heading.plus(Rotation2d.kPi);
 
-		turn_theta = hypot(tx, ty) < TURN_DEADBAND ? (mag < TURN_DEADBAND ? turn_theta : theta) : atan2(ty, tx);
+		targetTheta = hypot(tx, ty) < TURN_DEADBAND ? (mag < TURN_DEADBAND ? targetTheta : theta) : atan2(ty, tx);
 
-		turn_theta = inputModulus(turn_theta - setpointHeading.position, 0, 2 * PI) + setpointHeading.position;
-		State newHeading1 = profile.calculate(LOOP_PERIOD, setpointHeading, new State(turn_theta, 0));
-		double time1 = profile.totalTime();
+		targetTheta = inputModulus(targetTheta - setpointHeading.position, 0, 2 * PI) + setpointHeading.position;
+		State h1 = profile.calculate(LOOP_PERIOD, setpointHeading, new State(targetTheta, 0));
+		double t1 = profile.totalTime();
 
-		turn_theta -= 2 * PI;
-		State newHeading2 = profile.calculate(LOOP_PERIOD, setpointHeading, new State(turn_theta, 0));
-		double time2 = profile.totalTime();
+		targetTheta -= 2 * PI;
+		State h2 = profile.calculate(LOOP_PERIOD, setpointHeading, new State(targetTheta, 0));
+		double t2 = profile.totalTime();
 
-		State newHeading = time1 < time2 ? newHeading1 : newHeading2;
+		State newHeading = t1 < t2 ? h1 : h2;
 		setpointHeading = newHeading;
 
 		ChassisSpeeds speeds = new ChassisSpeeds(
-				mag_curved * cos(theta) * drive.MAX_VEL * speed_mul,
-				mag_curved * sin(theta) * drive.MAX_VEL * speed_mul,
+				v * cos(theta) * drive.MAX_VEL * speedMul,
+				v * sin(theta) * drive.MAX_VEL * speedMul,
 				pid.calculate(heading.getRadians(), newHeading.position) + newHeading.velocity);
 
 		return ChassisSpeeds.fromFieldRelativeSpeeds(speeds, heading);
@@ -71,7 +70,7 @@ public class FieldSnakeDrive extends Command {
 
 	@Override
 	public void execute() {
-		ChassisSpeeds speeds = run(ctrl.leftY(), ctrl.leftX(), ctrl.rightY(), ctrl.rightX());
+		ChassisSpeeds speeds = run(controls.leftY(), controls.leftX(), controls.rightY(), controls.rightX());
 		drive.drive(speeds);
 	}
 }

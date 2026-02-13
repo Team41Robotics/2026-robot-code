@@ -12,20 +12,20 @@ public class DrivePIDTestCommand extends Command {
 		addRequirements(drive);
 	}
 
-	double velocity = 2;
+	double testVelocity = 2;
 
 	@Override
 	public void initialize() {
-		ctrl.sysidQuasiForward().onChange(new InstantCommand(() -> {
-			velocity = -velocity;
+		controls.sysidQuasiForward().onChange(new InstantCommand(() -> {
+			testVelocity = -testVelocity;
 		}));
 	}
 
 	@Override
 	public void execute() {
 		for (int i = 0; i < drive.modules.length; i++) {
-			drive.modules[i].drive(
-					new SwerveModuleState(ctrl.sysidQuasiBackward().getAsBoolean() ? velocity : 0, new Rotation2d()));
+			drive.modules[i].drive(new SwerveModuleState(
+					controls.sysidQuasiBackward().getAsBoolean() ? testVelocity : 0, new Rotation2d()));
 		}
 	}
 }

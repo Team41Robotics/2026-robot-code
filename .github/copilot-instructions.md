@@ -24,11 +24,60 @@ This is a WPILib-based robot codebase (Java) built around a sense -> schedule ->
 
 - Sense/Actuate separation: Subsystems implement `init()`, `sense()` (populate inputs / Logger.processInputs), and `actuate()` (write outputs / Logger.recordOutput). See `SwerveDrive`, `SwerveHW`, and `Vision` for examples.
 - Static wiring: `RobotContainer` exposes static subsystem instances (e.g., `RobotContainer.drive`, `RobotContainer.imu`) and is statically imported in many subsystem files (`import static frc.robot.RobotContainer.*;`). When editing code, prefer referencing these statics rather than creating new instances.
-- No encapsulation: Subsystem fields are often public for direct access (e.g., `SwerveDrive.pose`, `Vision.latestResults`) to simplify data flow and logging.
+- No encapsulation: Subsystem fields are often public for direct access (e.g., `SwerveDrive.pose`, `Vision.cameras`) to simplify data flow and logging.
 - Logging conventions: use `Logger.processInputs("/Subsystem/Name", inputs)` for inputs and `Logger.recordOutput("/Path/entry", value)` for outputs (examples in `SwerveDrive.sense()` and `SwerveHW.actuate()`). Keep the path consistent with subsystem names. Log as much as possible for replay/debugging, especially sensor readings and control setpoints.
 - Hardware IDs/configs: Swerve module IDs and angle offsets live in `SwerveDrive.configs` (see the `SwerveModuleConfiguration[]` array). To change hardware mapping, update those entries — don't scatter IDs through code.
 - CAN bus: `RobotContainer.driveBus` is configured once; CTRE Phoenix 6 components are created with that bus (see `SwerveHW.init`). Use the `driveBus` instance when instantiating hardware.
 - Field/AprilTag JSONs: deployed JSONs are in `src/main/deploy/apriltags/...`. `FieldConstants.AprilTagLayoutType` loads them via WPILib's deploy directory at runtime; change files there for simulation/replay.
+
+## Naming conventions (new repository standard)
+
+Follow these rules when adding or renaming variables, constants, and fields. The goal is concise, math-friendly names plus a clear, machine-parsable prefix scheme for measured vs. commanded values.
+
+- Short math-style locals are preferred in algorithms and commands:
+  - velocities: `v_x`, `v_y` (field-relative components), `v` or `mag` for magnitude
+  - angles/heading: `theta`
+  - angular velocity: `w` (omega)
+  - use `vx`, `vy`, `w` in one-letter math contexts for clarity and compact expressions
+
+- Swerve module / subsystem fields follow this measured/target/setpoint convention:
+  - Measured (sensor) values: simple, short names (no prefix). Examples: `angle`, `vel`, `drivePos`, `state` (for a SwerveModuleState)
+  - Target/command inputs from higher-level code: `targetVel`, `targetAng` (these are what you asked the module to achieve)
+  - Controller setpoints / profiler outputs: `setpointVel`, `setpointAng` (these are internal controller/trapezoid outputs)
+  - Use `state` for the WPILib kinematic object (e.g., `SwerveModuleState state`) and reserve `target`/`setpoint` names for numeric values produced/consumed by control loops.
+
+- Constants naming:
+  - Use an ALL_CAPS subsystem prefix, underscore, then the conventional WPILib-style lowercase `k` suffix for gains. Examples:
+    - Feedforward: `DRIVE_kS`, `DRIVE_kV`, `DRIVE_kA`, `TURN_kS`, `TURN_kV`, `TURN_kA`
+    - PID gains: `DRIVE_kP`, `TURN_kP`, `TURN_kD` (note the lowercase `k` then uppercase term)
+  - Use `MAX_VEL` and `MAX_W` for physical limits (meters/sec and rad/sec respectively).
+
+- Trapezoid/profile conventions:
+  - Make `TrapezoidProfile.Constraints` objects constants when they represent fixed tuning values for a controller: `public static final Constraints TURN_CONSTRAINTS = new Constraints(maxVel, maxAccel);`
+  - Do NOT make `PIDController` objects static/constants. Keep `PIDController` and `TrapezoidProfile` instances as non-static instance fields (they have internal state and should be per-command or per-subsystem).
+
+- Logger / API change guidance when renaming:
+  - When renaming fields used by logging or by other classes (for example `drive.poseEst` → `drive.poseEstimator` or vice versa), update all static imports and Logger paths. Logger keys should remain consistent when possible.
+
+Examples (recommended style):
+
+- SwerveModule fields:
+  - public SwerveModuleState state; // measured
+  - public double angle; // measured
+  - public double vel; // measured
+  - public double drivePos; // measured encoder
+  - public double targetVel; // commanded
+  - public double targetAng; // commanded
+  - public State setpointAng; // trapezoid output
+
+- Constants in `SwerveModule`/`SwerveHW`:
+  - public static final double DRIVE_kV = 1.23;
+  - public static final double DRIVE_kS = 0.12;
+  - public static final double DRIVE_kA = 0.01;
+  - public static final double MAX_VEL = 6.0;
+  - public static final double MAX_W = MAX_VEL / hypot(ROBOT_LEN/2, ROBOT_WID/2);
+
+These conventions strike a balance between compact math-like code (easier to read in control/math contexts) while preserving explicit, machine-friendly field names for logging and cross-class references.
 
 ## Build / test / formatting (quick commands)
 

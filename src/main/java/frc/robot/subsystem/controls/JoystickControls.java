@@ -4,39 +4,39 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class JoystickControls implements Controls {
-	public static CommandJoystick left_js = new CommandJoystick(3);
-	public static CommandJoystick right_js = new CommandJoystick(4);
-	public static CommandJoystick ds = new CommandJoystick(2);
+	public static CommandJoystick leftJoystick = new CommandJoystick(3);
+	public static CommandJoystick rightJoystick = new CommandJoystick(4);
+	public static CommandJoystick driverStation = new CommandJoystick(2);
 
 	public Trigger sysidQuasiForward() {
-		return left_js.button(1);
+		return leftJoystick.button(1);
 	}
 
 	public Trigger sysidQuasiBackward() {
-		return left_js.button(2);
+		return leftJoystick.button(2);
 	}
 
 	public Trigger sysidDynaForward() {
-		return left_js.button(3);
+		return leftJoystick.button(3);
 	}
 
 	public Trigger sysidDynaBackward() {
-		return left_js.button(4);
+		return leftJoystick.button(4);
 	}
 
 	public double leftX() {
-		return left_js.getX();
+		return leftJoystick.getX();
 	}
 
 	public double leftY() {
-		return left_js.getY();
+		return leftJoystick.getY();
 	}
 
 	public double rightX() {
-		return -right_js.getX();
+		return -rightJoystick.getX();
 	}
 
 	public double rightY() {
-		return -right_js.getY();
+		return -rightJoystick.getY();
 	}
 }

@@ -30,10 +30,10 @@ public class VisionHW {
 
 		inputs.isConnected = cam.isConnected();
 
-		List<PhotonPipelineResult> res = cam.getAllUnreadResults();
+		List<PhotonPipelineResult> results = cam.getAllUnreadResults();
 
 		encodePacket.reset();
-		encodePacket.encodeList(res);
+		encodePacket.encodeList(results);
 
 		inputs.data = encodePacket.getDataReference();
 	}

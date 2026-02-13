@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class JoystickControls implements Controls {
-	public static CommandJoystick left_js = new CommandJoystick(3); // FIXME. left joystick port
-	public static CommandJoystick right_js = new CommandJoystick(4); // FIXME. right joystick port
-	public static CommandJoystick ds = new CommandJoystick(2); // FIXME. driver station joystick port
+	public static CommandJoystick left_js = new CommandJoystick(3);
+	public static CommandJoystick right_js = new CommandJoystick(4);
+	public static CommandJoystick ds = new CommandJoystick(2);
 
 	public Trigger sysid_quasi_forward() {
 		return left_js.button(1);

@@ -11,10 +11,14 @@ import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
 import frc.robot.commands.drive.FieldSnakeDrive;
 import frc.robot.commands.drive.RobotOrientedDrive;
+import frc.robot.commands.intake.IntakeDown;
+import frc.robot.commands.intake.IntakeOscillate;
+import frc.robot.commands.intake.IntakeUp;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.JoystickControls;
 import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;
+import frc.robot.subsystem.intake.Intake;
 import frc.robot.subsystem.vision.Vision;
 import frc.robot.test.drive.DrivePIDTestCommand;
 import frc.robot.test.drive.TurnPIDTestCommand;
@@ -31,6 +35,7 @@ public class RobotContainer {
 	public static SwerveDrive drive = new SwerveDrive();
 	public static IMU imu = new IMU();
 	public static Vision vision = new Vision();
+	public static Intake intake = new Intake();
 
 	public static Command autonomousCommand = null;
 
@@ -39,6 +44,8 @@ public class RobotContainer {
 
 		drive.init(new Pose2d());
 		drive.setDefaultCommand(new FieldOrientedDrive());
+
+		intake.init();
 
 		// left_js.button(1).onTrue(new PrintSwervePos());
 
@@ -54,6 +61,10 @@ public class RobotContainer {
 		SmartDashboard.putData("FieldHeadingDrive", new FieldHeadingDrive());
 		SmartDashboard.putData("FieldSnakeDrive", new FieldSnakeDrive());
 
+		SmartDashboard.putData("IntakeDown", new IntakeDown());
+		SmartDashboard.putData("IntakeUp", new IntakeUp());
+		SmartDashboard.putData("IntakeOscillate", new IntakeOscillate());
+
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());
 	}
 
@@ -61,10 +72,12 @@ public class RobotContainer {
 		imu.sense();
 		drive.sense();
 		vision.sense();
+		intake.sense();
 
 		CommandScheduler.getInstance().run();
 
 		drive.actuate();
+		intake.actuate();
 	}
 
 	public static Command getAutonomousCommand() {

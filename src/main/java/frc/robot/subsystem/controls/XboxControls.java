@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class XboxControls implements Controls {
 	public static CommandXboxController xbox = new CommandXboxController(1);
-	public static CommandJoystick ds = new CommandJoystick(2);
+	public static CommandJoystick driverStation = new CommandJoystick(2);
 
 	public Trigger sysidQuasiForward() {
 		return xbox.y();

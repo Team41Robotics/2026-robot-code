@@ -18,71 +18,74 @@ import org.photonvision.common.dataflow.structures.ReusablePacket;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 public class Vision extends SubsystemBase {
-	public VisionHW[] hws = new VisionHW[] {new VisionHW("TODO", new Transform3d())};
-	public VisionInputsAutoLogged[] inputs = new VisionInputsAutoLogged[hws.length];
-	public PhotonPoseEstimator[] poseEst = new PhotonPoseEstimator[hws.length];
+	public VisionHW[] cameras = new VisionHW[] {new VisionHW("TODO", new Transform3d())};
+	public VisionInputsAutoLogged[] inputs = new VisionInputsAutoLogged[cameras.length];
+	public PhotonPoseEstimator[] poseEsts = new PhotonPoseEstimator[cameras.length];
 
-	public ReusablePacket[] decodePackets = new ReusablePacket[hws.length];
+	public ReusablePacket[] decodePackets = new ReusablePacket[cameras.length];
 
-	public static AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
+	public static final AprilTagFieldLayout TAG_LAYOUT =
+			AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
-	public int n = hws.length;
+	public final int nCams = cameras.length;
 
 	public void init() {
-		for (int i = 0; i < n; i++) {
-			VisionHW hw = hws[i];
+		for (int i = 0; i < nCams; i++) {
+			VisionHW cam = cameras[i];
 			inputs[i] = new VisionInputsAutoLogged();
-			poseEst[i] = new PhotonPoseEstimator(tagLayout, hw.camPos);
+			poseEsts[i] = new PhotonPoseEstimator(TAG_LAYOUT, cam.camPos);
 			decodePackets[i] = new ReusablePacket(0); // Pre-allocate decode packets
-			hw.init();
+			cam.init();
 		}
 		sense();
 	}
 
 	public void sense() {
-		for (int i = 0; i < n; i++) {
-			VisionHW hw = hws[i];
+		for (int i = 0; i < nCams; i++) {
+			VisionHW cam = cameras[i];
 			VisionInputsAutoLogged input = inputs[i];
 
-			hw.sense(input);
-			Logger.processInputs("/Vision/" + hw.name, input);
+			cam.sense(input);
+			Logger.processInputs("/Vision/" + cam.name, input);
 
 			decodePackets[i].setData(input.data);
 
-			List<PhotonPipelineResult> res = decodePackets[i].decodeList(PhotonPipelineResult.photonStruct);
+			List<PhotonPipelineResult> results = decodePackets[i].decodeList(PhotonPipelineResult.photonStruct);
 
-			poseEst[i].addHeadingData(Timer.getTimestamp(), drive.pose.getRotation());
+			poseEsts[i].addHeadingData(Timer.getTimestamp(), drive.pose.getRotation());
 
-			for (int j = 0; j < res.size(); j++) {
-				Optional<EstimatedRobotPose> camPose = poseEst[i].estimateConstrainedSolvepnpPose(
-						res.get(j),
-						hw.cam.getCameraMatrix().orElseThrow(),
-						hw.cam.getDistCoeffs().orElseThrow(),
+			for (int j = 0; j < results.size(); j++) {
+				PhotonPipelineResult result = results.get(j);
+
+				Optional<EstimatedRobotPose> estPose = poseEsts[i].estimateConstrainedSolvepnpPose(
+						result,
+						cam.cam.getCameraMatrix().orElseThrow(),
+						cam.cam.getDistCoeffs().orElseThrow(),
 						new Pose3d(drive.pose),
 						false,
 						1);
-				if (!camPose.isEmpty()) {
+				if (estPose.isPresent()) {
 					drive.poseEst.addVisionMeasurement(
-							camPose.get().estimatedPose.toPose2d(),
-							res.get(j).getTimestampSeconds(),
+							estPose.get().estimatedPose.toPose2d(),
+							result.getTimestampSeconds(),
 							VecBuilder.fill(0.75, 0.75, 0.9)); // FIXME. vision measurement covariance (tune)
 					continue;
 				}
 
-				camPose = poseEst[i].estimateCoprocMultiTagPose(res.get(j));
-				if (!camPose.isEmpty() && res.get(j).targets.size() >= 2) {
+				estPose = poseEsts[i].estimateCoprocMultiTagPose(result);
+				if (estPose.isPresent() && result.targets.size() >= 2) {
 					drive.poseEst.addVisionMeasurement(
-							camPose.get().estimatedPose.toPose2d(),
-							res.get(j).getTimestampSeconds(),
+							estPose.get().estimatedPose.toPose2d(),
+							result.getTimestampSeconds(),
 							VecBuilder.fill(0.75, 0.75, 0.9)); // FIXME. vision measurement covariance (tune)
 					continue;
 				}
 
-				camPose = poseEst[i].estimatePnpDistanceTrigSolvePose(res.get(j));
-				if (!camPose.isEmpty()) {
+				estPose = poseEsts[i].estimatePnpDistanceTrigSolvePose(result);
+				if (estPose.isPresent()) {
 					drive.poseEst.addVisionMeasurement(
-							camPose.get().estimatedPose.toPose2d(),
-							res.get(j).getTimestampSeconds(),
+							estPose.get().estimatedPose.toPose2d(),
+							result.getTimestampSeconds(),
 							VecBuilder.fill(0.75, 0.75, 0.9)); // FIXME. vision measurement covariance (tune)
 					continue;
 				}

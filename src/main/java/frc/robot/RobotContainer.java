@@ -24,10 +24,10 @@ import frc.robot.test.drive.DrivePIDTestCommand;
 import frc.robot.test.drive.TurnPIDTestCommand;
 
 public class RobotContainer {
-	public static double LOOP_PERIOD = 0.020;
+	public static final double LOOP_PERIOD = 0.020;
 
-	public static Controls ctrl = new JoystickControls();
-	// public static Controls ctrl = new XboxControls();
+	public static Controls controls = new JoystickControls();
+	// public static Controls controls = new XboxControls();
 
 	public static Robot robot;
 	public static CANBus driveBus = new CANBus("Ducky"); // FIXME.

@@ -9,8 +9,8 @@ import frc.robot.Util;
 
 @SuppressWarnings("static-access")
 public class RobotOrientedDrive extends Command {
-	public static double DEADBAND = 0.10; // FIXME. controller deadband
-	public static double TURN_DEADBAND = 0.10; // FIXME. controller turn deadband
+	public static final double DEADBAND = 0.10; // FIXME. controller deadband
+	public static final double TURN_DEADBAND = 0.10; // FIXME. controller turn deadband
 
 	public RobotOrientedDrive() {
 		addRequirements(drive);
@@ -18,24 +18,23 @@ public class RobotOrientedDrive extends Command {
 
 	public ChassisSpeeds run(double vx, double vy, double w) {
 		double mag = hypot(vx, vy);
-		double mag_curved = Util.squareCurve(Util.deadband(mag, DEADBAND));
-		double w_curved = Util.squareCurve(Util.deadband(w, TURN_DEADBAND));
+		double v = Util.squareCurve(Util.deadband(mag, DEADBAND));
+		double wc = Util.squareCurve(Util.deadband(w, TURN_DEADBAND));
 
-		// TODO: maybe angle snap?
 		double theta = atan2(vy, vx);
 
-		double speed_mul = 1; // FIXME. speed multiplier/limiter (tune)
-		double angular_speed_mul = 1; // FIXME. angular speed multiplier/limiter (tune)
+		double speedMul = 1; // FIXME. speed multiplier/limiter (tune)
+		double wMul = 1; // FIXME. angular speed multiplier/limiter (tune)
 
 		return new ChassisSpeeds(
-				mag_curved * cos(theta) * drive.MAX_VEL * speed_mul,
-				mag_curved * sin(theta) * drive.MAX_VEL * speed_mul,
-				w_curved * drive.MAX_OMEGA * angular_speed_mul);
+				v * cos(theta) * drive.MAX_VEL * speedMul,
+				v * sin(theta) * drive.MAX_VEL * speedMul,
+				wc * drive.MAX_W * wMul);
 	}
 
 	@Override
 	public void execute() {
-		ChassisSpeeds speeds = run(ctrl.leftY(), ctrl.leftX(), ctrl.rightX());
+		ChassisSpeeds speeds = run(controls.leftY(), controls.leftX(), controls.rightX());
 		drive.drive(speeds);
 	}
 }

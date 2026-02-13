@@ -37,7 +37,7 @@ public class TurnSysID {
 
 	public void init() {
 		for (int i = 0; i < drive.modules.length; i++) {
-			drive.modules[i].hw.sysidTurn = true;
+			drive.modules[i].hw.sysIdTurn = true;
 		}
 
 		SysIdRoutine.Config config = new SysIdRoutine.Config(
@@ -45,9 +45,9 @@ public class TurnSysID {
 		SysIdRoutine.Mechanism mechanism = new SysIdRoutine.Mechanism(this::actuate, this::log, drive);
 		routine = new SysIdRoutine(config, mechanism);
 
-		ctrl.sysidQuasiForward().whileTrue(routine.quasistatic(Direction.kForward));
-		ctrl.sysidQuasiBackward().whileTrue(routine.quasistatic(Direction.kReverse));
-		ctrl.sysidDynaForward().whileTrue(routine.dynamic(Direction.kForward));
-		ctrl.sysidDynaBackward().whileTrue(routine.dynamic(Direction.kReverse));
+		controls.sysidQuasiForward().whileTrue(routine.quasistatic(Direction.kForward));
+		controls.sysidQuasiBackward().whileTrue(routine.quasistatic(Direction.kReverse));
+		controls.sysidDynaForward().whileTrue(routine.dynamic(Direction.kForward));
+		controls.sysidDynaBackward().whileTrue(routine.dynamic(Direction.kReverse));
 	}
 }

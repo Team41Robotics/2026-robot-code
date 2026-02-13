@@ -13,37 +13,39 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule {
-	public static double DRIVE_kS = 0.093052; // FIXME. feedforward ks (tune)
-	public static double DRIVE_kV = 1.8968; // FIXME. feedforward kv (tune)
-	public static double DRIVE_kA = 0.15096; // FIXME. feedforward ka (tune)
-	public static SimpleMotorFeedforward DRIVE_FF = new SimpleMotorFeedforward(DRIVE_kS, DRIVE_kV, DRIVE_kA);
+	public static final double DRIVE_kS = 0.093052; // FIXME. feedforward kS (tune)
+	public static final double DRIVE_kV = 1.8968; // FIXME. feedforward kV (tune)
+	public static final double DRIVE_kA = 0.15096; // FIXME. feedforward kA (tune)
+	public static final SimpleMotorFeedforward DRIVE_FF = new SimpleMotorFeedforward(DRIVE_kS, DRIVE_kV, DRIVE_kA);
 
-	public static double TURN_kS = 0.19431; // FIXME. turn feedforward ks (tune)
-	public static double TURN_kV = 0.36606; // FIXME. turn feedforward kv (tune)
-	// public static double TURN_kA = 0.044138;
-	public static double TURN_kA = 0.; // FIXME. turn feedforward ka (tune)
-	public static SimpleMotorFeedforward TURN_FF = new SimpleMotorFeedforward(TURN_kS, TURN_kV, TURN_kA);
+	public static final double TURN_kS = 0.19431; // FIXME. turn feedforward kS (tune)
+	public static final double TURN_kV = 0.36606; // FIXME. turn feedforward kV (tune)
+	public static final double TURN_kA = 0.; // FIXME. turn feedforward kA (tune)
+	public static final SimpleMotorFeedforward TURN_FF = new SimpleMotorFeedforward(TURN_kS, TURN_kV, TURN_kA);
 
-	public static double MAX_VEL = 6.0; // FIXME. max wheel velocity (m/s)
+	public static final double MAX_VEL = 6.0; // FIXME. max wheel velocity (m/s)
 
-	public static Constraints DRIVE_CONSTRAINTS = new Constraints(45, 1e9); // FIXME. drive constraints (deg/s, deg/s^2)
-	public static TrapezoidProfile driveProfile = new TrapezoidProfile(DRIVE_CONSTRAINTS);
+	public static final Constraints DRIVE_CONSTRAINTS =
+			new Constraints(45, 1e9); // FIXME. drive constraints (deg/s, deg/s^2)
+	public static final TrapezoidProfile DRIVE_PROFILE = new TrapezoidProfile(DRIVE_CONSTRAINTS);
 
-	public static Constraints TURN_CONSTRAINTS = new Constraints(20, 80); // FIXME. turn constraints (deg/s, deg/s^2)
-	// public static Constraints TURN_CONSTRAINTS = new Constraints(1e9, 1e9);
-	public static TrapezoidProfile turnProfile = new TrapezoidProfile(TURN_CONSTRAINTS);
+	public static final Constraints TURN_CONSTRAINTS =
+			new Constraints(20, 80); // FIXME. turn constraints (deg/s, deg/s^2)
+	public static final TrapezoidProfile TURN_PROFILE = new TrapezoidProfile(TURN_CONSTRAINTS);
 
 	public SwerveHW hw = new SwerveHW();
 	public SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
 	public String name;
 
-	public SwerveModuleState currentState = new SwerveModuleState();
-	public double currentAngle;
-	public double currentVel;
-	public double currentDrivePos;
+	// Measured state
+	public SwerveModuleState state = new SwerveModuleState();
+	public double angle;
+	public double vel;
+	public double drivePos;
 
+	// Target/setpoint state
 	public SwerveModuleState targetState = new SwerveModuleState();
-	public State setpointAngle = new State();
+	public State setpointAng = new State();
 	public double setpointVel = 0;
 
 	public void init(SwerveModuleConfiguration config) {
@@ -51,45 +53,44 @@ public class SwerveModule {
 
 		hw.init(config);
 		sense();
-		setpointAngle = new State(inputs.turnAbsPos, inputs.turnVel);
+		setpointAng = new State(inputs.turnAbsPos, inputs.turnVel);
 	}
 
 	public void sense() {
 		hw.sense(inputs);
 		Logger.processInputs(hw.logRoot, inputs);
 
-		currentState = new SwerveModuleState(inputs.driveVel, new Rotation2d(angleModulus(inputs.turnAbsPos)));
-		currentAngle = inputs.turnAbsPos;
-		currentVel = inputs.driveVel;
-		currentDrivePos = inputs.drivePos;
+		state = new SwerveModuleState(inputs.driveVel, new Rotation2d(angleModulus(inputs.turnAbsPos)));
+		angle = inputs.turnAbsPos;
+		vel = inputs.driveVel;
+		drivePos = inputs.drivePos;
 	}
 
-	public void drive(SwerveModuleState state) {
-		state.optimize(new Rotation2d(inputs.turnAbsPos));
-		targetState = state;
+	public void drive(SwerveModuleState s) {
+		s.optimize(new Rotation2d(inputs.turnAbsPos));
+		targetState = s;
 	}
 
 	public void actuate() {
-		double targetAngle = targetState.angle.getRadians();
-		targetAngle = setpointAngle.position + angleModulus(targetAngle - setpointAngle.position);
-		double targetVel = targetState.speedMetersPerSecond * cos(currentAngle - targetAngle);
+		double targetAng = targetState.angle.getRadians();
+		targetAng = setpointAng.position + angleModulus(targetAng - setpointAng.position);
+		double targetVel = targetState.speedMetersPerSecond * cos(angle - targetAng);
 
-		State newSetpointAngle = turnProfile.calculate(LOOP_PERIOD, setpointAngle, new State(targetAngle, 0));
-		double turnFF = TURN_FF.calculateWithVelocities(setpointAngle.velocity, newSetpointAngle.velocity);
-		setpointAngle = newSetpointAngle;
+		State newSetpointAng = TURN_PROFILE.calculate(LOOP_PERIOD, setpointAng, new State(targetAng, 0));
+		double turnFF = TURN_FF.calculateWithVelocities(setpointAng.velocity, newSetpointAng.velocity);
+		setpointAng = newSetpointAng;
 
 		double newSetpointVel =
-				driveProfile.calculate(LOOP_PERIOD, new State(setpointVel, 0), new State(targetVel, 0)).position;
+				DRIVE_PROFILE.calculate(LOOP_PERIOD, new State(setpointVel, 0), new State(targetVel, 0)).position;
 		double driveFF = DRIVE_FF.calculateWithVelocities(setpointVel, newSetpointVel);
 		setpointVel = newSetpointVel;
 
-		hw.actuate(inputs, targetVel, driveFF, setpointAngle.position, turnFF);
+		hw.actuate(inputs, targetVel, driveFF, setpointAng.position, turnFF);
 
-		Logger.recordOutput(hw.logRoot + "/targetAngle", angleModulus(targetAngle));
+		Logger.recordOutput(hw.logRoot + "/targetAng", angleModulus(targetAng));
 		Logger.recordOutput(hw.logRoot + "/targetVel", targetVel);
-		Logger.recordOutput(hw.logRoot + "/targetVelCos", targetVel);
-		Logger.recordOutput(hw.logRoot + "/turnProfiledPos", angleModulus(setpointAngle.position));
-		Logger.recordOutput(hw.logRoot + "/turnProfiledVel", setpointAngle.velocity);
+		Logger.recordOutput(hw.logRoot + "/setpointAng", angleModulus(setpointAng.position));
+		Logger.recordOutput(hw.logRoot + "/setpointAngVel", setpointAng.velocity);
 		Logger.recordOutput(hw.logRoot + "/driveFF", driveFF);
 		Logger.recordOutput(hw.logRoot + "/turnFF", turnFF);
 	}

@@ -3,9 +3,9 @@ package frc.robot;
 import static java.lang.Math.*;
 
 public class Util {
-	public static double deadband(double x, double d) {
-		if (abs(x) < d) return 0;
-		return copySign(((abs(x) - d) / (1 - d)), x);
+	public static double deadband(double x, double db) {
+		if (abs(x) < db) return 0;
+		return copySign(((abs(x) - db) / (1 - db)), x);
 	}
 
 	public static double squareCurve(double x) {

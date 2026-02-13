@@ -18,8 +18,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 public class Robot extends LoggedRobot {
 	public final MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
 	public final List<GarbageCollectorMXBean> gcBeans = ManagementFactory.getGarbageCollectorMXBeans();
-	public long lastGcCount = 0;
-	public long lastGcTime = 0;
+	public long prevGcCount = 0;
+	public long prevGcTime = 0;
 
 	public Robot() {
 		super();
@@ -79,11 +79,11 @@ public class Robot extends LoggedRobot {
 
 		Logger.recordOutput("/GC/TotalCollections", totalGcCount);
 		Logger.recordOutput("/GC/TotalCollectionTimeMS", totalGcTime);
-		Logger.recordOutput("/GC/CollectionsSinceLast", totalGcCount - lastGcCount);
-		Logger.recordOutput("/GC/CollectionTimeMSSinceLast", totalGcTime - lastGcTime);
+		Logger.recordOutput("/GC/CollectionsSinceLast", totalGcCount - prevGcCount);
+		Logger.recordOutput("/GC/CollectionTimeMSSinceLast", totalGcTime - prevGcTime);
 
-		lastGcCount = totalGcCount;
-		lastGcTime = totalGcTime;
+		prevGcCount = totalGcCount;
+		prevGcTime = totalGcTime;
 	}
 
 	@Override

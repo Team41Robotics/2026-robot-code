@@ -35,6 +35,9 @@ public class SwerveHW {
 	public boolean sysidDrive = false;
 	public boolean sysidTurn = false;
 
+	public VelocityVoltage driveControlRequest = new VelocityVoltage(0).withSlot(0);
+	public PositionVoltage turnControlRequest = new PositionVoltage(0).withSlot(0);
+
 	public void init(SwerveModuleConfiguration config) {
 		logRoot = "Swerve/" + config.name;
 		angleOffset = config.angleOffset;
@@ -108,9 +111,9 @@ public class SwerveHW {
 		if (!Robot.isReal()) return;
 
 		if (!sysidDrive && !sysidTurn) {
-			driveTalonFX.setControl(new VelocityVoltage(driveVelocity / (DRIVE_RATIO * 2 * PI * SWERVE_WHEEL_RAD))
-					.withFeedForward(driveFF)
-					.withSlot(0));
+			driveTalonFX.setControl(driveControlRequest
+					.withVelocity(driveVelocity / (DRIVE_RATIO * 2 * PI * SWERVE_WHEEL_RAD))
+					.withFeedForward(driveFF));
 		}
 
 		Logger.recordOutput(logRoot + "/driveError", inputs.driveVel - driveVelocity);
@@ -119,9 +122,9 @@ public class SwerveHW {
 		Logger.recordOutput(logRoot + "/turnError", diff);
 
 		if (!sysidTurn) {
-			turnTalonFX.setControl(new PositionVoltage((inputs.turnPos + diff) / (2 * PI * TURN_RATIO))
-					.withFeedForward(turnFF)
-					.withSlot(0));
+			turnTalonFX.setControl(turnControlRequest
+					.withPosition((inputs.turnPos + diff) / (2 * PI * TURN_RATIO))
+					.withFeedForward(turnFF));
 		}
 	}
 }

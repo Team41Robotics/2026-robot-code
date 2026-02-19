@@ -69,6 +69,11 @@ public class SwerveDrive extends SubsystemBase {
 		sense();
 	}
 
+	public void resetPose(Pose2d newPose) {
+		poseEst.resetPosition(new Rotation2d(imu.yaw), modulePos, newPose);
+		pose = newPose;
+	}
+
 	public void drive(ChassisSpeeds speeds) {
 		speeds = ChassisSpeeds.discretize(speeds, LOOP_PERIOD);
 		targetSpeeds = speeds;

@@ -98,7 +98,7 @@ Note: The repo uses Littleton's `junction` logging. Running in simulation sets t
 
 ## Vision & Estimation gotchas
 
-- `Vision` uses `PhotonPoseEstimator` with multiple fallback estimation methods (see `Vision.sense()`). When changing pose fusion, keep measurement timestamps consistent (they use `Timer.getFPGATimestamp()` and `Timer.getTimestamp()` in specific places).
+- `Vision` uses `PhotonPoseEstimator` with multiple fallback estimation methods (see `Vision.sense()`). When changing pose fusion, keep measurement timestamps consistent (they use `Timer.getTimestamp()` in specific places).
 - The drive's `SwerveDrivePoseEstimator` is seeded in `SwerveDrive.init()` with covariance matrices — tune these there, not ad-hoc elsewhere.
 
 ## Where to look for external / vendor info

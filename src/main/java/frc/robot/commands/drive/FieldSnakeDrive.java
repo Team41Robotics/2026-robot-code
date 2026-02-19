@@ -18,7 +18,8 @@ public class FieldSnakeDrive extends Command {
 	public static final double DEADBAND = 0.10; // FIXME. controller deadband
 	public static final double TURN_DEADBAND = 0.50; // FIXME. controller turn deadband
 
-	public static final Constraints ROT_CONSTRAINTS = new Constraints(drive.MAX_W, drive.MAX_W); // FIXME. turn constraints
+	public static final Constraints ROT_CONSTRAINTS =
+			new Constraints(drive.MAX_W, drive.MAX_W); // FIXME. turn constraints
 
 	public TrapezoidProfile profile = new TrapezoidProfile(ROT_CONSTRAINTS);
 	public PIDController pid = new PIDController(5, 0, 0); // FIXME. heading PID (P,I,D)

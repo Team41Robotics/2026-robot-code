@@ -4,8 +4,14 @@ import org.littletonrobotics.junction.AutoLog;
 
 @AutoLog
 public class ShooterInputs {
-        public double flyWheelVelocity;
-        public double[] flyWheelCurrent;
-        public double flyWheelVoltage;
-        public double hoodAngleRad;
+	public double flyWheelVelocityRPM;
+	public double flyWheelVoltage;
+	public double flyWheelCurrent;
+
+	public double hoodAngleRad;
+	public double hoodVoltage;
+	public double hoodCurrent;
+
+	public double indexerVoltage;
+	public double indexerCurrent;
 }

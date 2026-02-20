@@ -59,7 +59,7 @@ public class TurnAngle extends Command {
 
 	@Override
 	public boolean isFinished() {
-		return abs(pid.getPositionError()) < ANGLE_TOLERANCE && abs(setpointHeading.velocity) < TURN_VEL_TOLERANCE;
+		return abs(pid.getError()) < ANGLE_TOLERANCE && abs(pid.getErrorDerivative()) < TURN_VEL_TOLERANCE;
 	}
 
 	@Override

@@ -13,8 +13,10 @@ import frc.robot.Robot;
 public class ShooterHW {
 	public static final double SHOOTER_RATIO = 1.0; // FIXME. motor rotations * ratio = mechanism RPM
 
-	public static final double SHOOTER_kP = 0.0; // FIXME. shooter PID P (tune)
-	public static final double SHOOTER_kV = 0.0; // FIXME. shooter feedforward kV (tune)
+	public static final double SHOOTER_kP = 6e-3 / 12.0;                    // duty_cycle/RPM
+	public static final double SHOOTER_kD = 2.5e-4 / 12.0;                  // duty_cycle/(RPM/s)
+	public static final double SHOOTER_kV = (0.0019203 / 1.07) / 12.0;      // duty_cycle/RPM
+	public static final double SHOOTER_kS = (0.0019203 / 1.07 * 30) / 12.0; // duty_cycle
 
 	public SparkFlex shooterMotor;
 	public SparkFlex shooterFollower;
@@ -25,8 +27,8 @@ public class ShooterHW {
 
 		shooterMotor = new SparkFlex(41, MotorType.kBrushless);
 		SparkFlexConfig shooterConfig = new SparkFlexConfig();
-		shooterConfig.closedLoop.pid(SHOOTER_kP, 0, 0);
-		shooterConfig.closedLoop.feedForward.kV(SHOOTER_kV);
+		shooterConfig.closedLoop.pid(SHOOTER_kP, 0, SHOOTER_kD);
+		shooterConfig.closedLoop.feedForward.kS(SHOOTER_kS).kV(SHOOTER_kV);
 		shooterConfig.idleMode(IdleMode.kCoast);
 		shooterMotor.configure(shooterConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 		shooterMotor.clearFaults();

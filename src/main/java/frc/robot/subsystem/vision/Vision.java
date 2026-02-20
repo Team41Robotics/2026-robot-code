@@ -20,7 +20,8 @@ import org.photonvision.common.dataflow.structures.ReusablePacket;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 public class Vision extends SubsystemBase {
-	public VisionHW[] cameras = new VisionHW[] {new VisionHW("TODO", new Transform3d())};
+	// public VisionHW[] cameras = new VisionHW[] {new VisionHW("TODO", new Transform3d())};
+	public VisionHW[] cameras = new VisionHW[] {};
 	public VisionInputsAutoLogged[] inputs = new VisionInputsAutoLogged[cameras.length];
 	public PhotonPoseEstimator[] poseEsts = new PhotonPoseEstimator[cameras.length];
 

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 # FIRST PRIORITY: EVERYTHING SHOULD BE PUBLIC
 # STATIC WHENVER POSSIBLE
-# FINAL ONLY FOR TRUE CONSTANTS
+# FINAL ONLY FOR CONSTANTS
 
 ## What this is
 

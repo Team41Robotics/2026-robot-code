@@ -11,10 +11,13 @@ import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
 import frc.robot.commands.drive.FieldSnakeDrive;
 import frc.robot.commands.drive.RobotOrientedDrive;
+import frc.robot.commands.indexer.StartIndexer;
 import frc.robot.commands.indexer.StopIndexer;
+import frc.robot.commands.shooter.ShooterActive;
 import frc.robot.commands.shooter.ShooterRest;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.JoystickControls;
+import frc.robot.subsystem.controls.XboxControls;
 import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;
 import frc.robot.subsystem.indexer.Indexer;
@@ -26,8 +29,8 @@ import frc.robot.test.drive.TurnPIDTestCommand;
 public class RobotContainer {
 	public static final double LOOP_PERIOD = 0.020;
 
-	public static Controls controls = new JoystickControls();
-	// public static Controls controls = new XboxControls();
+	// public static Controls controls = new JoystickControls();
+	public static Controls controls = new XboxControls();
 
 	public static Robot robot;
 	public static CANBus driveBus = CANBus.roboRIO(); // FIXME.
@@ -49,6 +52,11 @@ public class RobotContainer {
 		drive.setDefaultCommand(new FieldOrientedDrive());
 		shooter.setDefaultCommand(new ShooterRest());
 		indexer.setDefaultCommand(new StopIndexer());
+
+		SmartDashboard.putData("ShooterOn", new ShooterActive());
+		SmartDashboard.putData("ShooterOff", new ShooterRest());
+		SmartDashboard.putData("IndexerOn", new StartIndexer());
+		SmartDashboard.putData("IndexerOff", new StopIndexer());
 
 		// left_js.button(1).onTrue(new PrintSwervePos());
 

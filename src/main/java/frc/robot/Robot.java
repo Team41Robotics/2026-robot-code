@@ -30,7 +30,7 @@ public class Robot extends LoggedRobot {
 	public void robotInit() {
 		if (isReal()) {
 			Logger.addDataReceiver(new NT4Publisher());
-			Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
+			// Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
 		} else {
 			setUseTiming(false);
 			String logPath = LogFileUtil.findReplayLog();

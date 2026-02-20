@@ -46,9 +46,9 @@ public class ShooterHW {
 		if (!Robot.isReal()) return;
 
 		inputs.velocityRPM = shooterMotor.getEncoder().getVelocity();
-		inputs.busVoltage = shooterMotor.getBusVoltage();
-		inputs.voltage = shooterMotor.getAppliedOutput() * inputs.busVoltage;
-		inputs.current = shooterMotor.getOutputCurrent();
+		inputs.busVoltageVolts = shooterMotor.getBusVoltage();
+		inputs.voltageVolts = shooterMotor.getAppliedOutput() * inputs.busVoltageVolts;
+		inputs.currentAmps = shooterMotor.getOutputCurrent();
 	}
 
 	public void setShooterVelocity(double rpm) {

@@ -19,6 +19,6 @@ public class IMU extends SubsystemBase {
 		hw.sense(inputs);
 		Logger.processInputs("/IMU", inputs);
 
-		yaw = inputs.yaw;
+		yaw = inputs.yawRadians;
 	}
 }

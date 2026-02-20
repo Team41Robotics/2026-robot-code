@@ -6,5 +6,5 @@ import org.littletonrobotics.junction.AutoLog;
 public class IMUInputs {
 	public boolean isConnected;
 	public boolean isCalibrating;
-	public double yaw;
+	public double yawRadians;
 }

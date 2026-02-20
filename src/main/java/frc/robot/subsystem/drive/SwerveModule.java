@@ -53,21 +53,21 @@ public class SwerveModule {
 
 		hw.init(config);
 		sense();
-		setpointAng = new State(inputs.turnAbsPos, inputs.turnVel);
+		setpointAng = new State(inputs.turnAbsPosRadians, inputs.turnVelRadiansPerSec);
 	}
 
 	public void sense() {
 		hw.sense(inputs);
 		Logger.processInputs(hw.logRoot, inputs);
 
-		state = new SwerveModuleState(inputs.driveVel, new Rotation2d(angleModulus(inputs.turnAbsPos)));
-		angle = inputs.turnAbsPos;
-		vel = inputs.driveVel;
-		drivePos = inputs.drivePos;
+		state = new SwerveModuleState(inputs.driveVelMetersPerSec, new Rotation2d(angleModulus(inputs.turnAbsPosRadians)));
+		angle = inputs.turnAbsPosRadians;
+		vel = inputs.driveVelMetersPerSec;
+		drivePos = inputs.drivePosMeters;
 	}
 
 	public void drive(SwerveModuleState s) {
-		s.optimize(new Rotation2d(inputs.turnAbsPos));
+		s.optimize(new Rotation2d(inputs.turnAbsPosRadians));
 		targetState = s;
 	}
 
@@ -87,11 +87,11 @@ public class SwerveModule {
 
 		hw.actuate(inputs, targetVel, driveFF, setpointAng.position, turnFF);
 
-		Logger.recordOutput(hw.logRoot + "/targetAng", angleModulus(targetAng));
-		Logger.recordOutput(hw.logRoot + "/targetVel", targetVel);
-		Logger.recordOutput(hw.logRoot + "/setpointAng", angleModulus(setpointAng.position));
-		Logger.recordOutput(hw.logRoot + "/setpointAngVel", setpointAng.velocity);
-		Logger.recordOutput(hw.logRoot + "/driveFF", driveFF);
-		Logger.recordOutput(hw.logRoot + "/turnFF", turnFF);
+		Logger.recordOutput(hw.logRoot + "/targetAngRadians", angleModulus(targetAng));
+		Logger.recordOutput(hw.logRoot + "/targetVelMetersPerSec", targetVel);
+		Logger.recordOutput(hw.logRoot + "/setpointAngRadians", angleModulus(setpointAng.position));
+		Logger.recordOutput(hw.logRoot + "/setpointAngVelRadiansPerSec", setpointAng.velocity);
+		Logger.recordOutput(hw.logRoot + "/driveFFVolts", driveFF);
+		Logger.recordOutput(hw.logRoot + "/turnFFVolts", turnFF);
 	}
 }

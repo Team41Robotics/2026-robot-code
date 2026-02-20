@@ -26,9 +26,9 @@ public class IndexerHW {
 		if (!Robot.isReal()) return;
 
 		inputs.velocityRPM = indexer.getEncoder().getVelocity();
-		inputs.busVoltage = indexer.getBusVoltage();
-		inputs.voltage = indexer.getAppliedOutput() * inputs.busVoltage;
-		inputs.current = indexer.getOutputCurrent();
+		inputs.busVoltageVolts = indexer.getBusVoltage();
+		inputs.voltageVolts = indexer.getAppliedOutput() * inputs.busVoltageVolts;
+		inputs.currentAmps = indexer.getOutputCurrent();
 	}
 
 	public void setVoltage(double voltage) {

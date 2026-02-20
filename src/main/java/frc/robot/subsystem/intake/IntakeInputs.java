@@ -4,9 +4,9 @@ import org.littletonrobotics.junction.AutoLog;
 
 @AutoLog
 public class IntakeInputs {
-	public double voltage;
-	public double current;
-	public double busVoltage;
-	public double busCurrent;
-	public double vel;
+	public double voltageVolts;
+	public double currentAmps;
+	public double busVoltageVolts;
+	public double busCurrentAmps;
+	public double velRotationsPerSec;
 }

@@ -81,30 +81,30 @@ public class SwerveHW {
 	public void sense(SwerveInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		inputs.drivePos = driveTalonFX.getPosition().getValueAsDouble() * 2 * PI * DRIVE_RATIO * WHEEL_RAD;
-		inputs.driveVel = driveTalonFX.getVelocity().getValueAsDouble() * 2 * PI * DRIVE_RATIO * WHEEL_RAD;
+		inputs.drivePosMeters = driveTalonFX.getPosition().getValueAsDouble() * 2 * PI * DRIVE_RATIO * WHEEL_RAD;
+		inputs.driveVelMetersPerSec = driveTalonFX.getVelocity().getValueAsDouble() * 2 * PI * DRIVE_RATIO * WHEEL_RAD;
 
-		inputs.driveBusVoltage = driveTalonFX.getSupplyVoltage().getValueAsDouble();
-		inputs.driveBusCurrent = driveTalonFX.getSupplyCurrent().getValueAsDouble();
-		inputs.driveVoltage = driveTalonFX.getMotorVoltage().getValueAsDouble();
-		inputs.driveCurrent = driveTalonFX.getStatorCurrent().getValueAsDouble();
+		inputs.driveBusVoltageVolts = driveTalonFX.getSupplyVoltage().getValueAsDouble();
+		inputs.driveBusCurrentAmps = driveTalonFX.getSupplyCurrent().getValueAsDouble();
+		inputs.driveVoltageVolts = driveTalonFX.getMotorVoltage().getValueAsDouble();
+		inputs.driveCurrentAmps = driveTalonFX.getStatorCurrent().getValueAsDouble();
 
-		inputs.turnBusVoltage = turnTalonFX.getSupplyVoltage().getValueAsDouble();
-		inputs.turnBusCurrent = turnTalonFX.getSupplyCurrent().getValueAsDouble();
-		inputs.turnPos = turnTalonFX.getPosition().getValueAsDouble() * 2 * PI * TURN_RATIO;
-		inputs.turnVel = turnTalonFX.getVelocity().getValueAsDouble() * 2 * PI * TURN_RATIO;
+		inputs.turnBusVoltageVolts = turnTalonFX.getSupplyVoltage().getValueAsDouble();
+		inputs.turnBusCurrentAmps = turnTalonFX.getSupplyCurrent().getValueAsDouble();
+		inputs.turnPosRadians = turnTalonFX.getPosition().getValueAsDouble() * 2 * PI * TURN_RATIO;
+		inputs.turnVelRadiansPerSec = turnTalonFX.getVelocity().getValueAsDouble() * 2 * PI * TURN_RATIO;
 
-		inputs.turnVoltage = turnTalonFX.getMotorVoltage().getValueAsDouble();
-		inputs.turnCurrent = turnTalonFX.getStatorCurrent().getValueAsDouble();
+		inputs.turnVoltageVolts = turnTalonFX.getMotorVoltage().getValueAsDouble();
+		inputs.turnCurrentAmps = turnTalonFX.getStatorCurrent().getValueAsDouble();
 
-		inputs.turnAbsPos = turnAbsoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * PI - angleOffset;
+		inputs.turnAbsPosRadians = turnAbsoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * PI - angleOffset;
 	}
 
 	public void actuate(SwerveInputs inputs, double targetVel, double driveFF, double targetAng, double turnFF) {
-		Logger.recordOutput(logRoot + "/targetVel", targetVel);
-		Logger.recordOutput(logRoot + "/driveFF", driveFF);
-		Logger.recordOutput(logRoot + "/targetAng", angleModulus(targetAng));
-		Logger.recordOutput(logRoot + "/turnFF", turnFF);
+		Logger.recordOutput(logRoot + "/targetVelMetersPerSec", targetVel);
+		Logger.recordOutput(logRoot + "/driveFFVolts", driveFF);
+		Logger.recordOutput(logRoot + "/targetAngRadians", angleModulus(targetAng));
+		Logger.recordOutput(logRoot + "/turnFFVolts", turnFF);
 
 		if (!Robot.isReal()) return;
 
@@ -114,14 +114,14 @@ public class SwerveHW {
 					.withFeedForward(driveFF));
 		}
 
-		Logger.recordOutput(logRoot + "/driveError", inputs.driveVel - targetVel);
+		Logger.recordOutput(logRoot + "/driveErrorMetersPerSec", inputs.driveVelMetersPerSec - targetVel);
 
-		double diff = angleModulus(targetAng - inputs.turnAbsPos);
-		Logger.recordOutput(logRoot + "/turnError", diff);
+		double diff = angleModulus(targetAng - inputs.turnAbsPosRadians);
+		Logger.recordOutput(logRoot + "/turnErrorRadians", diff);
 
 		if (!sysIdTurn) {
 			turnTalonFX.setControl(turnControlRequest
-					.withPosition((inputs.turnPos + diff) / (2 * PI * TURN_RATIO))
+					.withPosition((inputs.turnPosRadians + diff) / (2 * PI * TURN_RATIO))
 					.withFeedForward(turnFF));
 		}
 	}

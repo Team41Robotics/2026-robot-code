@@ -36,9 +36,9 @@ public class Shooter extends SubsystemBase {
 		} else {
 			hw.setShooterVoltage(targetVoltage);
 		}
-		Logger.recordOutput("/Shooter/mode", mode.name());
+		Logger.recordOutput("/Shooter/mode", mode);
 		Logger.recordOutput("/Shooter/targetRPM", targetRPM);
-		Logger.recordOutput("/Shooter/targetVoltage", targetVoltage);
+		Logger.recordOutput("/Shooter/targetVoltageVolts", targetVoltage);
 	}
 
 	public void setVelocity(double rpm) {

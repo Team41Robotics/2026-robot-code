@@ -106,10 +106,10 @@ public class SwerveDrive extends SubsystemBase {
 		Logger.recordOutput("/Swerve/measuredSpeeds", measuredSpeeds);
 		Logger.recordOutput("/Odom/pose", pose);
 		Logger.recordOutput("/Odom/rot", pose.getRotation());
-		Logger.recordOutput("/Odom/x", pose.getX());
-		Logger.recordOutput("/Odom/y", pose.getY());
-		Logger.recordOutput("/Odom/rotRad", pose.getRotation().getRadians());
-		Logger.recordOutput("/Odom/imuYaw", imu.yaw);
+		Logger.recordOutput("/Odom/xMeters", pose.getX());
+		Logger.recordOutput("/Odom/yMeters", pose.getY());
+		Logger.recordOutput("/Odom/rotRadians", pose.getRotation().getRadians());
+		Logger.recordOutput("/Odom/imuYawRadians", imu.yaw);
 		Logger.recordOutput("/Swerve/targetModuleStates", targetStates);
 		Logger.recordOutput("/Swerve/measuredModuleStates", measuredStates);
 	}

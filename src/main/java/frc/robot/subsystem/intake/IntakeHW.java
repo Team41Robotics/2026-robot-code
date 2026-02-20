@@ -35,15 +35,15 @@ public class IntakeHW {
 	public void sense(IntakeInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		inputs.voltage = spinnerTalonFX.getMotorVoltage().getValueAsDouble();
-		inputs.current = spinnerTalonFX.getStatorCurrent().getValueAsDouble();
-		inputs.busVoltage = spinnerTalonFX.getSupplyVoltage().getValueAsDouble();
-		inputs.busCurrent = spinnerTalonFX.getSupplyCurrent().getValueAsDouble();
-		inputs.vel = spinnerTalonFX.getVelocity().getValueAsDouble();
+		inputs.voltageVolts = spinnerTalonFX.getMotorVoltage().getValueAsDouble();
+		inputs.currentAmps = spinnerTalonFX.getStatorCurrent().getValueAsDouble();
+		inputs.busVoltageVolts = spinnerTalonFX.getSupplyVoltage().getValueAsDouble();
+		inputs.busCurrentAmps = spinnerTalonFX.getSupplyCurrent().getValueAsDouble();
+		inputs.velRotationsPerSec = spinnerTalonFX.getVelocity().getValueAsDouble();
 	}
 
 	public void actuate(double voltage) {
-		Logger.recordOutput("/Intake/actuatedVoltage", voltage);
+		Logger.recordOutput("/Intake/actuatedVoltageVolts", voltage);
 
 		if (!Robot.isReal()) return;
 

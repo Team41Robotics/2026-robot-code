@@ -20,6 +20,6 @@ public class IMUNavXHW {
 
 		inputs.isConnected = imu.isConnected();
 		inputs.isCalibrating = imu.isCalibrating();
-		inputs.yaw = imu.getAngle() / 180 * PI;
+		inputs.yawRadians = imu.getAngle() / 180 * PI;
 	}
 }

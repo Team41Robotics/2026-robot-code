@@ -16,7 +16,6 @@ import frc.robot.commands.indexer.StopIndexer;
 import frc.robot.commands.shooter.ShooterActive;
 import frc.robot.commands.shooter.ShooterRest;
 import frc.robot.subsystem.controls.Controls;
-import frc.robot.subsystem.controls.JoystickControls;
 import frc.robot.subsystem.controls.XboxControls;
 import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;

@@ -4,7 +4,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
-	public enum Mode { VELOCITY, VOLTAGE }
+	public enum Mode {
+		VELOCITY,
+		VOLTAGE
+	}
 
 	public ShooterHW hw = new ShooterHW();
 	public ShooterInputsAutoLogged inputs = new ShooterInputsAutoLogged();

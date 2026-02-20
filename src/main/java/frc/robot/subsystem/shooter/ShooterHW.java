@@ -13,9 +13,9 @@ import frc.robot.Robot;
 public class ShooterHW {
 	public static final double SHOOTER_RATIO = 1.0; // FIXME. motor rotations * ratio = mechanism RPM
 
-	public static final double SHOOTER_kP = 6e-3 / 12.0;                    // duty_cycle/RPM
-	public static final double SHOOTER_kD = 2.5e-4 / 12.0;                  // duty_cycle/(RPM/s)
-	public static final double SHOOTER_kV = (0.0019203 / 1.07) / 12.0;      // duty_cycle/RPM
+	public static final double SHOOTER_kP = 6e-3 / 12.0; // duty_cycle/RPM
+	public static final double SHOOTER_kD = 2.5e-4 / 12.0; // duty_cycle/(RPM/s)
+	public static final double SHOOTER_kV = (0.0019203 / 1.07) / 12.0; // duty_cycle/RPM
 	public static final double SHOOTER_kS = (0.0019203 / 1.07 * 30) / 12.0; // duty_cycle
 
 	public SparkFlex shooterMotor;

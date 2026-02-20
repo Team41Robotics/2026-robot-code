@@ -12,12 +12,14 @@ import frc.robot.commands.drive.FieldOrientedDrive;
 import frc.robot.commands.drive.FieldSnakeDrive;
 import frc.robot.commands.drive.RobotOrientedDrive;
 import frc.robot.commands.indexer.StopIndexer;
+import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.shooter.ShooterRest;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.JoystickControls;
 import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;
 import frc.robot.subsystem.indexer.Indexer;
+import frc.robot.subsystem.intake.Intake;
 import frc.robot.subsystem.shooter.Shooter;
 import frc.robot.subsystem.vision.Vision;
 import frc.robot.test.drive.DrivePIDTestCommand;
@@ -37,6 +39,7 @@ public class RobotContainer {
 	public static Vision vision = new Vision();
 	public static Shooter shooter = new Shooter();
 	public static Indexer indexer = new Indexer();
+	public static Intake intake = new Intake();
 
 	public static Command autonomousCommand = null;
 
@@ -44,11 +47,13 @@ public class RobotContainer {
 		imu.init();
 		shooter.init();
 		indexer.init();
+		intake.init();
 
 		drive.init(new Pose2d());
 		drive.setDefaultCommand(new FieldOrientedDrive());
 		shooter.setDefaultCommand(new ShooterRest());
 		indexer.setDefaultCommand(new StopIndexer());
+		intake.setDefaultCommand(new StopIntake());
 
 		// left_js.button(1).onTrue(new PrintSwervePos());
 
@@ -72,6 +77,7 @@ public class RobotContainer {
 		drive.sense();
 		shooter.sense();
 		indexer.sense();
+		intake.sense();
 		vision.sense();
 
 		CommandScheduler.getInstance().run();
@@ -79,6 +85,7 @@ public class RobotContainer {
 		drive.actuate();
 		shooter.actuate();
 		indexer.actuate();
+		intake.actuate();
 	}
 
 	public static Command getAutonomousCommand() {

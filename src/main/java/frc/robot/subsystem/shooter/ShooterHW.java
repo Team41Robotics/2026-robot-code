@@ -30,6 +30,7 @@ public class ShooterHW {
 		shooterConfig.closedLoop.pid(SHOOTER_kP, 0, SHOOTER_kD);
 		shooterConfig.closedLoop.feedForward.kS(SHOOTER_kS).kV(SHOOTER_kV);
 		shooterConfig.idleMode(IdleMode.kCoast);
+		shooterConfig.smartCurrentLimit(60);
 		shooterMotor.configure(shooterConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 		shooterMotor.clearFaults();
 		shooterController = shooterMotor.getClosedLoopController();
@@ -45,7 +46,8 @@ public class ShooterHW {
 		if (!Robot.isReal()) return;
 
 		inputs.velocityRPM = shooterMotor.getEncoder().getVelocity();
-		inputs.voltage = shooterMotor.getAppliedOutput() * shooterMotor.getBusVoltage();
+		inputs.busVoltage = shooterMotor.getBusVoltage();
+		inputs.voltage = shooterMotor.getAppliedOutput() * inputs.busVoltage;
 		inputs.current = shooterMotor.getOutputCurrent();
 	}
 

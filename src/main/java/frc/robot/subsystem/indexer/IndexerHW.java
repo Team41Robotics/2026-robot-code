@@ -17,6 +17,7 @@ public class IndexerHW {
 		indexer = new SparkFlex(25, MotorType.kBrushless);
 		SparkFlexConfig config = new SparkFlexConfig();
 		config.idleMode(IdleMode.kCoast);
+		config.smartCurrentLimit(40);
 		indexer.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 		indexer.clearFaults();
 	}
@@ -24,7 +25,9 @@ public class IndexerHW {
 	public void sense(IndexerInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		inputs.voltage = indexer.getAppliedOutput() * indexer.getBusVoltage();
+		inputs.velocityRPM = indexer.getEncoder().getVelocity();
+		inputs.busVoltage = indexer.getBusVoltage();
+		inputs.voltage = indexer.getAppliedOutput() * inputs.busVoltage;
 		inputs.current = indexer.getOutputCurrent();
 	}
 

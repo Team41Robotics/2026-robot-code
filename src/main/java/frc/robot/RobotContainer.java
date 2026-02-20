@@ -46,6 +46,7 @@ public class RobotContainer {
 		imu.init();
 		shooter.init();
 		indexer.init();
+		vision.init();
 
 		drive.init(new Pose2d());
 		drive.setDefaultCommand(new FieldOrientedDrive());

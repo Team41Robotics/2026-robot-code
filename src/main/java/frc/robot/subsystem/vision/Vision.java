@@ -6,6 +6,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.List;
@@ -17,8 +18,7 @@ import org.photonvision.common.dataflow.structures.ReusablePacket;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 public class Vision extends SubsystemBase {
-	// public VisionHW[] cameras = new VisionHW[] {new VisionHW("TODO", new Transform3d())};
-	public VisionHW[] cameras = new VisionHW[] {};
+	public VisionHW[] cameras = new VisionHW[] {new VisionHW("TODO", new Transform3d())};
 	public VisionInputsAutoLogged[] inputs = new VisionInputsAutoLogged[cameras.length];
 	public PhotonPoseEstimator[] poseEsts = new PhotonPoseEstimator[cameras.length];
 
@@ -48,15 +48,12 @@ public class Vision extends SubsystemBase {
 
 			cam.sense(input);
 			Logger.processInputs("/Vision/" + cam.name, input);
-
 			decodePackets[i].setData(input.data);
-
 			List<PhotonPipelineResult> results = decodePackets[i].decodeList(PhotonPipelineResult.photonStruct);
 
 			poseEsts[i].addHeadingData(Timer.getTimestamp(), drive.pose.getRotation());
 
 			if (!enabled) continue;
-
 			for (int j = 0; j < results.size(); j++) {
 				PhotonPipelineResult result = results.get(j);
 

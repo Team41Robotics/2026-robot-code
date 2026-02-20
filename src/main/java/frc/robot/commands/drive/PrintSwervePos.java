@@ -8,7 +8,7 @@ public class PrintSwervePos extends Command {
 	@Override
 	public void execute() {
 		for (int i = 0; i < drive.modules.length; i++) {
-			System.out.println(drive.modules[i].name + " :  " + drive.modules[i].inputs.turnAbsPos);
+			System.out.println(drive.modules[i].name + " :  " + drive.modules[i].inputs.turnAbsPosRadians);
 		}
 	}
 

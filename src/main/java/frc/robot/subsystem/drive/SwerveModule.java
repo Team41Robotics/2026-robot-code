@@ -60,7 +60,8 @@ public class SwerveModule {
 		hw.sense(inputs);
 		Logger.processInputs(hw.logRoot, inputs);
 
-		state = new SwerveModuleState(inputs.driveVelMetersPerSec, new Rotation2d(angleModulus(inputs.turnAbsPosRadians)));
+		state = new SwerveModuleState(
+				inputs.driveVelMetersPerSec, new Rotation2d(angleModulus(inputs.turnAbsPosRadians)));
 		angle = inputs.turnAbsPosRadians;
 		vel = inputs.driveVelMetersPerSec;
 		drivePos = inputs.drivePosMeters;

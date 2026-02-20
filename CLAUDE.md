@@ -31,6 +31,12 @@ WPILib-based FRC 2026 robot code (Java 17) built around a **sense â†’ schedule â
 
 On Windows use `gradlew.bat` instead of `./gradlew`.
 
+**Running from bash (Claude Code / WSL / Git Bash):** Gradle requires the WPILib JDK. Set `JAVA_HOME` before invoking gradlew:
+
+```bash
+JAVA_HOME="C:/Users/Public/wpilib/2026/jdk" PATH="C:/Users/Public/wpilib/2026/jdk/bin:$PATH" ./gradlew build
+```
+
 ## Architecture
 
 ### Main loop (`RobotContainer.periodic()`)

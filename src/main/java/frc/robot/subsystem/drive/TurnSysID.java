@@ -29,9 +29,9 @@ public class TurnSysID {
 			SwerveModule module = drive.modules[i];
 			SwerveInputsAutoLogged inputs = module.inputs;
 			log.motor(module.name)
-					.voltage(voltage.mut_replace(inputs.turnVoltage, Volts))
-					.linearPosition(distance.mut_replace(inputs.turnPos, Meters))
-					.linearVelocity(velocity.mut_replace(inputs.turnVel, MetersPerSecond));
+					.voltage(voltage.mut_replace(inputs.turnVoltageVolts, Volts))
+					.linearPosition(distance.mut_replace(inputs.turnPosRadians, Meters))
+					.linearVelocity(velocity.mut_replace(inputs.turnVelRadiansPerSec, MetersPerSecond));
 		}
 	}
 

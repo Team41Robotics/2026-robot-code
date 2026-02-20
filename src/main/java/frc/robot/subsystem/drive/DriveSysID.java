@@ -32,9 +32,9 @@ public class DriveSysID {
 			SwerveModule module = drive.modules[i];
 			SwerveInputsAutoLogged inputs = module.inputs;
 			log.motor(module.name)
-					.voltage(voltage.mut_replace(inputs.driveVoltage, Volts))
-					.linearPosition(distance.mut_replace(inputs.drivePos, Meters))
-					.linearVelocity(velocity.mut_replace(inputs.driveVel, MetersPerSecond));
+					.voltage(voltage.mut_replace(inputs.driveVoltageVolts, Volts))
+					.linearPosition(distance.mut_replace(inputs.drivePosMeters, Meters))
+					.linearVelocity(velocity.mut_replace(inputs.driveVelMetersPerSec, MetersPerSecond));
 		}
 	}
 

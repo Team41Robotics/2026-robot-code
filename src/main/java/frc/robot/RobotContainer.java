@@ -11,10 +11,14 @@ import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
 import frc.robot.commands.drive.FieldSnakeDrive;
 import frc.robot.commands.drive.RobotOrientedDrive;
+import frc.robot.commands.indexer.StopIndexer;
+import frc.robot.commands.shooter.ShooterRest;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.JoystickControls;
 import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;
+import frc.robot.subsystem.indexer.Indexer;
+import frc.robot.subsystem.shooter.Shooter;
 import frc.robot.subsystem.vision.Vision;
 import frc.robot.test.drive.DrivePIDTestCommand;
 import frc.robot.test.drive.TurnPIDTestCommand;
@@ -26,19 +30,25 @@ public class RobotContainer {
 	// public static Controls controls = new XboxControls();
 
 	public static Robot robot;
-	public static CANBus driveBus = new CANBus("Ducky"); // FIXME.
+	public static CANBus driveBus = CANBus.roboRIO(); // FIXME.
 
 	public static SwerveDrive drive = new SwerveDrive();
 	public static IMU imu = new IMU();
 	public static Vision vision = new Vision();
+	public static Shooter shooter = new Shooter();
+	public static Indexer indexer = new Indexer();
 
 	public static Command autonomousCommand = null;
 
 	public static void init() {
 		imu.init();
+		shooter.init();
+		indexer.init();
 
 		drive.init(new Pose2d());
 		drive.setDefaultCommand(new FieldOrientedDrive());
+		shooter.setDefaultCommand(new ShooterRest());
+		indexer.setDefaultCommand(new StopIndexer());
 
 		// left_js.button(1).onTrue(new PrintSwervePos());
 
@@ -60,11 +70,15 @@ public class RobotContainer {
 	public static void periodic() {
 		imu.sense();
 		drive.sense();
+		shooter.sense();
+		indexer.sense();
 		vision.sense();
 
 		CommandScheduler.getInstance().run();
 
 		drive.actuate();
+		shooter.actuate();
+		indexer.actuate();
 	}
 
 	public static Command getAutonomousCommand() {

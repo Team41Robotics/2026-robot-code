@@ -16,8 +16,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 public class Robot extends LoggedRobot {
-	public final MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
-	public final List<GarbageCollectorMXBean> gcBeans = ManagementFactory.getGarbageCollectorMXBeans();
+	public MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+	public List<GarbageCollectorMXBean> gcBeans = ManagementFactory.getGarbageCollectorMXBeans();
 	public long prevGcCount = 0;
 	public long prevGcTime = 0;
 

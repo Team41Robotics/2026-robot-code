@@ -1,14 +1,18 @@
 package frc.robot.commands.shooter;
 
+import static frc.robot.RobotContainer.*;
+
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class Shoot extends Command {
-	public Shoot() {
-		// addRequirements(shooter);
+public class ShooterRest extends Command {
+	public ShooterRest() {
+		addRequirements(shooter);
 	}
 
 	@Override
-	public void initialize() {}
+	public void initialize() {
+		shooter.stop();
+	}
 
 	@Override
 	public void execute() {}

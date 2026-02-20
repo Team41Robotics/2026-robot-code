@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+# FIRST PRIORITY: EVERYTHING SHOULD BE PUBLIC
+# STATIC WHENVER POSSIBLE
+# FINAL ONLY FOR TRUE CONSTANTS
+
 ## What this is
 
 WPILib-based FRC 2026 robot code (Java 17) built around a **sense → schedule → actuate** loop. Uses CTRE Phoenix 6 motors, PhotonVision, AdvantageKit (junction) logging, and swerve drive kinematics/estimation.

@@ -14,11 +14,11 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 public class DriveSysID {
-	SysIdRoutine routine;
+	public SysIdRoutine routine;
 
-	MutVoltage voltage = Volts.mutable(0);
-	MutDistance distance = Meters.mutable(0);
-	MutLinearVelocity velocity = MetersPerSecond.mutable(0);
+	public MutVoltage voltage = Volts.mutable(0);
+	public MutDistance distance = Meters.mutable(0);
+	public MutLinearVelocity velocity = MetersPerSecond.mutable(0);
 
 	public void actuate(Voltage volts) {
 		for (int i = 0; i < drive.modules.length; i++) {

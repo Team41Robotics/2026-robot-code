@@ -12,7 +12,7 @@ public class DrivePIDTestCommand extends Command {
 		addRequirements(drive);
 	}
 
-	double testVelocity = 2;
+	public double testVelocity = 2;
 
 	@Override
 	public void initialize() {

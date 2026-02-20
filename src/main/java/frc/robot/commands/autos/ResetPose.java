@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.FieldConstants;
 
 public class ResetPose extends Command {
-	private Pose2d pose;
+	public Pose2d pose;
 
 	public ResetPose(double x, double y, double theta) {
 		addRequirements(drive);
@@ -16,7 +16,9 @@ public class ResetPose extends Command {
 	}
 
 	public void flip() {
-		this.pose = new Pose2d(FieldConstants.fieldWidth - pose.getX(), FieldConstants.fieldLength - pose.getY(),
+		this.pose = new Pose2d(
+				FieldConstants.fieldWidth - pose.getX(),
+				FieldConstants.fieldLength - pose.getY(),
 				pose.getRotation().plus(new Rotation2d(Math.PI)));
 	}
 

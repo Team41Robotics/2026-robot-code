@@ -30,6 +30,9 @@ public class Vision extends SubsystemBase {
 	public int nCams = cameras.length;
 	public boolean enabled = true;
 
+	@SuppressWarnings("unchecked")
+	public List<PhotonPipelineResult>[] latestResults = new List[cameras.length];
+
 	public void init() {
 		for (int i = 0; i < nCams; i++) {
 			VisionHW cam = cameras[i];
@@ -50,6 +53,7 @@ public class Vision extends SubsystemBase {
 			Logger.processInputs("/Vision/" + cam.name, input);
 			decodePackets[i].setData(input.data);
 			List<PhotonPipelineResult> results = decodePackets[i].decodeList(PhotonPipelineResult.photonStruct);
+			latestResults[i] = results;
 
 			poseEsts[i].addHeadingData(Timer.getTimestamp(), drive.pose.getRotation());
 

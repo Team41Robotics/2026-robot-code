@@ -11,19 +11,14 @@ import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
 import frc.robot.commands.drive.FieldSnakeDrive;
 import frc.robot.commands.drive.RobotOrientedDrive;
-import frc.robot.commands.indexer.StartIndexer;
-import frc.robot.commands.indexer.StopIndexer;
-import frc.robot.commands.intake.StartIntake;
-import frc.robot.commands.intake.StopIntake;
-import frc.robot.commands.shooter.ShooterActive;
-import frc.robot.commands.shooter.ShooterRest;
+import frc.robot.commands.intake.IntakeDown;
+import frc.robot.commands.intake.IntakeOscillate;
+import frc.robot.commands.intake.IntakeUp;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.XboxControls;
 import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;
-import frc.robot.subsystem.indexer.Indexer;
 import frc.robot.subsystem.intake.Intake;
-import frc.robot.subsystem.shooter.Shooter;
 import frc.robot.subsystem.vision.Vision;
 import frc.robot.test.drive.DrivePIDTestCommand;
 import frc.robot.test.drive.TurnPIDTestCommand;
@@ -40,36 +35,18 @@ public class RobotContainer {
 	public static SwerveDrive drive = new SwerveDrive();
 	public static IMU imu = new IMU();
 	public static Vision vision = new Vision();
-	public static Shooter shooter = new Shooter();
-	public static Indexer indexer = new Indexer();
 	public static Intake intake = new Intake();
 
 	public static Command autonomousCommand = null;
 
 	public static void init() {
 		imu.init();
-		shooter.init();
-		indexer.init();
 		vision.init();
 		intake.init();
 
 		drive.init(new Pose2d());
 		// drive.setDefaultCommand(new FieldOrientedDrive());
 		drive.setDefaultCommand(new RobotOrientedDrive());
-		shooter.setDefaultCommand(new ShooterRest());
-		indexer.setDefaultCommand(new StopIndexer());
-		intake.setDefaultCommand(new StopIntake());
-
-		((XboxControls) controls).shooterActive().toggleOnTrue(new ShooterActive());
-		((XboxControls) controls).shoot().toggleOnTrue(new StartIndexer());
-		((XboxControls) controls).intake().toggleOnTrue(new StartIntake());
-
-		// SmartDashboard.putData("ShooterOn", new ShooterActive());
-		// SmartDashboard.putData("ShooterOff", new ShooterRest());
-		// SmartDashboard.putData("IndexerOn", new StartIndexer());
-		// SmartDashboard.putData("IndexerOff", new StopIndexer());
-		// SmartDashboard.putData("IntakeOn", new StartIntake());
-		// SmartDashboard.putData("IntakeOff", new StopIntake());
 
 		// left_js.button(1).onTrue(new PrintSwervePos());
 
@@ -85,22 +62,22 @@ public class RobotContainer {
 		SmartDashboard.putData("FieldHeadingDrive", new FieldHeadingDrive());
 		SmartDashboard.putData("FieldSnakeDrive", new FieldSnakeDrive());
 
+		SmartDashboard.putData("IntakeDown", new IntakeDown());
+		SmartDashboard.putData("IntakeUp", new IntakeUp());
+		SmartDashboard.putData("IntakeOscillate", new IntakeOscillate());
+
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());
 	}
 
 	public static void periodic() {
 		imu.sense();
 		drive.sense();
-		shooter.sense();
-		indexer.sense();
 		intake.sense();
 		vision.sense();
 
 		CommandScheduler.getInstance().run();
 
 		drive.actuate();
-		shooter.actuate();
-		indexer.actuate();
 		intake.actuate();
 	}
 

@@ -1,5 +1,10 @@
 package frc.robot.subsystem.intake;
 
+import static frc.robot.RobotContainer.*;
+
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -7,11 +12,18 @@ public class Intake extends SubsystemBase {
 	public IntakeHW hw = new IntakeHW();
 	public IntakeInputsAutoLogged inputs = new IntakeInputsAutoLogged();
 
-	public double voltage = 0;
+	public double targetJointPosition = 0;
+	public double targetIntakeVoltage = 0;
+
+	public static final Constraints JOINT_CONSTRAINTS = new Constraints(2.0, 10.0); // FIXME. max vel/accel
+	public static TrapezoidProfile jointProfile = new TrapezoidProfile(JOINT_CONSTRAINTS);
+	public State jointSetpoint = new State();
 
 	public void init() {
 		hw.init();
 		sense();
+
+		jointSetpoint = new State(inputs.jointPos, inputs.jointVel);
 	}
 
 	public void sense() {
@@ -20,14 +32,26 @@ public class Intake extends SubsystemBase {
 	}
 
 	public void actuate() {
-		hw.actuate(voltage);
+		State targetState = new State(targetJointPosition, 0);
+		State newSetpoint = jointProfile.calculate(LOOP_PERIOD, jointSetpoint, targetState);
+		jointSetpoint = newSetpoint;
+
+		Logger.recordOutput("/Intake/intakeVoltage", targetIntakeVoltage);
+		Logger.recordOutput("/Intake/jointTargetPos", targetJointPosition);
+		Logger.recordOutput("/Intake/jointProfilePos", jointSetpoint.position);
+
+		hw.actuate(inputs, jointSetpoint.position, targetIntakeVoltage);
 	}
 
-	public void setVoltage(double voltage) {
-		this.voltage = voltage;
+	public void setJointPosition(double position) {
+		targetJointPosition = position;
 	}
 
-	public void stop() {
-		this.voltage = 0;
+	public void setIntakeVoltage(double voltage) {
+		targetIntakeVoltage = voltage;
+	}
+
+	public void zeroJointPosition() {
+		hw.zeroJointPosition();
 	}
 }

@@ -15,9 +15,9 @@ import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveHW {
-	public static final double DRIVE_RATIO = 1 / 5.36; // motor * ratio = mechanism // FIXME.
-	public static final double TURN_RATIO = 1 / 18.75; // FIXME.
-	public static final double WHEEL_RAD = 2 * 2.54 / 100.; // FIXME. wheel radius (m)
+	public static final double DRIVE_RATIO = 1 / 5.27; // motor * ratio = mechanism
+	public static final double TURN_RATIO = 11.0 / 287;
+	public static final double WHEEL_RAD = 2 * 2.54 / 100.;
 
 	public static final double DRIVE_kP = 4; // FIXME. drive PID P
 	public static final double TURN_kP = 20; // FIXME. turn PID P

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.camcal.CameraCalibration;
 import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
 import frc.robot.commands.drive.FieldSnakeDrive;
@@ -76,6 +77,8 @@ public class RobotContainer {
 		SmartDashboard.putData("FieldOrientedDrive", new FieldOrientedDrive());
 		SmartDashboard.putData("FieldHeadingDrive", new FieldHeadingDrive());
 		SmartDashboard.putData("FieldSnakeDrive", new FieldSnakeDrive());
+
+		SmartDashboard.putData("CameraCalibration", new CameraCalibration());
 
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());
 	}

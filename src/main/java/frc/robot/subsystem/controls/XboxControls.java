@@ -39,4 +39,16 @@ public class XboxControls implements Controls {
 	public double rightY() {
 		return -xbox.getRightY();
 	}
+
+	public Trigger shooterActive() {
+		return xbox.rightTrigger();
+	}
+
+	public Trigger shoot() {
+		return xbox.leftBumper();
+	}
+
+	public Trigger intake() {
+		return xbox.leftTrigger();
+	}
 }

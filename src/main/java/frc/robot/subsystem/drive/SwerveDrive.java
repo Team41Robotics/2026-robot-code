@@ -26,17 +26,17 @@ public class SwerveDrive extends SubsystemBase {
 			MAX_VEL / hypot(ROBOT_LEN / 2, ROBOT_WID / 2); // FIXME. derived max angular vel (rad/s)
 
 	public SwerveModuleConfiguration[] configs = new SwerveModuleConfiguration[] {
-		new SwerveModuleConfiguration("NW", 9, 10, 15, -0.006135923151542565), // FIXME. ports & angle offset
-		new SwerveModuleConfiguration("NE", 7, 8, 18, 0.006135923151542565), // FIXME. ports & angle offset
-		new SwerveModuleConfiguration("SW", 11, 12, 17, 0.009203884727313847), // FIXME. ports & angle offset
-		new SwerveModuleConfiguration("SE", 5, 6, 16, -0.032213596545598466) // FIXME. ports & angle offset
+		new SwerveModuleConfiguration("NW", 9, 10, 15, PI + -0.006135923151542565), // FIXME. ports & angle offset
+		new SwerveModuleConfiguration("NE", 7, 8, 18, PI + 0.006135923151542565), // FIXME. ports & angle offset
+		new SwerveModuleConfiguration("SW", 11, 12, 17, PI + 0.009203884727313847), // FIXME. ports & angle offset
+		new SwerveModuleConfiguration("SE", 5, 6, 16, PI + -0.032213596545598466) // FIXME. ports & angle offset
 	};
 
 	public SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-			new Translation2d(ROBOT_LEN / 2, ROBOT_WID / 2),
-			new Translation2d(ROBOT_LEN / 2, -ROBOT_WID / 2),
+			new Translation2d(-ROBOT_LEN / 2, -ROBOT_WID / 2),
 			new Translation2d(-ROBOT_LEN / 2, ROBOT_WID / 2),
-			new Translation2d(-ROBOT_LEN / 2, -ROBOT_WID / 2));
+			new Translation2d(ROBOT_LEN / 2, -ROBOT_WID / 2),
+			new Translation2d(ROBOT_LEN / 2, ROBOT_WID / 2));
 
 	public SwerveModule[] modules = new SwerveModule[configs.length];
 

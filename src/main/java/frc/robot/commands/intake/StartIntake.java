@@ -8,7 +8,7 @@ public class StartIntake extends Command {
 	public double voltage;
 
 	public StartIntake() {
-		this(10.0); // FIXME. default intake voltage (V)
+		this(-12.0); // FIXME. default intake voltage (V)
 	}
 
 	public StartIntake(double voltage) {

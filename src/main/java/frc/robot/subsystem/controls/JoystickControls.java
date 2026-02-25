@@ -39,4 +39,15 @@ public class JoystickControls implements Controls {
 	public double rightY() {
 		return -rightJoystick.getY();
 	}
+
+	public Trigger shooterActive() {
+		return driverStation.button(2);
+	}
+
+	public Trigger shoot() {
+		return driverStation.button(1);
+	}
+
+
 }
+	

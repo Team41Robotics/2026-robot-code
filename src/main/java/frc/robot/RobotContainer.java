@@ -13,6 +13,7 @@ import frc.robot.commands.drive.FieldSnakeDrive;
 import frc.robot.commands.drive.RobotOrientedDrive;
 import frc.robot.commands.indexer.StartIndexer;
 import frc.robot.commands.indexer.StopIndexer;
+import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.shooter.ShooterActive;
 import frc.robot.commands.shooter.ShooterRest;
@@ -53,15 +54,22 @@ public class RobotContainer {
 		intake.init();
 
 		drive.init(new Pose2d());
-		drive.setDefaultCommand(new FieldOrientedDrive());
+		// drive.setDefaultCommand(new FieldOrientedDrive());
+		drive.setDefaultCommand(new RobotOrientedDrive());
 		shooter.setDefaultCommand(new ShooterRest());
 		indexer.setDefaultCommand(new StopIndexer());
 		intake.setDefaultCommand(new StopIntake());
 
-		SmartDashboard.putData("ShooterOn", new ShooterActive());
-		SmartDashboard.putData("ShooterOff", new ShooterRest());
-		SmartDashboard.putData("IndexerOn", new StartIndexer());
-		SmartDashboard.putData("IndexerOff", new StopIndexer());
+		((XboxControls) controls).shooterActive().toggleOnTrue(new ShooterActive());
+		((XboxControls) controls).shoot().toggleOnTrue(new StartIndexer());
+		((XboxControls) controls).intake().toggleOnTrue(new StartIntake());
+
+		// SmartDashboard.putData("ShooterOn", new ShooterActive());
+		// SmartDashboard.putData("ShooterOff", new ShooterRest());
+		// SmartDashboard.putData("IndexerOn", new StartIndexer());
+		// SmartDashboard.putData("IndexerOff", new StopIndexer());
+		// SmartDashboard.putData("IntakeOn", new StartIntake());
+		// SmartDashboard.putData("IntakeOff", new StopIntake());
 
 		// left_js.button(1).onTrue(new PrintSwervePos());
 

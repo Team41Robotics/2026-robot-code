@@ -12,9 +12,9 @@ import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class IntakeHW {
-	public static double JOINT_RATIO = 0.2; // FIXME. joint gear ratio (motor * ratio = mechanism)
-	public static double JOINT_kP = 10.0; // FIXME. joint PID P
-	public static double JOINT_kD = 0.0; // FIXME. joint PID D
+	public static final double JOINT_RATIO = 0.2; // FIXME. joint gear ratio (motor * ratio = mechanism)
+	public static final double JOINT_kP = 10.0; // FIXME. joint PID P
+	public static final double JOINT_kD = 0.0; // FIXME. joint PID D
 
 	public TalonFX jointTalonFX;
 	public TalonFX intakeTalonFX;

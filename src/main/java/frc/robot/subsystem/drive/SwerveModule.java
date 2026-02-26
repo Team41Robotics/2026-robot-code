@@ -27,11 +27,11 @@ public class SwerveModule {
 
 	public static final Constraints DRIVE_CONSTRAINTS =
 			new Constraints(45, 1e9); // FIXME. drive constraints (deg/s, deg/s^2)
-	public static final TrapezoidProfile DRIVE_PROFILE = new TrapezoidProfile(DRIVE_CONSTRAINTS);
+	public static TrapezoidProfile driveProfile = new TrapezoidProfile(DRIVE_CONSTRAINTS);
 
 	public static final Constraints TURN_CONSTRAINTS =
 			new Constraints(20, 80); // FIXME. turn constraints (deg/s, deg/s^2)
-	public static final TrapezoidProfile TURN_PROFILE = new TrapezoidProfile(TURN_CONSTRAINTS);
+	public static TrapezoidProfile turnProfile = new TrapezoidProfile(TURN_CONSTRAINTS);
 
 	public SwerveHW hw = new SwerveHW();
 	public SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
@@ -77,12 +77,12 @@ public class SwerveModule {
 		targetAng = setpointAng.position + angleModulus(targetAng - setpointAng.position);
 		double targetVel = targetState.speedMetersPerSecond * cos(angle - targetAng);
 
-		State newSetpointAng = TURN_PROFILE.calculate(LOOP_PERIOD, setpointAng, new State(targetAng, 0));
+		State newSetpointAng = turnProfile.calculate(LOOP_PERIOD, setpointAng, new State(targetAng, 0));
 		double turnFF = TURN_FF.calculateWithVelocities(setpointAng.velocity, newSetpointAng.velocity);
 		setpointAng = newSetpointAng;
 
 		double newSetpointVel =
-				DRIVE_PROFILE.calculate(LOOP_PERIOD, new State(setpointVel, 0), new State(targetVel, 0)).position;
+				driveProfile.calculate(LOOP_PERIOD, new State(setpointVel, 0), new State(targetVel, 0)).position;
 		double driveFF = DRIVE_FF.calculateWithVelocities(setpointVel, newSetpointVel);
 		setpointVel = newSetpointVel;
 

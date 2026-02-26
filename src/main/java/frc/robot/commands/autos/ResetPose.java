@@ -1,7 +1,7 @@
 package frc.robot.commands.autos;
 
-import static java.lang.Math.*;
 import static frc.robot.RobotContainer.*;
+import static java.lang.Math.*;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;

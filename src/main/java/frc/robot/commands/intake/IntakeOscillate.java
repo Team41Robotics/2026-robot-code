@@ -7,10 +7,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class IntakeOscillate extends Command {
-	public static double HIGH_VOLTAGE = 10.0; // FIXME. high intake voltage (V)
-	public static double CENTER_POSITION = 0.5; // FIXME. oscillation center position (radians)
-	public static double OSCILLATE_AMPLITUDE = 0.2; // FIXME. oscillation amplitude (radians)
-	public static double OSCILLATE_PERIOD = 0.5; // FIXME. oscillation period (seconds)
+	public static final double HIGH_VOLTAGE = 10.0; // FIXME. high intake voltage (V)
+	public static final double CENTER_POSITION = 0.5; // FIXME. oscillation center position (radians)
+	public static final double OSCILLATE_AMPLITUDE = 0.2; // FIXME. oscillation amplitude (radians)
+	public static final double OSCILLATE_PERIOD = 0.5; // FIXME. oscillation period (seconds)
 
 	public double startTime;
 

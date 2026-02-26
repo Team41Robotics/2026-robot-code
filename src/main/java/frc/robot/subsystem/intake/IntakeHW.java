@@ -67,22 +67,22 @@ public class IntakeHW {
 	public void sense(IntakeInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		inputs.jointPos = angleModulus(jointAbsoluteEncoder.getPosition().getValueAsDouble() * JOINT_RATIO * 2 * PI - JOINT_ENCODER_ZERO);
+		inputs.jointPosRadians = angleModulus(jointAbsoluteEncoder.getPosition().getValueAsDouble() * JOINT_RATIO * 2 * PI - JOINT_ENCODER_ZERO);
 
-		inputs.jointVel = jointEncoder.getVelocity();
-		inputs.jointVoltage = jointSparkMax.getBusVoltage() * jointSparkMax.getAppliedOutput();
-		inputs.jointCurrent = jointSparkMax.getOutputCurrent();
-		inputs.jointBusVoltage = jointSparkMax.getBusVoltage();
+		inputs.jointVelRadiansPerSec = jointEncoder.getVelocity();
+		inputs.jointVoltageVolts = jointSparkMax.getBusVoltage() * jointSparkMax.getAppliedOutput();
+		inputs.jointCurrentAmps = jointSparkMax.getOutputCurrent();
+		inputs.jointBusVoltageVolts = jointSparkMax.getBusVoltage();
 
 		inputs.intakeVelocityRPM = intakeTalonFX.getVelocity().getValueAsDouble() * 60.0;
-		inputs.intakeVoltage = intakeTalonFX.getMotorVoltage().getValueAsDouble();
-		inputs.intakeCurrent = intakeTalonFX.getStatorCurrent().getValueAsDouble();
-		inputs.intakeBusVoltage = intakeTalonFX.getSupplyVoltage().getValueAsDouble();
-		inputs.intakeBusCurrent = intakeTalonFX.getSupplyCurrent().getValueAsDouble();
+		inputs.intakeVoltageVolts = intakeTalonFX.getMotorVoltage().getValueAsDouble();
+		inputs.intakeCurrentAmps = intakeTalonFX.getStatorCurrent().getValueAsDouble();
+		inputs.intakeBusVoltageVolts = intakeTalonFX.getSupplyVoltage().getValueAsDouble();
+		inputs.intakeBusCurrentAmps = intakeTalonFX.getSupplyCurrent().getValueAsDouble();
 	}
 
 	public void actuate(IntakeInputs inputs, double jointPosition, double intakeVoltage) {
-		Logger.recordOutput("/Intake/jointErrorRad", inputs.jointPos - jointPosition);
+		Logger.recordOutput("/Intake/jointErrorRadians", inputs.jointPosRadians - jointPosition);
 
 		if (!Robot.isReal()) return;
 

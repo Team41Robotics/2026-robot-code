@@ -15,14 +15,14 @@ public class IntakeDown extends Command {
 
 	@Override
 	public void initialize() {
-		double currentPos = intake.inputs.jointPos;
+		double currentPos = intake.inputs.jointPosRadians;
 		intake.targetJointPosition = currentPos - 20.0 / 180.0 * PI;
 		intake.targetIntakeVoltage = HIGH_VOLTAGE;
 	}
 
 	@Override
 	public boolean isFinished() {
-		return intake.inputs.intakeCurrent > CURRENT_THRESHOLD;
+		return intake.inputs.intakeCurrentAmps > CURRENT_THRESHOLD;
 	}
 
 	@Override

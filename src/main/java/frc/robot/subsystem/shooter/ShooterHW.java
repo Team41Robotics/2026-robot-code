@@ -46,8 +46,9 @@ public class ShooterHW {
 		// --- Turret ---
 		turretTalonFX = new TalonFX(40); // FIXME
 		TalonFXConfiguration turretConfig = new TalonFXConfiguration();
-		turretConfig.Slot0.kP = TURRET_kP * TURRET_RATIO * 2 * PI;
-		turretConfig.Slot0.kD = TURRET_kD * TURRET_RATIO * 2 * PI;
+		turretConfig.Feedback.SensorToMechanismRatio = 1.0 / (TURRET_RATIO * 2 * PI);
+		turretConfig.Slot0.kP = TURRET_kP;
+		turretConfig.Slot0.kD = TURRET_kD;
 		turretConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		turretConfig.CurrentLimits.SupplyCurrentLimit = 30; // FIXME
 		turretConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -62,8 +63,9 @@ public class ShooterHW {
 		hoodTalonFX = new TalonFX(41); // FIXME
 		hoodLimitSwitch = new DigitalInput(0); // FIXME
 		TalonFXConfiguration hoodConfig = new TalonFXConfiguration();
-		hoodConfig.Slot0.kP = HOOD_kP * HOOD_RATIO * 2 * PI;
-		hoodConfig.Slot0.kD = HOOD_kD * HOOD_RATIO * 2 * PI;
+		hoodConfig.Feedback.SensorToMechanismRatio = 1.0 / (HOOD_RATIO * 2 * PI);
+		hoodConfig.Slot0.kP = HOOD_kP;
+		hoodConfig.Slot0.kD = HOOD_kD;
 		hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		hoodConfig.CurrentLimits.SupplyCurrentLimit = 30; // FIXME
 		hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -77,8 +79,9 @@ public class ShooterHW {
 		// --- Flywheel (leader) ---
 		flywheelTalonFX = new TalonFX(42); // FIXME
 		TalonFXConfiguration flywheelConfig = new TalonFXConfiguration();
-		flywheelConfig.Slot0.kP = FLYWHEEL_kP * FLYWHEEL_RATIO * 2 * PI;
-		flywheelConfig.Slot0.kV = FLYWHEEL_kV * FLYWHEEL_RATIO * 2 * PI;
+		flywheelConfig.Feedback.SensorToMechanismRatio = 1.0 / (FLYWHEEL_RATIO * 2 * PI);
+		flywheelConfig.Slot0.kP = FLYWHEEL_kP;
+		flywheelConfig.Slot0.kV = FLYWHEEL_kV;
 		flywheelConfig.Slot0.kS = FLYWHEEL_kS;
 		flywheelConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		flywheelConfig.CurrentLimits.SupplyCurrentLimit = 40; // FIXME
@@ -105,37 +108,37 @@ public class ShooterHW {
 			hoodTalonFX.setPosition(0);
 		}
 
-		inputs.turretPos = turretTalonFX.getPosition().getValueAsDouble() * TURRET_RATIO * 2 * PI;
-		inputs.turretVel = turretTalonFX.getVelocity().getValueAsDouble() * TURRET_RATIO * 2 * PI;
-		inputs.turretVoltage = turretTalonFX.getMotorVoltage().getValueAsDouble();
-		inputs.turretCurrent = turretTalonFX.getStatorCurrent().getValueAsDouble();
-		inputs.turretBusVoltage = turretTalonFX.getSupplyVoltage().getValueAsDouble();
-		inputs.turretBusCurrent = turretTalonFX.getSupplyCurrent().getValueAsDouble();
+		inputs.turretPosRadians = turretTalonFX.getPosition().getValueAsDouble();
+		inputs.turretVelRadiansPerSec = turretTalonFX.getVelocity().getValueAsDouble();
+		inputs.turretVoltageVolts = turretTalonFX.getMotorVoltage().getValueAsDouble();
+		inputs.turretCurrentAmps = turretTalonFX.getStatorCurrent().getValueAsDouble();
+		inputs.turretBusVoltageVolts = turretTalonFX.getSupplyVoltage().getValueAsDouble();
+		inputs.turretBusCurrentAmps = turretTalonFX.getSupplyCurrent().getValueAsDouble();
 
-		inputs.hoodPos = hoodTalonFX.getPosition().getValueAsDouble() * HOOD_RATIO * 2 * PI;
-		inputs.hoodVel = hoodTalonFX.getVelocity().getValueAsDouble() * HOOD_RATIO * 2 * PI;
-		inputs.hoodVoltage = hoodTalonFX.getMotorVoltage().getValueAsDouble();
-		inputs.hoodCurrent = hoodTalonFX.getStatorCurrent().getValueAsDouble();
-		inputs.hoodBusVoltage = hoodTalonFX.getSupplyVoltage().getValueAsDouble();
-		inputs.hoodBusCurrent = hoodTalonFX.getSupplyCurrent().getValueAsDouble();
+		inputs.hoodPosRadians = hoodTalonFX.getPosition().getValueAsDouble();
+		inputs.hoodVelRadiansPerSec = hoodTalonFX.getVelocity().getValueAsDouble();
+		inputs.hoodVoltageVolts = hoodTalonFX.getMotorVoltage().getValueAsDouble();
+		inputs.hoodCurrentAmps = hoodTalonFX.getStatorCurrent().getValueAsDouble();
+		inputs.hoodBusVoltageVolts = hoodTalonFX.getSupplyVoltage().getValueAsDouble();
+		inputs.hoodBusCurrentAmps = hoodTalonFX.getSupplyCurrent().getValueAsDouble();
 
-		inputs.flywheelVel = flywheelTalonFX.getVelocity().getValueAsDouble() * FLYWHEEL_RATIO * 2 * PI;
-		inputs.flywheelVoltage = flywheelTalonFX.getMotorVoltage().getValueAsDouble();
-		inputs.flywheelCurrent = flywheelTalonFX.getStatorCurrent().getValueAsDouble();
-		inputs.flywheelBusVoltage = flywheelTalonFX.getSupplyVoltage().getValueAsDouble();
-		inputs.flywheelBusCurrent = flywheelTalonFX.getSupplyCurrent().getValueAsDouble();
+		inputs.flywheelVelRadiansPerSec = flywheelTalonFX.getVelocity().getValueAsDouble();
+		inputs.flywheelVoltageVolts = flywheelTalonFX.getMotorVoltage().getValueAsDouble();
+		inputs.flywheelCurrentAmps = flywheelTalonFX.getStatorCurrent().getValueAsDouble();
+		inputs.flywheelBusVoltageVolts = flywheelTalonFX.getSupplyVoltage().getValueAsDouble();
+		inputs.flywheelBusCurrentAmps = flywheelTalonFX.getSupplyCurrent().getValueAsDouble();
 	}
 
 	public void actuate(ShooterInputs inputs, double turretPosition, double hoodPosition, double flywheelVelocity) {
-		Logger.recordOutput("/Shooter/turretErrorRad", inputs.turretPos - turretPosition);
-		Logger.recordOutput("/Shooter/hoodErrorRad", inputs.hoodPos - hoodPosition);
-		Logger.recordOutput("/Shooter/flywheelErrorRadPerSec", inputs.flywheelVel - flywheelVelocity);
+		Logger.recordOutput("/Shooter/turretErrorRadians", inputs.turretPosRadians - turretPosition);
+		Logger.recordOutput("/Shooter/hoodErrorRadians", inputs.hoodPosRadians - hoodPosition);
+		Logger.recordOutput("/Shooter/flywheelErrorRadiansPerSec", inputs.flywheelVelRadiansPerSec - flywheelVelocity);
 
 		if (!Robot.isReal()) return;
 
-		turretTalonFX.setControl(turretControlRequest.withPosition(turretPosition / (TURRET_RATIO * 2 * PI)));
-		hoodTalonFX.setControl(hoodControlRequest.withPosition(hoodPosition / (HOOD_RATIO * 2 * PI)));
-		flywheelTalonFX.setControl(flywheelControlRequest.withVelocity(flywheelVelocity / (FLYWHEEL_RATIO * 2 * PI)));
+		turretTalonFX.setControl(turretControlRequest.withPosition(turretPosition));
+		hoodTalonFX.setControl(hoodControlRequest.withPosition(hoodPosition));
+		flywheelTalonFX.setControl(flywheelControlRequest.withVelocity(flywheelVelocity));
 		// follower automatically follows leader
 	}
 }

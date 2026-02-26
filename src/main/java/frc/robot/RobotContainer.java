@@ -11,6 +11,7 @@ import frc.robot.commands.drive.DrivePIDTestCommand;
 import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
 import frc.robot.commands.drive.FieldSnakeDrive;
+import frc.robot.commands.drive.PrintSwervePos;
 import frc.robot.commands.drive.RobotOrientedDrive;
 import frc.robot.commands.drive.TurnPIDTestCommand;
 import frc.robot.commands.indexer.RunIndexer;
@@ -20,7 +21,7 @@ import frc.robot.commands.intake.IntakeUp;
 import frc.robot.commands.shooter.ShooterIdle;
 import frc.robot.commands.shooter.SpinUpFlywheel;
 import frc.robot.subsystem.controls.Controls;
-import frc.robot.subsystem.controls.XboxControls;
+import frc.robot.subsystem.controls.JoystickControls;
 import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;
 import frc.robot.subsystem.indexer.Indexer;
@@ -31,8 +32,8 @@ import frc.robot.subsystem.vision.Vision;
 public class RobotContainer {
 	public static final double LOOP_PERIOD = 0.020;
 
-	// public static Controls controls = new JoystickControls();
-	public static Controls controls = new XboxControls();
+	public static Controls controls = new JoystickControls();
+	// public static Controls controls = new XboxControls();
 
 	public static Robot robot;
 	public static CANBus driveBus = CANBus.roboRIO(); // FIXME.
@@ -58,7 +59,7 @@ public class RobotContainer {
 		drive.setDefaultCommand(new RobotOrientedDrive());
 		shooter.setDefaultCommand(new ShooterIdle());
 
-		// left_js.button(1).onTrue(new PrintSwervePos());
+		controls.shoot().onTrue(new PrintSwervePos());
 
 		// DriveSysID sysid = new DriveSysID();
 		// TurnSysID sysid = new TurnSysID();

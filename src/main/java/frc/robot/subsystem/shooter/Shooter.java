@@ -28,8 +28,8 @@ public class Shooter extends SubsystemBase {
 		hw.init();
 		sense();
 
-		turretSetpoint = new State(inputs.turretPos, inputs.turretVel);
-		hoodSetpoint = new State(inputs.hoodPos, inputs.hoodVel);
+		turretSetpoint = new State(inputs.turretPosRadians, inputs.turretVelRadiansPerSec);
+		hoodSetpoint = new State(inputs.hoodPosRadians, inputs.hoodVelRadiansPerSec);
 	}
 
 	public void sense() {
@@ -44,13 +44,13 @@ public class Shooter extends SubsystemBase {
 		State hoodGoal = new State(targetHoodPos, 0);
 		hoodSetpoint = hoodProfile.calculate(LOOP_PERIOD, hoodSetpoint, hoodGoal);
 
-		Logger.recordOutput("/Shooter/targetTurretPos", targetTurretPos);
-		Logger.recordOutput("/Shooter/turretProfilePos", turretSetpoint.position);
-		Logger.recordOutput("/Shooter/targetHoodPos", targetHoodPos);
-		Logger.recordOutput("/Shooter/hoodProfilePos", hoodSetpoint.position);
-		Logger.recordOutput("/Shooter/targetFlywheelVel", targetFlywheelVel);
-		Logger.recordOutput("/Shooter/turretProfileVel", turretSetpoint.velocity);
-		Logger.recordOutput("/Shooter/hoodProfileVel", hoodSetpoint.velocity);
+		Logger.recordOutput("/Shooter/targetTurretPosRadians", targetTurretPos);
+		Logger.recordOutput("/Shooter/turretProfilePosRadians", turretSetpoint.position);
+		Logger.recordOutput("/Shooter/targetHoodPosRadians", targetHoodPos);
+		Logger.recordOutput("/Shooter/hoodProfilePosRadians", hoodSetpoint.position);
+		Logger.recordOutput("/Shooter/targetFlywheelVelRadiansPerSec", targetFlywheelVel);
+		Logger.recordOutput("/Shooter/turretProfileVelRadiansPerSec", turretSetpoint.velocity);
+		Logger.recordOutput("/Shooter/hoodProfileVelRadiansPerSec", hoodSetpoint.velocity);
 
 		hw.actuate(inputs, turretSetpoint.position, hoodSetpoint.position, targetFlywheelVel);
 	}

@@ -4,13 +4,13 @@ import org.littletonrobotics.junction.AutoLog;
 
 @AutoLog
 public class IndexerInputs {
-	public double spinVoltage;
-	public double spinCurrent;
-	public double spinBusVoltage;
-	public double spinBusCurrent;
+	public double spinVoltageVolts;
+	public double spinCurrentAmps;
+	public double spinBusVoltageVolts;
+	public double spinBusCurrentAmps;
 
-	public double elevatorVoltage;
-	public double elevatorCurrent;
-	public double elevatorBusVoltage;
-	public double elevatorBusCurrent;
+	public double elevatorVoltageVolts;
+	public double elevatorCurrentAmps;
+	public double elevatorBusVoltageVolts;
+	public double elevatorBusCurrentAmps;
 }

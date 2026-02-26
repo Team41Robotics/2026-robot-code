@@ -44,7 +44,8 @@ public class SwerveHW {
 
 		driveTalonFX = new TalonFX(config.driveMotorId, driveBus);
 		TalonFXConfiguration driveConfig = new TalonFXConfiguration();
-		driveConfig.Slot0.kP = DRIVE_kP * DRIVE_RATIO * 2 * PI * WHEEL_RAD;
+		driveConfig.Feedback.SensorToMechanismRatio = 1.0 / (DRIVE_RATIO * 2 * PI * WHEEL_RAD);
+		driveConfig.Slot0.kP = DRIVE_kP;
 		driveConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		driveConfig.CurrentLimits.SupplyCurrentLimit = 60; // FIXME. supply current limit (A)
 		driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -57,8 +58,9 @@ public class SwerveHW {
 
 		turnTalonFX = new TalonFX(config.turnMotorId, driveBus);
 		TalonFXConfiguration turnConfig = new TalonFXConfiguration();
-		turnConfig.Slot0.kP = TURN_kP * TURN_RATIO * 2 * PI;
-		turnConfig.Slot0.kD = TURN_kD * TURN_RATIO * 2 * PI;
+		turnConfig.Feedback.SensorToMechanismRatio = 1.0 / (TURN_RATIO * 2 * PI);
+		turnConfig.Slot0.kP = TURN_kP;
+		turnConfig.Slot0.kD = TURN_kD;
 		turnConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		turnConfig.CurrentLimits.SupplyCurrentLimit = 30; // FIXME. supply current limit (A)
 		turnConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -73,8 +75,8 @@ public class SwerveHW {
 	public void sense(SwerveInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		inputs.drivePosMeters = driveTalonFX.getPosition().getValueAsDouble() * 2 * PI * DRIVE_RATIO * WHEEL_RAD;
-		inputs.driveVelMetersPerSec = driveTalonFX.getVelocity().getValueAsDouble() * 2 * PI * DRIVE_RATIO * WHEEL_RAD;
+		inputs.drivePosMeters = driveTalonFX.getPosition().getValueAsDouble();
+		inputs.driveVelMetersPerSec = driveTalonFX.getVelocity().getValueAsDouble();
 
 		inputs.driveBusVoltageVolts = driveTalonFX.getSupplyVoltage().getValueAsDouble();
 		inputs.driveBusCurrentAmps = driveTalonFX.getSupplyCurrent().getValueAsDouble();
@@ -83,8 +85,8 @@ public class SwerveHW {
 
 		inputs.turnBusVoltageVolts = turnTalonFX.getSupplyVoltage().getValueAsDouble();
 		inputs.turnBusCurrentAmps = turnTalonFX.getSupplyCurrent().getValueAsDouble();
-		inputs.turnPosRadians = turnTalonFX.getPosition().getValueAsDouble() * 2 * PI * TURN_RATIO;
-		inputs.turnVelRadiansPerSec = turnTalonFX.getVelocity().getValueAsDouble() * 2 * PI * TURN_RATIO;
+		inputs.turnPosRadians = turnTalonFX.getPosition().getValueAsDouble();
+		inputs.turnVelRadiansPerSec = turnTalonFX.getVelocity().getValueAsDouble();
 
 		inputs.turnVoltageVolts = turnTalonFX.getMotorVoltage().getValueAsDouble();
 		inputs.turnCurrentAmps = turnTalonFX.getStatorCurrent().getValueAsDouble();
@@ -97,7 +99,7 @@ public class SwerveHW {
 
 		if (!sysIdDrive && !sysIdTurn) {
 			driveTalonFX.setControl(driveControlRequest
-					.withVelocity(targetVel / (DRIVE_RATIO * 2 * PI * WHEEL_RAD))
+					.withVelocity(targetVel)
 					.withFeedForward(driveFF));
 		}
 
@@ -108,7 +110,7 @@ public class SwerveHW {
 
 		if (!sysIdTurn) {
 			turnTalonFX.setControl(turnControlRequest
-					.withPosition((inputs.turnPosRadians + diff) / (2 * PI * TURN_RATIO))
+					.withPosition(inputs.turnPosRadians + diff)
 					.withFeedForward(turnFF));
 		}
 	}

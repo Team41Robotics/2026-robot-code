@@ -41,15 +41,15 @@ public class IndexerHW {
 	public void sense(IndexerInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		inputs.spinVoltage = spinTalonFX.getMotorVoltage().getValueAsDouble();
-		inputs.spinCurrent = spinTalonFX.getStatorCurrent().getValueAsDouble();
-		inputs.spinBusVoltage = spinTalonFX.getSupplyVoltage().getValueAsDouble();
-		inputs.spinBusCurrent = spinTalonFX.getSupplyCurrent().getValueAsDouble();
+		inputs.spinVoltageVolts = spinTalonFX.getMotorVoltage().getValueAsDouble();
+		inputs.spinCurrentAmps = spinTalonFX.getStatorCurrent().getValueAsDouble();
+		inputs.spinBusVoltageVolts = spinTalonFX.getSupplyVoltage().getValueAsDouble();
+		inputs.spinBusCurrentAmps = spinTalonFX.getSupplyCurrent().getValueAsDouble();
 
-		inputs.elevatorVoltage = elevatorTalonFX.getMotorVoltage().getValueAsDouble();
-		inputs.elevatorCurrent = elevatorTalonFX.getStatorCurrent().getValueAsDouble();
-		inputs.elevatorBusVoltage = elevatorTalonFX.getSupplyVoltage().getValueAsDouble();
-		inputs.elevatorBusCurrent = elevatorTalonFX.getSupplyCurrent().getValueAsDouble();
+		inputs.elevatorVoltageVolts = elevatorTalonFX.getMotorVoltage().getValueAsDouble();
+		inputs.elevatorCurrentAmps = elevatorTalonFX.getStatorCurrent().getValueAsDouble();
+		inputs.elevatorBusVoltageVolts = elevatorTalonFX.getSupplyVoltage().getValueAsDouble();
+		inputs.elevatorBusCurrentAmps = elevatorTalonFX.getSupplyCurrent().getValueAsDouble();
 	}
 
 	public void actuate(IndexerInputs inputs, double spinVoltage, double elevatorVoltage) {

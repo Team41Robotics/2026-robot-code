@@ -23,7 +23,7 @@ public class Intake extends SubsystemBase {
 		hw.init();
 		sense();
 
-		jointSetpoint = new State(inputs.jointPos, inputs.jointVel);
+		jointSetpoint = new State(inputs.jointPosRadians, inputs.jointVelRadiansPerSec);
 	}
 
 	public void sense() {
@@ -40,10 +40,10 @@ public class Intake extends SubsystemBase {
 		State newSetpoint = jointProfile.calculate(LOOP_PERIOD, jointSetpoint, targetState);
 		jointSetpoint = newSetpoint;
 
-		Logger.recordOutput("/Intake/intakeVoltage", targetIntakeVoltage);
-		Logger.recordOutput("/Intake/jointTargetPos", targetJointPosition);
-		Logger.recordOutput("/Intake/jointProfilePos", jointSetpoint.position);
-		Logger.recordOutput("/Intake/jointProfileVel", jointSetpoint.velocity);
+		Logger.recordOutput("/Intake/intakeVoltageVolts", targetIntakeVoltage);
+		Logger.recordOutput("/Intake/jointTargetPosRadians", targetJointPosition);
+		Logger.recordOutput("/Intake/jointProfilePosRadians", jointSetpoint.position);
+		Logger.recordOutput("/Intake/jointProfileVelRadiansPerSec", jointSetpoint.velocity);
 
 		hw.actuate(inputs, jointSetpoint.position, targetIntakeVoltage);
 	}

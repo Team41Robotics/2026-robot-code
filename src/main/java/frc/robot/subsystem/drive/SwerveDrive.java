@@ -25,10 +25,10 @@ public class SwerveDrive extends SubsystemBase {
 	public static final double MAX_W = MAX_VEL / hypot(ROBOT_LEN / 2, ROBOT_WID / 2);
 
 	public SwerveModuleConfiguration[] configs = new SwerveModuleConfiguration[] {
-		new SwerveModuleConfiguration("NW", 9, 10, 15, 0),
-		new SwerveModuleConfiguration("NE", 7, 8, 18, 0),
-		new SwerveModuleConfiguration("SW", 11, 12, 17, 0),
-		new SwerveModuleConfiguration("SE", 5, 6, 16, 0)
+		new SwerveModuleConfiguration("NW", 17, 19, 18, 0),
+		new SwerveModuleConfiguration("NE", 22, 20, 21, 0),
+		new SwerveModuleConfiguration("SW", 16, 14, 15, 0),
+		new SwerveModuleConfiguration("SE", 11, 13, 12, 0)
 	};
 
 	public SwerveDriveKinematics kinematics = new SwerveDriveKinematics(

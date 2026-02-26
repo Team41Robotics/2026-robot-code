@@ -10,6 +10,7 @@ public class IntakeInputs {
 	public double jointCurrent;
 	public double jointBusVoltage;
 
+	public double intakeVelocityRPM;
 	public double intakeVoltage;
 	public double intakeCurrent;
 	public double intakeBusVoltage;

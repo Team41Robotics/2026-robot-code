@@ -13,7 +13,7 @@ import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class IntakeHW {
-	public static double JOINT_RATIO = 1.0 / 25.0; // FIXME. joint gear ratio (motor * ratio = mechanism)
+	public static double JOINT_RATIO = 0.2; // FIXME. joint gear ratio (motor * ratio = mechanism)
 	public static double JOINT_kP = 10.0; // FIXME. joint PID P
 	public static double JOINT_kD = 0.0; // FIXME. joint PID D
 
@@ -26,7 +26,7 @@ public class IntakeHW {
 	public void init() {
 		if (!Robot.isReal()) return;
 
-		jointTalonFX = new TalonFX(20, driveBus); // FIXME. joint motor CAN ID
+		jointTalonFX = new TalonFX(31);
 		TalonFXConfiguration jointConfig = new TalonFXConfiguration();
 
 		jointConfig.Slot0.kP = JOINT_kP * JOINT_RATIO * 2 * PI;
@@ -44,7 +44,7 @@ public class IntakeHW {
 		jointTalonFX.setPosition(0);
 		jointTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
-		intakeTalonFX = new TalonFX(21, driveBus); // FIXME. intake motor CAN ID
+		intakeTalonFX = new TalonFX(32);
 		TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
 
 		intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -81,8 +81,10 @@ public class IntakeHW {
 
 		if (!Robot.isReal()) return;
 
-		jointTalonFX.setControl(jointControlRequest.withPosition(jointPosition / (JOINT_RATIO * 2 * PI)));
-		intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
+		// jointTalonFX.setControl(jointControlRequest.withPosition(jointPosition / (JOINT_RATIO * 2 * PI)));
+		// intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
+		// intakeTalonFX.setVoltage(-12);
+		jointTalonFX.setVoltage(12);
 	}
 
 	public void zeroJointPosition() {

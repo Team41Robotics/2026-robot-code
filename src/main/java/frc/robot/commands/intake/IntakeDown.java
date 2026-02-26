@@ -15,7 +15,7 @@ public class IntakeDown extends Command {
 	@Override
 	public void initialize() {
 		double currentPos = intake.inputs.jointPos; // in radians
-		intake.setJointPosition(currentPos - Math.toRadians(20.0));
+		intake.setJointPosition(currentPos + Math.toRadians(20.0));
 		intake.setIntakeVoltage(HIGH_VOLTAGE);
 	}
 

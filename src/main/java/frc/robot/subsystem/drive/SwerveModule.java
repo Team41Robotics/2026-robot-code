@@ -37,13 +37,11 @@ public class SwerveModule {
 	public SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
 	public String name;
 
-	// Measured state
 	public SwerveModuleState state = new SwerveModuleState();
 	public double angle;
 	public double vel;
 	public double drivePos;
 
-	// Target/setpoint state
 	public SwerveModuleState targetState = new SwerveModuleState();
 	public State setpointAng = new State();
 	public double setpointVel = 0;
@@ -88,8 +86,9 @@ public class SwerveModule {
 
 		hw.actuate(inputs, targetVel, driveFF, setpointAng.position, turnFF);
 
-		Logger.recordOutput(hw.logRoot + "/targetAngRadians", angleModulus(targetAng));
+		Logger.recordOutput(hw.logRoot + "/setpointVelMetersPerSec", setpointVel);
 		Logger.recordOutput(hw.logRoot + "/targetVelMetersPerSec", targetVel);
+		Logger.recordOutput(hw.logRoot + "/targetAngRadians", angleModulus(targetAng));
 		Logger.recordOutput(hw.logRoot + "/setpointAngRadians", angleModulus(setpointAng.position));
 		Logger.recordOutput(hw.logRoot + "/setpointAngVelRadiansPerSec", setpointAng.velocity);
 		Logger.recordOutput(hw.logRoot + "/driveFFVolts", driveFF);

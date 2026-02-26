@@ -21,7 +21,7 @@ public class IntakeOscillate extends Command {
 	@Override
 	public void initialize() {
 		startTime = Timer.getFPGATimestamp();
-		intake.setIntakeVoltage(HIGH_VOLTAGE);
+		intake.targetIntakeVoltage = HIGH_VOLTAGE;
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class IntakeOscillate extends Command {
 		double elapsed = Timer.getFPGATimestamp() - startTime;
 		double center = CENTER_POSITION;
 		double offset = OSCILLATE_AMPLITUDE * sin(2.0 * PI * elapsed / OSCILLATE_PERIOD);
-		intake.setJointPosition(center + offset);
+		intake.targetJointPosition = center + offset;
 	}
 
 	@Override
@@ -39,6 +39,6 @@ public class IntakeOscillate extends Command {
 
 	@Override
 	public void end(boolean interrupted) {
-		intake.setIntakeVoltage(0);
+		intake.targetIntakeVoltage = 0;
 	}
 }

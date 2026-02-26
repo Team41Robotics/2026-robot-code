@@ -16,8 +16,8 @@ public class IntakeDown extends Command {
 	@Override
 	public void initialize() {
 		double currentPos = intake.inputs.jointPos;
-		intake.setJointPosition(currentPos - 20.0 / 180.0 * PI);
-		intake.setIntakeVoltage(HIGH_VOLTAGE);
+		intake.targetJointPosition = currentPos - 20.0 / 180.0 * PI;
+		intake.targetIntakeVoltage = HIGH_VOLTAGE;
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class IntakeDown extends Command {
 
 	@Override
 	public void end(boolean interrupted) {
-		intake.setJointPosition(0);
+		intake.targetJointPosition = 0;
 		intake.zeroJointPosition();
 	}
 }

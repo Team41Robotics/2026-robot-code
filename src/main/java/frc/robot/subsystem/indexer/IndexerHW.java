@@ -6,7 +6,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Robot;
-import org.littletonrobotics.junction.Logger;
 
 public class IndexerHW {
 	public TalonFX spinTalonFX;
@@ -54,9 +53,6 @@ public class IndexerHW {
 	}
 
 	public void actuate(IndexerInputs inputs, double spinVoltage, double elevatorVoltage) {
-		Logger.recordOutput("/Indexer/actuatedSpinVoltage", spinVoltage);
-		Logger.recordOutput("/Indexer/actuatedElevatorVoltage", elevatorVoltage);
-
 		if (!Robot.isReal()) return;
 
 		spinTalonFX.setControl(spinControlRequest.withOutput(spinVoltage));

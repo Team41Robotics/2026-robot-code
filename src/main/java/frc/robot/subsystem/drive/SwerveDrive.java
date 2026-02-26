@@ -74,15 +74,7 @@ public class SwerveDrive extends SubsystemBase {
 	}
 
 	public void drive(ChassisSpeeds speeds) {
-		speeds = ChassisSpeeds.discretize(speeds, LOOP_PERIOD);
 		targetSpeeds = speeds;
-
-		targetStates = kinematics.toSwerveModuleStates(speeds);
-		SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, SwerveModule.MAX_VEL);
-
-		for (int i = 0; i < modules.length; i++) {
-			modules[i].drive(targetStates[i]);
-		}
 	}
 
 	public void sense() {
@@ -114,6 +106,13 @@ public class SwerveDrive extends SubsystemBase {
 	}
 
 	public void actuate() {
-		for (int i = 0; i < modules.length; i++) modules[i].actuate();
+		ChassisSpeeds speeds = ChassisSpeeds.discretize(targetSpeeds, LOOP_PERIOD);
+		targetStates = kinematics.toSwerveModuleStates(speeds);
+		SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, SwerveModule.MAX_VEL);
+
+		for (int i = 0; i < modules.length; i++) {
+			modules[i].drive(targetStates[i]);
+			modules[i].actuate();
+		}
 	}
 }

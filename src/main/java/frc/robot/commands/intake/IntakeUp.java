@@ -15,12 +15,12 @@ public class IntakeUp extends Command {
 
 	@Override
 	public void initialize() {
-		intake.setJointPosition(UP_POSITION);
-		intake.setIntakeVoltage(LOW_VOLTAGE);
+		intake.targetJointPosition = UP_POSITION;
+		intake.targetIntakeVoltage = LOW_VOLTAGE;
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		intake.setIntakeVoltage(0);
+		intake.targetIntakeVoltage = 0;
 	}
 }

@@ -44,16 +44,12 @@ public class SwerveHW {
 
 		driveTalonFX = new TalonFX(config.driveMotorId, driveBus);
 		TalonFXConfiguration driveConfig = new TalonFXConfiguration();
-
 		driveConfig.Slot0.kP = DRIVE_kP * DRIVE_RATIO * 2 * PI * WHEEL_RAD;
-
 		driveConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		driveConfig.CurrentLimits.SupplyCurrentLimit = 60; // FIXME. supply current limit (A)
 		driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		driveConfig.CurrentLimits.StatorCurrentLimit = 23; // FIXME. stator current limit (A)
-
 		driveConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
 		driveTalonFX.getConfigurator().apply(driveConfig);
 		driveTalonFX.clearStickyFaults();
 		driveTalonFX.setPosition(0);
@@ -61,15 +57,11 @@ public class SwerveHW {
 
 		turnTalonFX = new TalonFX(config.turnMotorId, driveBus);
 		TalonFXConfiguration turnConfig = new TalonFXConfiguration();
-
 		turnConfig.Slot0.kP = TURN_kP * TURN_RATIO * 2 * PI;
 		turnConfig.Slot0.kD = TURN_kD * TURN_RATIO * 2 * PI;
-
 		turnConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		turnConfig.CurrentLimits.SupplyCurrentLimit = 30; // FIXME. supply current limit (A)
-
 		turnConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
 		turnTalonFX.getConfigurator().apply(turnConfig);
 		turnTalonFX.clearStickyFaults();
 		turnTalonFX.setNeutralMode(NeutralModeValue.Coast);
@@ -101,11 +93,6 @@ public class SwerveHW {
 	}
 
 	public void actuate(SwerveInputs inputs, double targetVel, double driveFF, double targetAng, double turnFF) {
-		Logger.recordOutput(logRoot + "/targetVelMetersPerSec", targetVel);
-		Logger.recordOutput(logRoot + "/driveFFVolts", driveFF);
-		Logger.recordOutput(logRoot + "/targetAngRadians", angleModulus(targetAng));
-		Logger.recordOutput(logRoot + "/turnFFVolts", turnFF);
-
 		if (!Robot.isReal()) return;
 
 		if (!sysIdDrive && !sysIdTurn) {

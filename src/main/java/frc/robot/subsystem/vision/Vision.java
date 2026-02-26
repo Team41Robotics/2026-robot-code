@@ -5,6 +5,7 @@ import static frc.robot.RobotContainer.*;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.Timer;
@@ -42,6 +43,8 @@ public class Vision extends SubsystemBase {
 	}
 
 	public void sense() {
+		Logger.recordOutput("/Vision/enabled", enabled);
+
 		for (int i = 0; i < nCams; i++) {
 			VisionHW cam = cameras[i];
 			VisionInputsAutoLogged input = inputs[i];
@@ -53,9 +56,10 @@ public class Vision extends SubsystemBase {
 
 			poseEsts[i].addHeadingData(Timer.getTimestamp(), drive.pose.getRotation());
 
-			if (!enabled) continue;
 			for (int j = 0; j < results.size(); j++) {
 				PhotonPipelineResult result = results.get(j);
+				Pose2d visionPose = null;
+				String method = "none";
 
 				Optional<EstimatedRobotPose> estPose = poseEsts[i].estimateConstrainedSolvepnpPose(
 						result,
@@ -65,29 +69,29 @@ public class Vision extends SubsystemBase {
 						false,
 						1);
 				if (estPose.isPresent()) {
-					drive.poseEst.addVisionMeasurement(
-							estPose.get().estimatedPose.toPose2d(),
-							result.getTimestampSeconds(),
-							VecBuilder.fill(0.75, 0.75, 0.9)); // FIXME. vision measurement covariance (tune)
-					continue;
+					visionPose = estPose.get().estimatedPose.toPose2d();
+					method = "constrainedPnP";
+				} else {
+					estPose = poseEsts[i].estimateCoprocMultiTagPose(result);
+					if (estPose.isPresent() && result.targets.size() >= 2) {
+						visionPose = estPose.get().estimatedPose.toPose2d();
+						method = "multiTag";
+					} else {
+						estPose = poseEsts[i].estimatePnpDistanceTrigSolvePose(result);
+						if (estPose.isPresent()) {
+							visionPose = estPose.get().estimatedPose.toPose2d();
+							method = "pnpDistTrig";
+						}
+					}
 				}
 
-				estPose = poseEsts[i].estimateCoprocMultiTagPose(result);
-				if (estPose.isPresent() && result.targets.size() >= 2) {
-					drive.poseEst.addVisionMeasurement(
-							estPose.get().estimatedPose.toPose2d(),
-							result.getTimestampSeconds(),
-							VecBuilder.fill(0.75, 0.75, 0.9)); // FIXME. vision measurement covariance (tune)
-					continue;
-				}
+				Logger.recordOutput("/Vision/" + cam.name + "/nTargets", result.targets.size());
+				Logger.recordOutput("/Vision/" + cam.name + "/method", method);
 
-				estPose = poseEsts[i].estimatePnpDistanceTrigSolvePose(result);
-				if (estPose.isPresent()) {
+				if (visionPose != null && enabled) {
 					drive.poseEst.addVisionMeasurement(
-							estPose.get().estimatedPose.toPose2d(),
-							result.getTimestampSeconds(),
-							VecBuilder.fill(0.75, 0.75, 0.9)); // FIXME. vision measurement covariance (tune)
-					continue;
+							visionPose, result.getTimestampSeconds(), VecBuilder.fill(0.75, 0.75, 0.9));
+					Logger.recordOutput("/Vision/" + cam.name + "/estimatedPose", visionPose);
 				}
 			}
 		}

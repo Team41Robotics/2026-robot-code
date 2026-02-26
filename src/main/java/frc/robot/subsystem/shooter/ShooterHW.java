@@ -14,20 +14,16 @@ import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class ShooterHW {
-	// Gear ratios (motor * ratio = mechanism)
 	public static final double TURRET_RATIO = 0.05; // FIXME
 	public static final double HOOD_RATIO = 1.0; // FIXME
 	public static final double FLYWHEEL_RATIO = 1.0; // FIXME
 
-	// Turret PID (volts per radian error in mechanism space)
 	public static final double TURRET_kP = 5.0; // FIXME
 	public static final double TURRET_kD = 0.0; // FIXME
 
-	// Hood PID
 	public static final double HOOD_kP = 0.5; // FIXME
 	public static final double HOOD_kD = 0.0; // FIXME
 
-	// Flywheel PID + FF
 	public static final double FLYWHEEL_kP = 0.1; // FIXME
 	public static final double FLYWHEEL_kV = 0.12; // FIXME
 	public static final double FLYWHEEL_kS = 0.0; // FIXME
@@ -122,9 +118,9 @@ public class ShooterHW {
 	}
 
 	public void actuate(ShooterInputs inputs, double turretPosition, double hoodPosition, double flywheelVelocity) {
-		Logger.recordOutput("/Shooter/actuatedTurretPos", turretPosition);
-		Logger.recordOutput("/Shooter/actuatedHoodPos", hoodPosition);
-		Logger.recordOutput("/Shooter/actuatedFlywheelVel", flywheelVelocity);
+		Logger.recordOutput("/Shooter/turretErrorRad", inputs.turretPos - turretPosition);
+		Logger.recordOutput("/Shooter/hoodErrorRad", inputs.hoodPos - hoodPosition);
+		Logger.recordOutput("/Shooter/flywheelErrorRadPerSec", inputs.flywheelVel - flywheelVelocity);
 
 		if (!Robot.isReal()) return;
 

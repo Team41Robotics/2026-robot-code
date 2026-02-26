@@ -27,17 +27,13 @@ public class IntakeHW {
 
 		jointTalonFX = new TalonFX(32);
 		TalonFXConfiguration jointConfig = new TalonFXConfiguration();
-
 		jointConfig.Slot0.kP = JOINT_kP * JOINT_RATIO * 2 * PI;
 		jointConfig.Slot0.kD = JOINT_kD * JOINT_RATIO * 2 * PI;
-
 		jointConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		jointConfig.CurrentLimits.SupplyCurrentLimit = 40; // FIXME. supply current limit (A)
 		jointConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		jointConfig.CurrentLimits.StatorCurrentLimit = 60; // FIXME. stator current limit (A)
-
 		jointConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // FIXME. inversion
-
 		jointTalonFX.getConfigurator().apply(jointConfig);
 		jointTalonFX.clearStickyFaults();
 		jointTalonFX.setPosition(0);
@@ -45,12 +41,9 @@ public class IntakeHW {
 
 		intakeTalonFX = new TalonFX(31);
 		TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
-
 		intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		intakeConfig.CurrentLimits.SupplyCurrentLimit = 40; // FIXME. supply current limit (A)
-
 		intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // FIXME. inversion
-
 		intakeTalonFX.getConfigurator().apply(intakeConfig);
 		intakeTalonFX.clearStickyFaults();
 		intakeTalonFX.setNeutralMode(NeutralModeValue.Coast);
@@ -73,8 +66,7 @@ public class IntakeHW {
 	}
 
 	public void actuate(IntakeInputs inputs, double jointPosition, double intakeVoltage) {
-		Logger.recordOutput("/Intake/actuatedJointPos", jointPosition);
-		Logger.recordOutput("/Intake/actuatedIntakeVoltage", intakeVoltage);
+		Logger.recordOutput("/Intake/jointErrorRad", inputs.jointPos - jointPosition);
 
 		if (!Robot.isReal()) return;
 
@@ -84,6 +76,7 @@ public class IntakeHW {
 
 	public void zeroJointPosition() {
 		if (!Robot.isReal()) return;
+
 		jointTalonFX.setPosition(0);
 	}
 }

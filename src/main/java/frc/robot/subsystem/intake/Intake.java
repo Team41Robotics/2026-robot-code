@@ -31,6 +31,10 @@ public class Intake extends SubsystemBase {
 		Logger.processInputs("/Intake", inputs);
 	}
 
+	public void zeroJointPosition() {
+		hw.zeroJointPosition();
+	}
+
 	public void actuate() {
 		State targetState = new State(targetJointPosition, 0);
 		State newSetpoint = jointProfile.calculate(LOOP_PERIOD, jointSetpoint, targetState);
@@ -39,19 +43,8 @@ public class Intake extends SubsystemBase {
 		Logger.recordOutput("/Intake/intakeVoltage", targetIntakeVoltage);
 		Logger.recordOutput("/Intake/jointTargetPos", targetJointPosition);
 		Logger.recordOutput("/Intake/jointProfilePos", jointSetpoint.position);
+		Logger.recordOutput("/Intake/jointProfileVel", jointSetpoint.velocity);
 
 		hw.actuate(inputs, jointSetpoint.position, targetIntakeVoltage);
-	}
-
-	public void setJointPosition(double position) {
-		targetJointPosition = position;
-	}
-
-	public void setIntakeVoltage(double voltage) {
-		targetIntakeVoltage = voltage;
-	}
-
-	public void zeroJointPosition() {
-		hw.zeroJointPosition();
 	}
 }

@@ -10,6 +10,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
@@ -37,6 +38,8 @@ public class ShooterHW {
 	public PositionVoltage hoodControlRequest = new PositionVoltage(0).withSlot(0);
 	public VelocityVoltage flywheelControlRequest = new VelocityVoltage(0).withSlot(0);
 
+	public DigitalInput hoodLimitSwitch;
+
 	public void init() {
 		if (!Robot.isReal()) return;
 
@@ -57,6 +60,7 @@ public class ShooterHW {
 
 		// --- Hood ---
 		hoodTalonFX = new TalonFX(41); // FIXME
+		hoodLimitSwitch = new DigitalInput(0); // FIXME
 		TalonFXConfiguration hoodConfig = new TalonFXConfiguration();
 		hoodConfig.Slot0.kP = HOOD_kP * HOOD_RATIO * 2 * PI;
 		hoodConfig.Slot0.kD = HOOD_kD * HOOD_RATIO * 2 * PI;
@@ -90,11 +94,16 @@ public class ShooterHW {
 		flywheelFollowerTalonFX.getConfigurator().apply(new TalonFXConfiguration());
 		flywheelFollowerTalonFX.clearStickyFaults();
 		flywheelFollowerTalonFX.setNeutralMode(NeutralModeValue.Coast);
-		flywheelFollowerTalonFX.setControl(new Follower(42, MotorAlignmentValue.Aligned)); // FIXME: Aligned or Opposed
+		flywheelFollowerTalonFX.setControl(new Follower(42, MotorAlignmentValue.Opposed)); // FIXME
 	}
 
 	public void sense(ShooterInputs inputs) {
 		if (!Robot.isReal()) return;
+
+		inputs.isHoodLimitSwitchOn = hoodLimitSwitch.get();
+		if (inputs.isHoodLimitSwitchOn) {
+			hoodTalonFX.setPosition(0);
+		}
 
 		inputs.turretPos = turretTalonFX.getPosition().getValueAsDouble() * TURRET_RATIO * 2 * PI;
 		inputs.turretVel = turretTalonFX.getVelocity().getValueAsDouble() * TURRET_RATIO * 2 * PI;

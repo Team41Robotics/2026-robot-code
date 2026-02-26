@@ -7,10 +7,12 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.drive.DrivePIDTestCommand;
 import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
 import frc.robot.commands.drive.FieldSnakeDrive;
 import frc.robot.commands.drive.RobotOrientedDrive;
+import frc.robot.commands.drive.TurnPIDTestCommand;
 import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.intake.IntakeOscillate;
@@ -25,8 +27,6 @@ import frc.robot.subsystem.indexer.Indexer;
 import frc.robot.subsystem.intake.Intake;
 import frc.robot.subsystem.shooter.Shooter;
 import frc.robot.subsystem.vision.Vision;
-import frc.robot.test.drive.DrivePIDTestCommand;
-import frc.robot.test.drive.TurnPIDTestCommand;
 
 public class RobotContainer {
 	public static final double LOOP_PERIOD = 0.020;

@@ -9,7 +9,6 @@ public class IntakeInputs {
 	public double jointVoltage;
 	public double jointCurrent;
 	public double jointBusVoltage;
-	public double jointBusCurrent;
 
 	public double intakeVoltage;
 	public double intakeCurrent;

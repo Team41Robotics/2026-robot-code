@@ -1,5 +1,6 @@
 package frc.robot.commands.autos;
 
+import static java.lang.Math.*;
 import static frc.robot.RobotContainer.*;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -19,7 +20,7 @@ public class ResetPose extends Command {
 		this.pose = new Pose2d(
 				FieldConstants.fieldWidth - pose.getX(),
 				FieldConstants.fieldLength - pose.getY(),
-				pose.getRotation().plus(new Rotation2d(Math.PI)));
+				pose.getRotation().plus(new Rotation2d(PI)));
 	}
 
 	@Override

@@ -1,12 +1,13 @@
 package frc.robot.commands.intake;
 
 import static frc.robot.RobotContainer.*;
+import static java.lang.Math.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class IntakeUp extends Command {
 	public static double LOW_VOLTAGE = 3.0; // FIXME. low intake voltage (V)
-	public static double UP_POSITION = Math.toRadians(60.0); // FIXME. joint up position (radians)
+	public static double UP_POSITION = 60 / 180.0 * PI; // FIXME. joint up position (radians)
 
 	public IntakeUp() {
 		addRequirements(intake);

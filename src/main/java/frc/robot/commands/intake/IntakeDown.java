@@ -1,6 +1,7 @@
 package frc.robot.commands.intake;
 
 import static frc.robot.RobotContainer.*;
+import static java.lang.Math.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -14,8 +15,8 @@ public class IntakeDown extends Command {
 
 	@Override
 	public void initialize() {
-		double currentPos = intake.inputs.jointPos; // in radians
-		intake.setJointPosition(currentPos + Math.toRadians(20.0));
+		double currentPos = intake.inputs.jointPos;
+		intake.setJointPosition(currentPos - 20.0 / 180.0 * PI);
 		intake.setIntakeVoltage(HIGH_VOLTAGE);
 	}
 

@@ -1,6 +1,7 @@
 package frc.robot.commands.intake;
 
 import static frc.robot.RobotContainer.*;
+import static java.lang.Math.*;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,7 +28,7 @@ public class IntakeOscillate extends Command {
 	public void execute() {
 		double elapsed = Timer.getFPGATimestamp() - startTime;
 		double center = CENTER_POSITION;
-		double offset = OSCILLATE_AMPLITUDE * Math.sin(2.0 * Math.PI * elapsed / OSCILLATE_PERIOD);
+		double offset = OSCILLATE_AMPLITUDE * sin(2.0 * PI * elapsed / OSCILLATE_PERIOD);
 		intake.setJointPosition(center + offset);
 	}
 

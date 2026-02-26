@@ -1,6 +1,5 @@
 package frc.robot.subsystem.intake;
 
-import static frc.robot.RobotContainer.*;
 import static java.lang.Math.*;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -26,7 +25,7 @@ public class IntakeHW {
 	public void init() {
 		if (!Robot.isReal()) return;
 
-		jointTalonFX = new TalonFX(31);
+		jointTalonFX = new TalonFX(32);
 		TalonFXConfiguration jointConfig = new TalonFXConfiguration();
 
 		jointConfig.Slot0.kP = JOINT_kP * JOINT_RATIO * 2 * PI;
@@ -44,13 +43,11 @@ public class IntakeHW {
 		jointTalonFX.setPosition(0);
 		jointTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
-		intakeTalonFX = new TalonFX(32);
+		intakeTalonFX = new TalonFX(31);
 		TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
 
 		intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		intakeConfig.CurrentLimits.SupplyCurrentLimit = 40; // FIXME. supply current limit (A)
-		intakeConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		intakeConfig.CurrentLimits.StatorCurrentLimit = 60; // FIXME. stator current limit (A)
 
 		intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // FIXME. inversion
 
@@ -81,10 +78,8 @@ public class IntakeHW {
 
 		if (!Robot.isReal()) return;
 
-		// jointTalonFX.setControl(jointControlRequest.withPosition(jointPosition / (JOINT_RATIO * 2 * PI)));
-		// intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
-		// intakeTalonFX.setVoltage(-12);
-		jointTalonFX.setVoltage(12);
+		jointTalonFX.setControl(jointControlRequest.withPosition(jointPosition / (JOINT_RATIO * 2 * PI)));
+		intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
 	}
 
 	public void zeroJointPosition() {

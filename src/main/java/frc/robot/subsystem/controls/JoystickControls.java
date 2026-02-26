@@ -47,4 +47,8 @@ public class JoystickControls implements Controls {
 	public Trigger shoot() {
 		return driverStation.button(1);
 	}
+
+	public Trigger intake() {
+		return driverStation.button(3); // FIXME
+	}
 }

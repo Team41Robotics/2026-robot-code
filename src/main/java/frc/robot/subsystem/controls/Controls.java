@@ -19,4 +19,10 @@ public interface Controls {
 	public double rightX();
 
 	public double rightY();
+
+	public Trigger shooterActive();
+
+	public Trigger shoot();
+
+	public Trigger intake();
 }

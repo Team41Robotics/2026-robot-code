@@ -11,14 +11,19 @@ import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
 import frc.robot.commands.drive.FieldSnakeDrive;
 import frc.robot.commands.drive.RobotOrientedDrive;
+import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.intake.IntakeOscillate;
 import frc.robot.commands.intake.IntakeUp;
+import frc.robot.commands.shooter.ShooterIdle;
+import frc.robot.commands.shooter.SpinUpFlywheel;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.XboxControls;
 import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;
+import frc.robot.subsystem.indexer.Indexer;
 import frc.robot.subsystem.intake.Intake;
+import frc.robot.subsystem.shooter.Shooter;
 import frc.robot.subsystem.vision.Vision;
 import frc.robot.test.drive.DrivePIDTestCommand;
 import frc.robot.test.drive.TurnPIDTestCommand;
@@ -36,6 +41,8 @@ public class RobotContainer {
 	public static IMU imu = new IMU();
 	public static Vision vision = new Vision();
 	public static Intake intake = new Intake();
+	public static Shooter shooter = new Shooter();
+	public static Indexer indexer = new Indexer();
 
 	public static Command autonomousCommand = null;
 
@@ -43,10 +50,13 @@ public class RobotContainer {
 		imu.init();
 		vision.init();
 		intake.init();
+		shooter.init();
+		indexer.init();
 
 		drive.init(new Pose2d());
 		// drive.setDefaultCommand(new FieldOrientedDrive());
 		drive.setDefaultCommand(new RobotOrientedDrive());
+		shooter.setDefaultCommand(new ShooterIdle());
 
 		// left_js.button(1).onTrue(new PrintSwervePos());
 
@@ -66,6 +76,12 @@ public class RobotContainer {
 		SmartDashboard.putData("IntakeUp", new IntakeUp());
 		SmartDashboard.putData("IntakeOscillate", new IntakeOscillate());
 
+		SmartDashboard.putData("SpinUpFlywheel", new SpinUpFlywheel());
+		SmartDashboard.putData("RunIndexer", new RunIndexer());
+
+		controls.shooterActive().whileTrue(new SpinUpFlywheel());
+		controls.shoot().whileTrue(new RunIndexer());
+
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());
 	}
 
@@ -73,12 +89,16 @@ public class RobotContainer {
 		imu.sense();
 		drive.sense();
 		intake.sense();
+		shooter.sense();
+		indexer.sense();
 		vision.sense();
 
 		CommandScheduler.getInstance().run();
 
 		drive.actuate();
 		intake.actuate();
+		shooter.actuate();
+		indexer.actuate();
 	}
 
 	public static Command getAutonomousCommand() {

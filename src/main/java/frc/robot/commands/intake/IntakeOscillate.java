@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class IntakeOscillate extends Command {
-	public static final double HIGH_VOLTAGE = 10.0; // TUNEME. high intake voltage (V)
+	public static final double HIGH_VOLTAGE = 0.0; // TUNEME. high intake voltage (V)
 	public static final double CENTER_POSITION = 0.5; // TUNEME. oscillation center position (radians)
 	public static final double OSCILLATE_AMPLITUDE = 0.2; // TUNEME. oscillation amplitude (radians)
 	public static final double OSCILLATE_PERIOD = 0.5; // TUNEME. oscillation period (seconds)

@@ -29,6 +29,11 @@ public class Intake extends SubsystemBase {
 	public void sense() {
 		hw.sense(inputs);
 		Logger.processInputs("/Intake", inputs);
+
+		if(robot.isDisabled()) {
+			targetJointPosition = inputs.jointPosRadians;
+			jointSetpoint = new State(inputs.jointPosRadians, inputs.jointVelRadiansPerSec);
+		}
 	}
 
 	public void actuate() {

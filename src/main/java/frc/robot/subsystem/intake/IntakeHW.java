@@ -22,10 +22,11 @@ import org.littletonrobotics.junction.Logger;
 
 public class IntakeHW {
 	public static final double JOINT_RATIO = 1.0 / 27.0; // TUNEME. joint gear ratio (motor * ratio = mechanism)
-	public static final double JOINT_kP = 10.0; // TUNEME. joint PID P
+	public static final double JOINT_kP = 5.0; // TUNEME. joint PID P
+	public static final double JOINT_kI = 0.0; // TUNEME. joint PID I
 	public static final double JOINT_kD = 0.0; // TUNEME. joint PID D
 
-	public static final double JOINT_ENCODER_ZERO = 0; // TUNEME. absolute encoder zero (rad)
+	public static final double JOINT_ENCODER_ZERO = 3.005;
 
 	public SparkMax jointSparkMax;
 	public RelativeEncoder jointEncoder;
@@ -38,19 +39,20 @@ public class IntakeHW {
 	public void init() {
 		if (!Robot.isReal()) return;
 
-		jointSparkMax = new SparkMax(33, MotorType.kBrushless); // FIXME
-		jointEncoder = jointSparkMax.getEncoder();
+		jointSparkMax = new SparkMax(33, MotorType.kBrushless);
 		SparkMaxConfig jointConfig = new SparkMaxConfig();
 		jointConfig.encoder.positionConversionFactor(JOINT_RATIO * 2 * PI);
 		jointConfig.encoder.velocityConversionFactor(JOINT_RATIO * 2 * PI / 60);
-		jointConfig.closedLoop.p(JOINT_kP).d(JOINT_kD);
+		jointConfig.closedLoop.p(JOINT_kP).i(JOINT_kI).d(JOINT_kD);
 		jointConfig.smartCurrentLimit(40, 60);
-		jointConfig.inverted(true); // TUNEME. inversion
 		jointConfig.idleMode(IdleMode.kBrake);
 		jointSparkMax.configure(jointConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+		jointEncoder = jointSparkMax.getEncoder();
 
-		jointAbsoluteEncoder = new CANcoder(32); // FIXME verify
+		jointAbsoluteEncoder = new CANcoder(32);
 		jointAbsoluteEncoder.clearStickyFaults();
+
+		jointEncoder.setPosition(angleModulus(jointAbsoluteEncoder.getPosition().getValueAsDouble() * 2 * PI - JOINT_ENCODER_ZERO));
 
 		intakeTalonFX = new TalonFX(31);
 		TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
@@ -65,8 +67,11 @@ public class IntakeHW {
 	public void sense(IntakeInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		inputs.jointPosRadians = jointAbsoluteEncoder.getPosition().getValueAsDouble() * JOINT_RATIO * 2 * PI;
+		inputs.jointPosRadians = jointAbsoluteEncoder.getPosition().getValueAsDouble() * 2 * PI;
 		inputs.jointPosRadians = angleModulus(inputs.jointPosRadians - JOINT_ENCODER_ZERO);
+		jointEncoder.setPosition(inputs.jointPosRadians);
+
+		inputs.jointPosRawRadians = jointEncoder.getPosition();
 
 		inputs.jointVelRadiansPerSec = jointEncoder.getVelocity();
 		inputs.jointVoltageVolts = jointSparkMax.getBusVoltage() * jointSparkMax.getAppliedOutput();

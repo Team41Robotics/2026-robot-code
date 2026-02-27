@@ -5,7 +5,7 @@ import static frc.robot.RobotContainer.*;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class SpinUpFlywheel extends Command {
-	public static final double DEFAULT_VEL = 400.0; // FIXME rad/s
+	public static final double DEFAULT_VEL = 400.0; // TUNEME rad/s
 
 	public double velocity;
 

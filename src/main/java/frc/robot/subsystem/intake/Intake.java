@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase {
 	public double targetJointPosition = 0;
 	public double targetIntakeVoltage = 0;
 
-	public static final Constraints JOINT_CONSTRAINTS = new Constraints(2.0, 10.0); // FIXME. max vel/accel
+	public static final Constraints JOINT_CONSTRAINTS = new Constraints(2.0, 10.0); // TUNEME. max vel/accel
 	public static TrapezoidProfile jointProfile = new TrapezoidProfile(JOINT_CONSTRAINTS);
 	public State jointSetpoint = new State();
 

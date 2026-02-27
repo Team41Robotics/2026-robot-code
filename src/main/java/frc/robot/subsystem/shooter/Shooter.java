@@ -16,11 +16,11 @@ public class Shooter extends SubsystemBase {
 	public double targetHoodPos = 0;
 	public double targetFlywheelVel = 0;
 
-	public static final Constraints TURRET_CONSTRAINTS = new Constraints(3.0, 6.0); // FIXME rad/s, rad/s^2
+	public static final Constraints TURRET_CONSTRAINTS = new Constraints(3.0, 6.0); // TUNEME rad/s, rad/s^2
 	public static TrapezoidProfile turretProfile = new TrapezoidProfile(TURRET_CONSTRAINTS);
 	public State turretSetpoint = new State();
 
-	public static final Constraints HOOD_CONSTRAINTS = new Constraints(2.0, 4.0); // FIXME
+	public static final Constraints HOOD_CONSTRAINTS = new Constraints(2.0, 4.0); // TUNEME
 	public static TrapezoidProfile hoodProfile = new TrapezoidProfile(HOOD_CONSTRAINTS);
 	public State hoodSetpoint = new State();
 

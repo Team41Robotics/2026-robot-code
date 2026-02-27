@@ -5,8 +5,8 @@ import static frc.robot.RobotContainer.*;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class RunIndexer extends Command {
-	public static final double DEFAULT_SPIN_VOLTAGE = 8.0; // FIXME
-	public static final double DEFAULT_ELEVATOR_VOLTAGE = 8.0; // FIXME
+	public static final double DEFAULT_SPIN_VOLTAGE = 8.0; // TUNEME
+	public static final double DEFAULT_ELEVATOR_VOLTAGE = 8.0; // TUNEME
 
 	public double spinVoltage;
 	public double elevatorVoltage;

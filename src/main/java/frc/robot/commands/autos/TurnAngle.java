@@ -14,14 +14,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 @SuppressWarnings("static-access")
 public class TurnAngle extends Command {
-	public static final double ANGLE_TOLERANCE = toRadians(2); // FIXME. finish tolerance (rad)
-	public static final double TURN_VEL_TOLERANCE = 0.05; // FIXME. turn velocity finish tolerance (rad/s)
+	public static final double ANGLE_TOLERANCE = toRadians(2); // TUNEME. finish tolerance (rad)
+	public static final double TURN_VEL_TOLERANCE = 0.05; // TUNEME. turn velocity finish tolerance (rad/s)
 
 	public static final Constraints ROT_CONSTRAINTS =
-			new Constraints(drive.MAX_W, drive.MAX_W); // FIXME. turn constraints
+			new Constraints(drive.MAX_W, drive.MAX_W); // TUNEME. turn constraints
 
 	public TrapezoidProfile profile = new TrapezoidProfile(ROT_CONSTRAINTS);
-	public PIDController pid = new PIDController(5, 0, 0); // FIXME. heading PID (P,I,D)
+	public PIDController pid = new PIDController(5, 0, 0); // TUNEME. heading PID (P,I,D)
 
 	public State setpointHeading = new State();
 	public double targetAngle;

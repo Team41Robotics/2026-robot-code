@@ -49,6 +49,6 @@ public class JoystickControls implements Controls {
 	}
 
 	public Trigger intake() {
-		return driverStation.button(3); // FIXME
+		return driverStation.button(3); // TUNEME
 	}
 }

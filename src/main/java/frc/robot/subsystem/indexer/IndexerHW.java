@@ -17,21 +17,21 @@ public class IndexerHW {
 	public void init() {
 		if (!Robot.isReal()) return;
 
-		spinTalonFX = new TalonFX(50); // FIXME
+		spinTalonFX = new TalonFX(50); // TUNEME
 		TalonFXConfiguration spinConfig = new TalonFXConfiguration();
 		spinConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		spinConfig.CurrentLimits.SupplyCurrentLimit = 60; // FIXME
-		spinConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // FIXME
+		spinConfig.CurrentLimits.SupplyCurrentLimit = 60; // TUNEME
+		spinConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // TUNEME
 
 		spinTalonFX.getConfigurator().apply(spinConfig);
 		spinTalonFX.clearStickyFaults();
 		spinTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
-		elevatorTalonFX = new TalonFX(51); // FIXME
+		elevatorTalonFX = new TalonFX(51); // TUNEME
 		TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
 		elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		elevatorConfig.CurrentLimits.SupplyCurrentLimit = 60; // FIXME
-		elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // FIXME
+		elevatorConfig.CurrentLimits.SupplyCurrentLimit = 60; // TUNEME
+		elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // TUNEME
 
 		elevatorTalonFX.getConfigurator().apply(elevatorConfig);
 		elevatorTalonFX.clearStickyFaults();

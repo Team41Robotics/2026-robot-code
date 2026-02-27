@@ -38,7 +38,7 @@ public class Robot extends LoggedRobot {
 			Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
 		}
 
-		LoggedPowerDistribution.getInstance(7, ModuleType.kRev); // FIXME.
+		LoggedPowerDistribution.getInstance(7, ModuleType.kRev); // TUNEME.
 
 		Logger.start();
 

@@ -15,19 +15,19 @@ import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class ShooterHW {
-	public static final double TURRET_RATIO = 0.05; // FIXME
-	public static final double HOOD_RATIO = 1.0; // FIXME
-	public static final double FLYWHEEL_RATIO = 1.0; // FIXME
+	public static final double TURRET_RATIO = 0.05; // TUNEME
+	public static final double HOOD_RATIO = 1.0; // TUNEME
+	public static final double FLYWHEEL_RATIO = 1.0; // TUNEME
 
-	public static final double TURRET_kP = 5.0; // FIXME
-	public static final double TURRET_kD = 0.0; // FIXME
+	public static final double TURRET_kP = 5.0; // TUNEME
+	public static final double TURRET_kD = 0.0; // TUNEME
 
-	public static final double HOOD_kP = 0.5; // FIXME
-	public static final double HOOD_kD = 0.0; // FIXME
+	public static final double HOOD_kP = 0.5; // TUNEME
+	public static final double HOOD_kD = 0.0; // TUNEME
 
-	public static final double FLYWHEEL_kP = 0.1; // FIXME
-	public static final double FLYWHEEL_kV = 0.12; // FIXME
-	public static final double FLYWHEEL_kS = 0.0; // FIXME
+	public static final double FLYWHEEL_kP = 0.1; // TUNEME
+	public static final double FLYWHEEL_kV = 0.12; // TUNEME
+	public static final double FLYWHEEL_kS = 0.0; // TUNEME
 
 	public TalonFX turretTalonFX;
 	public TalonFX hoodTalonFX;
@@ -44,60 +44,60 @@ public class ShooterHW {
 		if (!Robot.isReal()) return;
 
 		// --- Turret ---
-		turretTalonFX = new TalonFX(40); // FIXME
+		turretTalonFX = new TalonFX(40); // TUNEME
 		TalonFXConfiguration turretConfig = new TalonFXConfiguration();
 		turretConfig.Feedback.SensorToMechanismRatio = 1.0 / (TURRET_RATIO * 2 * PI);
 		turretConfig.Slot0.kP = TURRET_kP;
 		turretConfig.Slot0.kD = TURRET_kD;
 		turretConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		turretConfig.CurrentLimits.SupplyCurrentLimit = 30; // FIXME
+		turretConfig.CurrentLimits.SupplyCurrentLimit = 30; // TUNEME
 		turretConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		turretConfig.CurrentLimits.StatorCurrentLimit = 60; // FIXME
-		turretConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // FIXME
+		turretConfig.CurrentLimits.StatorCurrentLimit = 60; // TUNEME
+		turretConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // TUNEME
 		turretTalonFX.getConfigurator().apply(turretConfig);
 		turretTalonFX.clearStickyFaults();
 		turretTalonFX.setPosition(0);
 		turretTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
 		// --- Hood ---
-		hoodTalonFX = new TalonFX(41); // FIXME
-		hoodLimitSwitch = new DigitalInput(0); // FIXME
+		hoodTalonFX = new TalonFX(41); // TUNEME
+		hoodLimitSwitch = new DigitalInput(0); // TUNEME
 		TalonFXConfiguration hoodConfig = new TalonFXConfiguration();
 		hoodConfig.Feedback.SensorToMechanismRatio = 1.0 / (HOOD_RATIO * 2 * PI);
 		hoodConfig.Slot0.kP = HOOD_kP;
 		hoodConfig.Slot0.kD = HOOD_kD;
 		hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		hoodConfig.CurrentLimits.SupplyCurrentLimit = 30; // FIXME
+		hoodConfig.CurrentLimits.SupplyCurrentLimit = 30; // TUNEME
 		hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		hoodConfig.CurrentLimits.StatorCurrentLimit = 40; // FIXME
-		hoodConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // FIXME
+		hoodConfig.CurrentLimits.StatorCurrentLimit = 40; // TUNEME
+		hoodConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // TUNEME
 		hoodTalonFX.getConfigurator().apply(hoodConfig);
 		hoodTalonFX.clearStickyFaults();
 		hoodTalonFX.setPosition(0);
 		hoodTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
 		// --- Flywheel (leader) ---
-		flywheelTalonFX = new TalonFX(42); // FIXME
+		flywheelTalonFX = new TalonFX(42); // TUNEME
 		TalonFXConfiguration flywheelConfig = new TalonFXConfiguration();
 		flywheelConfig.Feedback.SensorToMechanismRatio = 1.0 / (FLYWHEEL_RATIO * 2 * PI);
 		flywheelConfig.Slot0.kP = FLYWHEEL_kP;
 		flywheelConfig.Slot0.kV = FLYWHEEL_kV;
 		flywheelConfig.Slot0.kS = FLYWHEEL_kS;
 		flywheelConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		flywheelConfig.CurrentLimits.SupplyCurrentLimit = 40; // FIXME
+		flywheelConfig.CurrentLimits.SupplyCurrentLimit = 40; // TUNEME
 		flywheelConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		flywheelConfig.CurrentLimits.StatorCurrentLimit = 80; // FIXME
-		flywheelConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // FIXME
+		flywheelConfig.CurrentLimits.StatorCurrentLimit = 80; // TUNEME
+		flywheelConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // TUNEME
 		flywheelTalonFX.getConfigurator().apply(flywheelConfig);
 		flywheelTalonFX.clearStickyFaults();
 		flywheelTalonFX.setNeutralMode(NeutralModeValue.Coast);
 
 		// --- Flywheel follower ---
-		flywheelFollowerTalonFX = new TalonFX(43); // FIXME
+		flywheelFollowerTalonFX = new TalonFX(43); // TUNEME
 		flywheelFollowerTalonFX.getConfigurator().apply(new TalonFXConfiguration());
 		flywheelFollowerTalonFX.clearStickyFaults();
 		flywheelFollowerTalonFX.setNeutralMode(NeutralModeValue.Coast);
-		flywheelFollowerTalonFX.setControl(new Follower(42, MotorAlignmentValue.Opposed)); // FIXME
+		flywheelFollowerTalonFX.setControl(new Follower(42, MotorAlignmentValue.Opposed)); // TUNEME
 	}
 
 	public void sense(ShooterInputs inputs) {

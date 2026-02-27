@@ -9,8 +9,8 @@ import frc.robot.Util;
 
 @SuppressWarnings("static-access")
 public class RobotOrientedDrive extends Command {
-	public static final double DEADBAND = 0.10; // FIXME. controller deadband
-	public static final double TURN_DEADBAND = 0.10; // FIXME. controller turn deadband
+	public static final double DEADBAND = 0.10; // TUNEME. controller deadband
+	public static final double TURN_DEADBAND = 0.10; // TUNEME. controller turn deadband
 
 	public RobotOrientedDrive() {
 		addRequirements(drive);
@@ -23,8 +23,8 @@ public class RobotOrientedDrive extends Command {
 
 		double theta = atan2(vy, vx);
 
-		double speedMul = 1; // FIXME. speed multiplier/limiter (tune)
-		double wMul = 1; // FIXME. angular speed multiplier/limiter (tune)
+		double speedMul = 1; // TUNEME. speed multiplier/limiter (tune)
+		double wMul = 1; // TUNEME. angular speed multiplier/limiter (tune)
 
 		return new ChassisSpeeds(
 				v * cos(theta) * drive.MAX_VEL * speedMul,

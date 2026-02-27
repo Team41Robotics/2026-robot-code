@@ -18,14 +18,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveDrive extends SubsystemBase {
-	public static final double ROBOT_LEN = 20.750 * 2.54 / 100.;
+	public static final double ROBOT_LEN = 20.750 * 2.54 / 100.; // TODO verify
 	public static final double ROBOT_WID = 23.3125 * 2.54 / 100.;
 
 	public static final double MAX_VEL = SwerveModule.MAX_VEL;
 	public static final double MAX_W = MAX_VEL / hypot(ROBOT_LEN / 2, ROBOT_WID / 2);
 
 	public SwerveModuleConfiguration[] configs = new SwerveModuleConfiguration[] {
-		new SwerveModuleConfiguration("NW", 19, 17, 18, 2.8746799964976915),
+		new SwerveModuleConfiguration("NW", 19, 17, 18, 2.8746799964976915),// TODO
 		new SwerveModuleConfiguration("NE", 20, 22, 21, 1.7564080021290591),
 		new SwerveModuleConfiguration("SW", 14, 16, 15, 0.8237476830945893),
 		new SwerveModuleConfiguration("SE", 13, 11, 12, -0.6519418348513975)
@@ -62,8 +62,8 @@ public class SwerveDrive extends SubsystemBase {
 				new Rotation2d(imu.yaw),
 				zeroPos,
 				initPose,
-				VecBuilder.fill(0.1, 0.1, 0.05), // FIXME. odometry state covariance
-				VecBuilder.fill(0.75, 0.75, 0.9)); // FIXME. vision measurement covariance (tune)
+				VecBuilder.fill(0.1, 0.1, 0.05), // TUNEME. odometry state covariance
+				VecBuilder.fill(0.75, 0.75, 0.9)); // TUNEME. vision measurement covariance (tune)
 
 		sense();
 	}

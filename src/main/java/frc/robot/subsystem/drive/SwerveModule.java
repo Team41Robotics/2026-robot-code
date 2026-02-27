@@ -13,24 +13,24 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule {
-	public static final double DRIVE_kS = 0.093052; // FIXME. feedforward kS (tune)
-	public static final double DRIVE_kV = 1.8968; // FIXME. feedforward kV (tune)
-	public static final double DRIVE_kA = 0.15096; // FIXME. feedforward kA (tune)
+	public static final double DRIVE_kS = 0.093052; // TUNEME. feedforward kS (tune)
+	public static final double DRIVE_kV = 1.8968; // TUNEME. feedforward kV (tune)
+	public static final double DRIVE_kA = 0.15096; // TUNEME. feedforward kA (tune)
 	public static final SimpleMotorFeedforward DRIVE_FF = new SimpleMotorFeedforward(DRIVE_kS, DRIVE_kV, DRIVE_kA);
 
-	public static final double TURN_kS = 0.19431; // FIXME. turn feedforward kS (tune)
-	public static final double TURN_kV = 0.36606; // FIXME. turn feedforward kV (tune)
-	public static final double TURN_kA = 0.; // FIXME. turn feedforward kA (tune)
+	public static final double TURN_kS = 0.19431; // TUNEME. turn feedforward kS (tune)
+	public static final double TURN_kV = 0.36606; // TUNEME. turn feedforward kV (tune)
+	public static final double TURN_kA = 0.; // TUNEME. turn feedforward kA (tune)
 	public static final SimpleMotorFeedforward TURN_FF = new SimpleMotorFeedforward(TURN_kS, TURN_kV, TURN_kA);
 
-	public static final double MAX_VEL = 6.0; // FIXME. max wheel velocity (m/s)
+	public static final double MAX_VEL = 6.0; // TUNEME. max wheel velocity (m/s)
 
 	public static final Constraints DRIVE_CONSTRAINTS =
-			new Constraints(45, 1e9); // FIXME. drive constraints (deg/s, deg/s^2)
+			new Constraints(45, 1e9); // TUNEME. drive constraints (deg/s, deg/s^2)
 	public static TrapezoidProfile driveProfile = new TrapezoidProfile(DRIVE_CONSTRAINTS);
 
 	public static final Constraints TURN_CONSTRAINTS =
-			new Constraints(20, 80); // FIXME. turn constraints (deg/s, deg/s^2)
+			new Constraints(20, 80); // TUNEME. turn constraints (deg/s, deg/s^2)
 	public static TrapezoidProfile turnProfile = new TrapezoidProfile(TURN_CONSTRAINTS);
 
 	public SwerveHW hw = new SwerveHW();

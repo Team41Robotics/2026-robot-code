@@ -44,7 +44,7 @@ public class DriveSysID {
 		}
 
 		SysIdRoutine.Config config = new SysIdRoutine.Config(
-				Volts.of(0.5).per(Second), Volts.of(5), Seconds.of(10)); // FIXME. sysid volt ramp, max volts, duration
+				Volts.of(0.5).per(Second), Volts.of(5), Seconds.of(10)); // TUNEME. sysid volt ramp, max volts, duration
 		SysIdRoutine.Mechanism mechanism = new SysIdRoutine.Mechanism(this::actuate, this::log, drive);
 		routine = new SysIdRoutine(config, mechanism);
 

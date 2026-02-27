@@ -21,11 +21,11 @@ import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class IntakeHW {
-	public static final double JOINT_RATIO = 1.0 / 27.0; // FIXME. joint gear ratio (motor * ratio = mechanism)
-	public static final double JOINT_kP = 10.0; // FIXME. joint PID P
-	public static final double JOINT_kD = 0.0; // FIXME. joint PID D
+	public static final double JOINT_RATIO = 1.0 / 27.0; // TUNEME. joint gear ratio (motor * ratio = mechanism)
+	public static final double JOINT_kP = 10.0; // TUNEME. joint PID P
+	public static final double JOINT_kD = 0.0; // TUNEME. joint PID D
 
-	public static final double JOINT_ENCODER_ZERO = 0; // FIXME. absolute encoder zero (rad)
+	public static final double JOINT_ENCODER_ZERO = 0; // TUNEME. absolute encoder zero (rad)
 
 	public SparkMax jointSparkMax;
 	public RelativeEncoder jointEncoder;
@@ -45,7 +45,7 @@ public class IntakeHW {
 		jointConfig.encoder.velocityConversionFactor(JOINT_RATIO * 2 * PI / 60);
 		jointConfig.closedLoop.p(JOINT_kP).d(JOINT_kD);
 		jointConfig.smartCurrentLimit(40, 60);
-		jointConfig.inverted(true); // FIXME. inversion
+		jointConfig.inverted(true); // TUNEME. inversion
 		jointConfig.idleMode(IdleMode.kBrake);
 		jointSparkMax.configure(jointConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -55,8 +55,8 @@ public class IntakeHW {
 		intakeTalonFX = new TalonFX(31);
 		TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
 		intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		intakeConfig.CurrentLimits.SupplyCurrentLimit = 40; // FIXME. supply current limit (A)
-		intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // FIXME. inversion
+		intakeConfig.CurrentLimits.SupplyCurrentLimit = 40; // TUNEME. supply current limit (A)
+		intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // TUNEME. inversion
 		intakeTalonFX.getConfigurator().apply(intakeConfig);
 		intakeTalonFX.clearStickyFaults();
 		intakeTalonFX.setNeutralMode(NeutralModeValue.Coast);

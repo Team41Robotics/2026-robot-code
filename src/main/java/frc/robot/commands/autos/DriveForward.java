@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.FieldConstants;
 
-@SuppressWarnings("static-access")
 public class DriveForward extends Command {
 	public double x, y, theta, dist, speed, maxTime;
 	public double startTime;

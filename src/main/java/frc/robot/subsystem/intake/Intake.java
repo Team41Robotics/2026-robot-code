@@ -31,10 +31,6 @@ public class Intake extends SubsystemBase {
 		Logger.processInputs("/Intake", inputs);
 	}
 
-	public void zeroJointPosition() {
-		hw.zeroJointPosition();
-	}
-
 	public void actuate() {
 		State targetState = new State(targetJointPosition, 0);
 		State newSetpoint = jointProfile.calculate(LOOP_PERIOD, jointSetpoint, targetState);

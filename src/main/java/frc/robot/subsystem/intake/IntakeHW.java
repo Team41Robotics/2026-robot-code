@@ -89,9 +89,4 @@ public class IntakeHW {
 		intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
 	}
 
-	public void zeroJointPosition() {
-		if (!Robot.isReal()) return;
-
-		jointEncoder.setPosition(0);
-	}
 }

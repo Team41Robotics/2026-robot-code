@@ -25,7 +25,7 @@ public class DrivePIDTestCommand extends Command {
 	public void execute() {
 		for (int i = 0; i < drive.modules.length; i++) {
 			drive.modules[i].drive(new SwerveModuleState(
-					controls.sysidQuasiBackward().getAsBoolean() ? testVelocity : 0, new Rotation2d()));
+					controls.sysidQuasiBackward().getAsBoolean() ? testVelocity : 0, Rotation2d.kZero));
 		}
 	}
 }

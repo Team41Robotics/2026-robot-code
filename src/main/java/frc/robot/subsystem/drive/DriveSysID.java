@@ -23,7 +23,7 @@ public class DriveSysID {
 	public void actuate(Voltage volts) {
 		for (int i = 0; i < drive.modules.length; i++) {
 			drive.modules[i].hw.driveTalonFX.setVoltage(volts.magnitude());
-			drive.modules[i].drive(new SwerveModuleState(0, new Rotation2d()));
+			drive.modules[i].drive(new SwerveModuleState(0, Rotation2d.kZero));
 		}
 	}
 

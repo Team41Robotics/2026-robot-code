@@ -20,7 +20,7 @@ public class ResetPose extends Command {
 		this.pose = new Pose2d(
 				FieldConstants.fieldWidth - pose.getX(),
 				FieldConstants.fieldLength - pose.getY(),
-				pose.getRotation().plus(new Rotation2d(PI)));
+				pose.getRotation().plus(Rotation2d.kPi));
 	}
 
 	@Override

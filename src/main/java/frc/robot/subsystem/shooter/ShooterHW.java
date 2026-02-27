@@ -44,7 +44,7 @@ public class ShooterHW {
 		if (!Robot.isReal()) return;
 
 		// --- Turret ---
-		turretTalonFX = new TalonFX(40); // TUNEME
+		turretTalonFX = new TalonFX(40); // HACK
 		TalonFXConfiguration turretConfig = new TalonFXConfiguration();
 		turretConfig.Feedback.SensorToMechanismRatio = 1.0 / (TURRET_RATIO * 2 * PI);
 		turretConfig.Slot0.kP = TURRET_kP;
@@ -60,8 +60,8 @@ public class ShooterHW {
 		turretTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
 		// --- Hood ---
-		hoodTalonFX = new TalonFX(41); // TUNEME
-		hoodLimitSwitch = new DigitalInput(0); // TUNEME
+		hoodTalonFX = new TalonFX(41); // HACK
+		hoodLimitSwitch = new DigitalInput(0); // HACK
 		TalonFXConfiguration hoodConfig = new TalonFXConfiguration();
 		hoodConfig.Feedback.SensorToMechanismRatio = 1.0 / (HOOD_RATIO * 2 * PI);
 		hoodConfig.Slot0.kP = HOOD_kP;
@@ -77,7 +77,7 @@ public class ShooterHW {
 		hoodTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
 		// --- Flywheel (leader) ---
-		flywheelTalonFX = new TalonFX(42); // TUNEME
+		flywheelTalonFX = new TalonFX(42); // HACK
 		TalonFXConfiguration flywheelConfig = new TalonFXConfiguration();
 		flywheelConfig.Feedback.SensorToMechanismRatio = 1.0 / (FLYWHEEL_RATIO * 2 * PI);
 		flywheelConfig.Slot0.kP = FLYWHEEL_kP;
@@ -93,11 +93,11 @@ public class ShooterHW {
 		flywheelTalonFX.setNeutralMode(NeutralModeValue.Coast);
 
 		// --- Flywheel follower ---
-		flywheelFollowerTalonFX = new TalonFX(43); // TUNEME
+		flywheelFollowerTalonFX = new TalonFX(43); // HACK
 		flywheelFollowerTalonFX.getConfigurator().apply(new TalonFXConfiguration());
 		flywheelFollowerTalonFX.clearStickyFaults();
 		flywheelFollowerTalonFX.setNeutralMode(NeutralModeValue.Coast);
-		flywheelFollowerTalonFX.setControl(new Follower(42, MotorAlignmentValue.Opposed)); // TUNEME
+		flywheelFollowerTalonFX.setControl(new Follower(42, MotorAlignmentValue.Opposed)); // HACK
 	}
 
 	public void sense(ShooterInputs inputs) {

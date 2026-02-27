@@ -17,7 +17,7 @@ public class IndexerHW {
 	public void init() {
 		if (!Robot.isReal()) return;
 
-		spinTalonFX = new TalonFX(50); // TUNEME
+		spinTalonFX = new TalonFX(50); // HACK
 		TalonFXConfiguration spinConfig = new TalonFXConfiguration();
 		spinConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		spinConfig.CurrentLimits.SupplyCurrentLimit = 60; // TUNEME
@@ -27,7 +27,7 @@ public class IndexerHW {
 		spinTalonFX.clearStickyFaults();
 		spinTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
-		elevatorTalonFX = new TalonFX(51); // TUNEME
+		elevatorTalonFX = new TalonFX(51); // HACK
 		TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
 		elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		elevatorConfig.CurrentLimits.SupplyCurrentLimit = 60; // TUNEME

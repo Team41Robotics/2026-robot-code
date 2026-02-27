@@ -4,15 +4,14 @@ import org.littletonrobotics.junction.AutoLog;
 
 @AutoLog
 public class ShooterInputs {
-	// Turret
 	public double turretPosRadians;
 	public double turretVelRadiansPerSec;
 	public double turretVoltageVolts;
 	public double turretCurrentAmps;
 	public double turretBusVoltageVolts;
 	public double turretBusCurrentAmps;
+	public boolean turretLimitSwitchOn;
 
-	// Hood
 	public double hoodPosRadians;
 	public double hoodVelRadiansPerSec;
 	public double hoodVoltageVolts;
@@ -21,8 +20,7 @@ public class ShooterInputs {
 	public double hoodBusCurrentAmps;
 	public boolean isHoodLimitSwitchOn;
 
-	// Flywheel (leader only — follower mirrors)
-	public double flywheelVelRadiansPerSec;
+	public double flywheelVelocityRPM;
 	public double flywheelVoltageVolts;
 	public double flywheelCurrentAmps;
 	public double flywheelBusVoltageVolts;

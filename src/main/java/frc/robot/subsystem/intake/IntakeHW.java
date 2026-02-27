@@ -38,7 +38,7 @@ public class IntakeHW {
 	public void init() {
 		if (!Robot.isReal()) return;
 
-		jointSparkMax = new SparkMax(32, MotorType.kBrushless);
+		jointSparkMax = new SparkMax(33, MotorType.kBrushless); // FIXME
 		jointEncoder = jointSparkMax.getEncoder();
 		SparkMaxConfig jointConfig = new SparkMaxConfig();
 		jointConfig.encoder.positionConversionFactor(JOINT_RATIO * 2 * PI);
@@ -49,7 +49,7 @@ public class IntakeHW {
 		jointConfig.idleMode(IdleMode.kBrake);
 		jointSparkMax.configure(jointConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-		jointAbsoluteEncoder = new CANcoder(33);
+		jointAbsoluteEncoder = new CANcoder(32); // FIXME verify
 		jointAbsoluteEncoder.clearStickyFaults();
 
 		intakeTalonFX = new TalonFX(31);

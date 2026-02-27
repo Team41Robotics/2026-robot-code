@@ -14,7 +14,7 @@ public class Shooter extends SubsystemBase {
 
 	public double targetTurretPos = 0;
 	public double targetHoodPos = 0;
-	public double targetFlywheelVel = 0;
+	public double targetFlywheelRPM = 0;
 
 	public static final Constraints TURRET_CONSTRAINTS = new Constraints(3.0, 6.0); // TUNEME rad/s, rad/s^2
 	public static TrapezoidProfile turretProfile = new TrapezoidProfile(TURRET_CONSTRAINTS);
@@ -48,10 +48,10 @@ public class Shooter extends SubsystemBase {
 		Logger.recordOutput("/Shooter/turretProfilePosRadians", turretSetpoint.position);
 		Logger.recordOutput("/Shooter/targetHoodPosRadians", targetHoodPos);
 		Logger.recordOutput("/Shooter/hoodProfilePosRadians", hoodSetpoint.position);
-		Logger.recordOutput("/Shooter/targetFlywheelVelRadiansPerSec", targetFlywheelVel);
+		Logger.recordOutput("/Shooter/targetFlywheelRPM", targetFlywheelRPM);
 		Logger.recordOutput("/Shooter/turretProfileVelRadiansPerSec", turretSetpoint.velocity);
 		Logger.recordOutput("/Shooter/hoodProfileVelRadiansPerSec", hoodSetpoint.velocity);
 
-		hw.actuate(inputs, turretSetpoint.position, hoodSetpoint.position, targetFlywheelVel);
+		hw.actuate(inputs, turretSetpoint.position, hoodSetpoint.position, targetFlywheelRPM);
 	}
 }

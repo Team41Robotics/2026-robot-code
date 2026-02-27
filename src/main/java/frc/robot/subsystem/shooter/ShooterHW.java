@@ -29,6 +29,11 @@ public class ShooterHW {
 	public static final double FLYWHEEL_kV = 0.12; // TUNEME
 	public static final double FLYWHEEL_kS = 0.0; // TUNEME
 
+	public static final double ENCODER_LIM_POS1LEFT = -2.0; // TUNEME. turret left limit (rad)
+	public static final double ENCODER_LIM_POS1RIGHT = 2.0; // TUNEME. turret right limit (rad)
+	public static final double ENCODER_LIM_POS2LEFT = -1.0; // TUNEME. hood left limit (rad)
+	public static final double ENCODER_LIM_POS2RIGHT = 1.0; // TUNEME. hood right limit (rad)
+
 	public TalonFX turretTalonFX;
 	public TalonFX hoodTalonFX;
 	public TalonFX flywheelTalonFX;
@@ -39,6 +44,7 @@ public class ShooterHW {
 	public VelocityVoltage flywheelControlRequest = new VelocityVoltage(0).withSlot(0);
 
 	public DigitalInput hoodLimitSwitch;
+	public DigitalInput turretLimitSwitch;
 
 	public void init() {
 		if (!Robot.isReal()) return;
@@ -59,9 +65,10 @@ public class ShooterHW {
 		turretTalonFX.setPosition(0);
 		turretTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
+		turretLimitSwitch = new DigitalInput(1); // HACK
+
 		// --- Hood ---
 		hoodTalonFX = new TalonFX(41); // HACK
-		hoodLimitSwitch = new DigitalInput(0); // HACK
 		TalonFXConfiguration hoodConfig = new TalonFXConfiguration();
 		hoodConfig.Feedback.SensorToMechanismRatio = 1.0 / (HOOD_RATIO * 2 * PI);
 		hoodConfig.Slot0.kP = HOOD_kP;
@@ -76,10 +83,12 @@ public class ShooterHW {
 		hoodTalonFX.setPosition(0);
 		hoodTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
+		hoodLimitSwitch = new DigitalInput(0); // HACK
+
 		// --- Flywheel (leader) ---
 		flywheelTalonFX = new TalonFX(42); // HACK
 		TalonFXConfiguration flywheelConfig = new TalonFXConfiguration();
-		flywheelConfig.Feedback.SensorToMechanismRatio = 1.0 / (FLYWHEEL_RATIO * 2 * PI);
+		flywheelConfig.Feedback.SensorToMechanismRatio = 1.0 / (FLYWHEEL_RATIO / 60.0); // mechanism unit = RPM
 		flywheelConfig.Slot0.kP = FLYWHEEL_kP;
 		flywheelConfig.Slot0.kV = FLYWHEEL_kV;
 		flywheelConfig.Slot0.kS = FLYWHEEL_kS;
@@ -103,42 +112,68 @@ public class ShooterHW {
 	public void sense(ShooterInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		inputs.isHoodLimitSwitchOn = hoodLimitSwitch.get();
-		if (inputs.isHoodLimitSwitchOn) {
-			hoodTalonFX.setPosition(0);
+		inputs.turretLimitSwitchOn = turretLimitSwitch.get();
+		inputs.turretPosRadians = turretTalonFX.getPosition().getValueAsDouble();
+		if (inputs.turretLimitSwitchOn) {
+			double bestPos = Double.POSITIVE_INFINITY;
+			if (abs(inputs.turretPosRadians - ENCODER_LIM_POS1LEFT) < abs(inputs.turretPosRadians - bestPos)) {
+				bestPos = ENCODER_LIM_POS1LEFT;
+			}
+			if (abs(inputs.turretPosRadians - ENCODER_LIM_POS1RIGHT) < abs(inputs.turretPosRadians - bestPos)) {
+				bestPos = ENCODER_LIM_POS1RIGHT;
+			}
+			if (ENCODER_LIM_POS1LEFT < inputs.turretPosRadians && inputs.turretPosRadians < ENCODER_LIM_POS1RIGHT) {
+				bestPos = inputs.turretPosRadians;
+			}
+			if (abs(inputs.turretPosRadians - ENCODER_LIM_POS2LEFT) < abs(inputs.turretPosRadians - bestPos)) {
+				bestPos = ENCODER_LIM_POS2LEFT;
+			}
+			if (abs(inputs.turretPosRadians - ENCODER_LIM_POS2RIGHT) < abs(inputs.turretPosRadians - bestPos)) {
+				bestPos = ENCODER_LIM_POS2RIGHT;
+			}
+			if (ENCODER_LIM_POS2LEFT < inputs.turretPosRadians && inputs.turretPosRadians < ENCODER_LIM_POS2RIGHT) {
+				bestPos = inputs.turretPosRadians;
+			}
+			turretTalonFX.setPosition(bestPos);
+			inputs.turretPosRadians = bestPos;
 		}
 
-		inputs.turretPosRadians = turretTalonFX.getPosition().getValueAsDouble();
 		inputs.turretVelRadiansPerSec = turretTalonFX.getVelocity().getValueAsDouble();
 		inputs.turretVoltageVolts = turretTalonFX.getMotorVoltage().getValueAsDouble();
 		inputs.turretCurrentAmps = turretTalonFX.getStatorCurrent().getValueAsDouble();
 		inputs.turretBusVoltageVolts = turretTalonFX.getSupplyVoltage().getValueAsDouble();
 		inputs.turretBusCurrentAmps = turretTalonFX.getSupplyCurrent().getValueAsDouble();
 
+		inputs.isHoodLimitSwitchOn = hoodLimitSwitch.get();
 		inputs.hoodPosRadians = hoodTalonFX.getPosition().getValueAsDouble();
+		if (inputs.isHoodLimitSwitchOn) {
+			hoodTalonFX.setPosition(0);
+			inputs.hoodPosRadians = 0;
+		}
+
 		inputs.hoodVelRadiansPerSec = hoodTalonFX.getVelocity().getValueAsDouble();
 		inputs.hoodVoltageVolts = hoodTalonFX.getMotorVoltage().getValueAsDouble();
 		inputs.hoodCurrentAmps = hoodTalonFX.getStatorCurrent().getValueAsDouble();
 		inputs.hoodBusVoltageVolts = hoodTalonFX.getSupplyVoltage().getValueAsDouble();
 		inputs.hoodBusCurrentAmps = hoodTalonFX.getSupplyCurrent().getValueAsDouble();
 
-		inputs.flywheelVelRadiansPerSec = flywheelTalonFX.getVelocity().getValueAsDouble();
+		inputs.flywheelVelocityRPM = flywheelTalonFX.getVelocity().getValueAsDouble();
 		inputs.flywheelVoltageVolts = flywheelTalonFX.getMotorVoltage().getValueAsDouble();
 		inputs.flywheelCurrentAmps = flywheelTalonFX.getStatorCurrent().getValueAsDouble();
 		inputs.flywheelBusVoltageVolts = flywheelTalonFX.getSupplyVoltage().getValueAsDouble();
 		inputs.flywheelBusCurrentAmps = flywheelTalonFX.getSupplyCurrent().getValueAsDouble();
 	}
 
-	public void actuate(ShooterInputs inputs, double turretPosition, double hoodPosition, double flywheelVelocity) {
+	public void actuate(ShooterInputs inputs, double turretPosition, double hoodPosition, double flywheelRPM) {
 		Logger.recordOutput("/Shooter/turretErrorRadians", inputs.turretPosRadians - turretPosition);
 		Logger.recordOutput("/Shooter/hoodErrorRadians", inputs.hoodPosRadians - hoodPosition);
-		Logger.recordOutput("/Shooter/flywheelErrorRadiansPerSec", inputs.flywheelVelRadiansPerSec - flywheelVelocity);
+		Logger.recordOutput("/Shooter/flywheelErrorRPM", inputs.flywheelVelocityRPM - flywheelRPM);
 
 		if (!Robot.isReal()) return;
 
 		turretTalonFX.setControl(turretControlRequest.withPosition(turretPosition));
 		hoodTalonFX.setControl(hoodControlRequest.withPosition(hoodPosition));
-		flywheelTalonFX.setControl(flywheelControlRequest.withVelocity(flywheelVelocity));
+		flywheelTalonFX.setControl(flywheelControlRequest.withVelocity(flywheelRPM));
 		// follower automatically follows leader
 	}
 }

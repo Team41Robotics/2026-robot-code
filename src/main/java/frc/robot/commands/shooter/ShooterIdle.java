@@ -11,7 +11,7 @@ public class ShooterIdle extends Command {
 
 	@Override
 	public void initialize() {
-		shooter.targetFlywheelVel = 0;
+		shooter.targetFlywheelRPM = 0;
 		shooter.targetTurretPos = 0;
 		shooter.targetHoodPos = 0;
 	}

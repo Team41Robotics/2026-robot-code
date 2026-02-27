@@ -19,7 +19,6 @@ import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.intake.IntakeOscillate;
 import frc.robot.commands.intake.IntakeUp;
 import frc.robot.commands.shooter.ShooterIdle;
-import frc.robot.commands.shooter.SpinUpFlywheel;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.JoystickControls;
 import frc.robot.subsystem.drive.SwerveDrive;
@@ -77,10 +76,8 @@ public class RobotContainer {
 		SmartDashboard.putData("IntakeUp", new IntakeUp());
 		SmartDashboard.putData("IntakeOscillate", new IntakeOscillate());
 
-		SmartDashboard.putData("SpinUpFlywheel", new SpinUpFlywheel());
 		SmartDashboard.putData("RunIndexer", new RunIndexer());
 
-		controls.shooterActive().whileTrue(new SpinUpFlywheel());
 		controls.shoot().whileTrue(new RunIndexer());
 
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());

@@ -73,7 +73,7 @@ public class IntakeHW {
 		inputs.jointCurrentAmps = jointSparkMax.getOutputCurrent();
 		inputs.jointBusVoltageVolts = jointSparkMax.getBusVoltage();
 
-		inputs.intakeVelocityRPM = intakeTalonFX.getVelocity().getValueAsDouble() * 60.0;
+		inputs.intakeVelocityRPM = intakeTalonFX.getVelocity().getValueAsDouble() * 60.0; // FIXME ratio?
 		inputs.intakeVoltageVolts = intakeTalonFX.getMotorVoltage().getValueAsDouble();
 		inputs.intakeCurrentAmps = intakeTalonFX.getStatorCurrent().getValueAsDouble();
 		inputs.intakeBusVoltageVolts = intakeTalonFX.getSupplyVoltage().getValueAsDouble();

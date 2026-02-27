@@ -41,11 +41,13 @@ public class IndexerHW {
 	public void sense(IndexerInputs inputs) {
 		if (!Robot.isReal()) return;
 
+		inputs.spinVelocityRPM = spinTalonFX.getVelocity().getValueAsDouble() * 60.0; // FIXME Ratio
 		inputs.spinVoltageVolts = spinTalonFX.getMotorVoltage().getValueAsDouble();
 		inputs.spinCurrentAmps = spinTalonFX.getStatorCurrent().getValueAsDouble();
 		inputs.spinBusVoltageVolts = spinTalonFX.getSupplyVoltage().getValueAsDouble();
 		inputs.spinBusCurrentAmps = spinTalonFX.getSupplyCurrent().getValueAsDouble();
 
+		inputs.elevatorVelocityRPM = elevatorTalonFX.getVelocity().getValueAsDouble() * 60.0; // FIXME ratio
 		inputs.elevatorVoltageVolts = elevatorTalonFX.getMotorVoltage().getValueAsDouble();
 		inputs.elevatorCurrentAmps = elevatorTalonFX.getStatorCurrent().getValueAsDouble();
 		inputs.elevatorBusVoltageVolts = elevatorTalonFX.getSupplyVoltage().getValueAsDouble();

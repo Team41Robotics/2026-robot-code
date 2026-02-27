@@ -3,7 +3,6 @@ package frc.robot.subsystem.intake;
 import static edu.wpi.first.math.MathUtil.angleModulus;
 import static java.lang.Math.*;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -13,7 +12,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
-import com.revrobotics.jni.CANCommonJNI;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -67,7 +65,8 @@ public class IntakeHW {
 	public void sense(IntakeInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		inputs.jointPosRadians = angleModulus(jointAbsoluteEncoder.getPosition().getValueAsDouble() * JOINT_RATIO * 2 * PI - JOINT_ENCODER_ZERO);
+		inputs.jointPosRadians = jointAbsoluteEncoder.getPosition().getValueAsDouble() * JOINT_RATIO * 2 * PI;
+		inputs.jointPosRadians = angleModulus(inputs.jointPosRadians - JOINT_ENCODER_ZERO);
 
 		inputs.jointVelRadiansPerSec = jointEncoder.getVelocity();
 		inputs.jointVoltageVolts = jointSparkMax.getBusVoltage() * jointSparkMax.getAppliedOutput();

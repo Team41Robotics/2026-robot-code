@@ -36,7 +36,7 @@ public class RobotContainer {
 	// public static Controls controls = new XboxControls();
 
 	public static Robot robot;
-	public static CANBus driveBus = CANBus.roboRIO(); // FIXME.
+	public static CANBus driveBus = new CANBus("Ducky"); // FIXME.
 
 	public static SwerveDrive drive = new SwerveDrive();
 	public static IMU imu = new IMU();

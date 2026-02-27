@@ -63,10 +63,10 @@ public class SwerveHW {
 		turnConfig.Slot0.kD = TURN_kD;
 		turnConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		turnConfig.CurrentLimits.SupplyCurrentLimit = 30; // FIXME. supply current limit (A)
-		turnConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+		turnConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 		turnTalonFX.getConfigurator().apply(turnConfig);
 		turnTalonFX.clearStickyFaults();
-		turnTalonFX.setNeutralMode(NeutralModeValue.Coast);
+		turnTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
 		turnAbsoluteEncoder = new CANcoder(config.encoderId, driveBus);
 		turnAbsoluteEncoder.clearStickyFaults();
@@ -91,16 +91,15 @@ public class SwerveHW {
 		inputs.turnVoltageVolts = turnTalonFX.getMotorVoltage().getValueAsDouble();
 		inputs.turnCurrentAmps = turnTalonFX.getStatorCurrent().getValueAsDouble();
 
-		inputs.turnAbsPosRadians = turnAbsoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * PI - angleOffset;
+		inputs.turnAbsPosRadians = turnAbsoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * PI;
+		inputs.turnAbsPosRadians = angleModulus(inputs.turnAbsPosRadians - angleOffset);
 	}
 
 	public void actuate(SwerveInputs inputs, double targetVel, double driveFF, double targetAng, double turnFF) {
 		if (!Robot.isReal()) return;
 
 		if (!sysIdDrive && !sysIdTurn) {
-			driveTalonFX.setControl(driveControlRequest
-					.withVelocity(targetVel)
-					.withFeedForward(driveFF));
+			driveTalonFX.setControl(driveControlRequest.withVelocity(targetVel).withFeedForward(driveFF));
 		}
 
 		Logger.recordOutput(logRoot + "/driveErrorMetersPerSec", inputs.driveVelMetersPerSec - targetVel);

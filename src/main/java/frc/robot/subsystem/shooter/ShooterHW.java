@@ -1,6 +1,9 @@
 package frc.robot.subsystem.shooter;
 
+import static edu.wpi.first.math.MathUtil.*;
 import static java.lang.Math.*;
+
+import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
@@ -10,29 +13,36 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Robot;
-import org.littletonrobotics.junction.Logger;
 
 public class ShooterHW {
-	public static final double TURRET_RATIO = 0.05; // TUNEME
-	public static final double HOOD_RATIO = 1.0; // TUNEME
-	public static final double FLYWHEEL_RATIO = 1.0; // TUNEME
+	public static final double TURRET_RATIO = 1.0 / 16.8571667;
+	public static final double HOOD_RATIO = 1.0 / 3.0 / 17.5;
+	public static final double FLYWHEEL_RATIO = 1.0;
 
-	public static final double TURRET_kP = 5.0; // TUNEME
+	public static final double TURRET_kP = 4.0; // TUNEME
 	public static final double TURRET_kD = 0.0; // TUNEME
 
-	public static final double HOOD_kP = 0.5; // TUNEME
+	public static final double HOOD_kP = 4.0; // TUNEME
 	public static final double HOOD_kD = 0.0; // TUNEME
 
-	public static final double FLYWHEEL_kP = 0.1; // TUNEME
-	public static final double FLYWHEEL_kV = 0.12; // TUNEME
-	public static final double FLYWHEEL_kS = 0.0; // TUNEME
+	// public static final double FLYWHEEL_kP = 6e-3; // TUNEME
+	// public static final double FLYWHEEL_kD = 2.5e-4; // TUNEME
+	public static final double FLYWHEEL_kP = 0e-3; // TUNEME
+	public static final double FLYWHEEL_kD = 0e-4; // TUNEME
+	public static final double FLYWHEEL_kV = 0.0019203 / 1.07 * 0.5;
+	public static final double FLYWHEEL_kS = FLYWHEEL_kV * 30;
 
-	public static final double ENCODER_LIM_POS1LEFT = -2.0; // TUNEME. turret left limit (rad)
-	public static final double ENCODER_LIM_POS1RIGHT = 2.0; // TUNEME. turret right limit (rad)
-	public static final double ENCODER_LIM_POS2LEFT = -1.0; // TUNEME. hood left limit (rad)
-	public static final double ENCODER_LIM_POS2RIGHT = 1.0; // TUNEME. hood right limit (rad)
+	public static final double TURRET_START_POS = 0;
+	public static double K = PI - 14 / 180.0 * PI;
+	public static double ENCODER_LIM_POS1RIGHT = angleModulus(-(-95.3 - 95.903) / 180.0 * PI+K);
+	public static double ENCODER_LIM_POS1LEFT = angleModulus(-(-87.7 - 95.903) / 180.0 * PI +K);
+	public static double ENCODER_LIM_POS2RIGHT = angleModulus(-(0.2 - 95.903) / 180.0 * PI +K);
+	public static double ENCODER_LIM_POS2LEFT = angleModulus(-(8.1 - 95.903) / 180.0 * PI +K);
+	public static double ENCODER_LIM_POS3RIGHT = angleModulus(-(-183.3 - 95.903) / 180.0 * PI +K);
+	public static double ENCODER_LIM_POS3LEFT = angleModulus(-(-177.3 - 95.903) / 180.0 * PI+K);
 
 	public TalonFX turretTalonFX;
 	public TalonFX hoodTalonFX;
@@ -45,6 +55,24 @@ public class ShooterHW {
 
 	public DigitalInput hoodLimitSwitch;
 	public DigitalInput turretLimitSwitch;
+
+	public ShooterHW() {
+		if (ENCODER_LIM_POS1LEFT > ENCODER_LIM_POS1RIGHT) {
+			double temp = ENCODER_LIM_POS1LEFT;
+			ENCODER_LIM_POS1LEFT = ENCODER_LIM_POS1RIGHT;
+			ENCODER_LIM_POS1RIGHT = temp;
+		}
+		if (ENCODER_LIM_POS2LEFT > ENCODER_LIM_POS2RIGHT) {
+			double temp = ENCODER_LIM_POS2LEFT;
+			ENCODER_LIM_POS2LEFT = ENCODER_LIM_POS2RIGHT;
+			ENCODER_LIM_POS2RIGHT = temp;
+		}
+		if (ENCODER_LIM_POS3LEFT > ENCODER_LIM_POS3RIGHT) {
+			double temp = ENCODER_LIM_POS3LEFT;
+			ENCODER_LIM_POS3LEFT = ENCODER_LIM_POS3RIGHT;
+			ENCODER_LIM_POS3RIGHT = temp;
+		}
+	}
 
 	public void init() {
 		if (!Robot.isReal()) return;
@@ -59,13 +87,13 @@ public class ShooterHW {
 		turretConfig.CurrentLimits.SupplyCurrentLimit = 30; // TUNEME
 		turretConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		turretConfig.CurrentLimits.StatorCurrentLimit = 60; // TUNEME
-		turretConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // TUNEME
+		turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // TUNEME
 		turretTalonFX.getConfigurator().apply(turretConfig);
 		turretTalonFX.clearStickyFaults();
 		turretTalonFX.setPosition(0);
 		turretTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
-		turretLimitSwitch = new DigitalInput(1); // HACK
+		turretLimitSwitch = new DigitalInput(0);
 
 		// --- Hood ---
 		hoodTalonFX = new TalonFX(52);
@@ -77,26 +105,26 @@ public class ShooterHW {
 		hoodConfig.CurrentLimits.SupplyCurrentLimit = 30; // TUNEME
 		hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		hoodConfig.CurrentLimits.StatorCurrentLimit = 40; // TUNEME
-		hoodConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // TUNEME
+		hoodConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // TUNEME
 		hoodTalonFX.getConfigurator().apply(hoodConfig);
 		hoodTalonFX.clearStickyFaults();
 		hoodTalonFX.setPosition(0);
 		hoodTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
-		hoodLimitSwitch = new DigitalInput(0); // HACK
+		hoodLimitSwitch = new DigitalInput(1);
 
 		// --- Flywheel (leader) ---
 		flywheelTalonFX = new TalonFX(53);
 		TalonFXConfiguration flywheelConfig = new TalonFXConfiguration();
-		flywheelConfig.Feedback.SensorToMechanismRatio = 1.0 / (FLYWHEEL_RATIO / 60.0); // mechanism unit = RPM
-		flywheelConfig.Slot0.kP = FLYWHEEL_kP;
-		flywheelConfig.Slot0.kV = FLYWHEEL_kV;
-		flywheelConfig.Slot0.kS = FLYWHEEL_kS;
+		flywheelConfig.Feedback.SensorToMechanismRatio = 1.0 / FLYWHEEL_RATIO;
+		flywheelConfig.Slot0.kP = FLYWHEEL_kP * 60;
+		flywheelConfig.Slot0.kV = FLYWHEEL_kV * 60;
+		flywheelConfig.Slot0.kS = FLYWHEEL_kS * 60;
 		flywheelConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		flywheelConfig.CurrentLimits.SupplyCurrentLimit = 40; // TUNEME
+		flywheelConfig.CurrentLimits.SupplyCurrentLimit = 60; // TUNEME
 		flywheelConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		flywheelConfig.CurrentLimits.StatorCurrentLimit = 80; // TUNEME
-		flywheelConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // TUNEME
+		flywheelConfig.CurrentLimits.StatorCurrentLimit = 120; // TUNEME
+		flywheelConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // TUNEME
 		flywheelTalonFX.getConfigurator().apply(flywheelConfig);
 		flywheelTalonFX.clearStickyFaults();
 		flywheelTalonFX.setNeutralMode(NeutralModeValue.Coast);
@@ -112,7 +140,7 @@ public class ShooterHW {
 	public void sense(ShooterInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		inputs.turretLimitSwitchOn = turretLimitSwitch.get();
+		inputs.turretLimitSwitchOn = !turretLimitSwitch.get();
 		inputs.turretPosRadians = turretTalonFX.getPosition().getValueAsDouble();
 		if (inputs.turretLimitSwitchOn) {
 			double bestPos = Double.POSITIVE_INFINITY;
@@ -134,6 +162,15 @@ public class ShooterHW {
 			if (ENCODER_LIM_POS2LEFT < inputs.turretPosRadians && inputs.turretPosRadians < ENCODER_LIM_POS2RIGHT) {
 				bestPos = inputs.turretPosRadians;
 			}
+			if (abs(inputs.turretPosRadians - ENCODER_LIM_POS3LEFT) < abs(inputs.turretPosRadians - bestPos)) {
+				bestPos = ENCODER_LIM_POS3LEFT;
+			}
+			if (abs(inputs.turretPosRadians - ENCODER_LIM_POS3RIGHT) < abs(inputs.turretPosRadians - bestPos)) {
+				bestPos = ENCODER_LIM_POS3RIGHT;
+			}
+			if (ENCODER_LIM_POS3LEFT < inputs.turretPosRadians && inputs.turretPosRadians < ENCODER_LIM_POS3RIGHT) {
+				bestPos = inputs.turretPosRadians;
+			}
 			turretTalonFX.setPosition(bestPos);
 			inputs.turretPosRadians = bestPos;
 		}
@@ -144,7 +181,7 @@ public class ShooterHW {
 		inputs.turretBusVoltageVolts = turretTalonFX.getSupplyVoltage().getValueAsDouble();
 		inputs.turretBusCurrentAmps = turretTalonFX.getSupplyCurrent().getValueAsDouble();
 
-		inputs.isHoodLimitSwitchOn = hoodLimitSwitch.get();
+		inputs.isHoodLimitSwitchOn = !hoodLimitSwitch.get();
 		inputs.hoodPosRadians = hoodTalonFX.getPosition().getValueAsDouble();
 		if (inputs.isHoodLimitSwitchOn) {
 			hoodTalonFX.setPosition(0);
@@ -157,7 +194,7 @@ public class ShooterHW {
 		inputs.hoodBusVoltageVolts = hoodTalonFX.getSupplyVoltage().getValueAsDouble();
 		inputs.hoodBusCurrentAmps = hoodTalonFX.getSupplyCurrent().getValueAsDouble();
 
-		inputs.flywheelVelocityRPM = flywheelTalonFX.getVelocity().getValueAsDouble();
+		inputs.flywheelVelocityRPM = flywheelTalonFX.getVelocity().getValueAsDouble() * 60;
 		inputs.flywheelVoltageVolts = flywheelTalonFX.getMotorVoltage().getValueAsDouble();
 		inputs.flywheelCurrentAmps = flywheelTalonFX.getStatorCurrent().getValueAsDouble();
 		inputs.flywheelBusVoltageVolts = flywheelTalonFX.getSupplyVoltage().getValueAsDouble();
@@ -173,7 +210,6 @@ public class ShooterHW {
 
 		turretTalonFX.setControl(turretControlRequest.withPosition(turretPosition));
 		hoodTalonFX.setControl(hoodControlRequest.withPosition(hoodPosition));
-		flywheelTalonFX.setControl(flywheelControlRequest.withVelocity(flywheelRPM));
-		// follower automatically follows leader
+		flywheelTalonFX.setControl(flywheelControlRequest.withVelocity(flywheelRPM / 60.0));
 	}
 }

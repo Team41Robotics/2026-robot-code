@@ -1,6 +1,5 @@
 package frc.robot.subsystem.drive;
 
-import static edu.wpi.first.math.MathUtil.*;
 import static frc.robot.RobotContainer.*;
 import static java.lang.Math.*;
 
@@ -83,8 +82,7 @@ public class SwerveDrive extends SubsystemBase {
 		}
 
 		for (int i = 0; i < configs.length; i++) {
-			modulePos[i] =
-					new SwerveModulePosition(modules[i].drivePos, new Rotation2d(angleModulus(modules[i].angle)));
+			modulePos[i] = new SwerveModulePosition(modules[i].drivePos, new Rotation2d(modules[i].angle));
 			measuredStates[i] = modules[i].state;
 			targetStates[i] = modules[i].targetState;
 		}
@@ -95,6 +93,9 @@ public class SwerveDrive extends SubsystemBase {
 
 		Logger.recordOutput("/Swerve/targetSpeeds", targetSpeeds);
 		Logger.recordOutput("/Swerve/measuredSpeeds", measuredSpeeds);
+		Logger.recordOutput(
+				"/Swerve/realSpeedMetersPerSecond",
+				hypot(measuredSpeeds.vxMetersPerSecond, measuredSpeeds.vyMetersPerSecond));
 		Logger.recordOutput("/Odom/pose", pose);
 		Logger.recordOutput("/Odom/rot", pose.getRotation());
 		Logger.recordOutput("/Odom/xMeters", pose.getX());
@@ -103,6 +104,8 @@ public class SwerveDrive extends SubsystemBase {
 		Logger.recordOutput("/Odom/imuYawRadians", imu.yaw);
 		Logger.recordOutput("/Swerve/targetModuleStates", targetStates);
 		Logger.recordOutput("/Swerve/measuredModuleStates", measuredStates);
+
+		field.getRobotObject().setPose(pose);
 	}
 
 	public void actuate() {

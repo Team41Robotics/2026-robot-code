@@ -28,8 +28,8 @@ public class ShooterHW {
 	public static final double HOOD_kI = 96.0;
 	public static final double HOOD_kD = 0.0; // TUNEME
 
-		public static final double FLYWHEEL_kP = 0.17662; // TUNEME
-		public static final double FLYWHEEL_kD = 0; // TUNEME
+	public static final double FLYWHEEL_kP = 0.17662; // TUNEME
+	public static final double FLYWHEEL_kD = 0; // TUNEME
 	public static final double FLYWHEEL_kV = 0.11494;
 	public static final double FLYWHEEL_kS = 0.24333;
 
@@ -81,7 +81,7 @@ public class ShooterHW {
 		TalonFXConfiguration turretConfig = new TalonFXConfiguration();
 		turretConfig.Feedback.SensorToMechanismRatio = 1.0 / (TURRET_RATIO * 2 * PI);
 		turretConfig.Slot0.kP = TURRET_kP;
-turretConfig.Slot0.kI = TURRET_kI;
+		turretConfig.Slot0.kI = TURRET_kI;
 		turretConfig.Slot0.kD = TURRET_kD;
 		turretConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		turretConfig.CurrentLimits.SupplyCurrentLimit = 30;
@@ -100,7 +100,7 @@ turretConfig.Slot0.kI = TURRET_kI;
 		TalonFXConfiguration hoodConfig = new TalonFXConfiguration();
 		hoodConfig.Feedback.SensorToMechanismRatio = 1.0 / (HOOD_RATIO * 2 * PI);
 		hoodConfig.Slot0.kP = HOOD_kP;
-hoodConfig.Slot0.kI = HOOD_kI;
+		hoodConfig.Slot0.kI = HOOD_kI;
 		hoodConfig.Slot0.kD = HOOD_kD;
 		hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		hoodConfig.CurrentLimits.SupplyCurrentLimit = 30;

@@ -4,6 +4,7 @@ import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -42,6 +43,8 @@ public class RobotContainer {
 	public static Intake intake = new Intake();
 	public static Shooter shooter = new Shooter();
 	public static Indexer indexer = new Indexer();
+
+	public static Field2d field = new Field2d();
 
 	public static Command autonomousCommand = null;
 
@@ -94,6 +97,8 @@ public class RobotContainer {
 		vision.sense();
 
 		CommandScheduler.getInstance().run();
+
+		SmartDashboard.putData("Field", field);
 
 		drive.actuate();
 		intake.actuate();

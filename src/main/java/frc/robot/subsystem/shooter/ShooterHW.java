@@ -33,7 +33,7 @@ public class ShooterHW {
 	public static final double FLYWHEEL_kV = 0.11494;
 	public static final double FLYWHEEL_kS = 0.24333;
 
-	public static final double TURRET_START_POS = 0;
+	public static final double TURRET_START_POS = -PI/2;
 	public static double K = PI - 14 / 180.0 * PI;
 	public static double ENCODER_LIM_POS1RIGHT = angleModulus(-(-95.3 - 95.903) / 180.0 * PI + K);
 	public static double ENCODER_LIM_POS1LEFT = angleModulus(-(-87.7 - 95.903) / 180.0 * PI + K);
@@ -84,7 +84,7 @@ public class ShooterHW {
 		turretConfig.Slot0.kI = TURRET_kI;
 		turretConfig.Slot0.kD = TURRET_kD;
 		turretConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		turretConfig.CurrentLimits.SupplyCurrentLimit = 30;
+		turretConfig.CurrentLimits.SupplyCurrentLimit = 40;
 		turretConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		turretConfig.CurrentLimits.StatorCurrentLimit = 60;
 		turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -103,7 +103,7 @@ public class ShooterHW {
 		hoodConfig.Slot0.kI = HOOD_kI;
 		hoodConfig.Slot0.kD = HOOD_kD;
 		hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		hoodConfig.CurrentLimits.SupplyCurrentLimit = 30;
+		hoodConfig.CurrentLimits.SupplyCurrentLimit = 40;
 		hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		hoodConfig.CurrentLimits.StatorCurrentLimit = 60;
 		hoodConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -122,9 +122,9 @@ public class ShooterHW {
 		flywheelConfig.Slot0.kV = FLYWHEEL_kV;
 		flywheelConfig.Slot0.kS = FLYWHEEL_kS;
 		flywheelConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		flywheelConfig.CurrentLimits.SupplyCurrentLimit = 60; // TUNEME
+		flywheelConfig.CurrentLimits.SupplyCurrentLimit = 80; // TUNEME
 		flywheelConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		flywheelConfig.CurrentLimits.StatorCurrentLimit = 120; // TUNEME
+		flywheelConfig.CurrentLimits.StatorCurrentLimit = 180; // TUNEME
 		flywheelConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		flywheelTalonFX.getConfigurator().apply(flywheelConfig);
 		flywheelTalonFX.clearStickyFaults();

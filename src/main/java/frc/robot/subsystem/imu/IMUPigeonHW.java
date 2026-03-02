@@ -1,6 +1,6 @@
 package frc.robot.subsystem.imu;
 
-import static frc.robot.RobotContainer.driveBus;
+import static frc.robot.RobotContainer.*;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import frc.robot.Robot;

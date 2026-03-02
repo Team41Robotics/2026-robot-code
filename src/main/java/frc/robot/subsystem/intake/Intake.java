@@ -1,5 +1,7 @@
 package frc.robot.subsystem.intake;
 
+import static edu.wpi.first.math.MathUtil.*;
+import static java.lang.Math.*;
 import static frc.robot.RobotContainer.*;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -11,6 +13,9 @@ import org.littletonrobotics.junction.Logger;
 public class Intake extends SubsystemBase {
 	public IntakeHW hw = new IntakeHW();
 	public IntakeInputsAutoLogged inputs = new IntakeInputsAutoLogged();
+
+	public static final double JOINT_MIN = 0; // TUNEME
+	public static final double JOINT_MAX = 135 / 180.0 * PI;
 
 	public double targetJointPosition = 0;
 	public double targetIntakeVoltage = 0;
@@ -37,6 +42,7 @@ public class Intake extends SubsystemBase {
 	}
 
 	public void actuate() {
+		targetJointPosition = clamp(targetJointPosition, JOINT_MIN, JOINT_MAX);
 		State targetState = new State(targetJointPosition, 0);
 		State newSetpoint = jointProfile.calculate(LOOP_PERIOD, jointSetpoint, targetState);
 		jointSetpoint = newSetpoint;

@@ -1,6 +1,6 @@
 package frc.robot.subsystem.intake;
 
-import static edu.wpi.first.math.MathUtil.angleModulus;
+import static edu.wpi.first.math.MathUtil.*;
 import static java.lang.Math.*;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -26,7 +26,7 @@ public class IntakeHW {
 	public static final double JOINT_kP = 0.6; // TUNEME. joint PID P
 	public static final double JOINT_kI = 0.0002; // TUNEME. joint PID I
 	public static final double JOINT_kD = 12.0; // TUNEME. joint PID D
-	public static final double JOINT_kG = 0.6;
+	public static final double JOINT_kG = 0.6; // TUNEME, approximately correct
 
 	public static final double JOINT_ENCODER_ZERO = 3.005;
 
@@ -46,7 +46,7 @@ public class IntakeHW {
 		jointConfig.encoder.positionConversionFactor(JOINT_RATIO * 2 * PI);
 		jointConfig.encoder.velocityConversionFactor(JOINT_RATIO * 2 * PI / 60);
 		jointConfig.closedLoop.p(JOINT_kP).i(JOINT_kI).d(JOINT_kD);
-		jointConfig.smartCurrentLimit(40, 60);
+		jointConfig.smartCurrentLimit(60, 60);
 		jointConfig.idleMode(IdleMode.kBrake);
 		jointSparkMax.configure(jointConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 		jointEncoder = jointSparkMax.getEncoder();
@@ -57,8 +57,8 @@ public class IntakeHW {
 		intakeTalonFX = new TalonFX(31);
 		TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
 		intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		intakeConfig.CurrentLimits.SupplyCurrentLimit = 40; // TUNEME. supply current limit (A)
-		intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // TUNEME. inversion
+		intakeConfig.CurrentLimits.SupplyCurrentLimit = 60;
+		intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 		intakeTalonFX.getConfigurator().apply(intakeConfig);
 		intakeTalonFX.clearStickyFaults();
 		intakeTalonFX.setNeutralMode(NeutralModeValue.Coast);

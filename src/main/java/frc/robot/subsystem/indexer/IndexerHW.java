@@ -20,9 +20,9 @@ public class IndexerHW {
 		spinTalonFX = new TalonFX(43);
 		TalonFXConfiguration spinConfig = new TalonFXConfiguration();
 		spinConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		spinConfig.CurrentLimits.SupplyCurrentLimit = 60; // TUNEME
+		spinConfig.CurrentLimits.SupplyCurrentLimit = 60;
 		spinConfig.CurrentLimits.StatorCurrentLimitEnable = false;
-		spinConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // TUNEME
+		spinConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
 		spinTalonFX.getConfigurator().apply(spinConfig);
 		spinTalonFX.clearStickyFaults();
@@ -31,8 +31,8 @@ public class IndexerHW {
 		elevatorTalonFX = new TalonFX(41);
 		TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
 		elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		elevatorConfig.CurrentLimits.SupplyCurrentLimit = 60; // TUNEME
-		elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // TUNEME
+		elevatorConfig.CurrentLimits.SupplyCurrentLimit = 60;
+		elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
 		elevatorTalonFX.getConfigurator().apply(elevatorConfig);
 		elevatorTalonFX.clearStickyFaults();
@@ -42,7 +42,7 @@ public class IndexerHW {
 	public void sense(IndexerInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		inputs.spinVelocityRPM = spinTalonFX.getVelocity().getValueAsDouble() * 60.0; // FIXME Ratio
+		inputs.spinVelocityRPM = spinTalonFX.getVelocity().getValueAsDouble() * 60.0; // FIXME Ratio (dont care for now)
 		inputs.spinVoltageVolts = spinTalonFX.getMotorVoltage().getValueAsDouble();
 		inputs.spinCurrentAmps = spinTalonFX.getStatorCurrent().getValueAsDouble();
 		inputs.spinBusVoltageVolts = spinTalonFX.getSupplyVoltage().getValueAsDouble();

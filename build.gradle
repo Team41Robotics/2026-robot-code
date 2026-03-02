@@ -14,7 +14,7 @@ spotless {
     java {
         target fileTree('.') {
             include '**/*.java'
-            exclude '**/build/**', '**/build-*/**', '**/BuildConstants.java',"bin/**"
+            exclude '**/build/**', '**/build-*/**', '**/BuildConstants.java',"bin/**", '**/choreo/**'
         }
         toggleOffOn()
         palantirJavaFormat()

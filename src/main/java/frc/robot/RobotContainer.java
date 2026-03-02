@@ -1,5 +1,6 @@
 package frc.robot;
 
+import choreo.auto.AutoChooser;
 import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -8,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.autos.Autos;
 import frc.robot.commands.drive.DrivePIDTestCommand;
 import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
@@ -49,6 +51,7 @@ public class RobotContainer {
 
 	public static Field2d field = new Field2d();
 
+	public static AutoChooser autoChooser = new AutoChooser();
 	public static Command autonomousCommand = null;
 
 	public static void init() {
@@ -89,6 +92,10 @@ public class RobotContainer {
 		controls.intake().whileTrue(new IntakeDown());
 		controls.shoot().whileTrue(new RunIndexer());
 
+		Autos.init();
+		autoChooser.addRoutine("TestPath", Autos::testPath);
+		SmartDashboard.putData("AutoChooser", autoChooser);
+
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());
 		SmartDashboard.putData("Field", field);
 	}
@@ -106,6 +113,7 @@ public class RobotContainer {
 
 		if (DriverStation.isDisabled()) {
 			leds.control = leds.DISABLED_ANIMATION;
+			autonomousCommand = autoChooser.selectedCommand();
 		}
 
 		drive.actuate();
@@ -113,10 +121,6 @@ public class RobotContainer {
 		shooter.actuate();
 		indexer.actuate();
 		leds.actuate();
-	}
-
-	public static Command getAutonomousCommand() {
-		return null;
 	}
 
 	public static boolean isRed() {

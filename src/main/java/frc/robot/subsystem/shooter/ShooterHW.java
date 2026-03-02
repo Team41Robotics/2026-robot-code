@@ -122,9 +122,10 @@ public class ShooterHW {
 		flywheelConfig.Slot0.kV = FLYWHEEL_kV;
 		flywheelConfig.Slot0.kS = FLYWHEEL_kS;
 		flywheelConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		flywheelConfig.CurrentLimits.SupplyCurrentLimit = 80; // TUNEME
+		flywheelConfig.CurrentLimits.SupplyCurrentLimit = 80;
+		flywheelConfig.CurrentLimits.SupplyCurrentLowerTime = 3;
 		flywheelConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		flywheelConfig.CurrentLimits.StatorCurrentLimit = 180; // TUNEME
+		flywheelConfig.CurrentLimits.StatorCurrentLimit = 180;
 		flywheelConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		flywheelTalonFX.getConfigurator().apply(flywheelConfig);
 		flywheelTalonFX.clearStickyFaults();

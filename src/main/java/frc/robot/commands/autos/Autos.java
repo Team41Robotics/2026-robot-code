@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.choreo.ChoreoTraj;
 import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.shooter.ShooterStartup;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Autos {
@@ -56,10 +55,8 @@ public class Autos {
 		AutoRoutine routine = factory.newRoutine("TestPath");
 		AutoTrajectory traj = ChoreoTraj.TestPath.asAutoTraj(routine);
 
-		routine.active().onTrue(Commands.sequence(
-			new ShooterStartup(),
-			traj.cmd()
-		).repeatedly());
+		routine.active()
+				.onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()).repeatedly());
 		ChoreoTraj.TestPath$0.asAutoTraj(routine).active().whileTrue(new IntakeDown());
 
 		return routine;

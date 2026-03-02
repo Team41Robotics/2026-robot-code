@@ -40,15 +40,11 @@ public class JoystickControls implements Controls {
 		return -rightJoystick.getY();
 	}
 
-	public Trigger shooterActive() {
-		return driverStation.button(2);
-	}
-
 	public Trigger shoot() {
-		return driverStation.button(1);
+		return rightJoystick.button(1);
 	}
 
 	public Trigger intake() {
-		return driverStation.button(3); // FIXME
+		return leftJoystick.button(1);
 	}
 }

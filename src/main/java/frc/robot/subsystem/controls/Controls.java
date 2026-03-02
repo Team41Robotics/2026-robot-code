@@ -20,8 +20,6 @@ public interface Controls {
 
 	public double rightY();
 
-	public Trigger shooterActive();
-
 	public Trigger shoot();
 
 	public Trigger intake();

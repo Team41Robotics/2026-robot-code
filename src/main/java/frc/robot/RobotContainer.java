@@ -62,7 +62,6 @@ public class RobotContainer {
 
 		// DriveSysID sysid = new DriveSysID();
 		// TurnSysID sysid = new TurnSysID();
-		// sysid.init();
 		// ShooterFlywheelSysID sysid = new ShooterFlywheelSysID();
 		// sysid.init();
 

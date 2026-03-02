@@ -40,10 +40,6 @@ public class XboxControls implements Controls {
 		return -xbox.getRightY();
 	}
 
-	public Trigger shooterActive() {
-		return xbox.rightTrigger();
-	}
-
 	public Trigger shoot() {
 		return xbox.rightBumper();
 	}

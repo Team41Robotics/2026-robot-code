@@ -16,11 +16,10 @@ import frc.robot.commands.drive.RobotOrientedDrive;
 import frc.robot.commands.drive.TurnPIDTestCommand;
 import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.intake.IntakeDown;
-import frc.robot.commands.intake.IntakeOscillate;
 import frc.robot.commands.intake.IntakeUp;
 import frc.robot.commands.shooter.ShooterIdle;
 import frc.robot.subsystem.controls.Controls;
-import frc.robot.subsystem.controls.JoystickControls;
+import frc.robot.subsystem.controls.XboxControls;
 import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;
 import frc.robot.subsystem.indexer.Indexer;
@@ -31,11 +30,11 @@ import frc.robot.subsystem.vision.Vision;
 public class RobotContainer {
 	public static final double LOOP_PERIOD = 0.020;
 
-	public static Controls controls = new JoystickControls();
-	// public static Controls controls = new XboxControls();
+	// public static Controls controls = new JoystickControls();
+	public static Controls controls = new XboxControls();
 
 	public static Robot robot;
-	public static CANBus driveBus = new CANBus("Ducky"); // TUNEME.
+	public static CANBus driveBus = new CANBus("Ducky");
 
 	public static SwerveDrive drive = new SwerveDrive();
 	public static IMU imu = new IMU();
@@ -57,11 +56,14 @@ public class RobotContainer {
 		// drive.setDefaultCommand(new FieldOrientedDrive());
 		drive.setDefaultCommand(new RobotOrientedDrive());
 		shooter.setDefaultCommand(new ShooterIdle());
+		intake.setDefaultCommand(new IntakeUp());
 
 		controls.shoot().onTrue(new PrintSwervePos());
 
 		// DriveSysID sysid = new DriveSysID();
 		// TurnSysID sysid = new TurnSysID();
+		// sysid.init();
+		// ShooterFlywheelSysID sysid = new ShooterFlywheelSysID();
 		// sysid.init();
 
 		SmartDashboard.putData("DrivePIDTest", new DrivePIDTestCommand());
@@ -74,10 +76,11 @@ public class RobotContainer {
 
 		SmartDashboard.putData("IntakeDown", new IntakeDown());
 		SmartDashboard.putData("IntakeUp", new IntakeUp());
-		SmartDashboard.putData("IntakeOscillate", new IntakeOscillate());
 
 		SmartDashboard.putData("RunIndexer", new RunIndexer());
 
+		// controls.shoot().whileTrue(new RunIndexer());
+		controls.intake().whileTrue(new IntakeDown());
 		controls.shoot().whileTrue(new RunIndexer());
 
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());

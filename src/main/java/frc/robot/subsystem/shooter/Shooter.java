@@ -16,11 +16,13 @@ public class Shooter extends SubsystemBase {
 	public double targetHoodPos = 0;
 	public double targetFlywheelRPM = 0;
 
-	public static final Constraints TURRET_CONSTRAINTS = new Constraints(3.0, 6.0); // TUNEME rad/s, rad/s^2
+	// public static final Constraints TURRET_CONSTRAINTS = new Constraints(3.0, 48.0); // TODO
+	public static final Constraints TURRET_CONSTRAINTS = new Constraints(1e9, 1e9);
 	public static TrapezoidProfile turretProfile = new TrapezoidProfile(TURRET_CONSTRAINTS);
 	public State turretSetpoint = new State();
 
-	public static final Constraints HOOD_CONSTRAINTS = new Constraints(2.0, 4.0); // TUNEME
+	// public static final Constraints HOOD_CONSTRAINTS = new Constraints(2.0, 16.0);
+	public static final Constraints HOOD_CONSTRAINTS = new Constraints(1e9, 1e9);
 	public static TrapezoidProfile hoodProfile = new TrapezoidProfile(HOOD_CONSTRAINTS);
 	public State hoodSetpoint = new State();
 
@@ -35,6 +37,11 @@ public class Shooter extends SubsystemBase {
 	public void sense() {
 		hw.sense(inputs);
 		Logger.processInputs("/Shooter", inputs);
+
+		if (robot.isDisabled()) {
+			targetHoodPos = inputs.hoodPosRadians;
+			targetTurretPos = inputs.turretPosRadians;
+		}
 	}
 
 	public void actuate() {

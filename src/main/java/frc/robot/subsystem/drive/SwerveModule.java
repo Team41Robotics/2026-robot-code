@@ -58,13 +58,12 @@ public class SwerveModule {
 		hw.sense(inputs);
 		Logger.processInputs(hw.logRoot, inputs);
 
-		state = new SwerveModuleState(
-				inputs.driveVelMetersPerSec, new Rotation2d(inputs.turnAbsPosRadians));
+		state = new SwerveModuleState(inputs.driveVelMetersPerSec, new Rotation2d(inputs.turnAbsPosRadians));
 		angle = inputs.turnAbsPosRadians;
 		vel = inputs.driveVelMetersPerSec;
 		drivePos = inputs.drivePosMeters;
 
-		if(robot.isDisabled()) {
+		if (robot.isDisabled()) {
 			targetState = state;
 			setpointAng = new State(inputs.turnAbsPosRadians, inputs.turnVelRadiansPerSec);
 			setpointVel = inputs.driveVelMetersPerSec;

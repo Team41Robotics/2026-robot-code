@@ -3,8 +3,6 @@ package frc.robot.subsystem.shooter;
 import static edu.wpi.first.math.MathUtil.*;
 import static java.lang.Math.*;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -13,36 +11,36 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Robot;
+import org.littletonrobotics.junction.Logger;
 
 public class ShooterHW {
 	public static final double TURRET_RATIO = 1.0 / 16.8571667;
 	public static final double HOOD_RATIO = 1.0 / 3.0 / 17.5;
 	public static final double FLYWHEEL_RATIO = 1.0;
 
-	public static final double TURRET_kP = 4.0; // TUNEME
-	public static final double TURRET_kD = 0.0; // TUNEME
+	public static final double TURRET_kP = 128.0;
+	public static final double TURRET_kI = 36.0;
+	public static final double TURRET_kD = 0.0;
 
-	public static final double HOOD_kP = 4.0; // TUNEME
+	public static final double HOOD_kP = 192.0;
+	public static final double HOOD_kI = 96.0;
 	public static final double HOOD_kD = 0.0; // TUNEME
 
-	// public static final double FLYWHEEL_kP = 6e-3; // TUNEME
-	// public static final double FLYWHEEL_kD = 2.5e-4; // TUNEME
-	public static final double FLYWHEEL_kP = 0e-3; // TUNEME
-	public static final double FLYWHEEL_kD = 0e-4; // TUNEME
-	public static final double FLYWHEEL_kV = 0.0019203 / 1.07 * 0.5;
-	public static final double FLYWHEEL_kS = FLYWHEEL_kV * 30;
+		public static final double FLYWHEEL_kP = 0.17662; // TUNEME
+		public static final double FLYWHEEL_kD = 0; // TUNEME
+	public static final double FLYWHEEL_kV = 0.11494;
+	public static final double FLYWHEEL_kS = 0.24333;
 
 	public static final double TURRET_START_POS = 0;
 	public static double K = PI - 14 / 180.0 * PI;
-	public static double ENCODER_LIM_POS1RIGHT = angleModulus(-(-95.3 - 95.903) / 180.0 * PI+K);
-	public static double ENCODER_LIM_POS1LEFT = angleModulus(-(-87.7 - 95.903) / 180.0 * PI +K);
-	public static double ENCODER_LIM_POS2RIGHT = angleModulus(-(0.2 - 95.903) / 180.0 * PI +K);
-	public static double ENCODER_LIM_POS2LEFT = angleModulus(-(8.1 - 95.903) / 180.0 * PI +K);
-	public static double ENCODER_LIM_POS3RIGHT = angleModulus(-(-183.3 - 95.903) / 180.0 * PI +K);
-	public static double ENCODER_LIM_POS3LEFT = angleModulus(-(-177.3 - 95.903) / 180.0 * PI+K);
+	public static double ENCODER_LIM_POS1RIGHT = angleModulus(-(-95.3 - 95.903) / 180.0 * PI + K);
+	public static double ENCODER_LIM_POS1LEFT = angleModulus(-(-87.7 - 95.903) / 180.0 * PI + K);
+	public static double ENCODER_LIM_POS2RIGHT = angleModulus(-(0.2 - 95.903) / 180.0 * PI + K);
+	public static double ENCODER_LIM_POS2LEFT = angleModulus(-(8.1 - 95.903) / 180.0 * PI + K);
+	public static double ENCODER_LIM_POS3RIGHT = angleModulus(-(-183.3 - 95.903) / 180.0 * PI + K);
+	public static double ENCODER_LIM_POS3LEFT = angleModulus(-(-177.3 - 95.903) / 180.0 * PI + K);
 
 	public TalonFX turretTalonFX;
 	public TalonFX hoodTalonFX;
@@ -82,12 +80,13 @@ public class ShooterHW {
 		TalonFXConfiguration turretConfig = new TalonFXConfiguration();
 		turretConfig.Feedback.SensorToMechanismRatio = 1.0 / (TURRET_RATIO * 2 * PI);
 		turretConfig.Slot0.kP = TURRET_kP;
+turretConfig.Slot0.kI = TURRET_kI;
 		turretConfig.Slot0.kD = TURRET_kD;
 		turretConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		turretConfig.CurrentLimits.SupplyCurrentLimit = 30; // TUNEME
+		turretConfig.CurrentLimits.SupplyCurrentLimit = 30;
 		turretConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		turretConfig.CurrentLimits.StatorCurrentLimit = 60; // TUNEME
-		turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // TUNEME
+		turretConfig.CurrentLimits.StatorCurrentLimit = 60;
+		turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		turretTalonFX.getConfigurator().apply(turretConfig);
 		turretTalonFX.clearStickyFaults();
 		turretTalonFX.setPosition(0);
@@ -100,12 +99,13 @@ public class ShooterHW {
 		TalonFXConfiguration hoodConfig = new TalonFXConfiguration();
 		hoodConfig.Feedback.SensorToMechanismRatio = 1.0 / (HOOD_RATIO * 2 * PI);
 		hoodConfig.Slot0.kP = HOOD_kP;
+hoodConfig.Slot0.kI = HOOD_kI;
 		hoodConfig.Slot0.kD = HOOD_kD;
 		hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		hoodConfig.CurrentLimits.SupplyCurrentLimit = 30; // TUNEME
+		hoodConfig.CurrentLimits.SupplyCurrentLimit = 30;
 		hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		hoodConfig.CurrentLimits.StatorCurrentLimit = 40; // TUNEME
-		hoodConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // TUNEME
+		hoodConfig.CurrentLimits.StatorCurrentLimit = 60;
+		hoodConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		hoodTalonFX.getConfigurator().apply(hoodConfig);
 		hoodTalonFX.clearStickyFaults();
 		hoodTalonFX.setPosition(0);
@@ -117,14 +117,14 @@ public class ShooterHW {
 		flywheelTalonFX = new TalonFX(53);
 		TalonFXConfiguration flywheelConfig = new TalonFXConfiguration();
 		flywheelConfig.Feedback.SensorToMechanismRatio = 1.0 / FLYWHEEL_RATIO;
-		flywheelConfig.Slot0.kP = FLYWHEEL_kP * 60;
-		flywheelConfig.Slot0.kV = FLYWHEEL_kV * 60;
-		flywheelConfig.Slot0.kS = FLYWHEEL_kS * 60;
+		flywheelConfig.Slot0.kP = FLYWHEEL_kP;
+		flywheelConfig.Slot0.kV = FLYWHEEL_kV;
+		flywheelConfig.Slot0.kS = FLYWHEEL_kS;
 		flywheelConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		flywheelConfig.CurrentLimits.SupplyCurrentLimit = 60; // TUNEME
 		flywheelConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		flywheelConfig.CurrentLimits.StatorCurrentLimit = 120; // TUNEME
-		flywheelConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // TUNEME
+		flywheelConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		flywheelTalonFX.getConfigurator().apply(flywheelConfig);
 		flywheelTalonFX.clearStickyFaults();
 		flywheelTalonFX.setNeutralMode(NeutralModeValue.Coast);

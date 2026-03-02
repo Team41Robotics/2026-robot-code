@@ -12,6 +12,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -21,10 +22,11 @@ import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class IntakeHW {
-	public static final double JOINT_RATIO = 1.0 / 27.0; // TUNEME. joint gear ratio (motor * ratio = mechanism)
-	public static final double JOINT_kP = 5.0; // TUNEME. joint PID P
-	public static final double JOINT_kI = 0.0; // TUNEME. joint PID I
-	public static final double JOINT_kD = 0.0; // TUNEME. joint PID D
+	public static final double JOINT_RATIO = 1.0 / 27.0;
+	public static final double JOINT_kP = 0.6; // TUNEME. joint PID P
+	public static final double JOINT_kI = 0.0002; // TUNEME. joint PID I
+	public static final double JOINT_kD = 12.0; // TUNEME. joint PID D
+	public static final double JOINT_kG = 0.6;
 
 	public static final double JOINT_ENCODER_ZERO = 3.005;
 
@@ -51,8 +53,6 @@ public class IntakeHW {
 
 		jointAbsoluteEncoder = new CANcoder(32);
 		jointAbsoluteEncoder.clearStickyFaults();
-
-		jointEncoder.setPosition(angleModulus(jointAbsoluteEncoder.getPosition().getValueAsDouble() * 2 * PI - JOINT_ENCODER_ZERO));
 
 		intakeTalonFX = new TalonFX(31);
 		TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
@@ -90,8 +90,14 @@ public class IntakeHW {
 
 		if (!Robot.isReal()) return;
 
+		jointSparkMax
+				.getClosedLoopController()
+				.setSetpoint(
+						jointPosition,
+						ControlType.kPosition,
+						ClosedLoopSlot.kSlot0,
+						JOINT_kG * cos(inputs.jointPosRadians));
 		jointSparkMax.getClosedLoopController().setSetpoint(jointPosition, ControlType.kPosition);
 		intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
 	}
-
 }

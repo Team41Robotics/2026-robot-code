@@ -45,10 +45,10 @@ public class XboxControls implements Controls {
 	}
 
 	public Trigger shoot() {
-		return xbox.leftBumper();
+		return xbox.rightBumper();
 	}
 
 	public Trigger intake() {
-		return xbox.leftTrigger();
+		return xbox.leftBumper();
 	}
 }

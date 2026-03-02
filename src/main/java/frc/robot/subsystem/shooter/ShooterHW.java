@@ -50,6 +50,7 @@ public class ShooterHW {
 	public PositionVoltage turretControlRequest = new PositionVoltage(0).withSlot(0);
 	public PositionVoltage hoodControlRequest = new PositionVoltage(0).withSlot(0);
 	public VelocityVoltage flywheelControlRequest = new VelocityVoltage(0).withSlot(0);
+	public boolean sysIdFlywheel = false;
 
 	public DigitalInput hoodLimitSwitch;
 	public DigitalInput turretLimitSwitch;
@@ -210,6 +211,6 @@ hoodConfig.Slot0.kI = HOOD_kI;
 
 		turretTalonFX.setControl(turretControlRequest.withPosition(turretPosition));
 		hoodTalonFX.setControl(hoodControlRequest.withPosition(hoodPosition));
-		flywheelTalonFX.setControl(flywheelControlRequest.withVelocity(flywheelRPM / 60.0));
+		if (!sysIdFlywheel) flywheelTalonFX.setControl(flywheelControlRequest.withVelocity(flywheelRPM / 60.0));
 	}
 }

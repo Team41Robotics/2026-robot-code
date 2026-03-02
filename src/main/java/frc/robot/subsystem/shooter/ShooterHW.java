@@ -123,7 +123,7 @@ public class ShooterHW {
 		flywheelConfig.Slot0.kS = FLYWHEEL_kS;
 		flywheelConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		flywheelConfig.CurrentLimits.SupplyCurrentLimit = 80;
-		flywheelConfig.CurrentLimits.SupplyCurrentLowerTime = 3;
+		flywheelConfig.CurrentLimits.SupplyCurrentLowerTime = 3.0;
 		flywheelConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		flywheelConfig.CurrentLimits.StatorCurrentLimit = 180;
 		flywheelConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

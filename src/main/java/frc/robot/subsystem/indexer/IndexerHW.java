@@ -21,6 +21,7 @@ public class IndexerHW {
 		TalonFXConfiguration spinConfig = new TalonFXConfiguration();
 		spinConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		spinConfig.CurrentLimits.SupplyCurrentLimit = 60; // TUNEME
+		spinConfig.CurrentLimits.StatorCurrentLimitEnable = false;
 		spinConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // TUNEME
 
 		spinTalonFX.getConfigurator().apply(spinConfig);

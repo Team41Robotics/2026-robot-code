@@ -38,6 +38,9 @@ public class IntakeHW {
 
 	public VoltageOut intakeControlRequest = new VoltageOut(0);
 
+	public boolean sysIdJoint = false;
+	public boolean sysIdIntake = false;
+
 	public void init() {
 		if (!Robot.isReal()) return;
 
@@ -97,7 +100,14 @@ public class IntakeHW {
 						ControlType.kPosition,
 						ClosedLoopSlot.kSlot0,
 						JOINT_kG * cos(inputs.jointPosRadians));
-		jointSparkMax.getClosedLoopController().setSetpoint(jointPosition, ControlType.kPosition);
-		intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
+		if (!sysIdJoint)
+			jointSparkMax
+					.getClosedLoopController()
+					.setSetpoint(
+							jointPosition,
+							ControlType.kPosition,
+							ClosedLoopSlot.kSlot0,
+							JOINT_kG * cos(inputs.jointPosRadians));
+		if (!sysIdIntake) intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
 	}
 }

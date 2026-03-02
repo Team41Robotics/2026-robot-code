@@ -14,6 +14,9 @@ public class IndexerHW {
 	public VoltageOut spinControlRequest = new VoltageOut(0);
 	public VoltageOut elevatorControlRequest = new VoltageOut(0);
 
+	public boolean sysIdSpin = false;
+	public boolean sysIdElevator = false;
+
 	public void init() {
 		if (!Robot.isReal()) return;
 
@@ -58,7 +61,7 @@ public class IndexerHW {
 	public void actuate(IndexerInputs inputs, double spinVoltage, double elevatorVoltage) {
 		if (!Robot.isReal()) return;
 
-		spinTalonFX.setControl(spinControlRequest.withOutput(spinVoltage));
-		elevatorTalonFX.setControl(elevatorControlRequest.withOutput(elevatorVoltage));
+		if (!sysIdSpin) spinTalonFX.setControl(spinControlRequest.withOutput(spinVoltage));
+		if (!sysIdElevator) elevatorTalonFX.setControl(elevatorControlRequest.withOutput(elevatorVoltage));
 	}
 }

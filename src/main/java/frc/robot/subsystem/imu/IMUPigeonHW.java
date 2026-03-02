@@ -21,5 +21,6 @@ public class IMUPigeonHW {
 		inputs.isConnected = imu.isConnected();
 		inputs.isCalibrating = false;
 		inputs.yawRadians = imu.getRotation2d().getRadians();
+		inputs.rotation3d = imu.getRotation3d(); // FIXME untested
 	}
 }

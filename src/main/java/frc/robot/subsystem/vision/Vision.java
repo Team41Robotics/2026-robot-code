@@ -5,7 +5,6 @@ import static frc.robot.RobotContainer.*;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.Timer;
@@ -58,28 +57,30 @@ public class Vision extends SubsystemBase {
 
 			for (int j = 0; j < results.size(); j++) {
 				PhotonPipelineResult result = results.get(j);
-				Pose2d visionPose = null;
+				Pose3d visionPose = null;
 				String method = "none";
+
+				// FIXME TODO HACK FIXME FIXME BUG FIXME TUNEME IDK IF THIS WORKS
 
 				Optional<EstimatedRobotPose> estPose = poseEsts[i].estimateConstrainedSolvepnpPose(
 						result,
 						cam.cam.getCameraMatrix().orElseThrow(),
 						cam.cam.getDistCoeffs().orElseThrow(),
-						new Pose3d(drive.pose),
+						drive.pose,
 						false,
 						1);
 				if (estPose.isPresent()) {
-					visionPose = estPose.get().estimatedPose.toPose2d();
+					visionPose = estPose.get().estimatedPose;
 					method = "constrainedPnP";
 				} else {
 					estPose = poseEsts[i].estimateCoprocMultiTagPose(result);
 					if (estPose.isPresent() && result.targets.size() >= 2) {
-						visionPose = estPose.get().estimatedPose.toPose2d();
+						visionPose = estPose.get().estimatedPose;
 						method = "multiTag";
 					} else {
 						estPose = poseEsts[i].estimatePnpDistanceTrigSolvePose(result);
 						if (estPose.isPresent()) {
-							visionPose = estPose.get().estimatedPose.toPose2d();
+							visionPose = estPose.get().estimatedPose;
 							method = "pnpDistTrig";
 						}
 					}
@@ -90,7 +91,7 @@ public class Vision extends SubsystemBase {
 
 				if (visionPose != null && enabled) {
 					drive.poseEst.addVisionMeasurement(
-							visionPose, result.getTimestampSeconds(), VecBuilder.fill(0.75, 0.75, 0.9));
+							visionPose, result.getTimestampSeconds(), VecBuilder.fill(0.75, 0.75, 0.75, 0.9));
 					Logger.recordOutput("/Vision/" + cam.name + "/estimatedPose", visionPose);
 				}
 			}

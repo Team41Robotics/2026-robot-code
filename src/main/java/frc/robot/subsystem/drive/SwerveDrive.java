@@ -4,8 +4,8 @@ import static frc.robot.RobotContainer.*;
 import static java.lang.Math.*;
 
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator3d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -38,7 +38,7 @@ public class SwerveDrive extends SubsystemBase {
 
 	public SwerveModule[] modules = new SwerveModule[configs.length];
 
-	public SwerveDrivePoseEstimator poseEst;
+	public SwerveDrivePoseEstimator3d poseEst;
 
 	public SwerveModulePosition[] modulePos = new SwerveModulePosition[configs.length];
 	public SwerveModuleState[] targetStates = new SwerveModuleState[configs.length];
@@ -46,9 +46,10 @@ public class SwerveDrive extends SubsystemBase {
 	public ChassisSpeeds targetSpeeds = new ChassisSpeeds();
 	public ChassisSpeeds measuredSpeeds = new ChassisSpeeds();
 
-	public Pose2d pose = new Pose2d();
+	public Pose3d pose = new Pose3d();
+	public Rotation2d rot = new Rotation2d();
 
-	public void init(Pose2d initPose) {
+	public void init(Pose3d initPose) {
 		for (int i = 0; i < modules.length; i++) {
 			modules[i] = new SwerveModule();
 			modules[i].init(configs[i]);
@@ -56,20 +57,21 @@ public class SwerveDrive extends SubsystemBase {
 
 		SwerveModulePosition[] zeroPos = new SwerveModulePosition[configs.length];
 		for (int i = 0; i < configs.length; i++) zeroPos[i] = new SwerveModulePosition();
-		poseEst = new SwerveDrivePoseEstimator(
+		poseEst = new SwerveDrivePoseEstimator3d(
 				kinematics,
-				new Rotation2d(imu.yaw),
+				imu.rotation3d,
 				zeroPos,
 				initPose,
-				VecBuilder.fill(0.1, 0.1, 0.05), // TUNEME. odometry state covariance
-				VecBuilder.fill(0.75, 0.75, 0.9)); // TUNEME. vision measurement covariance (tune)
+				VecBuilder.fill(0.1, 0.1, 0.1, 0.05), // TUNEME. odometry state covariance
+				VecBuilder.fill(0.75, 0.75, 0.75, 0.9)); // TUNEME. vision measurement covariance (tune)
 
 		sense();
 	}
 
-	public void resetPose(Pose2d newPose) {
-		poseEst.resetPosition(new Rotation2d(imu.yaw), modulePos, newPose);
+	public void resetPose(Pose3d newPose) {
+		poseEst.resetPosition(imu.rotation3d, modulePos, newPose);
 		pose = newPose;
+		rot = newPose.getRotation().toRotation2d();
 	}
 
 	public void drive(ChassisSpeeds speeds) {
@@ -88,8 +90,9 @@ public class SwerveDrive extends SubsystemBase {
 		}
 		measuredSpeeds = kinematics.toChassisSpeeds(measuredStates);
 
-		poseEst.updateWithTime(Timer.getTimestamp(), new Rotation2d(imu.yaw), modulePos);
+		poseEst.updateWithTime(Timer.getTimestamp(), imu.rotation3d, modulePos);
 		pose = poseEst.getEstimatedPosition();
+		rot = pose.getRotation().toRotation2d();
 
 		Logger.recordOutput("/Swerve/targetSpeeds", targetSpeeds);
 		Logger.recordOutput("/Swerve/measuredSpeeds", measuredSpeeds);
@@ -100,12 +103,12 @@ public class SwerveDrive extends SubsystemBase {
 		Logger.recordOutput("/Odom/rot", pose.getRotation());
 		Logger.recordOutput("/Odom/xMeters", pose.getX());
 		Logger.recordOutput("/Odom/yMeters", pose.getY());
-		Logger.recordOutput("/Odom/rotRadians", pose.getRotation().getRadians());
+		Logger.recordOutput("/Odom/rotRadians", rot.getRadians());
 		Logger.recordOutput("/Odom/imuYawRadians", imu.yaw);
 		Logger.recordOutput("/Swerve/targetModuleStates", targetStates);
 		Logger.recordOutput("/Swerve/measuredModuleStates", measuredStates);
 
-		field.getRobotObject().setPose(pose);
+		field.getRobotObject().setPose(pose.toPose2d());
 	}
 
 	public void actuate() {

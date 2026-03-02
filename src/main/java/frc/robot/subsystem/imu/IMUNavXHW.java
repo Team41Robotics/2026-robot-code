@@ -21,5 +21,6 @@ public class IMUNavXHW {
 		inputs.isConnected = imu.isConnected();
 		inputs.isCalibrating = imu.isCalibrating();
 		inputs.yawRadians = imu.getAngle() / 180 * PI;
+		inputs.rotation3d = imu.getRotation3d(); // FIXME untested
 	}
 }

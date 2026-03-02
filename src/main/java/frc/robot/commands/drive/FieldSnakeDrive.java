@@ -32,7 +32,7 @@ public class FieldSnakeDrive extends Command {
 		addRequirements(drive);
 		pid.enableContinuousInput(-PI, PI);
 
-		Rotation2d heading = drive.pose.getRotation();
+		Rotation2d heading = drive.rot;
 		if (isRed()) heading = heading.plus(Rotation2d.kPi);
 		setpointHeading = new State(heading.getRadians(), 0);
 	}
@@ -45,7 +45,7 @@ public class FieldSnakeDrive extends Command {
 
 		double speedMul = 1; // TUNEME. speed multiplier/limiter (tune)
 
-		Rotation2d heading = drive.pose.getRotation();
+		Rotation2d heading = drive.rot;
 		if (isRed()) heading = heading.plus(Rotation2d.kPi);
 
 		targetTheta = hypot(tx, ty) < TURN_DEADBAND ? (mag < TURN_DEADBAND ? targetTheta : theta) : atan2(ty, tx);

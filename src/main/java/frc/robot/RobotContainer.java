@@ -1,7 +1,7 @@
 package frc.robot;
 
 import com.ctre.phoenix6.CANBus;
-import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -55,7 +55,7 @@ public class RobotContainer {
 		shooter.init();
 		indexer.init();
 
-		drive.init(new Pose2d());
+		drive.init(new Pose3d());
 		// drive.setDefaultCommand(new FieldOrientedDrive());
 		drive.setDefaultCommand(new RobotOrientedDrive());
 		shooter.setDefaultCommand(new ShooterIdle());

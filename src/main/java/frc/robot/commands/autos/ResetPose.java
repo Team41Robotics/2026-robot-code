@@ -2,24 +2,25 @@ package frc.robot.commands.autos;
 
 import static frc.robot.RobotContainer.*;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.FieldConstants;
 
 public class ResetPose extends Command {
-	public Pose2d pose;
+	public Pose3d pose;
 
 	public ResetPose(double x, double y, double theta) {
 		addRequirements(drive);
-		this.pose = new Pose2d(x, y, new Rotation2d(theta));
+		this.pose = new Pose3d(x, y, 0, new Rotation3d(0, 0, theta));
 	}
 
 	public void flip() {
-		this.pose = new Pose2d(
+		this.pose = new Pose3d(
 				FieldConstants.fieldWidth - pose.getX(),
 				FieldConstants.fieldLength - pose.getY(),
-				pose.getRotation().plus(Rotation2d.kPi));
+				0,
+				pose.getRotation().plus(new Rotation3d(0, 0, Math.PI)));
 	}
 
 	@Override

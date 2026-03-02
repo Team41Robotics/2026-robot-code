@@ -1,8 +1,8 @@
 package frc.robot.subsystem.shooter;
 
-import static java.lang.Math.*;
 import static edu.wpi.first.math.MathUtil.*;
 import static frc.robot.RobotContainer.*;
+import static java.lang.Math.*;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -14,8 +14,8 @@ public class Shooter extends SubsystemBase {
 	public ShooterHW hw = new ShooterHW();
 	public ShooterInputsAutoLogged inputs = new ShooterInputsAutoLogged();
 
-	public static final double TURRET_POS_MIN = -PI/2; // TUNEME
-	public static final double TURRET_POS_MAX = PI/2;
+	public static final double TURRET_POS_MIN = -PI / 2; // TUNEME
+	public static final double TURRET_POS_MAX = PI / 2;
 	public static final double HOOD_POS_MIN = 0; //  TUNEME
 	public static final double HOOD_POS_MAX = 35 / 180.0 * Math.PI;
 

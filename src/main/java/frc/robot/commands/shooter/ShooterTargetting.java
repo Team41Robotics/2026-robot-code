@@ -11,21 +11,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.FieldConstants;
 
 public class ShooterTargetting extends Command {
-        public static final Transform2d TURRET_POS = new Transform2d(); // TODO
+	public static final Transform2d TURRET_POS = new Transform2d(); // TODO
 
-        public ShooterTargetting() {
-                addRequirements(shooter);
-        }
+	public ShooterTargetting() {
+		addRequirements(shooter);
+	}
 
-        @Override
-        public void execute() {
-                Translation2d target = FieldConstants.Hub.topCenterPoint.toTranslation2d();
+	@Override
+	public void execute() {
+		Translation2d target = FieldConstants.Hub.topCenterPoint.toTranslation2d();
 
-                Pose2d turretPos = drive.pose.plus(TURRET_POS);
+		Pose2d turretPos = drive.pose.plus(TURRET_POS);
 
-                Translation2d toTarget = target.minus(turretPos.getTranslation());
-                double angleToTarget = atan2(toTarget.getY(), toTarget.getX());
-                shooter.targetTurretPos = angleModulus(angleToTarget + PI);
-                shooter.targetTurretVel = -drive.measuredSpeeds.omegaRadiansPerSecond;
+		Translation2d toTarget = target.minus(turretPos.getTranslation());
+		double angleToTarget = atan2(toTarget.getY(), toTarget.getX());
+		shooter.targetTurretPos = angleModulus(angleToTarget + PI);
+		shooter.targetTurretVel = -drive.measuredSpeeds.omegaRadiansPerSecond;
 	}
 }

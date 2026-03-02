@@ -1,8 +1,8 @@
 package frc.robot.subsystem.intake;
 
 import static edu.wpi.first.math.MathUtil.*;
-import static java.lang.Math.*;
 import static frc.robot.RobotContainer.*;
+import static java.lang.Math.*;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;

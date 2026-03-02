@@ -47,6 +47,7 @@ public class SwerveDrive extends SubsystemBase {
 	public ChassisSpeeds measuredSpeeds = new ChassisSpeeds();
 
 	public Pose2d pose = new Pose2d();
+	public Rotation2d rot = new Rotation2d();
 
 	public void init(Pose2d initPose) {
 		for (int i = 0; i < modules.length; i++) {
@@ -90,6 +91,7 @@ public class SwerveDrive extends SubsystemBase {
 
 		poseEst.updateWithTime(Timer.getTimestamp(), new Rotation2d(imu.yaw), modulePos);
 		pose = poseEst.getEstimatedPosition();
+		rot = pose.getRotation();
 
 		Logger.recordOutput("/Swerve/targetSpeeds", targetSpeeds);
 		Logger.recordOutput("/Swerve/measuredSpeeds", measuredSpeeds);
@@ -97,10 +99,10 @@ public class SwerveDrive extends SubsystemBase {
 				"/Swerve/realSpeedMetersPerSecond",
 				hypot(measuredSpeeds.vxMetersPerSecond, measuredSpeeds.vyMetersPerSecond));
 		Logger.recordOutput("/Odom/pose", pose);
-		Logger.recordOutput("/Odom/rot", pose.getRotation());
+		Logger.recordOutput("/Odom/rot", rot);
 		Logger.recordOutput("/Odom/xMeters", pose.getX());
 		Logger.recordOutput("/Odom/yMeters", pose.getY());
-		Logger.recordOutput("/Odom/rotRadians", pose.getRotation().getRadians());
+		Logger.recordOutput("/Odom/rotRadians", rot.getRadians());
 		Logger.recordOutput("/Odom/imuYawRadians", imu.yaw);
 		Logger.recordOutput("/Swerve/targetModuleStates", targetStates);
 		Logger.recordOutput("/Swerve/measuredModuleStates", measuredStates);

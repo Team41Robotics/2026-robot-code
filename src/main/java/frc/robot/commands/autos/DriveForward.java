@@ -47,7 +47,7 @@ public class DriveForward extends Command {
 	@Override
 	public void execute() {
 		drive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
-				speed * cos(theta), speed * sin(theta), 0, drive.pose.getRotation()));
+				speed * cos(theta), speed * sin(theta), 0, drive.rot));
 	}
 
 	@Override

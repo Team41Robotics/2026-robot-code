@@ -30,7 +30,7 @@ public class FieldHeadingDrive extends Command {
 		addRequirements(drive);
 		pid.enableContinuousInput(-PI, PI);
 
-		Rotation2d heading = drive.pose.getRotation();
+		Rotation2d heading = drive.rot;
 		if (isRed()) heading = heading.plus(Rotation2d.kPi);
 		setpointHeading = new State(heading.getRadians(), 0);
 	}
@@ -43,7 +43,7 @@ public class FieldHeadingDrive extends Command {
 
 		double speedMul = 1; // TUNEME. speed multiplier/limiter (tune)
 
-		Rotation2d heading = drive.pose.getRotation();
+		Rotation2d heading = drive.rot;
 		if (isRed()) heading = heading.plus(Rotation2d.kPi);
 
 		double targetTheta = hypot(tx, ty) < TURN_DEADBAND ? setpointHeading.position : atan2(ty, tx);

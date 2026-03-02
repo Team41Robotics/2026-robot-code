@@ -54,7 +54,7 @@ public class Vision extends SubsystemBase {
 			decodePackets[i].setData(input.data);
 			List<PhotonPipelineResult> results = decodePackets[i].decodeList(PhotonPipelineResult.photonStruct);
 
-			poseEsts[i].addHeadingData(Timer.getTimestamp(), drive.pose.getRotation());
+			poseEsts[i].addHeadingData(Timer.getTimestamp(), drive.rot);
 
 			for (int j = 0; j < results.size(); j++) {
 				PhotonPipelineResult result = results.get(j);

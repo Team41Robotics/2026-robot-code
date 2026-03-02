@@ -34,12 +34,12 @@ public class TurnAngle extends Command {
 
 	@Override
 	public void initialize() {
-		setpointHeading = new State(drive.pose.getRotation().getRadians(), 0);
+		setpointHeading = new State(drive.rot.getRadians(), 0);
 	}
 
 	@Override
 	public void execute() {
-		Rotation2d heading = drive.pose.getRotation();
+		Rotation2d heading = drive.rot;
 
 		double targetTheta = targetAngle;
 

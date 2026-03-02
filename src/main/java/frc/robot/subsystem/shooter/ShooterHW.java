@@ -28,7 +28,7 @@ public class ShooterHW {
 	public static final double HOOD_kI = 96.0;
 	public static final double HOOD_kD = 0.0; // TUNEME
 
-	public static final double FLYWHEEL_kP = 0.17662; // TUNEME
+	public static final double FLYWHEEL_kP = 0.63934; // TUNEME
 	public static final double FLYWHEEL_kD = 0; // TUNEME
 	public static final double FLYWHEEL_kV = 0.11494;
 	public static final double FLYWHEEL_kS = 0.24333;

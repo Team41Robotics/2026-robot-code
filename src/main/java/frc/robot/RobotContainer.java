@@ -25,9 +25,11 @@ import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;
 import frc.robot.subsystem.indexer.Indexer;
 import frc.robot.subsystem.intake.Intake;
+import frc.robot.subsystem.leds.LEDS;
 import frc.robot.subsystem.shooter.Shooter;
 import frc.robot.subsystem.vision.Vision;
 
+@SuppressWarnings("static-access")
 public class RobotContainer {
 	public static final double LOOP_PERIOD = 0.020;
 
@@ -43,6 +45,7 @@ public class RobotContainer {
 	public static Intake intake = new Intake();
 	public static Shooter shooter = new Shooter();
 	public static Indexer indexer = new Indexer();
+	public static LEDS leds = new LEDS();
 
 	public static Field2d field = new Field2d();
 
@@ -54,6 +57,7 @@ public class RobotContainer {
 		intake.init();
 		shooter.init();
 		indexer.init();
+		leds.init();
 
 		drive.init(new Pose2d());
 		// drive.setDefaultCommand(new FieldOrientedDrive());
@@ -86,6 +90,7 @@ public class RobotContainer {
 		controls.shoot().whileTrue(new RunIndexer());
 
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());
+		SmartDashboard.putData("Field", field);
 	}
 
 	public static void periodic() {
@@ -94,16 +99,20 @@ public class RobotContainer {
 		intake.sense();
 		shooter.sense();
 		indexer.sense();
+		leds.sense();
 		vision.sense();
 
 		CommandScheduler.getInstance().run();
 
-		SmartDashboard.putData("Field", field);
+		if (DriverStation.isDisabled()) {
+			leds.control = leds.DISABLED_ANIMATION;
+		}
 
 		drive.actuate();
 		intake.actuate();
 		shooter.actuate();
 		indexer.actuate();
+		leds.actuate();
 	}
 
 	public static Command getAutonomousCommand() {

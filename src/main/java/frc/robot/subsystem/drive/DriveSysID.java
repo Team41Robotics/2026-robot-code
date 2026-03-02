@@ -43,8 +43,7 @@ public class DriveSysID {
 			drive.modules[i].hw.sysIdDrive = true;
 		}
 
-		SysIdRoutine.Config config = new SysIdRoutine.Config(
-				Volts.of(0.5).per(Second), Volts.of(5), Seconds.of(10));
+		SysIdRoutine.Config config = new SysIdRoutine.Config(Volts.of(0.5).per(Second), Volts.of(5), Seconds.of(10));
 		SysIdRoutine.Mechanism mechanism = new SysIdRoutine.Mechanism(this::actuate, this::log, drive);
 		routine = new SysIdRoutine(config, mechanism);
 

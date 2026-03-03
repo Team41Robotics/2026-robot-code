@@ -3,6 +3,8 @@ package frc.robot.subsystem.intake;
 import static edu.wpi.first.math.MathUtil.*;
 import static java.lang.Math.*;
 
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -16,6 +18,10 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
@@ -33,6 +39,13 @@ public class IntakeHW {
 	public TalonFX intakeTalonFX;
 
 	public CANcoder jointAbsoluteEncoder;
+
+	public StatusSignal<Angle> jointAbsolutePositionSignal;
+	public StatusSignal<AngularVelocity> intakeVelocitySignal;
+	public StatusSignal<Voltage> intakeMotorVoltageSignal;
+	public StatusSignal<Current> intakeStatorCurrentSignal;
+	public StatusSignal<Voltage> intakeSupplyVoltageSignal;
+	public StatusSignal<Current> intakeSupplyCurrentSignal;
 
 	public VoltageOut intakeControlRequest = new VoltageOut(0);
 
@@ -60,27 +73,50 @@ public class IntakeHW {
 		intakeTalonFX.getConfigurator().apply(intakeConfig);
 		intakeTalonFX.clearStickyFaults();
 		intakeTalonFX.setNeutralMode(NeutralModeValue.Coast);
+
+		jointAbsolutePositionSignal = jointAbsoluteEncoder.getPosition(false);
+		intakeVelocitySignal = intakeTalonFX.getVelocity(false);
+		intakeMotorVoltageSignal = intakeTalonFX.getMotorVoltage(false);
+		intakeStatorCurrentSignal = intakeTalonFX.getStatorCurrent(false);
+		intakeSupplyVoltageSignal = intakeTalonFX.getSupplyVoltage(false);
+		intakeSupplyCurrentSignal = intakeTalonFX.getSupplyCurrent(false);
+
+		jointAbsolutePositionSignal.setUpdateFrequency(50);
+		intakeVelocitySignal.setUpdateFrequency(50);
+		intakeMotorVoltageSignal.setUpdateFrequency(50);
+		intakeStatorCurrentSignal.setUpdateFrequency(50);
+		intakeSupplyVoltageSignal.setUpdateFrequency(50);
+		intakeSupplyCurrentSignal.setUpdateFrequency(50);
+
+		jointAbsoluteEncoder.optimizeBusUtilization();
+		intakeTalonFX.optimizeBusUtilization();
 	}
 
 	public void sense(IntakeInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		inputs.jointPosRadians = jointAbsoluteEncoder.getPosition().getValueAsDouble() * 2 * PI;
+		BaseStatusSignal.refreshAll(
+				jointAbsolutePositionSignal,
+				intakeVelocitySignal,
+				intakeMotorVoltageSignal,
+				intakeStatorCurrentSignal,
+				intakeSupplyVoltageSignal,
+				intakeSupplyCurrentSignal);
+
+		inputs.jointPosRadians = jointAbsolutePositionSignal.getValueAsDouble() * 2 * PI;
 		inputs.jointPosRadians = angleModulus(inputs.jointPosRadians - JOINT_ENCODER_ZERO);
 		jointEncoder.setPosition(inputs.jointPosRadians);
-
-		inputs.jointPosRawRadians = jointEncoder.getPosition();
 
 		inputs.jointVelRadiansPerSec = jointEncoder.getVelocity();
 		inputs.jointVoltageVolts = jointSparkMax.getBusVoltage() * jointSparkMax.getAppliedOutput();
 		inputs.jointCurrentAmps = jointSparkMax.getOutputCurrent();
 		inputs.jointBusVoltageVolts = jointSparkMax.getBusVoltage();
 
-		inputs.intakeVelocityRPM = intakeTalonFX.getVelocity().getValueAsDouble() * 60.0;
-		inputs.intakeVoltageVolts = intakeTalonFX.getMotorVoltage().getValueAsDouble();
-		inputs.intakeCurrentAmps = intakeTalonFX.getStatorCurrent().getValueAsDouble();
-		inputs.intakeBusVoltageVolts = intakeTalonFX.getSupplyVoltage().getValueAsDouble();
-		inputs.intakeBusCurrentAmps = intakeTalonFX.getSupplyCurrent().getValueAsDouble();
+		inputs.intakeVelocityRPM = intakeVelocitySignal.getValueAsDouble() * 60.0;
+		inputs.intakeVoltageVolts = intakeMotorVoltageSignal.getValueAsDouble();
+		inputs.intakeCurrentAmps = intakeStatorCurrentSignal.getValueAsDouble();
+		inputs.intakeBusVoltageVolts = intakeSupplyVoltageSignal.getValueAsDouble();
+		inputs.intakeBusCurrentAmps = intakeSupplyCurrentSignal.getValueAsDouble();
 	}
 
 	public void actuate(IntakeInputs inputs, double jointPosition, double intakeVoltage) {

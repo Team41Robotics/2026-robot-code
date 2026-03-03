@@ -3,6 +3,8 @@ package frc.robot.subsystem.shooter;
 import static edu.wpi.first.math.MathUtil.*;
 import static java.lang.Math.*;
 
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -11,6 +13,10 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
@@ -55,6 +61,31 @@ public class ShooterHW {
 	public DigitalInput hoodLimitSwitch;
 	public DigitalInput turretLimitSwitch;
 
+	// Cached StatusSignals — turret
+	public StatusSignal<Angle> turretPosition;
+	public StatusSignal<AngularVelocity> turretVelocity;
+	public StatusSignal<Voltage> turretMotorVoltage;
+	public StatusSignal<Current> turretStatorCurrent;
+	public StatusSignal<Voltage> turretSupplyVoltage;
+	public StatusSignal<Current> turretSupplyCurrent;
+
+	// Cached StatusSignals — hood
+	public StatusSignal<Angle> hoodPosition;
+	public StatusSignal<AngularVelocity> hoodVelocity;
+	public StatusSignal<Voltage> hoodMotorVoltage;
+	public StatusSignal<Current> hoodStatorCurrent;
+	public StatusSignal<Voltage> hoodSupplyVoltage;
+	public StatusSignal<Current> hoodSupplyCurrent;
+
+	// Cached StatusSignals — flywheel
+	public StatusSignal<AngularVelocity> flywheelVelocity;
+	public StatusSignal<Voltage> flywheelMotorVoltage;
+	public StatusSignal<Current> flywheelStatorCurrent;
+	public StatusSignal<Voltage> flywheelSupplyVoltage;
+	public StatusSignal<Current> flywheelSupplyCurrent;
+	public StatusSignal<Double> flywheelDutyCycle;
+	public StatusSignal<Current> flywheelTorqueCurrent;
+
 	public ShooterHW() {
 		if (ENCODER_LIM_POS1LEFT > ENCODER_LIM_POS1RIGHT) {
 			double temp = ENCODER_LIM_POS1LEFT;
@@ -90,7 +121,7 @@ public class ShooterHW {
 		turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		turretTalonFX.getConfigurator().apply(turretConfig);
 		turretTalonFX.clearStickyFaults();
-		turretTalonFX.setPosition(0, 0);
+		turretTalonFX.setPosition(0);
 		turretTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
 		turretLimitSwitch = new DigitalInput(0);
@@ -109,7 +140,7 @@ public class ShooterHW {
 		hoodConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		hoodTalonFX.getConfigurator().apply(hoodConfig);
 		hoodTalonFX.clearStickyFaults();
-		hoodTalonFX.setPosition(0, 0);
+		hoodTalonFX.setPosition(0);
 		hoodTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
 		hoodLimitSwitch = new DigitalInput(1);
@@ -137,13 +168,86 @@ public class ShooterHW {
 		flywheelFollowerTalonFX.clearStickyFaults();
 		flywheelFollowerTalonFX.setNeutralMode(NeutralModeValue.Coast);
 		flywheelFollowerTalonFX.setControl(new Follower(53, MotorAlignmentValue.Opposed));
+
+		// --- Cache StatusSignals ---
+		turretPosition = turretTalonFX.getPosition(false);
+		turretVelocity = turretTalonFX.getVelocity(false);
+		turretMotorVoltage = turretTalonFX.getMotorVoltage(false);
+		turretStatorCurrent = turretTalonFX.getStatorCurrent(false);
+		turretSupplyVoltage = turretTalonFX.getSupplyVoltage(false);
+		turretSupplyCurrent = turretTalonFX.getSupplyCurrent(false);
+
+		hoodPosition = hoodTalonFX.getPosition(false);
+		hoodVelocity = hoodTalonFX.getVelocity(false);
+		hoodMotorVoltage = hoodTalonFX.getMotorVoltage(false);
+		hoodStatorCurrent = hoodTalonFX.getStatorCurrent(false);
+		hoodSupplyVoltage = hoodTalonFX.getSupplyVoltage(false);
+		hoodSupplyCurrent = hoodTalonFX.getSupplyCurrent(false);
+
+		flywheelVelocity = flywheelTalonFX.getVelocity(false);
+		flywheelMotorVoltage = flywheelTalonFX.getMotorVoltage(false);
+		flywheelStatorCurrent = flywheelTalonFX.getStatorCurrent(false);
+		flywheelSupplyVoltage = flywheelTalonFX.getSupplyVoltage(false);
+		flywheelSupplyCurrent = flywheelTalonFX.getSupplyCurrent(false);
+		flywheelDutyCycle = flywheelTalonFX.getDutyCycle(false);
+		flywheelTorqueCurrent = flywheelTalonFX.getTorqueCurrent(false);
+
+		// --- Set update frequencies ---
+		turretPosition.setUpdateFrequency(50);
+		turretVelocity.setUpdateFrequency(50);
+		turretMotorVoltage.setUpdateFrequency(50);
+		turretStatorCurrent.setUpdateFrequency(50);
+		turretSupplyVoltage.setUpdateFrequency(50);
+		turretSupplyCurrent.setUpdateFrequency(50);
+
+		hoodPosition.setUpdateFrequency(50);
+		hoodVelocity.setUpdateFrequency(50);
+		hoodMotorVoltage.setUpdateFrequency(50);
+		hoodStatorCurrent.setUpdateFrequency(50);
+		hoodSupplyVoltage.setUpdateFrequency(50);
+		hoodSupplyCurrent.setUpdateFrequency(50);
+
+		flywheelVelocity.setUpdateFrequency(50);
+		flywheelMotorVoltage.setUpdateFrequency(50);
+		flywheelStatorCurrent.setUpdateFrequency(50);
+		flywheelSupplyVoltage.setUpdateFrequency(50);
+		flywheelSupplyCurrent.setUpdateFrequency(50);
+		flywheelDutyCycle.setUpdateFrequency(50);
+		flywheelTorqueCurrent.setUpdateFrequency(50);
+
+		// --- Optimize bus utilization ---
+		turretTalonFX.optimizeBusUtilization();
+		hoodTalonFX.optimizeBusUtilization();
+		flywheelTalonFX.optimizeBusUtilization();
+		flywheelFollowerTalonFX.optimizeBusUtilization();
 	}
 
 	public void sense(ShooterInputs inputs) {
 		if (!Robot.isReal()) return;
 
+		BaseStatusSignal.refreshAll(
+				turretPosition,
+				turretVelocity,
+				turretMotorVoltage,
+				turretStatorCurrent,
+				turretSupplyVoltage,
+				turretSupplyCurrent,
+				hoodPosition,
+				hoodVelocity,
+				hoodMotorVoltage,
+				hoodStatorCurrent,
+				hoodSupplyVoltage,
+				hoodSupplyCurrent,
+				flywheelVelocity,
+				flywheelMotorVoltage,
+				flywheelStatorCurrent,
+				flywheelSupplyVoltage,
+				flywheelSupplyCurrent,
+				flywheelDutyCycle,
+				flywheelTorqueCurrent);
+
 		inputs.turretLimitSwitchOn = !turretLimitSwitch.get();
-		inputs.turretPosRadians = turretTalonFX.getPosition().getValueAsDouble();
+		inputs.turretPosRadians = turretPosition.getValueAsDouble();
 		if (inputs.turretLimitSwitchOn) {
 			double bestPos = Double.POSITIVE_INFINITY;
 			if (abs(inputs.turretPosRadians - ENCODER_LIM_POS1LEFT) < abs(inputs.turretPosRadians - bestPos)) {
@@ -177,30 +281,30 @@ public class ShooterHW {
 			inputs.turretPosRadians = bestPos;
 		}
 
-		inputs.turretVelRadiansPerSec = turretTalonFX.getVelocity().getValueAsDouble();
-		inputs.turretVoltageVolts = turretTalonFX.getMotorVoltage().getValueAsDouble();
-		inputs.turretCurrentAmps = turretTalonFX.getStatorCurrent().getValueAsDouble();
-		inputs.turretBusVoltageVolts = turretTalonFX.getSupplyVoltage().getValueAsDouble();
-		inputs.turretBusCurrentAmps = turretTalonFX.getSupplyCurrent().getValueAsDouble();
+		inputs.turretVelRadiansPerSec = turretVelocity.getValueAsDouble();
+		inputs.turretVoltageVolts = turretMotorVoltage.getValueAsDouble();
+		inputs.turretCurrentAmps = turretStatorCurrent.getValueAsDouble();
+		inputs.turretBusVoltageVolts = turretSupplyVoltage.getValueAsDouble();
+		inputs.turretBusCurrentAmps = turretSupplyCurrent.getValueAsDouble();
 
 		inputs.isHoodLimitSwitchOn = !hoodLimitSwitch.get();
-		inputs.hoodPosRadians = hoodTalonFX.getPosition().getValueAsDouble();
+		inputs.hoodPosRadians = hoodPosition.getValueAsDouble();
 		if (inputs.isHoodLimitSwitchOn) {
 			hoodTalonFX.setPosition(0, 0);
 			inputs.hoodPosRadians = 0;
 		}
 
-		inputs.hoodVelRadiansPerSec = hoodTalonFX.getVelocity().getValueAsDouble();
-		inputs.hoodVoltageVolts = hoodTalonFX.getMotorVoltage().getValueAsDouble();
-		inputs.hoodCurrentAmps = hoodTalonFX.getStatorCurrent().getValueAsDouble();
-		inputs.hoodBusVoltageVolts = hoodTalonFX.getSupplyVoltage().getValueAsDouble();
-		inputs.hoodBusCurrentAmps = hoodTalonFX.getSupplyCurrent().getValueAsDouble();
+		inputs.hoodVelRadiansPerSec = hoodVelocity.getValueAsDouble();
+		inputs.hoodVoltageVolts = hoodMotorVoltage.getValueAsDouble();
+		inputs.hoodCurrentAmps = hoodStatorCurrent.getValueAsDouble();
+		inputs.hoodBusVoltageVolts = hoodSupplyVoltage.getValueAsDouble();
+		inputs.hoodBusCurrentAmps = hoodSupplyCurrent.getValueAsDouble();
 
-		inputs.flywheelVelocityRPM = flywheelTalonFX.getVelocity().getValueAsDouble() * 60;
-		inputs.flywheelVoltageVolts = flywheelTalonFX.getMotorVoltage().getValueAsDouble();
-		inputs.flywheelCurrentAmps = flywheelTalonFX.getStatorCurrent().getValueAsDouble();
-		inputs.flywheelBusVoltageVolts = flywheelTalonFX.getSupplyVoltage().getValueAsDouble();
-		inputs.flywheelBusCurrentAmps = flywheelTalonFX.getSupplyCurrent().getValueAsDouble();
+		inputs.flywheelVelocityRPM = flywheelVelocity.getValueAsDouble() * 60;
+		inputs.flywheelVoltageVolts = flywheelMotorVoltage.getValueAsDouble();
+		inputs.flywheelCurrentAmps = flywheelStatorCurrent.getValueAsDouble();
+		inputs.flywheelBusVoltageVolts = flywheelSupplyVoltage.getValueAsDouble();
+		inputs.flywheelBusCurrentAmps = flywheelSupplyCurrent.getValueAsDouble();
 	}
 
 	public void actuate(ShooterInputs inputs, double turretPosition, double hoodPosition, double flywheelRPM) {

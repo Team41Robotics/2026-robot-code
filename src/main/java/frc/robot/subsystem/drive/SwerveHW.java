@@ -4,6 +4,8 @@ import static edu.wpi.first.math.MathUtil.*;
 import static frc.robot.RobotContainer.*;
 import static java.lang.Math.*;
 
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -11,6 +13,10 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
@@ -36,6 +42,25 @@ public class SwerveHW {
 	public VelocityVoltage driveControlRequest = new VelocityVoltage(0).withSlot(0);
 	public PositionVoltage turnControlRequest = new PositionVoltage(0).withSlot(0);
 
+	// Cached StatusSignals — drive motor
+	public StatusSignal<Angle> drivePosition;
+	public StatusSignal<AngularVelocity> driveVelocity;
+	public StatusSignal<Voltage> driveSupplyVoltage;
+	public StatusSignal<Current> driveSupplyCurrent;
+	public StatusSignal<Voltage> driveMotorVoltage;
+	public StatusSignal<Current> driveStatorCurrent;
+
+	// Cached StatusSignals — turn motor
+	public StatusSignal<Voltage> turnSupplyVoltage;
+	public StatusSignal<Current> turnSupplyCurrent;
+	public StatusSignal<Angle> turnPosition;
+	public StatusSignal<AngularVelocity> turnVelocity;
+	public StatusSignal<Voltage> turnMotorVoltage;
+	public StatusSignal<Current> turnStatorCurrent;
+
+	// Cached StatusSignals — CANcoder
+	public StatusSignal<Angle> turnAbsolutePosition;
+
 	public void init(SwerveModuleConfiguration config) {
 		logRoot = "Swerve/" + config.name;
 		angleOffset = config.angleOffset;
@@ -54,7 +79,7 @@ public class SwerveHW {
 		driveConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		driveTalonFX.getConfigurator().apply(driveConfig);
 		driveTalonFX.clearStickyFaults();
-		driveTalonFX.setPosition(0, 0);
+		driveTalonFX.setPosition(0);
 		driveTalonFX.setNeutralMode(NeutralModeValue.Coast);
 
 		turnTalonFX = new TalonFX(config.turnMotorId, driveBus);
@@ -71,28 +96,83 @@ public class SwerveHW {
 
 		turnAbsoluteEncoder = new CANcoder(config.encoderId, driveBus);
 		turnAbsoluteEncoder.clearStickyFaults();
+
+		// Initialize cached signals
+		drivePosition = driveTalonFX.getPosition(false);
+		driveVelocity = driveTalonFX.getVelocity(false);
+		driveSupplyVoltage = driveTalonFX.getSupplyVoltage(false);
+		driveSupplyCurrent = driveTalonFX.getSupplyCurrent(false);
+		driveMotorVoltage = driveTalonFX.getMotorVoltage(false);
+		driveStatorCurrent = driveTalonFX.getStatorCurrent(false);
+
+		turnSupplyVoltage = turnTalonFX.getSupplyVoltage(false);
+		turnSupplyCurrent = turnTalonFX.getSupplyCurrent(false);
+		turnPosition = turnTalonFX.getPosition(false);
+		turnVelocity = turnTalonFX.getVelocity(false);
+		turnMotorVoltage = turnTalonFX.getMotorVoltage(false);
+		turnStatorCurrent = turnTalonFX.getStatorCurrent(false);
+
+		turnAbsolutePosition = turnAbsoluteEncoder.getAbsolutePosition(false);
+
+		// Set update frequencies
+		drivePosition.setUpdateFrequency(50);
+		driveVelocity.setUpdateFrequency(50);
+		driveSupplyVoltage.setUpdateFrequency(50);
+		driveSupplyCurrent.setUpdateFrequency(50);
+		driveMotorVoltage.setUpdateFrequency(50);
+		driveStatorCurrent.setUpdateFrequency(50);
+
+		turnSupplyVoltage.setUpdateFrequency(50);
+		turnSupplyCurrent.setUpdateFrequency(50);
+		turnPosition.setUpdateFrequency(50);
+		turnVelocity.setUpdateFrequency(50);
+		turnMotorVoltage.setUpdateFrequency(50);
+		turnStatorCurrent.setUpdateFrequency(50);
+
+		turnAbsolutePosition.setUpdateFrequency(50);
+
+		// Optimize bus utilization — disable signals we don't use
+		driveTalonFX.optimizeBusUtilization();
+		turnTalonFX.optimizeBusUtilization();
+		turnAbsoluteEncoder.optimizeBusUtilization();
 	}
 
 	public void sense(SwerveInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		inputs.drivePosMeters = driveTalonFX.getPosition().getValueAsDouble();
-		inputs.driveVelMetersPerSec = driveTalonFX.getVelocity().getValueAsDouble();
+		BaseStatusSignal.waitForAll(
+				0,
+				drivePosition,
+				driveVelocity,
+				driveSupplyVoltage,
+				driveSupplyCurrent,
+				driveMotorVoltage,
+				driveStatorCurrent,
+				turnSupplyVoltage,
+				turnSupplyCurrent,
+				turnPosition,
+				turnVelocity,
+				turnMotorVoltage,
+				turnStatorCurrent,
+				turnAbsolutePosition);
 
-		inputs.driveBusVoltageVolts = driveTalonFX.getSupplyVoltage().getValueAsDouble();
-		inputs.driveBusCurrentAmps = driveTalonFX.getSupplyCurrent().getValueAsDouble();
-		inputs.driveVoltageVolts = driveTalonFX.getMotorVoltage().getValueAsDouble();
-		inputs.driveCurrentAmps = driveTalonFX.getStatorCurrent().getValueAsDouble();
+		inputs.drivePosMeters = drivePosition.getValueAsDouble();
+		inputs.driveVelMetersPerSec = driveVelocity.getValueAsDouble();
 
-		inputs.turnBusVoltageVolts = turnTalonFX.getSupplyVoltage().getValueAsDouble();
-		inputs.turnBusCurrentAmps = turnTalonFX.getSupplyCurrent().getValueAsDouble();
-		inputs.turnPosRadians = turnTalonFX.getPosition().getValueAsDouble();
-		inputs.turnVelRadiansPerSec = turnTalonFX.getVelocity().getValueAsDouble();
+		inputs.driveBusVoltageVolts = driveSupplyVoltage.getValueAsDouble();
+		inputs.driveBusCurrentAmps = driveSupplyCurrent.getValueAsDouble();
+		inputs.driveVoltageVolts = driveMotorVoltage.getValueAsDouble();
+		inputs.driveCurrentAmps = driveStatorCurrent.getValueAsDouble();
 
-		inputs.turnVoltageVolts = turnTalonFX.getMotorVoltage().getValueAsDouble();
-		inputs.turnCurrentAmps = turnTalonFX.getStatorCurrent().getValueAsDouble();
+		inputs.turnBusVoltageVolts = turnSupplyVoltage.getValueAsDouble();
+		inputs.turnBusCurrentAmps = turnSupplyCurrent.getValueAsDouble();
+		inputs.turnPosRadians = turnPosition.getValueAsDouble();
+		inputs.turnVelRadiansPerSec = turnVelocity.getValueAsDouble();
 
-		inputs.turnAbsPosRadians = turnAbsoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * PI;
+		inputs.turnVoltageVolts = turnMotorVoltage.getValueAsDouble();
+		inputs.turnCurrentAmps = turnStatorCurrent.getValueAsDouble();
+
+		inputs.turnAbsPosRadians = turnAbsolutePosition.getValueAsDouble() * 2 * PI;
 		inputs.turnAbsPosRadians = angleModulus(inputs.turnAbsPosRadians - angleOffset);
 	}
 

@@ -17,14 +17,11 @@ public class ShooterStartup extends Command {
 	public void execute() {
 		shooter.targetFlywheelRPM = 0;
 		shooter.targetTurretPos = 20 * PI / 180.0;
-		// shooter.targetHoodPos = shooter.inputs.hoodPosRadians - PI/2;
 		shooter.targetHoodPos = 0;
 		if (shooter.inputs.turretLimitSwitchOn) {
 			turretLimitSwitchTriggered = true;
 		}
-		// if (shooter.inputs.isHoodLimitSwitchOn) {
 		hoodLimitSwitchTriggered = true;
-		// }
 	}
 
 	@Override

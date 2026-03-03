@@ -21,6 +21,7 @@ import frc.robot.commands.drive.TurnPIDTestCommand;
 import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.intake.IntakeUp;
+import frc.robot.subsystem.climber.Climber;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.XboxControls;
 import frc.robot.subsystem.drive.SwerveDrive;
@@ -48,6 +49,7 @@ public class RobotContainer {
 	public static Shooter shooter = new Shooter();
 	public static Indexer indexer = new Indexer();
 	public static LEDS leds = new LEDS();
+	public static Climber climber = new Climber();
 
 	public static Field2d field = new Field2d();
 
@@ -60,6 +62,7 @@ public class RobotContainer {
 		shooter.init();
 		indexer.init();
 		leds.init();
+		climber.init();
 		drive.init(new Pose2d());
 		vision.init();
 
@@ -109,6 +112,7 @@ public class RobotContainer {
 		shooter.sense();
 		indexer.sense();
 		vision.sense();
+		climber.sense();
 		// leds.sense();
 
 		CommandScheduler.getInstance().run();
@@ -122,6 +126,7 @@ public class RobotContainer {
 		intake.actuate();
 		shooter.actuate();
 		indexer.actuate();
+		climber.actuate();
 		// leds.actuate();
 	}
 

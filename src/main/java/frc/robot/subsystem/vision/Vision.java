@@ -102,6 +102,11 @@ public class Vision extends SubsystemBase {
 				Pose2d visionPose = null;
 				String method = "none";
 
+				if (result.targets.isEmpty()) {
+					Logger.recordOutput("/Vision/" + cam.name + "/method", "none");
+					continue;
+				}
+
 				Optional<EstimatedRobotPose> constrainedPnPpose;
 				try {
 					constrainedPnPpose = poseEsts[i].estimateConstrainedSolvepnpPose(

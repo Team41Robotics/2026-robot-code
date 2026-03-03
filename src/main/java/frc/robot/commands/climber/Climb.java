@@ -1,23 +1,9 @@
 package frc.robot.commands.climber;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-public class Climb extends Command {
+public class Climb extends SequentialCommandGroup {
 	public Climb() {
-		// addRequirements(climber);
+		addCommands(new ClimberUp(), new ClimberDown());
 	}
-
-	@Override
-	public void initialize() {}
-
-	@Override
-	public void execute() {}
-
-	@Override
-	public boolean isFinished() {
-		return false;
-	}
-
-	@Override
-	public void end(boolean interrupted) {}
 }

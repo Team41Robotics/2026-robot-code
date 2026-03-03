@@ -10,14 +10,18 @@ import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.choreo.ChoreoTraj;
+import frc.robot.choreo.ChoreoVars;
 import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.shooter.ShooterStartup;
 import org.littletonrobotics.junction.Logger;
 
 public class Autos {
 	public static AutoFactory factory;
+
+	public static SendableChooser<Pose2d> startPoseChooser = new SendableChooser<>();
 
 	// TUNEME: trajectory tracking PID gains
 	public static PIDController xController = new PIDController(5.0, 0, 0);
@@ -28,6 +32,10 @@ public class Autos {
 		thetaController.enableContinuousInput(-PI, PI);
 
 		factory = new AutoFactory(() -> drive.pose, drive::resetPose, Autos::choreoController, true, drive);
+
+		startPoseChooser.setDefaultOption("null", new Pose2d());
+		startPoseChooser.addOption("testStart", ChoreoVars.Poses.testStart);
+		startPoseChooser.addOption("TestPath start", ChoreoTraj.TestPath.initialPoseBlue());
 	}
 
 	public static void choreoController(SwerveSample sample) {

@@ -56,6 +56,8 @@ public class RobotContainer {
 	public static AutoChooser autoChooser = new AutoChooser();
 	public static Command autonomousCommand = null;
 
+	static Pose2d prevStartPose = null;
+
 	public static void init() {
 		imu.init();
 		intake.init();
@@ -100,6 +102,7 @@ public class RobotContainer {
 		Autos.init();
 		autoChooser.addRoutine("TestPath", Autos::testPath);
 		SmartDashboard.putData("AutoChooser", autoChooser);
+		SmartDashboard.putData("StartPoseChooser", Autos.startPoseChooser);
 
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());
 		SmartDashboard.putData("Field", field);
@@ -120,6 +123,12 @@ public class RobotContainer {
 		if (DriverStation.isDisabled()) {
 			leds.control = leds.DISABLED_ANIMATION;
 			autonomousCommand = autoChooser.selectedCommand();
+
+			Pose2d selected = Autos.startPoseChooser.getSelected();
+			if (selected != null && selected != prevStartPose) {
+				prevStartPose = selected;
+				drive.resetPose(selected);
+			}
 		}
 
 		drive.actuate();

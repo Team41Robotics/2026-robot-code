@@ -53,6 +53,7 @@ public class Vision extends SubsystemBase {
 	public boolean enableConstrainedPnP = false;
 	public boolean enableMultiTag = true;
 	public boolean enablePnpDistTrig = true;
+	public boolean enableHeading = false;
 
 	public void init() {
 		for (int i = 0; i < nCams; i++) {
@@ -65,6 +66,7 @@ public class Vision extends SubsystemBase {
 		SmartDashboard.putBoolean("Vision/enableConstrainedPnP", enableConstrainedPnP);
 		SmartDashboard.putBoolean("Vision/enableMultiTag", enableMultiTag);
 		SmartDashboard.putBoolean("Vision/enablePnpDistTrig", enablePnpDistTrig);
+		SmartDashboard.putBoolean("Vision/enableHeading", enableHeading);
 		sense();
 	}
 
@@ -85,6 +87,7 @@ public class Vision extends SubsystemBase {
 		enableConstrainedPnP = SmartDashboard.getBoolean("Vision/enableConstrainedPnP", enableConstrainedPnP);
 		enableMultiTag = SmartDashboard.getBoolean("Vision/enableMultiTag", enableMultiTag);
 		enablePnpDistTrig = SmartDashboard.getBoolean("Vision/enablePnpDistTrig", enablePnpDistTrig);
+		enableHeading = SmartDashboard.getBoolean("Vision/enableHeading", enableHeading);
 
 		for (int i = 0; i < nCams; i++) {
 			VisionHW cam = cameras[i];
@@ -114,7 +117,7 @@ public class Vision extends SubsystemBase {
 							cam.cam.getCameraMatrix().orElseThrow(),
 							cam.cam.getDistCoeffs().orElseThrow(),
 							new Pose3d(drive.pose),
-							false,
+							!enableHeading,
 							1);
 				} catch (Exception e) {
 					constrainedPnPpose = Optional.empty();

@@ -62,7 +62,7 @@ public class SwerveDrive extends SubsystemBase {
 				new Rotation2d(imu.yaw),
 				zeroPos,
 				initPose,
-				Util.buildCov(0.1, 0.1, 0.05), // TUNEME. odometry state covariance
+				Util.buildCov(0.1, 0.1, 0.02), // TUNEME. odometry state covariance
 				Util.buildCov(0, 0, 0));
 
 		sense();

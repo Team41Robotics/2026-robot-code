@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.autos.Autos;
 import frc.robot.commands.autos.StupidShootAuto;
 import frc.robot.commands.drive.DrivePIDTestCommand;
@@ -88,9 +87,6 @@ public class RobotContainer {
 		SmartDashboard.putData("IntakeUp", new IntakeUp());
 
 		SmartDashboard.putData("RunIndexer", new RunIndexer());
-		SmartDashboard.putData(
-				"PreferControlledPnP",
-				new InstantCommand(() -> vision.preferConstrainedPnP = !vision.preferConstrainedPnP));
 
 		SmartDashboard.putData("StupidShootAuto", new StupidShootAuto());
 

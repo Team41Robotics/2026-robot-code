@@ -14,7 +14,9 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.FieldConstants;
 import frc.robot.Util;
 import frc.robot.subsystem.drive.SwerveDrive;
 import java.util.List;
@@ -48,7 +50,9 @@ public class Vision extends SubsystemBase {
 
 	public int nCams = cameras.length;
 	public boolean enabled = true;
-	public boolean preferConstrainedPnP = false;
+	public boolean enableConstrainedPnP = false;
+	public boolean enableMultiTag = true;
+	public boolean enablePnpDistTrig = true;
 
 	public void init() {
 		for (int i = 0; i < nCams; i++) {
@@ -58,11 +62,29 @@ public class Vision extends SubsystemBase {
 			decodePackets[i] = new ReusablePacket(0); // Pre-allocate decode packets
 			cam.init();
 		}
+		SmartDashboard.putBoolean("Vision/enableConstrainedPnP", enableConstrainedPnP);
+		SmartDashboard.putBoolean("Vision/enableMultiTag", enableMultiTag);
+		SmartDashboard.putBoolean("Vision/enablePnpDistTrig", enablePnpDistTrig);
 		sense();
+	}
+
+	public static boolean sane(Optional<EstimatedRobotPose> est) {
+		if (est.isEmpty()) return false;
+		Pose3d p = est.get().estimatedPose;
+		double x = p.getX(), y = p.getY(), z = p.getZ();
+		return x >= 0
+				&& x <= FieldConstants.fieldLength
+				&& y >= 0
+				&& y <= FieldConstants.fieldWidth
+				&& z >= -2.0
+				&& z <= 3.0;
 	}
 
 	public void sense() {
 		Logger.recordOutput("/Vision/enabled", enabled);
+		enableConstrainedPnP = SmartDashboard.getBoolean("Vision/enableConstrainedPnP", enableConstrainedPnP);
+		enableMultiTag = SmartDashboard.getBoolean("Vision/enableMultiTag", enableMultiTag);
+		enablePnpDistTrig = SmartDashboard.getBoolean("Vision/enablePnpDistTrig", enablePnpDistTrig);
 
 		for (int i = 0; i < nCams; i++) {
 			VisionHW cam = cameras[i];
@@ -118,15 +140,15 @@ public class Vision extends SubsystemBase {
 						"/Vision/" + cam.name + "/pnpDistTrigPose",
 						pnpDistTrigPose.isPresent() ? pnpDistTrigPose.get().estimatedPose : null);
 
-				if (constrainedPnPpose.isPresent() && preferConstrainedPnP) {
-					visionPose = constrainedPnPpose.get().estimatedPose.toPose2d();
-					method = "constrainedPnP";
-				} else if (coprocPnPpose.isPresent() && result.targets.size() >= 2) {
-					visionPose = coprocPnPpose.get().estimatedPose.toPose2d();
-					method = "multiTag";
-				} else if (pnpDistTrigPose.isPresent()) {
+				if (sane(pnpDistTrigPose) && enablePnpDistTrig) {
 					visionPose = pnpDistTrigPose.get().estimatedPose.toPose2d();
 					method = "pnpDistTrig";
+				} else if (sane(constrainedPnPpose) && enableConstrainedPnP) {
+					visionPose = constrainedPnPpose.get().estimatedPose.toPose2d();
+					method = "constrainedPnP";
+				} else if (sane(coprocPnPpose) && result.targets.size() >= 2 && enableMultiTag) {
+					visionPose = coprocPnPpose.get().estimatedPose.toPose2d();
+					method = "multiTag";
 				}
 
 				Logger.recordOutput("/Vision/" + cam.name + "/nTargets", result.targets.size());
@@ -143,11 +165,10 @@ public class Vision extends SubsystemBase {
 							cov = Util.buildCov(0.9, 0.9, 1.2);
 							break;
 						case "pnpDistTrig":
-							cov = Util.buildCov(0.6, 0.6, 0.8);
+							cov = Util.buildCov(0.6, 0.6, 6.0);
 							break;
 						default:
-							cov = Util.buildCov(1.0, 1.0, 1.0);
-							break;
+							throw new IllegalStateException("Unexpected vision method: " + method);
 					}
 					drive.poseEst.addVisionMeasurement(visionPose, result.getTimestampSeconds(), cov);
 					Logger.recordOutput("/Vision/" + cam.name + "/estimatedPose", visionPose);

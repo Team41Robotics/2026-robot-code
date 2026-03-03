@@ -3,7 +3,6 @@ package frc.robot.subsystem.drive;
 import static frc.robot.RobotContainer.*;
 import static java.lang.Math.*;
 
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -14,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Util;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveDrive extends SubsystemBase {
@@ -62,8 +62,8 @@ public class SwerveDrive extends SubsystemBase {
 				new Rotation2d(imu.yaw),
 				zeroPos,
 				initPose,
-				VecBuilder.fill(0.1, 0.1, 0.05), // TUNEME. odometry state covariance
-				VecBuilder.fill(0.75, 0.75, 0.9)); // TUNEME. vision measurement covariance (tune)
+				Util.buildCov(0.1, 0.1, 0.05), // TUNEME. odometry state covariance
+				Util.buildCov(0, 0, 0));
 
 		sense();
 	}

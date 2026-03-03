@@ -5,14 +5,17 @@ import static java.lang.Math.*;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Util;
 import frc.robot.subsystem.drive.SwerveDrive;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +36,7 @@ public class Vision extends SubsystemBase {
 				"DuckySE",
 				new Transform3d(
 						new Translation3d(-SwerveDrive.ROBOT_LEN / 2, -SwerveDrive.ROBOT_WID / 2, 0.17),
-						new Rotation3d(0, -20. / 180. * PI, 180)))
+						new Rotation3d(0, -20. / 180. * PI, PI)))
 	};
 	public VisionInputsAutoLogged[] inputs = new VisionInputsAutoLogged[cameras.length];
 	public PhotonPoseEstimator[] poseEsts = new PhotonPoseEstimator[cameras.length];
@@ -45,6 +48,7 @@ public class Vision extends SubsystemBase {
 
 	public int nCams = cameras.length;
 	public boolean enabled = true;
+	public boolean preferConstrainedPnP = false;
 
 	public void init() {
 		for (int i = 0; i < nCams; i++) {
@@ -114,10 +118,10 @@ public class Vision extends SubsystemBase {
 						"/Vision/" + cam.name + "/pnpDistTrigPose",
 						pnpDistTrigPose.isPresent() ? pnpDistTrigPose.get().estimatedPose : null);
 
-				if (constrainedPnPpose.isPresent()) {
+				if (constrainedPnPpose.isPresent() && preferConstrainedPnP) {
 					visionPose = constrainedPnPpose.get().estimatedPose.toPose2d();
 					method = "constrainedPnP";
-				} else if (coprocPnPpose.isPresent() && result.targets.size() >= 1) {
+				} else if (coprocPnPpose.isPresent() && result.targets.size() >= 2) {
 					visionPose = coprocPnPpose.get().estimatedPose.toPose2d();
 					method = "multiTag";
 				} else if (pnpDistTrigPose.isPresent()) {
@@ -129,8 +133,23 @@ public class Vision extends SubsystemBase {
 				Logger.recordOutput("/Vision/" + cam.name + "/method", method);
 
 				if (visionPose != null && enabled) {
-					// drive.poseEst.addVisionMeasurement(
-							// visionPose, result.getTimestampSeconds(), VecBuilder.fill(0.75, 0.75, 0.9));
+					// TUNEME. vision measurement covariance (tune)
+					Matrix<N3, N1> cov;
+					switch (method) {
+						case "constrainedPnP":
+							cov = Util.buildCov(0.5, 0.5, 0.7);
+							break;
+						case "multiTag":
+							cov = Util.buildCov(0.9, 0.9, 1.2);
+							break;
+						case "pnpDistTrig":
+							cov = Util.buildCov(0.6, 0.6, 0.8);
+							break;
+						default:
+							cov = Util.buildCov(1.0, 1.0, 1.0);
+							break;
+					}
+					drive.poseEst.addVisionMeasurement(visionPose, result.getTimestampSeconds(), cov);
 					Logger.recordOutput("/Vision/" + cam.name + "/estimatedPose", visionPose);
 				}
 			}

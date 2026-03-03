@@ -23,7 +23,7 @@ public class ShooterStartup extends Command {
 			turretLimitSwitchTriggered = true;
 		}
 		// if (shooter.inputs.isHoodLimitSwitchOn) {
-			hoodLimitSwitchTriggered = true;
+		hoodLimitSwitchTriggered = true;
 		// }
 	}
 

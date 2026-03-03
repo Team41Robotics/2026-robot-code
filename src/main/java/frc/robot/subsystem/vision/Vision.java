@@ -1,15 +1,19 @@
 package frc.robot.subsystem.vision;
 
 import static frc.robot.RobotContainer.*;
+import static java.lang.Math.*;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystem.drive.SwerveDrive;
 import java.util.List;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
@@ -19,7 +23,18 @@ import org.photonvision.common.dataflow.structures.ReusablePacket;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 public class Vision extends SubsystemBase {
-	public VisionHW[] cameras = new VisionHW[] {new VisionHW("TODO", new Transform3d())};
+	public VisionHW[] cameras = new VisionHW[] {
+		new VisionHW(
+				"DuckyNE",
+				new Transform3d(
+						new Translation3d(SwerveDrive.ROBOT_LEN / 2, -SwerveDrive.ROBOT_WID / 2, 0.17),
+						new Rotation3d(0, -20. / 180. * PI, 0))),
+		new VisionHW(
+				"DuckySE",
+				new Transform3d(
+						new Translation3d(-SwerveDrive.ROBOT_LEN / 2, -SwerveDrive.ROBOT_WID / 2, 0.17),
+						new Rotation3d(0, -20. / 180. * PI, 180)))
+	};
 	public VisionInputsAutoLogged[] inputs = new VisionInputsAutoLogged[cameras.length];
 	public PhotonPoseEstimator[] poseEsts = new PhotonPoseEstimator[cameras.length];
 
@@ -61,36 +76,61 @@ public class Vision extends SubsystemBase {
 				Pose2d visionPose = null;
 				String method = "none";
 
-				Optional<EstimatedRobotPose> estPose = poseEsts[i].estimateConstrainedSolvepnpPose(
-						result,
-						cam.cam.getCameraMatrix().orElseThrow(),
-						cam.cam.getDistCoeffs().orElseThrow(),
-						new Pose3d(drive.pose),
-						false,
-						1);
-				if (estPose.isPresent()) {
-					visionPose = estPose.get().estimatedPose.toPose2d();
+				Optional<EstimatedRobotPose> constrainedPnPpose;
+				try {
+					constrainedPnPpose = poseEsts[i].estimateConstrainedSolvepnpPose(
+							result,
+							cam.cam.getCameraMatrix().orElseThrow(),
+							cam.cam.getDistCoeffs().orElseThrow(),
+							new Pose3d(drive.pose),
+							false,
+							1);
+				} catch (Exception e) {
+					constrainedPnPpose = Optional.empty();
+					System.out.println("Constrained PnP failed for " + cam.name + ": " + e.getMessage());
+				}
+				Optional<EstimatedRobotPose> coprocPnPpose;
+				try {
+					coprocPnPpose = poseEsts[i].estimateCoprocMultiTagPose(result);
+				} catch (Exception e) {
+					coprocPnPpose = Optional.empty();
+					System.out.println("Co-processor PnP failed for " + cam.name + ": " + e.getMessage());
+				}
+				Optional<EstimatedRobotPose> pnpDistTrigPose;
+				try {
+					pnpDistTrigPose = poseEsts[i].estimatePnpDistanceTrigSolvePose(result);
+				} catch (Exception e) {
+					pnpDistTrigPose = Optional.empty();
+					System.out.println("PnP Distance+Trig failed for " + cam.name + ": " + e.getMessage());
+				}
+
+				Logger.recordOutput(
+						"/Vision/" + cam.name + "/constrainedPnPPose",
+						constrainedPnPpose.isPresent() ? constrainedPnPpose.get().estimatedPose : null);
+				Logger.recordOutput(
+						"/Vision/" + cam.name + "/coprocPnPPose",
+						coprocPnPpose.isPresent() ? coprocPnPpose.get().estimatedPose : null);
+				Logger.recordOutput(
+						"/Vision/" + cam.name + "/pnpDistTrigPose",
+						pnpDistTrigPose.isPresent() ? pnpDistTrigPose.get().estimatedPose : null);
+
+				if (constrainedPnPpose.isPresent()) {
+					visionPose = constrainedPnPpose.get().estimatedPose.toPose2d();
 					method = "constrainedPnP";
-				} else {
-					estPose = poseEsts[i].estimateCoprocMultiTagPose(result);
-					if (estPose.isPresent() && result.targets.size() >= 2) {
-						visionPose = estPose.get().estimatedPose.toPose2d();
-						method = "multiTag";
-					} else {
-						estPose = poseEsts[i].estimatePnpDistanceTrigSolvePose(result);
-						if (estPose.isPresent()) {
-							visionPose = estPose.get().estimatedPose.toPose2d();
-							method = "pnpDistTrig";
-						}
-					}
+				} else if (coprocPnPpose.isPresent() && result.targets.size() >= 1) {
+					visionPose = coprocPnPpose.get().estimatedPose.toPose2d();
+					method = "multiTag";
+				} else if (pnpDistTrigPose.isPresent()) {
+					visionPose = pnpDistTrigPose.get().estimatedPose.toPose2d();
+					method = "pnpDistTrig";
 				}
 
 				Logger.recordOutput("/Vision/" + cam.name + "/nTargets", result.targets.size());
 				Logger.recordOutput("/Vision/" + cam.name + "/method", method);
 
 				if (visionPose != null && enabled) {
-					drive.poseEst.addVisionMeasurement(
-							visionPose, result.getTimestampSeconds(), VecBuilder.fill(0.75, 0.75, 0.9));
+					// drive.poseEst.addVisionMeasurement(
+							// visionPose, result.getTimestampSeconds(), VecBuilder.fill(0.75, 0.75, 0.9));
 					Logger.recordOutput("/Vision/" + cam.name + "/estimatedPose", visionPose);
 				}
 			}

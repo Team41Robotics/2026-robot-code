@@ -90,14 +90,13 @@ public class IntakeHW {
 
 		if (!Robot.isReal()) return;
 
-		jointSparkMax
-				.getClosedLoopController()
-				.setSetpoint(
-						jointPosition,
-						ControlType.kPosition,
-						ClosedLoopSlot.kSlot0,
-						JOINT_kG * cos(inputs.jointPosRadians));
-		jointSparkMax.getClosedLoopController().setSetpoint(jointPosition, ControlType.kPosition);
-		intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
+		// jointSparkMax
+		// 		.getClosedLoopController()
+		// 		.setSetpoint(
+		// 				jointPosition,
+		// 				ControlType.kPosition,
+		// 				ClosedLoopSlot.kSlot0,
+		// 				JOINT_kG * cos(inputs.jointPosRadians));
+		// intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
 	}
 }

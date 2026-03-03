@@ -54,7 +54,7 @@ public class SwerveHW {
 		driveConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		driveTalonFX.getConfigurator().apply(driveConfig);
 		driveTalonFX.clearStickyFaults();
-		driveTalonFX.setPosition(0);
+		driveTalonFX.setPosition(0, 0);
 		driveTalonFX.setNeutralMode(NeutralModeValue.Coast);
 
 		turnTalonFX = new TalonFX(config.turnMotorId, driveBus);

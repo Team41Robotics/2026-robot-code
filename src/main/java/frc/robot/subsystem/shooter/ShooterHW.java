@@ -28,12 +28,12 @@ public class ShooterHW {
 	public static final double HOOD_kI = 96.0;
 	public static final double HOOD_kD = 0.0; // TUNEME
 
-	public static final double FLYWHEEL_kP = 0.63934; // TUNEME
+	public static final double FLYWHEEL_kP = 0.17662; // TUNEME
 	public static final double FLYWHEEL_kD = 0; // TUNEME
 	public static final double FLYWHEEL_kV = 0.11494;
 	public static final double FLYWHEEL_kS = 0.24333;
 
-	public static final double TURRET_START_POS = -PI / 2;
+	public static final double TURRET_START_POS = -PI;
 	public static double K = PI - 14 / 180.0 * PI;
 	public static double ENCODER_LIM_POS1RIGHT = angleModulus(-(-95.3 - 95.903) / 180.0 * PI + K);
 	public static double ENCODER_LIM_POS1LEFT = angleModulus(-(-87.7 - 95.903) / 180.0 * PI + K);
@@ -90,7 +90,7 @@ public class ShooterHW {
 		turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		turretTalonFX.getConfigurator().apply(turretConfig);
 		turretTalonFX.clearStickyFaults();
-		turretTalonFX.setPosition(0);
+		turretTalonFX.setPosition(0, 0);
 		turretTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
 		turretLimitSwitch = new DigitalInput(0);
@@ -109,7 +109,7 @@ public class ShooterHW {
 		hoodConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		hoodTalonFX.getConfigurator().apply(hoodConfig);
 		hoodTalonFX.clearStickyFaults();
-		hoodTalonFX.setPosition(0);
+		hoodTalonFX.setPosition(0, 0);
 		hoodTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
 		hoodLimitSwitch = new DigitalInput(1);
@@ -173,7 +173,7 @@ public class ShooterHW {
 			if (ENCODER_LIM_POS3LEFT < inputs.turretPosRadians && inputs.turretPosRadians < ENCODER_LIM_POS3RIGHT) {
 				bestPos = inputs.turretPosRadians;
 			}
-			turretTalonFX.setPosition(bestPos);
+			turretTalonFX.setPosition(bestPos, 0);
 			inputs.turretPosRadians = bestPos;
 		}
 
@@ -186,7 +186,7 @@ public class ShooterHW {
 		inputs.isHoodLimitSwitchOn = !hoodLimitSwitch.get();
 		inputs.hoodPosRadians = hoodTalonFX.getPosition().getValueAsDouble();
 		if (inputs.isHoodLimitSwitchOn) {
-			hoodTalonFX.setPosition(0);
+			hoodTalonFX.setPosition(0, 0);
 			inputs.hoodPosRadians = 0;
 		}
 

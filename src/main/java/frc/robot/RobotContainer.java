@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.autos.Autos;
+import frc.robot.commands.autos.StupidShootAuto;
 import frc.robot.commands.drive.DrivePIDTestCommand;
 import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
@@ -21,6 +22,7 @@ import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.intake.IntakeUp;
 import frc.robot.commands.shooter.ShooterIdle;
+import frc.robot.commands.shooter.ShooterStartup;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.XboxControls;
 import frc.robot.subsystem.drive.SwerveDrive;
@@ -56,16 +58,16 @@ public class RobotContainer {
 
 	public static void init() {
 		imu.init();
-		vision.init();
 		intake.init();
 		shooter.init();
 		indexer.init();
 		leds.init();
-
 		drive.init(new Pose2d());
+		vision.init();
+
 		// drive.setDefaultCommand(new FieldOrientedDrive());
-		drive.setDefaultCommand(new RobotOrientedDrive());
-		shooter.setDefaultCommand(new ShooterIdle());
+		// drive.setDefaultCommand(new RobotOrientedDrive());
+		// shooter.setDefaultCommand(new ShooterIdle());
 		intake.setDefaultCommand(new IntakeUp());
 
 		controls.shoot().onTrue(new PrintSwervePos());
@@ -88,6 +90,8 @@ public class RobotContainer {
 
 		SmartDashboard.putData("RunIndexer", new RunIndexer());
 
+		SmartDashboard.putData("StupidShootAuto", new StupidShootAuto());
+
 		// controls.shoot().whileTrue(new RunIndexer());
 		controls.intake().whileTrue(new IntakeDown());
 		controls.shoot().whileTrue(new RunIndexer());
@@ -106,8 +110,8 @@ public class RobotContainer {
 		intake.sense();
 		shooter.sense();
 		indexer.sense();
-		leds.sense();
 		vision.sense();
+		// leds.sense();
 
 		CommandScheduler.getInstance().run();
 
@@ -120,7 +124,7 @@ public class RobotContainer {
 		intake.actuate();
 		shooter.actuate();
 		indexer.actuate();
-		leds.actuate();
+		// leds.actuate();
 	}
 
 	public static boolean isRed() {

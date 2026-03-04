@@ -121,7 +121,7 @@ public class ShooterHW {
 		turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		turretTalonFX.getConfigurator().apply(turretConfig);
 		turretTalonFX.clearStickyFaults();
-		turretTalonFX.setPosition(0);
+		turretTalonFX.setPosition(TURRET_START_POS);
 		turretTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
 		turretLimitSwitch = new DigitalInput(0);

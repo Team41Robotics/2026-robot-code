@@ -15,7 +15,7 @@ public class StupidShootAuto extends SequentialCommandGroup {
 				new ShooterStartup(),
 				new InstantCommand(() -> {
 					shooter.targetTurretPos = 0.468;
-					shooter.targetFlywheelRPM = 1500;
+					shooter.targetFlywheelRPM = 2056; // TUNEME
 					shooter.targetHoodPos = 10 / 180.0 * PI;
 				}),
 				new WaitCommand(5),

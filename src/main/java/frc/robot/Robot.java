@@ -15,7 +15,7 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
-public class Robot extends LoggedRobot { // TODO TODO LOOP OVERRUN
+public class Robot extends LoggedRobot {
 	public MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
 	public List<GarbageCollectorMXBean> gcBeans = ManagementFactory.getGarbageCollectorMXBeans();
 	public long prevGcCount = 0;

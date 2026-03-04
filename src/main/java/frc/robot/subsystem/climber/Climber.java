@@ -8,6 +8,7 @@ public class Climber extends SubsystemBase {
 	public ClimberInputsAutoLogged inputs = new ClimberInputsAutoLogged();
 
 	public double targetVoltage = 0;
+	public double actuatorTargetVoltage = 0;
 
 	public void init() {
 		hw.init();
@@ -20,6 +21,6 @@ public class Climber extends SubsystemBase {
 	}
 
 	public void actuate() {
-		hw.actuate(targetVoltage);
+		hw.actuate(targetVoltage, actuatorTargetVoltage);
 	}
 }

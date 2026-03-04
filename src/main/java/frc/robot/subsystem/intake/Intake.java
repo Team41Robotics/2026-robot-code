@@ -14,7 +14,7 @@ public class Intake extends SubsystemBase {
 	public IntakeHW hw = new IntakeHW();
 	public IntakeInputsAutoLogged inputs = new IntakeInputsAutoLogged();
 
-	public static final double JOINT_MIN = 0; // TUNEME
+	public static final double JOINT_MIN = 0;
 	public static final double JOINT_MAX = 135 / 180.0 * PI;
 
 	public double targetJointPosition = 0;

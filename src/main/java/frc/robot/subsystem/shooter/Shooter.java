@@ -7,15 +7,17 @@ import static java.lang.Math.*;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.shooter.ShooterStartup;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
 	public ShooterHW hw = new ShooterHW();
 	public ShooterInputsAutoLogged inputs = new ShooterInputsAutoLogged();
 
-	public static final double TURRET_POS_MIN = -PI / 2; // TUNEME
-	public static final double TURRET_POS_MAX = PI / 2;
+	public static final double TURRET_POS_MIN = -2.029; // TUNEME
+	public static final double TURRET_POS_MAX = 1.087;
 	public static final double HOOD_POS_MIN = 0; //  TUNEME
 	public static final double HOOD_POS_MAX = 35 / 180.0 * Math.PI;
 
@@ -34,6 +36,8 @@ public class Shooter extends SubsystemBase {
 	public double targetHoodPos = 0;
 	public double targetFlywheelRPM = 0;
 
+	public boolean zeroed = false;
+
 	public void init() {
 		hw.init();
 		sense();
@@ -49,6 +53,9 @@ public class Shooter extends SubsystemBase {
 		if (robot.isDisabled()) {
 			targetHoodPos = inputs.hoodPosRadians;
 			targetTurretPos = inputs.turretPosRadians;
+		}
+		if (!zeroed) {
+			CommandScheduler.getInstance().schedule(new ShooterStartup());
 		}
 	}
 

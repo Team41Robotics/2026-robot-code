@@ -15,7 +15,6 @@ import frc.robot.commands.drive.DrivePIDTestCommand;
 import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
 import frc.robot.commands.drive.FieldSnakeDrive;
-import frc.robot.commands.drive.PrintSwervePos;
 import frc.robot.commands.drive.RobotOrientedDrive;
 import frc.robot.commands.drive.TurnPIDTestCommand;
 import frc.robot.commands.indexer.RunIndexer;
@@ -64,7 +63,7 @@ public class RobotContainer {
 		shooter.init();
 		indexer.init();
 		leds.init();
-		climber.init();
+		// climber.init();
 		drive.init(new Pose2d());
 		vision.init();
 
@@ -72,8 +71,9 @@ public class RobotContainer {
 		// drive.setDefaultCommand(new RobotOrientedDrive());
 		// shooter.setDefaultCommand(new ShooterIdle());
 		intake.setDefaultCommand(new IntakeUp());
+		indexer.setDefaultCommand(new RunIndexer(0.5, 0));
 
-		controls.shoot().onTrue(new PrintSwervePos());
+		// controls.shoot().onTrue(new PrintSwervePos());
 
 		// DriveSysID sysid = new DriveSysID();
 		// TurnSysID sysid = new TurnSysID();
@@ -115,7 +115,7 @@ public class RobotContainer {
 		shooter.sense();
 		indexer.sense();
 		vision.sense();
-		climber.sense();
+		// climber.sense();
 		// leds.sense();
 
 		CommandScheduler.getInstance().run();
@@ -135,7 +135,7 @@ public class RobotContainer {
 		intake.actuate();
 		shooter.actuate();
 		indexer.actuate();
-		climber.actuate();
+		// climber.actuate();
 		// leds.actuate();
 	}
 

@@ -14,6 +14,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -27,12 +29,12 @@ import org.littletonrobotics.junction.Logger;
 
 public class IntakeHW {
 	public static final double JOINT_RATIO = 1.0 / 27.0;
-	public static final double JOINT_kP = 0.6; // TUNEME. joint PID P
-	public static final double JOINT_kI = 0.0002; // TUNEME. joint PID I
-	public static final double JOINT_kD = 12.0; // TUNEME. joint PID D
-	public static final double JOINT_kG = 0.6; // TUNEME, approximately correct
+	public static final double JOINT_kP = 0.6; // TUNEME. joint PID
+	public static final double JOINT_kI = 0.0002;
+	public static final double JOINT_kD = 50.0;
+	public static final double JOINT_kG = 0.6;
 
-	public static final double JOINT_ENCODER_ZERO = 3.005;
+	public static final double JOINT_ENCODER_ZERO = 3.005 + PI / 3;
 
 	public SparkMax jointSparkMax;
 	public RelativeEncoder jointEncoder;
@@ -54,6 +56,7 @@ public class IntakeHW {
 
 		jointSparkMax = new SparkMax(33, MotorType.kBrushless);
 		SparkMaxConfig jointConfig = new SparkMaxConfig();
+		jointConfig.inverted(true);
 		jointConfig.encoder.positionConversionFactor(JOINT_RATIO * 2 * PI);
 		jointConfig.encoder.velocityConversionFactor(JOINT_RATIO * 2 * PI / 60);
 		jointConfig.closedLoop.p(JOINT_kP).i(JOINT_kI).d(JOINT_kD);
@@ -124,13 +127,13 @@ public class IntakeHW {
 
 		if (!Robot.isReal()) return;
 
-		// jointSparkMax
-		// 		.getClosedLoopController()
-		// 		.setSetpoint(
-		// 				jointPosition,
-		// 				ControlType.kPosition,
-		// 				ClosedLoopSlot.kSlot0,
-		// 				JOINT_kG * cos(inputs.jointPosRadians));
-		// intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
+		jointSparkMax
+				.getClosedLoopController()
+				.setSetpoint(
+						jointPosition,
+						ControlType.kPosition,
+						ClosedLoopSlot.kSlot0,
+						JOINT_kG * cos(inputs.jointPosRadians));
+		intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
 	}
 }

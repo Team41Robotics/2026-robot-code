@@ -28,4 +28,14 @@ public class ShooterStartup extends Command {
 	public boolean isFinished() {
 		return turretLimitSwitchTriggered && hoodLimitSwitchTriggered;
 	}
+
+	@Override
+	public void end(boolean interrupted) {
+		if (!interrupted) {
+			shooter.zeroed = true;
+		}
+		shooter.targetFlywheelRPM = 0;
+		shooter.targetTurretPos = shooter.inputs.turretPosRadians;
+		shooter.targetHoodPos = shooter.inputs.hoodPosRadians;
+	}
 }

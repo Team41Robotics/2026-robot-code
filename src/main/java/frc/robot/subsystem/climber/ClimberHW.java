@@ -6,6 +6,12 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -24,6 +30,9 @@ public class ClimberHW {
 	public DigitalInput limitSwitchTop;
 	public DigitalInput limitSwitchBottom;
 
+	public SparkMax actuator;
+	public DigitalInput limitSwitchActuator;
+
 	// Cached StatusSignals
 	public StatusSignal<Angle> position;
 	public StatusSignal<AngularVelocity> velocity;
@@ -40,6 +49,12 @@ public class ClimberHW {
 		leader.setNeutralMode(NeutralModeValue.Brake);
 		follower.setNeutralMode(NeutralModeValue.Brake);
 		follower.setControl(new Follower(60, MotorAlignmentValue.Aligned));
+
+		actuator = new SparkMax(62, MotorType.kBrushed); // TODO: CAN ID
+		SparkMaxConfig actuatorConfig = new SparkMaxConfig();
+		actuatorConfig.idleMode(IdleMode.kBrake);
+		actuator.configure(actuatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+		limitSwitchActuator = new DigitalInput(2); // TODO: DIO port
 
 		// Initialize cached signals
 		position = leader.getPosition(false);
@@ -72,10 +87,16 @@ public class ClimberHW {
 
 		inputs.limitTop = !limitSwitchTop.get();
 		inputs.limitBottom = !limitSwitchBottom.get();
+
+		inputs.actuatorVoltageVolts = actuator.getBusVoltage() * actuator.getAppliedOutput();
+		inputs.actuatorCurrentAmps = actuator.getOutputCurrent();
+		inputs.limitActuator = !limitSwitchActuator.get();
 	}
 
-	public void actuate(double targetVoltage) {
+	public void actuate(double targetVoltage, double actuatorTargetVoltage) {
 		leader.setVoltage(targetVoltage);
+		actuator.setVoltage(actuatorTargetVoltage);
 		Logger.recordOutput("Climber/targetVoltage", targetVoltage);
+		Logger.recordOutput("Climber/actuatorTargetVoltage", actuatorTargetVoltage);
 	}
 }

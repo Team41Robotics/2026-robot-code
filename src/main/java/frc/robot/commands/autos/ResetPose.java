@@ -2,10 +2,10 @@ package frc.robot.commands.autos;
 
 import static frc.robot.RobotContainer.*;
 
-import frc.robot.Util;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Util;
 
 public class ResetPose extends Command {
 	public Pose2d pose;

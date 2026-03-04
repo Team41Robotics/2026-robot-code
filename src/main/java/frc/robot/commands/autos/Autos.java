@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.choreo.ChoreoTraj;
 import frc.robot.choreo.ChoreoVars;
 import frc.robot.commands.indexer.RunIndexer;
@@ -78,11 +79,21 @@ public class Autos {
 		return routine;
 	}
 
+	public static AutoRoutine simpleDepotAuto() {
+		AutoRoutine routine = factory.newRoutine("SimpleDepotAuto");
+		routine.active().onTrue(new SimpleDepotAuto());
+		return routine;
+	}
+
 	public static AutoRoutine depotAuto() {
 		AutoRoutine routine = factory.newRoutine("DepotAuto");
 		AutoTrajectory traj = ChoreoTraj.DepotAuto.asAutoTraj(routine);
 
-		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
+		routine.active()
+				.onTrue(Commands.sequence(
+						new ShooterStartup(),
+						traj.cmd(),
+						new ParallelCommandGroup(new IntakeDown(), new ShootOnTheFly(), new RunIndexer())));
 		traj.active().whileTrue(new IntakeDown());
 		traj.active().whileTrue(new ShootOnTheFly());
 		traj.active().whileTrue(new RunIndexer());

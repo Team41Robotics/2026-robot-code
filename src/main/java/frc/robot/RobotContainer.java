@@ -126,6 +126,7 @@ public class RobotContainer {
 		Autos.init();
 		autoChooser.addRoutine("TestPath", Autos::testPath);
 		autoChooser.addRoutine("StupidShootAuto", Autos::stupidShootAuto);
+		autoChooser.addRoutine("SimpleDepotAuto", Autos::simpleDepotAuto);
 
 		SmartDashboard.putData("AutoChooser", autoChooser);
 		SmartDashboard.putData("StartPoseChooser", Autos.startPoseChooser);

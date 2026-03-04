@@ -39,7 +39,7 @@ public class ShooterHW {
 	public static final double FLYWHEEL_kV = 0.11494;
 	public static final double FLYWHEEL_kS = 0.24333;
 
-	public static final double TURRET_START_POS = -PI;
+	public static final double TURRET_START_POS = -2 * PI / 3;
 	public static double K = PI - 14 / 180.0 * PI;
 	public static double ENCODER_LIM_POS1RIGHT = angleModulus(-(-95.3 - 95.903) / 180.0 * PI + K);
 	public static double ENCODER_LIM_POS1LEFT = angleModulus(-(-87.7 - 95.903) / 180.0 * PI + K);

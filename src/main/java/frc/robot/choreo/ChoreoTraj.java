@@ -52,6 +52,13 @@ public record ChoreoTraj(
 	    new Pose2d(3.376, 4.224, Rotation2d.fromRadians(0)),
 	    new Pose2d(2.404, 6.412, Rotation2d.fromRadians(0))
 	);
+	public static final ChoreoTraj DepotAuto = new ChoreoTraj(
+	    "DepotAuto",
+	    OptionalInt.empty(),
+	    2.92084,
+	    new Pose2d(3.672, 6.862, Rotation2d.fromRadians(1.571)),
+	    new Pose2d(0.359, 6.784, Rotation2d.fromRadians(1.545))
+	);
 
     /**
      * A map between trajectory names and their corresponding data.
@@ -61,7 +68,8 @@ public record ChoreoTraj(
     	Map.entry("TestPath", TestPath),
 		Map.entry("TestPath$0", TestPath$0),
 		Map.entry("TestPath$1", TestPath$1),
-		Map.entry("TestPath$2", TestPath$2)
+		Map.entry("TestPath$2", TestPath$2),
+		Map.entry("DepotAuto", DepotAuto)
     );
 
     /**

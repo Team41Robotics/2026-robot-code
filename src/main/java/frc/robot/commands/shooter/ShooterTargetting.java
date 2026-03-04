@@ -26,7 +26,8 @@ public class ShooterTargetting extends Command {
 		Pose2d turretPos = drive.pose.plus(TURRET_POS);
 
 		Translation2d toTarget = target.minus(turretPos.getTranslation());
-		double angleToTarget = atan2(toTarget.getY(), toTarget.getX());
+		double angleToTarget = toTarget.getAngle().getRadians();
+		angleToTarget -= drive.pose.getRotation().getRadians();
 		shooter.targetTurretPos = angleModulus(angleToTarget + PI);
 		shooter.targetTurretVel = -drive.measuredSpeeds.omegaRadiansPerSecond;
 	}

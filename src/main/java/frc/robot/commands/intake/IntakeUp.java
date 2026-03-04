@@ -6,8 +6,8 @@ import static java.lang.Math.*;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class IntakeUp extends Command {
-	public static final double LOW_VOLTAGE = 3.0; // TUNEME. low intake voltage (V)
-	public static final double UP_POSITION = 80 / 180.0 * PI; // TUNEME. joint up position (radians)
+	public static final double LOW_VOLTAGE = 1.0; // TUNEME. low intake voltage (V)
+	public static final double UP_POSITION = 80 / 180.0 * PI;
 
 	public IntakeUp() {
 		addRequirements(intake);

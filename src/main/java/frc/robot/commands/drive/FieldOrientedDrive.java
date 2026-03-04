@@ -32,7 +32,7 @@ public class FieldOrientedDrive extends Command {
 				v * sin(theta) * drive.MAX_VEL * speedMul,
 				wc * drive.MAX_W * wMul);
 
-		Rotation2d heading = drive.rot; // TODO verify correctness
+		Rotation2d heading = drive.rot;
 		if (isRed()) heading = heading.plus(Rotation2d.kPi);
 
 		return ChassisSpeeds.fromFieldRelativeSpeeds(speeds, heading);

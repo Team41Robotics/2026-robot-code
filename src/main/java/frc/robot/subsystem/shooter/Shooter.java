@@ -21,13 +21,11 @@ public class Shooter extends SubsystemBase {
 	// TODO MATCH HOOD POS WITH REAL INCLINE
 	public static final double HOOD_POS_MAX = 35 / 180.0 * Math.PI;
 
-	// public static final Constraints TURRET_CONSTRAINTS = new Constraints(3.0, 48.0); // TUNEME
-	public static final Constraints TURRET_CONSTRAINTS = new Constraints(1e9, 1e9);
+	public static final Constraints TURRET_CONSTRAINTS = new Constraints(3.0, 48.0); // TUNEME
 	public static TrapezoidProfile turretProfile = new TrapezoidProfile(TURRET_CONSTRAINTS);
 	public State turretSetpoint = new State();
 
-	// public static final Constraints HOOD_CONSTRAINTS = new Constraints(2.0, 16.0); // TUNEME
-	public static final Constraints HOOD_CONSTRAINTS = new Constraints(1e9, 1e9);
+	public static final Constraints HOOD_CONSTRAINTS = new Constraints(2.0, 16.0); // TUNEME
 	public static TrapezoidProfile hoodProfile = new TrapezoidProfile(HOOD_CONSTRAINTS);
 	public State hoodSetpoint = new State();
 
@@ -61,10 +59,9 @@ public class Shooter extends SubsystemBase {
 
 	public void actuate() {
 		targetTurretPos = angleModulus(targetTurretPos);
-		if(targetTurretPos < TURRET_POS_MIN || targetTurretPos > TURRET_POS_MAX) {
+		if (targetTurretPos < TURRET_POS_MIN || targetTurretPos > TURRET_POS_MAX) {
 			turretSetpoint = new State(inputs.turretPosRadians, 0);
-		}
-		else {
+		} else {
 			State turretGoal = new State(targetTurretPos, targetTurretVel);
 			turretSetpoint = turretProfile.calculate(LOOP_PERIOD, turretSetpoint, turretGoal);
 		}

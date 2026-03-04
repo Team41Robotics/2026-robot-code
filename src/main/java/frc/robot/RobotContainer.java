@@ -31,7 +31,7 @@ import frc.robot.commands.shooter.ShooterStartup;
 import frc.robot.commands.shooter.ShooterTargetting;
 import frc.robot.subsystem.climber.Climber;
 import frc.robot.subsystem.controls.Controls;
-import frc.robot.subsystem.controls.XboxControls;
+import frc.robot.subsystem.controls.JoystickControls;
 import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;
 import frc.robot.subsystem.indexer.Indexer;
@@ -44,8 +44,8 @@ import frc.robot.subsystem.vision.Vision;
 public class RobotContainer {
 	public static final double LOOP_PERIOD = 0.020;
 
-	// public static Controls controls = new JoystickControls();
-	public static Controls controls = new XboxControls();
+	public static Controls controls = new JoystickControls();
+	// public static Controls controls = new XboxControls();
 
 	public static Robot robot;
 	public static CANBus driveBus = new CANBus("Ducky");

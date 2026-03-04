@@ -92,6 +92,7 @@ public class Vision extends SubsystemBase {
 			Logger.processInputs("/Vision/" + cam.name, input);
 			decodePackets[i].setData(input.data);
 			List<PhotonPipelineResult> results = decodePackets[i].decodeList(PhotonPipelineResult.photonStruct);
+			// System.out.println("Camera " + cam.name + " sees " + results.size() + " targets");
 
 			poseEsts[i].addHeadingData(Timer.getTimestamp(), drive.rot);
 
@@ -143,12 +144,12 @@ public class Vision extends SubsystemBase {
 						"/Vision/" + cam.name + "/pnpDistTrigPose",
 						pnpDistTrigPose.isPresent() ? pnpDistTrigPose.get().estimatedPose : null);
 
-				if (sane(pnpDistTrigPose) && enablePnpDistTrig) {
-					visionPose = pnpDistTrigPose.get().estimatedPose.toPose2d();
-					method = "pnpDistTrig";
-				} else if (sane(constrainedPnPpose) && enableConstrainedPnP) {
+				if (sane(constrainedPnPpose) && enableConstrainedPnP) {
 					visionPose = constrainedPnPpose.get().estimatedPose.toPose2d();
 					method = "constrainedPnP";
+				} else if (sane(pnpDistTrigPose) && enablePnpDistTrig) {
+					visionPose = pnpDistTrigPose.get().estimatedPose.toPose2d();
+					method = "pnpDistTrig";
 				} else if (sane(coprocPnPpose) && result.targets.size() >= 2 && enableMultiTag) {
 					visionPose = coprocPnPpose.get().estimatedPose.toPose2d();
 					method = "multiTag";
@@ -165,7 +166,7 @@ public class Vision extends SubsystemBase {
 							cov = Util.buildCov(0.5, 0.5, 0.7);
 							break;
 						case "multiTag":
-							cov = Util.buildCov(0.9, 0.9, 1.2);
+							cov = Util.buildCov(0.9, 0.9, enableHeading ? 1.2 : 0.01);
 							break;
 						case "pnpDistTrig":
 							cov = Util.buildCov(0.6, 0.6, 6.0);

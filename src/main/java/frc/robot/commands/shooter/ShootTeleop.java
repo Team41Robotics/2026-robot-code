@@ -4,24 +4,18 @@ import static edu.wpi.first.math.MathUtil.*;
 import static frc.robot.RobotContainer.*;
 import static java.lang.Math.*;
 
+import frc.robot.Util;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.FieldConstants;
-import frc.robot.Util;
 import frc.robot.commands.shooter.Targetting.ShotParameters;
 import org.littletonrobotics.junction.Logger;
 
-public class StaticShootAtTarget extends Command {
+public class ShootTeleop extends Command {
 	public Translation2d origTarget, target;
 
-	public StaticShootAtTarget() {
-		this(FieldConstants.Hub.topCenterPoint.toTranslation2d());
-	}
-
-	public StaticShootAtTarget(Translation2d target) {
-		this.origTarget = target;
+	public ShootTeleop() {
 		addRequirements(shooter);
 	}
 
@@ -32,18 +26,19 @@ public class StaticShootAtTarget extends Command {
 
 	@Override
 	public void execute() {
-		double fieldAngle = Targetting.shotAngle(target);
+		Translation2d virtualTarget = Targetting.shootOnTheFly(target);
+		double fieldAngle = Targetting.shotAngle(virtualTarget);
 		shooter.targetTurretPos =
 				angleModulus(fieldAngle - drive.pose.getRotation().getRadians() + PI);
 		shooter.targetTurretVel = -drive.measuredSpeeds.omegaRadiansPerSecond;
 
-		double distance = Targetting.targetRelative(target).getNorm();
+		double distance = Targetting.targetRelative(virtualTarget).getNorm();
 		ShotParameters params = Targetting.shotSpeeds(distance);
 		shooter.targetFlywheelRPM = params.flywheelRPM();
 		shooter.targetHoodPos = params.hoodAngle();
 
-		Logger.recordOutput("/Targetting/targetPose", target);
-		field.getObject("shootTarget").setPose(new Pose2d(target, new Rotation2d()));
+		Logger.recordOutput("/Targetting/targetPose", virtualTarget);
+		field.getObject("shootTarget").setPose(new Pose2d(virtualTarget, new Rotation2d()));
 	}
 
 	@Override

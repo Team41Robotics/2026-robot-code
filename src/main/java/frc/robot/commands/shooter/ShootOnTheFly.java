@@ -9,19 +9,25 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.FieldConstants;
+import frc.robot.Util;
 import frc.robot.commands.shooter.Targetting.ShotParameters;
 import org.littletonrobotics.junction.Logger;
 
 public class ShootOnTheFly extends Command {
-	public Translation2d target;
+	public Translation2d origTarget, target;
 
 	public ShootOnTheFly() {
 		this(FieldConstants.Hub.topCenterPoint.toTranslation2d());
 	}
 
 	public ShootOnTheFly(Translation2d target) {
-		this.target = target;
+		this.origTarget = target;
 		addRequirements(shooter);
+	}
+
+	@Override
+	public void initialize() {
+		target = Util.flipIfRed(origTarget);
 	}
 
 	@Override

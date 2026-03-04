@@ -1,9 +1,9 @@
 package frc.robot.commands.autos;
 
 import static frc.robot.RobotContainer.*;
-import static frc.robot.Util.*;
 import static java.lang.Math.*;
 
+import frc.robot.Util;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
@@ -35,8 +35,8 @@ public class DriveForward extends Command {
 
 	@Override
 	public void initialize() {
-		this.theta = flipIfRed(origTheta);
-		Translation2d flipped = flipIfRed(new Translation2d(origX, origY));
+		this.theta = Util.flipIfRed(origTheta);
+		Translation2d flipped = Util.flipIfRed(new Translation2d(origX, origY));
 		this.x = flipped.getX();
 		this.y = flipped.getY();
 		startTime = Timer.getTimestamp();

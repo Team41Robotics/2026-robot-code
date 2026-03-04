@@ -2,9 +2,9 @@ package frc.robot.commands.autos;
 
 import static edu.wpi.first.math.MathUtil.*;
 import static frc.robot.RobotContainer.*;
-import static frc.robot.Util.*;
 import static java.lang.Math.*;
 
+import frc.robot.Util;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -36,7 +36,7 @@ public class TurnAngle extends Command {
 
 	@Override
 	public void initialize() {
-		targetAngle = flipIfRed(origTargetAngle);
+		targetAngle = Util.flipIfRed(origTargetAngle);
 		setpointHeading = new State(drive.rot.getRadians(), 0);
 	}
 

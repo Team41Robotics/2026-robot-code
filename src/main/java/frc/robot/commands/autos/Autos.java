@@ -69,4 +69,10 @@ public class Autos {
 
 		return routine;
 	}
+
+	public static AutoRoutine stupidShootAuto() {
+		AutoRoutine routine = factory.newRoutine("StupidShootAuto");
+		routine.active().onTrue(new StupidShootAuto());
+		return routine;
+	}
 }

@@ -2,7 +2,6 @@ package frc.robot.subsystem.shooter;
 
 import static edu.wpi.first.math.MathUtil.*;
 import static frc.robot.RobotContainer.*;
-import static java.lang.Math.*;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -19,6 +18,7 @@ public class Shooter extends SubsystemBase {
 	public static final double TURRET_POS_MIN = -2.029; // TUNEME
 	public static final double TURRET_POS_MAX = 1.087;
 	public static final double HOOD_POS_MIN = 0; //  TUNEME
+	// TODO MATCH HOOD POS WITH REAL INCLINE
 	public static final double HOOD_POS_MAX = 35 / 180.0 * Math.PI;
 
 	// public static final Constraints TURRET_CONSTRAINTS = new Constraints(3.0, 48.0); // TUNEME

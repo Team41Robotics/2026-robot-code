@@ -15,7 +15,7 @@ public class Util {
 
 	public static double deadband(double x, double db) {
 		if (abs(x) < db) return 0;
-		return copySign(((abs(x) - db) / (1 - db)), x);
+		return copySign((abs(x) - db) / (1 - db), x);
 	}
 
 	public static double squareCurve(double x) {

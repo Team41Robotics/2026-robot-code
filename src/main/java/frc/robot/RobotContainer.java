@@ -11,15 +11,24 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.autos.Autos;
 import frc.robot.commands.autos.StupidShootAuto;
+import frc.robot.commands.climber.Climb;
+import frc.robot.commands.climber.ClimberDown;
+import frc.robot.commands.climber.ClimberUp;
+import frc.robot.commands.climber.PrepareClimb;
 import frc.robot.commands.drive.DrivePIDTestCommand;
 import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
 import frc.robot.commands.drive.FieldSnakeDrive;
+import frc.robot.commands.drive.PrintSwervePos;
 import frc.robot.commands.drive.RobotOrientedDrive;
 import frc.robot.commands.drive.TurnPIDTestCommand;
 import frc.robot.commands.indexer.RunIndexer;
+import frc.robot.commands.indexer.StopIndexer;
 import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.intake.IntakeUp;
+import frc.robot.commands.shooter.ShooterIdle;
+import frc.robot.commands.shooter.ShooterStartup;
+import frc.robot.commands.shooter.ShooterTargetting;
 import frc.robot.subsystem.climber.Climber;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.XboxControls;
@@ -92,15 +101,28 @@ public class RobotContainer {
 		SmartDashboard.putData("IntakeUp", new IntakeUp());
 
 		SmartDashboard.putData("RunIndexer", new RunIndexer());
+		SmartDashboard.putData("StopIndexer", new StopIndexer());
+
+		SmartDashboard.putData("ShooterIdle", new ShooterIdle());
+		SmartDashboard.putData("ShooterStartup", new ShooterStartup());
+		SmartDashboard.putData("ShooterTargetting", new ShooterTargetting());
+
+		SmartDashboard.putData("PrintSwervePos", new PrintSwervePos());
+
+		SmartDashboard.putData("Climb", new Climb());
+		SmartDashboard.putData("ClimberUp", new ClimberUp());
+		SmartDashboard.putData("ClimberDown", new ClimberDown());
+		SmartDashboard.putData("PrepareClimb", new PrepareClimb());
 
 		SmartDashboard.putData("StupidShootAuto", new StupidShootAuto());
 
-		// controls.shoot().whileTrue(new RunIndexer());
 		controls.intake().whileTrue(new IntakeDown());
 		controls.shoot().whileTrue(new RunIndexer());
 
 		Autos.init();
 		autoChooser.addRoutine("TestPath", Autos::testPath);
+		autoChooser.addRoutine("StupidShootAuto", Autos::stupidShootAuto);
+
 		SmartDashboard.putData("AutoChooser", autoChooser);
 		SmartDashboard.putData("StartPoseChooser", Autos.startPoseChooser);
 

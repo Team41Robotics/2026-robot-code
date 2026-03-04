@@ -18,8 +18,8 @@ import frc.robot.commands.climber.PrepareClimb;
 import frc.robot.commands.drive.DrivePIDTestCommand;
 import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
-import frc.robot.commands.drive.NoDrive;
 import frc.robot.commands.drive.FieldSnakeDrive;
+import frc.robot.commands.drive.NoDrive;
 import frc.robot.commands.drive.PrintSwervePos;
 import frc.robot.commands.drive.RobotOrientedDrive;
 import frc.robot.commands.drive.TurnPIDTestCommand;
@@ -27,9 +27,10 @@ import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.indexer.StopIndexer;
 import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.intake.IntakeUp;
+import frc.robot.commands.shooter.ShootOnTheFly;
 import frc.robot.commands.shooter.ShooterIdle;
 import frc.robot.commands.shooter.ShooterStartup;
-import frc.robot.commands.shooter.ShooterTargetting;
+import frc.robot.commands.shooter.StaticShootAtTarget;
 import frc.robot.subsystem.climber.Climber;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.JoystickControls;
@@ -107,7 +108,8 @@ public class RobotContainer {
 
 		SmartDashboard.putData("ShooterIdle", new ShooterIdle());
 		SmartDashboard.putData("ShooterStartup", new ShooterStartup());
-		SmartDashboard.putData("ShooterTargetting", new ShooterTargetting());
+		SmartDashboard.putData("StaticShootAtTarget", new StaticShootAtTarget());
+		SmartDashboard.putData("ShootOnTheFly", new ShootOnTheFly());
 
 		SmartDashboard.putData("PrintSwervePos", new PrintSwervePos());
 

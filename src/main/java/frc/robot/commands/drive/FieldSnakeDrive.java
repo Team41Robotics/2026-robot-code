@@ -46,7 +46,7 @@ public class FieldSnakeDrive extends Command {
 		double speedMul = 1; // TUNEME. speed multiplier/limiter (tune)
 
 		Rotation2d heading = drive.rot;
-		if (isRed()) heading = heading.plus(Rotation2d.kPi);
+		heading = Util.flipIfRed(heading);
 
 		targetTheta = hypot(tx, ty) < TURN_DEADBAND ? (mag < TURN_DEADBAND ? targetTheta : theta) : atan2(ty, tx);
 

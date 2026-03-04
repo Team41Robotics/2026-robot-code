@@ -14,7 +14,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.choreo.ChoreoTraj;
 import frc.robot.choreo.ChoreoVars;
+import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.intake.IntakeDown;
+import frc.robot.commands.shooter.ShootOnTheFly;
 import frc.robot.commands.shooter.ShooterStartup;
 import org.littletonrobotics.junction.Logger;
 
@@ -73,6 +75,18 @@ public class Autos {
 	public static AutoRoutine stupidShootAuto() {
 		AutoRoutine routine = factory.newRoutine("StupidShootAuto");
 		routine.active().onTrue(new StupidShootAuto());
+		return routine;
+	}
+
+	public static AutoRoutine depotAuto() {
+		AutoRoutine routine = factory.newRoutine("DepotAuto");
+		AutoTrajectory traj = ChoreoTraj.DepotAuto.asAutoTraj(routine);
+
+		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
+		traj.active().whileTrue(new IntakeDown());
+		traj.active().whileTrue(new ShootOnTheFly());
+		traj.active().whileTrue(new RunIndexer());
+
 		return routine;
 	}
 }

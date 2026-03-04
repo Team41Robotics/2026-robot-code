@@ -1,22 +1,25 @@
 package frc.robot.commands.autos;
 
 import static frc.robot.RobotContainer.*;
+import static frc.robot.Util.*;
 import static java.lang.Math.*;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.FieldConstants;
 
 public class DriveForward extends Command {
-	public double x, y, theta, dist, speed, maxTime;
+	public double origX, origY, origTheta;
+	public double x, y, theta;
+	public double dist, speed, maxTime;
 	public double startTime;
 
 	public DriveForward(double x, double y, double xf, double yf, double speed, double maxTime) {
 		addRequirements(drive);
-		this.x = x;
-		this.y = y;
-		this.theta = atan2(yf - y, xf - x);
+		this.origX = x;
+		this.origY = y;
+		this.origTheta = atan2(yf - y, xf - x);
 		this.dist = hypot(xf - x, yf - y);
 		this.maxTime = maxTime;
 		this.speed = speed;
@@ -30,17 +33,12 @@ public class DriveForward extends Command {
 		this(x, y, xf, yf, 0.5);
 	}
 
-	public void flip() {
-		this.theta += PI;
-		this.x = FieldConstants.fieldWidth - x;
-		this.y = FieldConstants.fieldLength - y;
-	}
-
 	@Override
 	public void initialize() {
-		if (isRed()) {
-			flip();
-		}
+		this.theta = flipIfRed(origTheta);
+		Translation2d flipped = flipIfRed(new Translation2d(origX, origY));
+		this.x = flipped.getX();
+		this.y = flipped.getY();
 		startTime = Timer.getTimestamp();
 	}
 

@@ -44,7 +44,7 @@ public class FieldHeadingDrive extends Command {
 		double speedMul = 1; // TUNEME. speed multiplier/limiter (tune)
 
 		Rotation2d heading = drive.rot;
-		if (isRed()) heading = heading.plus(Rotation2d.kPi);
+		heading = Util.flipIfRed(heading);
 
 		double targetTheta = hypot(tx, ty) < TURN_DEADBAND ? setpointHeading.position : atan2(ty, tx);
 

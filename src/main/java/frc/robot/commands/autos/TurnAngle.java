@@ -2,6 +2,7 @@ package frc.robot.commands.autos;
 
 import static edu.wpi.first.math.MathUtil.*;
 import static frc.robot.RobotContainer.*;
+import static frc.robot.Util.*;
 import static java.lang.Math.*;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -24,16 +25,18 @@ public class TurnAngle extends Command {
 	public PIDController pid = new PIDController(5, 0, 0); // TUNEME. heading PID (P,I,D)
 
 	public State setpointHeading = new State();
+	public double origTargetAngle;
 	public double targetAngle;
 
 	public TurnAngle(double targetAngle) {
 		addRequirements(drive);
-		this.targetAngle = targetAngle;
+		this.origTargetAngle = targetAngle;
 		pid.enableContinuousInput(-PI, PI);
 	}
 
 	@Override
 	public void initialize() {
+		targetAngle = flipIfRed(origTargetAngle);
 		setpointHeading = new State(drive.rot.getRadians(), 0);
 	}
 

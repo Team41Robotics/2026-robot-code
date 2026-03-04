@@ -28,7 +28,8 @@ public class ShootOnTheFly extends Command {
 	public void execute() {
 		Translation2d virtualTarget = Targetting.shootOnTheFly(target);
 		double fieldAngle = Targetting.shotAngle(virtualTarget);
-		shooter.targetTurretPos = angleModulus(fieldAngle - drive.pose.getRotation().getRadians() + PI);
+		shooter.targetTurretPos =
+				angleModulus(fieldAngle - drive.pose.getRotation().getRadians() + PI);
 		shooter.targetTurretVel = -drive.measuredSpeeds.omegaRadiansPerSecond;
 
 		double distance = Targetting.targetRelative(virtualTarget).getNorm();

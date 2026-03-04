@@ -27,7 +27,8 @@ public class StaticShootAtTarget extends Command {
 	@Override
 	public void execute() {
 		double fieldAngle = Targetting.shotAngle(target);
-		shooter.targetTurretPos = angleModulus(fieldAngle - drive.pose.getRotation().getRadians() + PI);
+		shooter.targetTurretPos =
+				angleModulus(fieldAngle - drive.pose.getRotation().getRadians() + PI);
 		shooter.targetTurretVel = -drive.measuredSpeeds.omegaRadiansPerSecond;
 
 		double distance = Targetting.targetRelative(target).getNorm();

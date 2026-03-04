@@ -106,6 +106,18 @@ public class Vision extends SubsystemBase {
 					continue;
 				}
 
+				// Log seen AprilTag poses for AdvantageScope
+				Pose3d[] seenTagPoses3d = result.targets.stream()
+						.map(t -> TAG_LAYOUT.getTagPose(t.fiducialId))
+						.filter(Optional::isPresent)
+						.map(Optional::get)
+						.toArray(Pose3d[]::new);
+				Pose2d[] seenTagPoses2d = java.util.Arrays.stream(seenTagPoses3d)
+						.map(Pose3d::toPose2d)
+						.toArray(Pose2d[]::new);
+				Logger.recordOutput("/Vision/" + cam.name + "/seenTags3d", seenTagPoses3d);
+				Logger.recordOutput("/Vision/" + cam.name + "/seenTags", seenTagPoses2d);
+
 				Optional<EstimatedRobotPose> constrainedPnPpose;
 				try {
 					constrainedPnPpose = poseEsts[i].estimateConstrainedSolvepnpPose(

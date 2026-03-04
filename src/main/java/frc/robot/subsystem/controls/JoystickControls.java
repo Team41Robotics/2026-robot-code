@@ -47,4 +47,8 @@ public class JoystickControls implements Controls {
 	public Trigger intake() {
 		return leftJoystick.button(1);
 	}
+
+	public Trigger pov(int angle) {
+		return leftJoystick.pov(angle);
+	}
 }

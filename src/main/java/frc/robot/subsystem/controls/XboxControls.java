@@ -47,4 +47,8 @@ public class XboxControls implements Controls {
 	public Trigger intake() {
 		return xbox.leftBumper();
 	}
+
+	public Trigger pov(int angle) {
+		return xbox.pov(angle);
+	}
 }

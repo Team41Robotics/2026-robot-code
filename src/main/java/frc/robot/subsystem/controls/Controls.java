@@ -23,4 +23,6 @@ public interface Controls {
 	public Trigger shoot();
 
 	public Trigger intake();
+
+	public Trigger pov(int angle);
 }

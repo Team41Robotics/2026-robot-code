@@ -72,6 +72,8 @@ public class IntakeHW {
 		TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
 		intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		intakeConfig.CurrentLimits.SupplyCurrentLimit = 60;
+		intakeConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+		intakeConfig.CurrentLimits.StatorCurrentLimit = 120;
 		intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 		intakeTalonFX.getConfigurator().apply(intakeConfig);
 		intakeTalonFX.clearStickyFaults();

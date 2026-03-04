@@ -64,7 +64,7 @@ public class SwerveModule {
 		if (robot.isDisabled()) {
 			targetState = state;
 			setpointAng = new State(inputs.turnAbsPosRadians, inputs.turnVelRadiansPerSec);
-			setpointVel = inputs.driveVelMetersPerSec;
+			setpointVel = 0;
 		}
 	}
 

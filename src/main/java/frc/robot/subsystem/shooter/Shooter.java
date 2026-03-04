@@ -61,9 +61,13 @@ public class Shooter extends SubsystemBase {
 
 	public void actuate() {
 		targetTurretPos = angleModulus(targetTurretPos);
-		targetTurretPos = clamp(targetTurretPos, TURRET_POS_MIN, TURRET_POS_MAX);
-		State turretGoal = new State(targetTurretPos, targetTurretVel);
-		turretSetpoint = turretProfile.calculate(LOOP_PERIOD, turretSetpoint, turretGoal);
+		if(targetTurretPos < TURRET_POS_MIN || targetTurretPos > TURRET_POS_MAX) {
+			turretSetpoint = new State(inputs.turretPosRadians, 0);
+		}
+		else {
+			State turretGoal = new State(targetTurretPos, targetTurretVel);
+			turretSetpoint = turretProfile.calculate(LOOP_PERIOD, turretSetpoint, turretGoal);
+		}
 
 		targetHoodPos = clamp(targetHoodPos, HOOD_POS_MIN, HOOD_POS_MAX);
 		State hoodGoal = new State(targetHoodPos, 0);

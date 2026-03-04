@@ -45,7 +45,7 @@ public class Vision extends SubsystemBase {
 
 	public int nCams = cameras.length;
 	public boolean enabled = true;
-	public boolean enableConstrainedPnP = false;
+	public boolean enableConstrainedPnP = true;
 	public boolean enableMultiTag = true;
 	public boolean enablePnpDistTrig = true;
 	public boolean enableHeading = false;

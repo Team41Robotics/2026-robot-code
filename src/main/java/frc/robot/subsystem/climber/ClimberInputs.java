@@ -9,8 +9,7 @@ public class ClimberInputs {
 	public double voltageVolts;
 	public double currentAmps;
 
-	public boolean limitTop;
-	public boolean limitBottom;
+	public boolean limit;
 
 	public double actuatorVoltageVolts;
 	public double actuatorCurrentAmps;

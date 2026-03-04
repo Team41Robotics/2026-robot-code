@@ -18,6 +18,7 @@ import frc.robot.commands.climber.PrepareClimb;
 import frc.robot.commands.drive.DrivePIDTestCommand;
 import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
+import frc.robot.commands.drive.NoDrive;
 import frc.robot.commands.drive.FieldSnakeDrive;
 import frc.robot.commands.drive.PrintSwervePos;
 import frc.robot.commands.drive.RobotOrientedDrive;
@@ -92,6 +93,7 @@ public class RobotContainer {
 		SmartDashboard.putData("DrivePIDTest", new DrivePIDTestCommand());
 		SmartDashboard.putData("TurnPIDTest", new TurnPIDTestCommand());
 
+		SmartDashboard.putData("NoDrive", new NoDrive());
 		SmartDashboard.putData("RobotOrientedDrive", new RobotOrientedDrive());
 		SmartDashboard.putData("FieldOrientedDrive", new FieldOrientedDrive());
 		SmartDashboard.putData("FieldHeadingDrive", new FieldHeadingDrive());

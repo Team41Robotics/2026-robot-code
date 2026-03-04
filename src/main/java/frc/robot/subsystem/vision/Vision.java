@@ -30,11 +30,6 @@ import org.photonvision.targeting.PhotonPipelineResult;
 public class Vision extends SubsystemBase {
 	public VisionHW[] cameras = new VisionHW[] {
 		new VisionHW(
-				"DuckyNE",
-				new Transform3d(
-						new Translation3d(SwerveDrive.ROBOT_LEN / 2, -SwerveDrive.ROBOT_WID / 2, 0.17),
-						new Rotation3d(0, -20. / 180. * PI, 0))),
-		new VisionHW(
 				"DuckySE",
 				new Transform3d(
 						new Translation3d(-SwerveDrive.ROBOT_LEN / 2, -SwerveDrive.ROBOT_WID / 2, 0.17),

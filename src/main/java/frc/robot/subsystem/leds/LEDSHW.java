@@ -30,7 +30,7 @@ public class LEDSHW {
 	public void init() {
 		if (!Robot.isReal()) return;
 
-		candle = new CANdle(1434); // HACK
+		candle = new CANdle(6);
 
 		CANdleConfiguration config = new CANdleConfiguration();
 		config.LED.BrightnessScalar = 1.0;

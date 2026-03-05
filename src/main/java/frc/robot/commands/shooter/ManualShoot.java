@@ -3,6 +3,7 @@ package frc.robot.commands.shooter;
 import static frc.robot.RobotContainer.*;
 import static java.lang.Math.*;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Util;
 
@@ -23,10 +24,13 @@ public class ManualShoot extends Command {
 		double ly = controls.leftY();
 		double mag = Util.deadband(hypot(lx, ly), DEADBAND);
 
-		shooter.targetFlywheelRPM = mag * 3000 + 1500;
+		// shooter.targetFlywheelRPM = mag * 3000 + 1500;
+		shooter.targetFlywheelRPM = 0;
 
 		if (mag > 0) {
-			shooter.targetTurretPos = atan2(ly, lx);
+			// shooter.targetTurretPos = atan2(lx, ly);
+			shooter.targetTurretPos = shooter.TURRET_POS_MIN
+					+ (shooter.TURRET_POS_MAX - shooter.TURRET_POS_MIN) * (sin(Timer.getTimestamp()) + 1) / 2.;
 		}
 
 		boolean povUp = controls.pov(0).getAsBoolean();

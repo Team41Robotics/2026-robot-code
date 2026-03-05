@@ -17,7 +17,7 @@ public class ShootOnTheFly extends Command {
 	public Translation2d origTarget, target;
 
 	public ShootOnTheFly() {
-		this(FieldConstants.Hub.topCenterPoint.toTranslation2d());
+		this(FieldConstants.Hub.innerCenterPoint.toTranslation2d());
 	}
 
 	public ShootOnTheFly(Translation2d target) {
@@ -44,6 +44,7 @@ public class ShootOnTheFly extends Command {
 		shooter.targetHoodPos = params.hoodAngle();
 
 		Logger.recordOutput("/Targetting/targetPose", virtualTarget);
+		Logger.recordOutput("/Targetting/distance", distance);
 		field.getObject("shootTarget").setPose(new Pose2d(virtualTarget, new Rotation2d()));
 	}
 

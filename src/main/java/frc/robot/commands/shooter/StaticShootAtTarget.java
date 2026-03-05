@@ -17,7 +17,7 @@ public class StaticShootAtTarget extends Command {
 	public Translation2d origTarget, target;
 
 	public StaticShootAtTarget() {
-		this(FieldConstants.Hub.topCenterPoint.toTranslation2d());
+		this(FieldConstants.Hub.innerCenterPoint.toTranslation2d());
 	}
 
 	public StaticShootAtTarget(Translation2d target) {

@@ -16,7 +16,7 @@ import frc.robot.Robot;
 
 public class LEDSHW {
 	public static final int ONBOARD_LED_COUNT = 8;
-	public static final int STRIP_LENGTH = 60; // TUNEME
+	public static final int STRIP_LENGTH = 40; // TUNEME
 	public static final int TOTAL_LED_COUNT = ONBOARD_LED_COUNT + STRIP_LENGTH;
 
 	public CANdle candle;
@@ -30,7 +30,7 @@ public class LEDSHW {
 	public void init() {
 		if (!Robot.isReal()) return;
 
-		candle = new CANdle(1434); // HACK
+		candle = new CANdle(6);
 
 		CANdleConfiguration config = new CANdleConfiguration();
 		config.LED.BrightnessScalar = 1.0;

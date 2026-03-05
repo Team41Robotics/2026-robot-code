@@ -5,7 +5,7 @@ import static frc.robot.RobotContainer.*;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class RunIndexer extends Command {
-	public static final double DEFAULT_SPIN_VOLTAGE = 4.0; // TUNEME
+	public static final double DEFAULT_SPIN_VOLTAGE = 2.0; // TUNEME
 	public static final double DEFAULT_ELEVATOR_VOLTAGE = 8.0; // TUNEME
 
 	public double spinVoltage;
@@ -23,7 +23,8 @@ public class RunIndexer extends Command {
 
 	@Override
 	public void initialize() {
-		indexer.targetSpinVoltage = spinVoltage;
+		// indexer.targetSpinVoltage = spinVoltage;
+		indexer.targetSpinVoltage = shooter.onTarget ? spinVoltage : 0.5; // TODO do we want this?
 		indexer.targetElevatorVoltage = elevatorVoltage;
 	}
 

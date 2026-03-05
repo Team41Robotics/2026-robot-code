@@ -26,9 +26,12 @@ public class ShooterHW {
 	public static final double HOOD_RATIO = 1.0 / 3.0 / 17.5;
 	public static final double FLYWHEEL_RATIO = 1.0;
 
-	public static final double TURRET_kP = 128.0;
-	public static final double TURRET_kI = 36.0;
-	public static final double TURRET_kD = 0.0;
+	// public static final double TURRET_kP = 128.0;
+	// public static final double TURRET_kI = 36.0;
+	// public static final double TURRET_kD = 0.1;
+	public static final double TURRET_kP = 30;
+	public static final double TURRET_kI = 0;
+	public static final double TURRET_kD = 0;
 
 	public static final double HOOD_kP = 192.0;
 	public static final double HOOD_kI = 96.0;
@@ -117,7 +120,7 @@ public class ShooterHW {
 		turretConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		turretConfig.CurrentLimits.SupplyCurrentLimit = 40;
 		turretConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		turretConfig.CurrentLimits.StatorCurrentLimit = 60;
+		turretConfig.CurrentLimits.StatorCurrentLimit = 120;
 		turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		turretTalonFX.getConfigurator().apply(turretConfig);
 		turretTalonFX.clearStickyFaults();
@@ -136,7 +139,7 @@ public class ShooterHW {
 		hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		hoodConfig.CurrentLimits.SupplyCurrentLimit = 40;
 		hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		hoodConfig.CurrentLimits.StatorCurrentLimit = 60;
+		hoodConfig.CurrentLimits.StatorCurrentLimit = 80;
 		hoodConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		hoodTalonFX.getConfigurator().apply(hoodConfig);
 		hoodTalonFX.clearStickyFaults();
@@ -314,8 +317,8 @@ public class ShooterHW {
 
 		if (!Robot.isReal()) return;
 
-		turretTalonFX.setControl(turretControlRequest.withPosition(turretPosition));
-		hoodTalonFX.setControl(hoodControlRequest.withPosition(hoodPosition));
-		if (!sysIdFlywheel) flywheelTalonFX.setControl(flywheelControlRequest.withVelocity(flywheelRPM / 60.0));
+		// turretTalonFX.setControl(turretControlRequest.withPosition(turretPosition)); // TODO`
+		// hoodTalonFX.setControl(hoodControlRequest.withPosition(hoodPosition));
+		// if (!sysIdFlywheel) flywheelTalonFX.setControl(flywheelControlRequest.withVelocity(flywheelRPM / 60.0));
 	}
 }

@@ -27,6 +27,7 @@ import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.indexer.StopIndexer;
 import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.intake.IntakeUp;
+import frc.robot.commands.shooter.ManualShoot;
 import frc.robot.commands.shooter.ShootOnTheFly;
 import frc.robot.commands.shooter.ShooterIdle;
 import frc.robot.commands.shooter.ShooterStartup;
@@ -66,6 +67,10 @@ public class RobotContainer {
 	public static AutoChooser autoChooser = new AutoChooser();
 	public static Command autonomousCommand = null;
 
+	public static String currentPeriod = "DISABLED";
+	public static double periodTimeRemaining = 0;
+	public static String allianceHubStatus = "Unknown";
+
 	static Pose2d prevStartPose = null;
 
 	public static void init() {
@@ -80,8 +85,8 @@ public class RobotContainer {
 
 		drive.setDefaultCommand(new FieldOrientedDrive());
 		// drive.setDefaultCommand(new RobotOrientedDrive());
-		// shooter.setDefaultCommand(new ShooterIdle());
-		intake.setDefaultCommand(new IntakeUp());
+		shooter.setDefaultCommand(new ShootOnTheFly());
+		intake.setDefaultCommand(new IntakeDown());
 		indexer.setDefaultCommand(new RunIndexer(0.5, 0));
 
 		// controls.shoot().onTrue(new PrintSwervePos());
@@ -110,6 +115,7 @@ public class RobotContainer {
 		SmartDashboard.putData("ShooterStartup", new ShooterStartup());
 		SmartDashboard.putData("StaticShootAtTarget", new StaticShootAtTarget());
 		SmartDashboard.putData("ShootOnTheFly", new ShootOnTheFly());
+		SmartDashboard.putData("ManualShoot", new ManualShoot());
 
 		SmartDashboard.putData("PrintSwervePos", new PrintSwervePos());
 
@@ -120,7 +126,7 @@ public class RobotContainer {
 
 		SmartDashboard.putData("StupidShootAuto", new StupidShootAuto());
 
-		controls.intake().whileTrue(new IntakeDown());
+		controls.intake().whileTrue(new IntakeUp());
 		controls.shoot().whileTrue(new RunIndexer());
 
 		Autos.init();
@@ -143,7 +149,7 @@ public class RobotContainer {
 		indexer.sense();
 		vision.sense();
 		// climber.sense();
-		// leds.sense();
+		leds.sense();
 
 		CommandScheduler.getInstance().run();
 
@@ -156,14 +162,113 @@ public class RobotContainer {
 				prevStartPose = selected;
 				drive.resetPose(selected);
 			}
+		} else {
+			leds.control = shooter.onTarget ? leds.SHOOTING_ANIMATION : leds.IDLE_ANIMATION;
 		}
+
+		updateMatchPeriod();
 
 		drive.actuate();
 		intake.actuate();
 		shooter.actuate();
 		indexer.actuate();
 		// climber.actuate();
-		// leds.actuate();
+		leds.actuate();
+	}
+
+	public static boolean redWonAuto() {
+		String gameData = DriverStation.getGameSpecificMessage();
+		if (gameData != null && gameData.length() > 0) {
+			switch (gameData.charAt(0)) {
+				case 'R':
+					return true;
+				case 'B':
+					return false;
+				default:
+					break;
+			}
+		}
+		// No data yet (early teleop or no FMS), assume false
+		return false;
+	}
+
+	public static boolean isHubActive() {
+		if (DriverStation.isAutonomousEnabled()) {
+			return true;
+		}
+		if (!DriverStation.isTeleopEnabled()) {
+			return false;
+		}
+		double matchTime = DriverStation.getMatchTime();
+		boolean weWonAuto = (isRed() && redWonAuto()) || (!isRed() && !redWonAuto());
+
+		if (matchTime > 130) {
+			return true;
+		} else if (matchTime > 105) {
+			return !weWonAuto; // Shift 1: auto winner inactive
+		} else if (matchTime > 80) {
+			return weWonAuto; // Shift 2: auto winner active
+		} else if (matchTime > 55) {
+			return !weWonAuto; // Shift 3: auto winner inactive
+		} else if (matchTime > 30) {
+			return weWonAuto; // Shift 4: auto winner active
+		} else {
+			return true; // End game: always active
+		}
+	}
+
+	public static void updateMatchPeriod() {
+		double matchTime = DriverStation.getMatchTime();
+
+		if (DriverStation.isDisabled()) {
+			currentPeriod = "DISABLED";
+			periodTimeRemaining = 0;
+			allianceHubStatus = "#000000";
+		} else if (DriverStation.isAutonomous()) {
+			currentPeriod = "AUTO";
+			periodTimeRemaining = matchTime;
+			allianceHubStatus = "#FF00FF";
+		} else if (DriverStation.isTeleop()) {
+			boolean weWonAuto = (isRed() && redWonAuto()) || (!isRed() && !redWonAuto());
+
+			if (matchTime > 130) {
+				currentPeriod = "TRANSITION";
+				periodTimeRemaining = matchTime - 130;
+				allianceHubStatus = weWonAuto ? "#FF0000" : "#00FF00";
+			} else if (matchTime > 105) {
+				currentPeriod = "SHIFT 1";
+				periodTimeRemaining = matchTime - 105;
+				// Odd shift: auto winner's hub inactive
+				allianceHubStatus = weWonAuto ? "#FF0000" : "#00FF00";
+			} else if (matchTime > 80) {
+				currentPeriod = "SHIFT 2";
+				periodTimeRemaining = matchTime - 80;
+				// Even shift: auto winner's hub active
+				allianceHubStatus = weWonAuto ? "#00FF00" : "#FF0000";
+			} else if (matchTime > 55) {
+				currentPeriod = "SHIFT 3";
+				periodTimeRemaining = matchTime - 55;
+				allianceHubStatus = weWonAuto ? "#FF0000" : "#00FF00";
+			} else if (matchTime > 30) {
+				currentPeriod = "SHIFT 4";
+				periodTimeRemaining = matchTime - 30;
+				allianceHubStatus = weWonAuto ? "#00FF00" : "#FF0000";
+			} else {
+				currentPeriod = "END GAME";
+				periodTimeRemaining = matchTime;
+				allianceHubStatus = "#00FFFF";
+			}
+		} else {
+			currentPeriod = "TEST";
+			periodTimeRemaining = 0;
+			allianceHubStatus = "#000000";
+		}
+
+		SmartDashboard.putString("MatchPeriod", currentPeriod);
+		SmartDashboard.putNumber("PeriodTimeRemaining", periodTimeRemaining);
+		SmartDashboard.putString("AllianceHubStatus", allianceHubStatus);
+		SmartDashboard.putBoolean("RedWonAuto", redWonAuto());
+		SmartDashboard.putString("GameData", DriverStation.getGameSpecificMessage());
 	}
 
 	public static boolean isRed() {

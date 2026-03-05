@@ -14,8 +14,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
-import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -29,10 +27,6 @@ import org.littletonrobotics.junction.Logger;
 
 public class IntakeHW {
 	public static final double JOINT_RATIO = 1.0 / 27.0;
-	public static final double JOINT_kP = 0.6; // TUNEME. joint PID
-	public static final double JOINT_kI = 0.0002;
-	public static final double JOINT_kD = 50.0;
-	public static final double JOINT_kG = 0.6;
 
 	public static final double JOINT_ENCODER_ZERO = 3.005 + PI / 3;
 
@@ -59,7 +53,6 @@ public class IntakeHW {
 		jointConfig.inverted(true);
 		jointConfig.encoder.positionConversionFactor(JOINT_RATIO * 2 * PI);
 		jointConfig.encoder.velocityConversionFactor(JOINT_RATIO * 2 * PI / 60);
-		jointConfig.closedLoop.p(JOINT_kP).i(JOINT_kI).d(JOINT_kD);
 		jointConfig.smartCurrentLimit(60, 60);
 		jointConfig.idleMode(IdleMode.kBrake);
 		jointSparkMax.configure(jointConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -124,18 +117,12 @@ public class IntakeHW {
 		inputs.intakeBusCurrentAmps = intakeSupplyCurrentSignal.getValueAsDouble();
 	}
 
-	public void actuate(IntakeInputs inputs, double jointPosition, double intakeVoltage) {
-		Logger.recordOutput("/Intake/jointErrorRadians", inputs.jointPosRadians - jointPosition);
+	public void actuate(IntakeInputs inputs, double jointVoltage, double intakeVoltage) {
+		Logger.recordOutput("/Intake/jointCommandVoltageVolts", jointVoltage);
 
 		if (!Robot.isReal()) return;
 
-		jointSparkMax
-				.getClosedLoopController()
-				.setSetpoint(
-						jointPosition,
-						ControlType.kPosition,
-						ClosedLoopSlot.kSlot0,
-						JOINT_kG * cos(inputs.jointPosRadians));
+		jointSparkMax.setVoltage(jointVoltage);
 		intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
 	}
 }

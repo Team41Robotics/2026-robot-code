@@ -68,7 +68,6 @@ public class Autos {
 
 		routine.active()
 				.onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()).repeatedly());
-		ChoreoTraj.TestPath$0.asAutoTraj(routine).active().whileTrue(new IntakeDown());
 
 		return routine;
 	}

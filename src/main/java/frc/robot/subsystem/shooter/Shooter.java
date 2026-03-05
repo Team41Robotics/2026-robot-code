@@ -2,13 +2,14 @@ package frc.robot.subsystem.shooter;
 
 import static edu.wpi.first.math.MathUtil.*;
 import static frc.robot.RobotContainer.*;
+import static java.lang.Math.*;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.shooter.ShooterStartup;
+import frc.robot.commands.shooter.Targetting;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
@@ -18,10 +19,14 @@ public class Shooter extends SubsystemBase {
 	public static final double TURRET_POS_MIN = -2.029; // TUNEME
 	public static final double TURRET_POS_MAX = 1.087;
 	public static final double HOOD_POS_MIN = 0; //  TUNEME
-	// TODO MATCH HOOD POS WITH REAL INCLINE
-	public static final double HOOD_POS_MAX = 35 / 180.0 * Math.PI;
+	// FIXME MATCH HOOD POS WITH REAL INCLINE
+	public static final double HOOD_POS_MAX = 35 / 180.0 * PI;
 
-	public static final Constraints TURRET_CONSTRAINTS = new Constraints(3.0, 48.0); // TUNEME
+	public static final double FLYWHEEL_THRES = 100;
+	public static final double HOOD_POS_THRES = 2 / 180.8 * PI;
+	public static final double TURRET_POS_THRES = 2 / 180.0 * PI;
+
+	public static final Constraints TURRET_CONSTRAINTS = new Constraints(6.0, 60.0); // TUNEME
 	public static TrapezoidProfile turretProfile = new TrapezoidProfile(TURRET_CONSTRAINTS);
 	public State turretSetpoint = new State();
 
@@ -33,6 +38,7 @@ public class Shooter extends SubsystemBase {
 	public double targetTurretVel = 0;
 	public double targetHoodPos = 0;
 	public double targetFlywheelRPM = 0;
+	public boolean onTarget = false;
 
 	public boolean zeroed = false;
 
@@ -42,6 +48,8 @@ public class Shooter extends SubsystemBase {
 
 		turretSetpoint = new State(inputs.turretPosRadians, inputs.turretVelRadiansPerSec);
 		hoodSetpoint = new State(inputs.hoodPosRadians, inputs.hoodVelRadiansPerSec);
+		controls.pov(45).onTrue(new InstantCommand(() -> Targetting.flywhheelRPMtemp += 100));
+		controls.pov(270).onTrue(new InstantCommand(() -> Targetting.flywhheelRPMtemp -= 100));
 	}
 
 	public void sense() {
@@ -53,7 +61,7 @@ public class Shooter extends SubsystemBase {
 			targetTurretPos = inputs.turretPosRadians;
 		}
 		if (!zeroed) {
-			CommandScheduler.getInstance().schedule(new ShooterStartup());
+			// CommandScheduler.getInstance().schedule(new ShooterStartup()); // TODO
 		}
 	}
 
@@ -78,6 +86,15 @@ public class Shooter extends SubsystemBase {
 		Logger.recordOutput("/Shooter/turretProfileVelRadiansPerSec", turretSetpoint.velocity);
 		Logger.recordOutput("/Shooter/hoodProfileVelRadiansPerSec", hoodSetpoint.velocity);
 
+		if (abs(inputs.turretPosRadians - targetTurretPos) < TURRET_POS_THRES
+				&& abs(inputs.hoodPosRadians - targetHoodPos) < HOOD_POS_THRES
+				&& abs(inputs.flywheelVelocityRPM - targetFlywheelRPM) < FLYWHEEL_THRES) {
+			onTarget = true;
+		} else if (targetFlywheelRPM < TURRET_POS_THRES) {
+			onTarget = true;
+		} else {
+			onTarget = false;
+		}
 		hw.actuate(inputs, turretSetpoint.position, hoodSetpoint.position, targetFlywheelRPM);
 	}
 }

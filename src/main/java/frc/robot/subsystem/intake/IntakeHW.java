@@ -30,8 +30,9 @@ import org.littletonrobotics.junction.Logger;
 public class IntakeHW {
 	public static final double JOINT_RATIO = 1.0 / 27.0;
 	public static final double JOINT_kP = 0.6; // TUNEME. joint PID
-	public static final double JOINT_kI = 0.0002;
-	public static final double JOINT_kD = 50.0;
+	// public static final double JOINT_kI = 0.0002;
+	public static final double JOINT_kI = 0.0;
+	public static final double JOINT_kD = 0.1;
 	public static final double JOINT_kG = 0.6;
 
 	public static final double JOINT_ENCODER_ZERO = 3.005 + PI / 3;
@@ -129,13 +130,13 @@ public class IntakeHW {
 
 		if (!Robot.isReal()) return;
 
-		jointSparkMax
-				.getClosedLoopController()
-				.setSetpoint(
-						jointPosition,
-						ControlType.kPosition,
-						ClosedLoopSlot.kSlot0,
-						JOINT_kG * cos(inputs.jointPosRadians));
-		intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
+		// jointSparkMax
+		// 		.getClosedLoopController()
+		// 		.setSetpoint(
+		// 				jointPosition,
+		// 				ControlType.kPosition,
+		// 				ClosedLoopSlot.kSlot0,
+		// 				JOINT_kG * cos(inputs.jointPosRadians));
+		// intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage)); // TODO
 	}
 }

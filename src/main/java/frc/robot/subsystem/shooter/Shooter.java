@@ -7,8 +7,11 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.shooter.ShooterStartup;
+import frc.robot.commands.shooter.Targetting;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
@@ -21,7 +24,7 @@ public class Shooter extends SubsystemBase {
 	// TODO MATCH HOOD POS WITH REAL INCLINE
 	public static final double HOOD_POS_MAX = 35 / 180.0 * Math.PI;
 
-	public static final Constraints TURRET_CONSTRAINTS = new Constraints(3.0, 48.0); // TUNEME
+	public static final Constraints TURRET_CONSTRAINTS = new Constraints(6.0, 360.0); // TUNEME
 	public static TrapezoidProfile turretProfile = new TrapezoidProfile(TURRET_CONSTRAINTS);
 	public State turretSetpoint = new State();
 
@@ -42,6 +45,8 @@ public class Shooter extends SubsystemBase {
 
 		turretSetpoint = new State(inputs.turretPosRadians, inputs.turretVelRadiansPerSec);
 		hoodSetpoint = new State(inputs.hoodPosRadians, inputs.hoodVelRadiansPerSec);
+		controls.pov(45).onTrue(new InstantCommand(() -> Targetting.flywhheelRPMtemp += 100));
+		controls.pov(270).onTrue(new InstantCommand(() -> Targetting.flywhheelRPMtemp -= 100));
 	}
 
 	public void sense() {

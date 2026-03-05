@@ -24,8 +24,11 @@ public class Targetting {
 		return toTarget.getAngle().getRadians();
 	}
 
+	public static double flywhheelRPMtemp = 2000;
+
 	public static ShotParameters shotSpeeds(double distance) {
-		double flywheelRPM = 0; // TODO
+		// double flywheelRPM = flywhheelRPMtemp; // TODO
+		double flywheelRPM = 370 * distance + 1041;
 		double hoodAngle = 0; // TODO
 		double timeOfFlight = 0; // TODO
 		return new ShotParameters(flywheelRPM, hoodAngle, timeOfFlight, distance);

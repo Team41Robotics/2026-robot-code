@@ -86,7 +86,7 @@ public class RobotContainer {
 		drive.setDefaultCommand(new FieldOrientedDrive());
 		// drive.setDefaultCommand(new RobotOrientedDrive());
 		shooter.setDefaultCommand(new ShootOnTheFly());
-		intake.setDefaultCommand(new IntakeUp());
+		intake.setDefaultCommand(new IntakeDown());
 		indexer.setDefaultCommand(new RunIndexer(0.5, 0));
 
 		// controls.shoot().onTrue(new PrintSwervePos());
@@ -126,7 +126,7 @@ public class RobotContainer {
 
 		SmartDashboard.putData("StupidShootAuto", new StupidShootAuto());
 
-		controls.intake().whileTrue(new IntakeDown());
+		controls.intake().whileTrue(new IntakeUp());
 		controls.shoot().whileTrue(new RunIndexer());
 
 		Autos.init();
@@ -169,9 +169,9 @@ public class RobotContainer {
 		drive.actuate();
 		intake.actuate();
 		shooter.actuate();
-		indexer.actuate(); 
-		//climber.actuate();
-		//leds.actuate();
+		indexer.actuate();
+		// climber.actuate();
+		// leds.actuate();
 	}
 
 	public static boolean redWonAuto() {

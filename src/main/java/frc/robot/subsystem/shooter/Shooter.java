@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.shooter.ShooterStartup;
 import frc.robot.commands.shooter.Targetting;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
@@ -58,7 +57,7 @@ public class Shooter extends SubsystemBase {
 			targetTurretPos = inputs.turretPosRadians;
 		}
 		if (!zeroed) {
-			CommandScheduler.getInstance().schedule(new ShooterStartup());
+			// CommandScheduler.getInstance().schedule(new ShooterStartup());
 		}
 	}
 

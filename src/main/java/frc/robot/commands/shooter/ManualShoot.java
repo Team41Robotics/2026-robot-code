@@ -29,7 +29,8 @@ public class ManualShoot extends Command {
 
 		if (mag > 0) {
 			// shooter.targetTurretPos = atan2(lx, ly);
-			shooter.targetTurretPos = shooter.TURRET_POS_MIN + (shooter.TURRET_POS_MAX - shooter.TURRET_POS_MIN) * (sin(Timer.getTimestamp())+1)/2.;
+			shooter.targetTurretPos = shooter.TURRET_POS_MIN
+					+ (shooter.TURRET_POS_MAX - shooter.TURRET_POS_MIN) * (sin(Timer.getTimestamp()) + 1) / 2.;
 		}
 
 		boolean povUp = controls.pov(0).getAsBoolean();

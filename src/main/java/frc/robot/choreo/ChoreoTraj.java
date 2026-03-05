@@ -34,29 +34,8 @@ public record ChoreoTraj(
 	public static final ChoreoTraj TestPath = new ChoreoTraj(
 	    "TestPath",
 	    OptionalInt.empty(),
-	    3.25215,
+	    2.00584,
 	    new Pose2d(2.404, 6.412, Rotation2d.fromRadians(0)),
-	    new Pose2d(2.404, 6.412, Rotation2d.fromRadians(0))
-	);
-	public static final ChoreoTraj TestPath$0 = new ChoreoTraj(
-	    "TestPath",
-	    OptionalInt.of(0),
-	    1.14363,
-	    new Pose2d(2.404, 6.412, Rotation2d.fromRadians(0)),
-	    new Pose2d(2.042, 4.02, Rotation2d.fromRadians(2.729))
-	);
-	public static final ChoreoTraj TestPath$1 = new ChoreoTraj(
-	    "TestPath",
-	    OptionalInt.of(1),
-	    0.89385,
-	    new Pose2d(2.042, 4.02, Rotation2d.fromRadians(2.729)),
-	    new Pose2d(3.376, 4.224, Rotation2d.fromRadians(0))
-	);
-	public static final ChoreoTraj TestPath$2 = new ChoreoTraj(
-	    "TestPath",
-	    OptionalInt.of(2),
-	    1.21467,
-	    new Pose2d(3.376, 4.224, Rotation2d.fromRadians(0)),
 	    new Pose2d(2.404, 6.412, Rotation2d.fromRadians(0))
 	);
 
@@ -66,10 +45,7 @@ public record ChoreoTraj(
      */
     public static final Map<String, ChoreoTraj> ALL_TRAJECTORIES = Map.ofEntries(
     	Map.entry("DepotAuto", DepotAuto),
-		Map.entry("TestPath", TestPath),
-		Map.entry("TestPath$0", TestPath$0),
-		Map.entry("TestPath$1", TestPath$1),
-		Map.entry("TestPath$2", TestPath$2)
+		Map.entry("TestPath", TestPath)
     );
 
     /**

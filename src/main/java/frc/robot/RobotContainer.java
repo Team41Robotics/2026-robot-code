@@ -85,7 +85,7 @@ public class RobotContainer {
 
 		drive.setDefaultCommand(new FieldOrientedDrive());
 		// drive.setDefaultCommand(new RobotOrientedDrive());
-		// shooter.setDefaultCommand(new ShooterIdle());
+		shooter.setDefaultCommand(new ShootOnTheFly());
 		intake.setDefaultCommand(new IntakeUp());
 		indexer.setDefaultCommand(new RunIndexer(0.5, 0));
 

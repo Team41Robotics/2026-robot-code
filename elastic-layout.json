@@ -87,8 +87,8 @@
               "period": 0.06,
               "data_type": "double",
               "time_display_mode": "Seconds Only",
-              "red_start_time": 16,
-              "yellow_start_time": 8
+              "red_start_time": 8,
+              "yellow_start_time": 16
             }
           },
           {

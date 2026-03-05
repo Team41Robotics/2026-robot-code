@@ -1,19 +1,21 @@
 package frc.robot.commands.intake;
 
 import static frc.robot.RobotContainer.*;
+import static java.lang.Math.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class IntakeUp extends Command {
-	public static final double JOINT_UP_VOLTAGE = 7.0; // TUNEME. voltage to hold up (V)
+	public static final double JOINT_UP_VOLTAGE = -7.0; // TUNEME. voltage to hold up (V)
+	public static final double JOINT_UP_POS = 135.0 / 180 * PI; // TODO
 
 	public IntakeUp() {
 		addRequirements(intake);
 	}
 
 	@Override
-	public void initialize() {
-		intake.targetJointVoltage = JOINT_UP_VOLTAGE;
+	public void execute() {
+		intake.targetJointVoltage = intake.inputs.jointPosRadians < JOINT_UP_POS ? JOINT_UP_VOLTAGE : 0;
 		intake.targetIntakeVoltage = 0;
 	}
 

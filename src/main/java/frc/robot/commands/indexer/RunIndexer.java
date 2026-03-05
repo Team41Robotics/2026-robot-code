@@ -23,7 +23,8 @@ public class RunIndexer extends Command {
 
 	@Override
 	public void initialize() {
-		indexer.targetSpinVoltage = spinVoltage;
+		// indexer.targetSpinVoltage = spinVoltage;
+		indexer.targetSpinVoltage = shooter.onTarget ? spinVoltage : 0.5; // TODO do we want this?
 		indexer.targetElevatorVoltage = elevatorVoltage;
 	}
 

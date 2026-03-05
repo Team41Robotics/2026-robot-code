@@ -29,7 +29,7 @@ public class ShooterHW {
 	// public static final double TURRET_kP = 128.0;
 	// public static final double TURRET_kI = 36.0;
 	// public static final double TURRET_kD = 0.1;
-	public static final double TURRET_kP = 40;
+	public static final double TURRET_kP = 30;
 	public static final double TURRET_kI = 0;
 	public static final double TURRET_kD = 0;
 
@@ -317,8 +317,8 @@ public class ShooterHW {
 
 		if (!Robot.isReal()) return;
 
-		// turretTalonFX.setControl(turretControlRequest.withPosition(turretPosition));
-		hoodTalonFX.setControl(hoodControlRequest.withPosition(hoodPosition));
-		if (!sysIdFlywheel) flywheelTalonFX.setControl(flywheelControlRequest.withVelocity(flywheelRPM / 60.0));
+		// turretTalonFX.setControl(turretControlRequest.withPosition(turretPosition)); // TODO`
+		// hoodTalonFX.setControl(hoodControlRequest.withPosition(hoodPosition));
+		// if (!sysIdFlywheel) flywheelTalonFX.setControl(flywheelControlRequest.withVelocity(flywheelRPM / 60.0));
 	}
 }

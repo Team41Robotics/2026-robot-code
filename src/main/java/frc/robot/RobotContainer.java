@@ -149,7 +149,7 @@ public class RobotContainer {
 		indexer.sense();
 		vision.sense();
 		// climber.sense();
-		// leds.sense();
+		leds.sense();
 
 		CommandScheduler.getInstance().run();
 
@@ -162,6 +162,8 @@ public class RobotContainer {
 				prevStartPose = selected;
 				drive.resetPose(selected);
 			}
+		} else {
+			leds.control = shooter.onTarget ? leds.SHOOTING_ANIMATION : leds.IDLE_ANIMATION;
 		}
 
 		updateMatchPeriod();
@@ -171,7 +173,7 @@ public class RobotContainer {
 		shooter.actuate();
 		indexer.actuate();
 		// climber.actuate();
-		// leds.actuate();
+		leds.actuate();
 	}
 
 	public static boolean redWonAuto() {
@@ -221,45 +223,45 @@ public class RobotContainer {
 		if (DriverStation.isDisabled()) {
 			currentPeriod = "DISABLED";
 			periodTimeRemaining = 0;
-			allianceHubStatus = "---";
+			allianceHubStatus = "#000000";
 		} else if (DriverStation.isAutonomous()) {
 			currentPeriod = "AUTO";
 			periodTimeRemaining = matchTime;
-			allianceHubStatus = "Active";
+			allianceHubStatus = "#FF00FF";
 		} else if (DriverStation.isTeleop()) {
 			boolean weWonAuto = (isRed() && redWonAuto()) || (!isRed() && !redWonAuto());
 
 			if (matchTime > 130) {
 				currentPeriod = "TRANSITION";
 				periodTimeRemaining = matchTime - 130;
-				allianceHubStatus = "Active";
+				allianceHubStatus = weWonAuto ? "#FF0000" : "#00FF00";
 			} else if (matchTime > 105) {
 				currentPeriod = "SHIFT 1";
 				periodTimeRemaining = matchTime - 105;
 				// Odd shift: auto winner's hub inactive
-				allianceHubStatus = weWonAuto ? "Inactive" : "Active";
+				allianceHubStatus = weWonAuto ? "#FF0000" : "#00FF00";
 			} else if (matchTime > 80) {
 				currentPeriod = "SHIFT 2";
 				periodTimeRemaining = matchTime - 80;
 				// Even shift: auto winner's hub active
-				allianceHubStatus = weWonAuto ? "Active" : "Inactive";
+				allianceHubStatus = weWonAuto ? "#00FF00" : "#FF0000";
 			} else if (matchTime > 55) {
 				currentPeriod = "SHIFT 3";
 				periodTimeRemaining = matchTime - 55;
-				allianceHubStatus = weWonAuto ? "Inactive" : "Active";
+				allianceHubStatus = weWonAuto ? "#FF0000" : "#00FF00";
 			} else if (matchTime > 30) {
 				currentPeriod = "SHIFT 4";
 				periodTimeRemaining = matchTime - 30;
-				allianceHubStatus = weWonAuto ? "Active" : "Inactive";
+				allianceHubStatus = weWonAuto ? "#00FF00" : "#FF0000";
 			} else {
 				currentPeriod = "END GAME";
 				periodTimeRemaining = matchTime;
-				allianceHubStatus = "Active";
+				allianceHubStatus = "#00FFFF";
 			}
 		} else {
 			currentPeriod = "TEST";
 			periodTimeRemaining = 0;
-			allianceHubStatus = "---";
+			allianceHubStatus = "#000000";
 		}
 
 		SmartDashboard.putString("MatchPeriod", currentPeriod);

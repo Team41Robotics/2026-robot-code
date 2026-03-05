@@ -75,7 +75,7 @@ public class SwerveHW {
 		driveConfig.CurrentLimits.SupplyCurrentLimit = 80;
 		driveConfig.CurrentLimits.SupplyCurrentLowerTime = 2.0;
 		driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		driveConfig.CurrentLimits.StatorCurrentLimit = 90; // TUNEME. stator current limit (A)
+		driveConfig.CurrentLimits.StatorCurrentLimit = 90; // TODO TODO. stator current limit (A)
 		driveConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		driveTalonFX.getConfigurator().apply(driveConfig);
 		driveTalonFX.clearStickyFaults();

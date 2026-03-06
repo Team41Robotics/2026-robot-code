@@ -1,4 +1,4 @@
-// spotless:off
+
 package frc.robot.choreo;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -6,10 +6,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import java.util.Map;
 import java.util.OptionalInt;
 
+// If these imports cause errors because you're not using ChoreoLib,
+// turn off "Include ChoreoLib-specific Helpers" in Choreo's codegen settings.
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
-// If the 2 imports above cause errors because you're not using ChoreoLib,
-// turn off "Include ChoreoLib-specific Helpers" in Choreo's codegen settings.
 
 /**
  * A class containing the name, start pose, end pose, and total time of every Choreo trajectory.
@@ -25,86 +25,91 @@ public record ChoreoTraj(
     Pose2d endPoseBlue
 ) {
     public static final ChoreoTraj DepotAuto = new ChoreoTraj(
-        "DepotAuto",
-        OptionalInt.empty(),
-        2.92084,
-        new Pose2d(3.6719, 6.86231, Rotation2d.fromRadians(1.5708)),
-        new Pose2d(0.35888, 6.78412, Rotation2d.fromRadians(1.54543))
-    );
-    public static final ChoreoTraj GreifingAuto = new ChoreoTraj(
-        "GreifingAuto",
-        OptionalInt.empty(),
-        1.93598,
-        new Pose2d(4.2, 7.65, Rotation2d.fromRadians(-1.5708)),
-        new Pose2d(8.25531, 2.11157, Rotation2d.fromRadians(-1.5708))
-    );
-    public static final ChoreoTraj idk = new ChoreoTraj(
-        "idk",
-        OptionalInt.empty(),
-        8.23963,
-        new Pose2d(4.35959, 7.52709, Rotation2d.fromRadians(-0.5236)),
-        new Pose2d(0.4, 0.4, Rotation2d.fromRadians(3.14159))
-    );
-    public static final ChoreoTraj OutpostAuto = new ChoreoTraj(
-        "OutpostAuto",
-        OptionalInt.empty(),
-        1.10511,
-        new Pose2d(3.93586, 0.65544, Rotation2d.fromRadians(0)),
-        new Pose2d(0.37212, 0.67218, Rotation2d.fromRadians(0))
-    );
-    public static final ChoreoTraj TestPath = new ChoreoTraj(
-        "TestPath",
-        OptionalInt.empty(),
-        3.25215,
-        new Pose2d(2.40401, 6.41238, Rotation2d.fromRadians(0)),
-        new Pose2d(2.40401, 6.41238, Rotation2d.fromRadians(0))
-    );
-    /** ERROR: Can only use letters, 0-9, and _. Can't use $. Rename it in the Choreo app to fix this error. */
-    public static final ChoreoTraj TestPath$0 = new ChoreoTraj(
-        "TestPath",
-        OptionalInt.of(0),
-        1.14363,
-        new Pose2d(2.40401, 6.41238, Rotation2d.fromRadians(0)),
-        new Pose2d(2.04161, 4.0199, Rotation2d.fromRadians(2.72918))
-    );
-    /** ERROR: Can only use letters, 0-9, and _. Can't use $. Rename it in the Choreo app to fix this error. */
-    public static final ChoreoTraj TestPath$1 = new ChoreoTraj(
-        "TestPath",
-        OptionalInt.of(1),
-        0.89385,
-        new Pose2d(2.04161, 4.0199, Rotation2d.fromRadians(2.72918)),
-        new Pose2d(3.37635, 4.2235, Rotation2d.fromRadians(0))
-    );
-    /** ERROR: Can only use letters, 0-9, and _. Can't use $. Rename it in the Choreo app to fix this error. */
-    public static final ChoreoTraj TestPath$2 = new ChoreoTraj(
-        "TestPath",
-        OptionalInt.of(2),
-        1.21467,
-        new Pose2d(3.37635, 4.2235, Rotation2d.fromRadians(0)),
-        new Pose2d(2.40401, 6.41238, Rotation2d.fromRadians(0))
-    );
-    public static final ChoreoTraj TrenchAuto = new ChoreoTraj(
-        "TrenchAuto",
-        OptionalInt.empty(),
-        3.66328,
-        new Pose2d(4.00408, 7.41724, Rotation2d.fromRadians(-1.5708)),
-        new Pose2d(4.00408, 7.41724, Rotation2d.fromRadians(1.66844))
-    );
+	    "DepotAuto",
+	    OptionalInt.empty(),
+	    2.92084,
+	    new Pose2d(3.672, 6.862, Rotation2d.fromRadians(1.571)),
+	    new Pose2d(0.359, 6.784, Rotation2d.fromRadians(1.545))
+	);
+	public static final ChoreoTraj GreifingAuto = new ChoreoTraj(
+	    "GreifingAuto",
+	    OptionalInt.empty(),
+	    1.93598,
+	    new Pose2d(4.2, 7.65, Rotation2d.fromRadians(-1.571)),
+	    new Pose2d(8.255, 2.112, Rotation2d.fromRadians(-1.571))
+	);
+	public static final ChoreoTraj idk = new ChoreoTraj(
+	    "idk",
+	    OptionalInt.empty(),
+	    8.23963,
+	    new Pose2d(4.36, 7.527, Rotation2d.fromRadians(-0.524)),
+	    new Pose2d(0.4, 0.4, Rotation2d.fromRadians(3.142))
+	);
+	public static final ChoreoTraj OutpostAuto = new ChoreoTraj(
+	    "OutpostAuto",
+	    OptionalInt.empty(),
+	    1.10511,
+	    new Pose2d(3.936, 0.655, Rotation2d.fromRadians(0)),
+	    new Pose2d(0.372, 0.672, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj TestPath = new ChoreoTraj(
+	    "TestPath",
+	    OptionalInt.empty(),
+	    3.25215,
+	    new Pose2d(2.404, 6.412, Rotation2d.fromRadians(0)),
+	    new Pose2d(2.404, 6.412, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj TestPath$0 = new ChoreoTraj(
+	    "TestPath",
+	    OptionalInt.of(0),
+	    1.14363,
+	    new Pose2d(2.404, 6.412, Rotation2d.fromRadians(0)),
+	    new Pose2d(2.042, 4.02, Rotation2d.fromRadians(2.729))
+	);
+	public static final ChoreoTraj TestPath$1 = new ChoreoTraj(
+	    "TestPath",
+	    OptionalInt.of(1),
+	    0.89385,
+	    new Pose2d(2.042, 4.02, Rotation2d.fromRadians(2.729)),
+	    new Pose2d(3.376, 4.224, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj TestPath$2 = new ChoreoTraj(
+	    "TestPath",
+	    OptionalInt.of(2),
+	    1.21467,
+	    new Pose2d(3.376, 4.224, Rotation2d.fromRadians(0)),
+	    new Pose2d(2.404, 6.412, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj TrenchAuto = new ChoreoTraj(
+	    "TrenchAuto",
+	    OptionalInt.empty(),
+	    3.66328,
+	    new Pose2d(4.004, 7.417, Rotation2d.fromRadians(-1.571)),
+	    new Pose2d(4.004, 7.417, Rotation2d.fromRadians(1.668))
+	);
+	public static final ChoreoTraj MiddletoHP = new ChoreoTraj(
+	    "MiddletoHP",
+	    OptionalInt.empty(),
+	    1.19095,
+	    new Pose2d(3.747, 2.925, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(0.372, 0.625, Rotation2d.fromRadians(3.142))
+	);
 
     /**
      * A map between trajectory names and their corresponding data.
      * This allows for trajectory data to be looked up with strings during runtime.
      */
     public static final Map<String, ChoreoTraj> ALL_TRAJECTORIES = Map.ofEntries(
-        Map.entry("DepotAuto", DepotAuto),
-        Map.entry("GreifingAuto", GreifingAuto),
-        Map.entry("idk", idk),
-        Map.entry("OutpostAuto", OutpostAuto),
-        Map.entry("TestPath", TestPath),
-        Map.entry("TestPath$0", TestPath$0),
-        Map.entry("TestPath$1", TestPath$1),
-        Map.entry("TestPath$2", TestPath$2),
-        Map.entry("TrenchAuto", TrenchAuto)
+    	Map.entry("DepotAuto", DepotAuto),
+		Map.entry("GreifingAuto", GreifingAuto),
+		Map.entry("idk", idk),
+		Map.entry("OutpostAuto", OutpostAuto),
+		Map.entry("TestPath", TestPath),
+		Map.entry("TestPath$0", TestPath$0),
+		Map.entry("TestPath$1", TestPath$1),
+		Map.entry("TestPath$2", TestPath$2),
+		Map.entry("TrenchAuto", TrenchAuto),
+		Map.entry("MiddletoHP", MiddletoHP)
     );
 
     /**
@@ -131,4 +136,3 @@ public record ChoreoTraj(
         return routine.trajectory(this.name);
     }
 }
-// spotless:on

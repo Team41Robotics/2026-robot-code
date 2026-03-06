@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Util;
 
+@SuppressWarnings("static-access")
 public class ManualShoot extends Command {
 	public static final double DEADBAND = 0.10;
 	public static final double HOOD_INCREMENT = 5 / 180. * PI;

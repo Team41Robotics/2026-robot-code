@@ -23,8 +23,8 @@ public class ShootTeleop extends Command {
 	@Override
 	public void execute() {
 		Translation2d hubCenter = FieldConstants.Hub.innerCenterPoint.toTranslation2d();
-		Translation2d offset = new Translation2d(
-				controls.thirdX() * JOYSTICK_SCALE, controls.thirdY() * JOYSTICK_SCALE);
+		Translation2d offset =
+				new Translation2d(controls.thirdX() * JOYSTICK_SCALE, controls.thirdY() * JOYSTICK_SCALE);
 		Translation2d target = Util.flipIfRed(hubCenter.plus(offset));
 
 		Translation2d virtualTarget = Targetting.shootOnTheFly(target);

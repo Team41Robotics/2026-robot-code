@@ -31,26 +31,12 @@ public record ChoreoTraj(
 	    new Pose2d(3.672, 6.862, Rotation2d.fromRadians(1.571)),
 	    new Pose2d(0.359, 6.784, Rotation2d.fromRadians(1.545))
 	);
-	public static final ChoreoTraj GreifingAuto = new ChoreoTraj(
-	    "GreifingAuto",
+	public static final ChoreoTraj OutpostAuto_1 = new ChoreoTraj(
+	    "OutpostAuto_1",
 	    OptionalInt.empty(),
-	    1.93598,
-	    new Pose2d(4.2, 7.65, Rotation2d.fromRadians(-1.571)),
-	    new Pose2d(8.255, 2.112, Rotation2d.fromRadians(-1.571))
-	);
-	public static final ChoreoTraj idk = new ChoreoTraj(
-	    "idk",
-	    OptionalInt.empty(),
-	    8.23963,
-	    new Pose2d(4.36, 7.527, Rotation2d.fromRadians(-0.524)),
-	    new Pose2d(0.4, 0.4, Rotation2d.fromRadians(3.142))
-	);
-	public static final ChoreoTraj OutpostAuto = new ChoreoTraj(
-	    "OutpostAuto",
-	    OptionalInt.empty(),
-	    1.10511,
+	    1.10939,
 	    new Pose2d(3.936, 0.655, Rotation2d.fromRadians(0)),
-	    new Pose2d(0.372, 0.672, Rotation2d.fromRadians(0))
+	    new Pose2d(0.347, 0.7, Rotation2d.fromRadians(0))
 	);
 	public static final ChoreoTraj TestPath = new ChoreoTraj(
 	    "TestPath",
@@ -83,16 +69,23 @@ public record ChoreoTraj(
 	public static final ChoreoTraj TrenchAuto = new ChoreoTraj(
 	    "TrenchAuto",
 	    OptionalInt.empty(),
-	    3.66328,
+	    3.57279,
 	    new Pose2d(4.004, 7.417, Rotation2d.fromRadians(-1.571)),
 	    new Pose2d(4.004, 7.417, Rotation2d.fromRadians(1.668))
 	);
 	public static final ChoreoTraj MiddletoHP = new ChoreoTraj(
 	    "MiddletoHP",
 	    OptionalInt.empty(),
-	    1.19095,
+	    1.18758,
 	    new Pose2d(3.747, 2.925, Rotation2d.fromRadians(3.142)),
-	    new Pose2d(0.372, 0.625, Rotation2d.fromRadians(3.142))
+	    new Pose2d(0.347, 0.7, Rotation2d.fromRadians(3.142))
+	);
+	public static final ChoreoTraj OutpostAuto_2 = new ChoreoTraj(
+	    "OutpostAuto_2",
+	    OptionalInt.empty(),
+	    1.67973,
+	    new Pose2d(4.188, 0.547, Rotation2d.fromRadians(0)),
+	    new Pose2d(7.762, 3.503, Rotation2d.fromRadians(1.391))
 	);
 
     /**
@@ -101,15 +94,14 @@ public record ChoreoTraj(
      */
     public static final Map<String, ChoreoTraj> ALL_TRAJECTORIES = Map.ofEntries(
     	Map.entry("DepotAuto", DepotAuto),
-		Map.entry("GreifingAuto", GreifingAuto),
-		Map.entry("idk", idk),
-		Map.entry("OutpostAuto", OutpostAuto),
+		Map.entry("OutpostAuto_1", OutpostAuto_1),
 		Map.entry("TestPath", TestPath),
 		Map.entry("TestPath$0", TestPath$0),
 		Map.entry("TestPath$1", TestPath$1),
 		Map.entry("TestPath$2", TestPath$2),
 		Map.entry("TrenchAuto", TrenchAuto),
-		Map.entry("MiddletoHP", MiddletoHP)
+		Map.entry("MiddletoHP", MiddletoHP),
+		Map.entry("OutpostAuto_2", OutpostAuto_2)
     );
 
     /**

@@ -30,7 +30,7 @@ public class Targetting {
 		// double flywheelRPM = flywhheelRPMtemp; // TODO
 		double flywheelRPM = 370 * distance + 1041;
 		double hoodAngle = 0; // TODO
-		double timeOfFlight = 0; // TODO
+		double timeOfFlight = 2.5; // TODO
 		return new ShotParameters(flywheelRPM, hoodAngle, timeOfFlight, distance);
 	}
 

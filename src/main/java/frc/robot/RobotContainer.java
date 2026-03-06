@@ -168,9 +168,9 @@ public class RobotContainer {
 
 		updateMatchPeriod();
 
-		drive.actuate();
-		intake.actuate();
-		shooter.actuate();
+		// drive.actuate();
+		// intake.actuate();
+		// shooter.actuate();
 		indexer.actuate();
 		// climber.actuate();
 		leds.actuate();

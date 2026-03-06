@@ -115,7 +115,7 @@ public class IndexerHW {
 	public void actuate(IndexerInputs inputs, double spinVoltage, double elevatorVoltage) {
 		if (!Robot.isReal()) return;
 
-		spinTalonFX.setControl(spinControlRequest.withOutput(spinVoltage));
+		// spinTalonFX.setControl(spinControlRequest.withOutput(spinVoltage));
 		elevatorTalonFX.setControl(elevatorControlRequest.withOutput(elevatorVoltage));
 	}
 }

@@ -18,7 +18,8 @@ public class PrepareClimb extends Command {
 
 	@Override
 	public boolean isFinished() {
-		return climber.inputs.limitActuator;
+		// return climber.inputs.limitActuator;
+		return false; // TODO
 	}
 
 	@Override

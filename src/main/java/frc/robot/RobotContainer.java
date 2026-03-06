@@ -75,13 +75,13 @@ public class RobotContainer {
 
 	static Pose2d prevStartPose = null;
 
-	public static void init() {
+	public static void init() { // TODO change Akit mode to live mode
 		imu.init();
 		intake.init();
 		shooter.init();
 		indexer.init();
 		leds.init();
-		// climber.init();
+		climber.init();
 		drive.init(new Pose2d());
 		vision.init();
 
@@ -120,7 +120,7 @@ public class RobotContainer {
 
 		SmartDashboard.putData("StupidShootAuto", new StupidShootAuto());
 
-		controls.intake().whileTrue(new IntakeUp());
+		// controls.intake().whileTrue(new IntakeUp());
 		controls.shoot().whileTrue(new RunIndexer());
 
 		controls.intakeDown().onTrue(new IntakeDown());
@@ -177,7 +177,7 @@ public class RobotContainer {
 		shooter.sense();
 		indexer.sense();
 		vision.sense();
-		// climber.sense();
+		climber.sense();
 		leds.sense();
 
 		CommandScheduler.getInstance().run();
@@ -201,7 +201,7 @@ public class RobotContainer {
 		// intake.actuate();
 		// shooter.actuate();
 		indexer.actuate();
-		// climber.actuate();
+		climber.actuate();
 		leds.actuate();
 	}
 

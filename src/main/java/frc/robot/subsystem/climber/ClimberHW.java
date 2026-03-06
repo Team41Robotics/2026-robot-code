@@ -43,18 +43,20 @@ public class ClimberHW {
 		leader = new TalonFX(60);
 		follower = new TalonFX(61);
 
-		limitSwitchTop = new DigitalInput(0); // TODO: DIO port
-		limitSwitchBottom = new DigitalInput(1); // TODO: DIO port
+		limitSwitchTop = new DigitalInput(6); // TODO: DIO port
+		limitSwitchBottom = new DigitalInput(7); // TODO: DIO port
 
 		leader.setNeutralMode(NeutralModeValue.Brake);
 		follower.setNeutralMode(NeutralModeValue.Brake);
 		follower.setControl(new Follower(60, MotorAlignmentValue.Aligned));
 
-		actuator = new SparkMax(62, MotorType.kBrushed); // TODO: CAN ID
+		actuator = new SparkMax(9, MotorType.kBrushed); // TODO: CAN ID
 		SparkMaxConfig actuatorConfig = new SparkMaxConfig();
+		actuatorConfig.smartCurrentLimit(60);
 		actuatorConfig.idleMode(IdleMode.kBrake);
+		actuatorConfig.inverted(true);
 		actuator.configure(actuatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-		limitSwitchActuator = new DigitalInput(2); // TODO: DIO port
+		limitSwitchActuator = new DigitalInput(8); // TODO: DIO port
 
 		// Initialize cached signals
 		position = leader.getPosition(false);

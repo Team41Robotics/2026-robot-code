@@ -16,7 +16,7 @@ import frc.robot.Robot;
 
 public class LEDSHW {
 	public static final int ONBOARD_LED_COUNT = 8;
-	public static final int STRIP_LENGTH = 40; // TUNEME
+	public static final int STRIP_LENGTH = 40;
 	public static final int TOTAL_LED_COUNT = ONBOARD_LED_COUNT + STRIP_LENGTH;
 
 	public CANdle candle;
@@ -34,7 +34,7 @@ public class LEDSHW {
 
 		CANdleConfiguration config = new CANdleConfiguration();
 		config.LED.BrightnessScalar = 1.0;
-		config.LED.StripType = StripTypeValue.GRB; // TUNEME: match your strip wiring
+		config.LED.StripType = StripTypeValue.GRB;
 		config.LED.LossOfSignalBehavior = LossOfSignalBehaviorValue.DisableLEDs;
 		config.CANdleFeatures.VBatOutputMode = VBatOutputModeValue.Modulated;
 		config.CANdleFeatures.StatusLedWhenActive = StatusLedWhenActiveValue.Disabled;

@@ -53,7 +53,8 @@ public class IntakeHW {
 		jointConfig.inverted(true);
 		jointConfig.encoder.positionConversionFactor(JOINT_RATIO * 2 * PI);
 		jointConfig.encoder.velocityConversionFactor(JOINT_RATIO * 2 * PI / 60);
-		jointConfig.smartCurrentLimit(60, 60);
+		jointConfig.smartCurrentLimit(80);
+		jointConfig.secondaryCurrentLimit(60);
 		jointConfig.idleMode(IdleMode.kBrake);
 		jointSparkMax.configure(jointConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 		jointEncoder = jointSparkMax.getEncoder();

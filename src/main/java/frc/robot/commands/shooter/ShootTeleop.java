@@ -29,37 +29,30 @@ public class ShootTeleop extends Command {
 		Translation2d robotPos = Util.flipIfRed(drive.pose.getTranslation());
 		double robotX = robotPos.getX();
 		double robotY = robotPos.getY();
-		double trenchX = FieldConstants.LinesVertical.hubCenter;
+		double xTrenchMin = FieldConstants.LinesVertical.hubCenter - FieldConstants.LeftBump.width / 2.0;
+		double xTrenchMax = FieldConstants.LinesVertical.hubCenter + FieldConstants.LeftBump.width / 2.0;
 		double centerY = FieldConstants.fieldWidth / 2.0;
-
-		// Check if in trench zone (Y within trench opening bounds)
-		boolean inRightTrench = robotY < FieldConstants.LinesHorizontal.rightTrenchOpenStart;
-		boolean inLeftTrench = robotY > FieldConstants.LinesHorizontal.leftTrenchOpenEnd;
-		boolean inTrenchZone = inRightTrench || inLeftTrench;
-
-		// Check if robot is past the trench (other side from alliance wall)
-		boolean otherSide = robotX > trenchX;
 
 		Translation2d target;
 		boolean overrideHood = false;
 		String state;
 
-		if (inTrenchZone) {
-			// In the trench zone - hood angle 0, shoot at hub
-			target = Util.flipIfRed(hubCenter);
-			overrideHood = true;
-			state = "TRENCH";
-		} else if (otherSide) {
-			// Other side of trench - offset 1.7m in Y toward nearest trench opening
-			double yOffset = (robotY < centerY) ? -TRENCH_Y_OFFSET : TRENCH_Y_OFFSET;
-			target = Util.flipIfRed(hubCenter.plus(new Translation2d(0, yOffset)));
-			state = "OTHER_SIDE";
-		} else {
-			// Self side of trench - normal hub targeting with joystick offset
+		if (robotX < xTrenchMin) {
+			// Before trench - shoot at hub with joystick offset
 			Translation2d offset =
 					new Translation2d(controls.thirdY() * JOYSTICK_SCALE, controls.thirdX() * JOYSTICK_SCALE);
 			target = Util.flipIfRed(hubCenter.plus(offset));
-			state = "SELF_SIDE";
+			state = "SHOOT_HUB";
+		} else if (robotX < xTrenchMax) {
+			// In trench zone - hood to 0, aim at hub
+			target = Util.flipIfRed(hubCenter);
+			overrideHood = true;
+			state = "TRENCH";
+		} else {
+			// Past trench - pass to left or right side, NOT through middle
+			double yOffset = (robotY < centerY) ? -TRENCH_Y_OFFSET : TRENCH_Y_OFFSET;
+			target = Util.flipIfRed(hubCenter.plus(new Translation2d(0, yOffset)));
+			state = "PASS";
 		}
 
 		Translation2d virtualTarget = Targetting.shootOnTheFly(target);

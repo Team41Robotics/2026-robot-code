@@ -53,6 +53,10 @@ public class XboxControls implements Controls {
 		return xbox.pov(angle);
 	}
 
+	public Trigger rightPov(int angle) {
+		return xbox.pov(angle);
+	}
+
 	public double thirdX() {
 		return -thirdJoystick.getX();
 	}
@@ -95,5 +99,9 @@ public class XboxControls implements Controls {
 
 	public Trigger eStopAll() {
 		return driverStation.button(14);
+	}
+
+	public Trigger hoodZero() {
+		return driverStation.button(3);
 	}
 }

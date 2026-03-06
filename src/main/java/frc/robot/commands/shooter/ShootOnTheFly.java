@@ -36,7 +36,6 @@ public class ShootOnTheFly extends Command {
 		double fieldAngle = Targetting.shotAngle(virtualTarget);
 		shooter.targetTurretPos =
 				angleModulus(fieldAngle - drive.pose.getRotation().getRadians() + PI);
-		shooter.targetTurretVel = -drive.measuredSpeeds.omegaRadiansPerSecond;
 
 		double distance = Targetting.targetRelative(virtualTarget).getNorm();
 		ShotParameters params = Targetting.shotSpeeds(distance);

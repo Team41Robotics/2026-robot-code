@@ -7,8 +7,10 @@ import static java.lang.Math.*;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.shooter.ShooterStartup;
 import frc.robot.commands.shooter.Targetting;
 import org.littletonrobotics.junction.Logger;
 
@@ -26,7 +28,7 @@ public class Shooter extends SubsystemBase {
 	public static final double HOOD_POS_THRES = 2 / 180.8 * PI;
 	public static final double TURRET_POS_THRES = 2 / 180.0 * PI;
 
-	public static final Constraints TURRET_CONSTRAINTS = new Constraints(6.0, 60.0); // TUNEME
+	public static final Constraints TURRET_CONSTRAINTS = new Constraints(6.0, 240.0); // TUNEME
 	public static TrapezoidProfile turretProfile = new TrapezoidProfile(TURRET_CONSTRAINTS);
 	public State turretSetpoint = new State();
 
@@ -35,7 +37,6 @@ public class Shooter extends SubsystemBase {
 	public State hoodSetpoint = new State();
 
 	public double targetTurretPos = 0;
-	public double targetTurretVel = 0;
 	public double targetHoodPos = 0;
 	public double targetFlywheelRPM = 0;
 	public boolean onTarget = false;
@@ -61,7 +62,7 @@ public class Shooter extends SubsystemBase {
 			targetTurretPos = inputs.turretPosRadians;
 		}
 		if (!zeroed) {
-			// CommandScheduler.getInstance().schedule(new ShooterStartup()); // TODO
+			CommandScheduler.getInstance().schedule(new ShooterStartup());
 		}
 	}
 
@@ -70,7 +71,7 @@ public class Shooter extends SubsystemBase {
 		if (targetTurretPos < TURRET_POS_MIN || targetTurretPos > TURRET_POS_MAX) {
 			turretSetpoint = new State(inputs.turretPosRadians, 0);
 		} else {
-			State turretGoal = new State(targetTurretPos, targetTurretVel);
+			State turretGoal = new State(targetTurretPos, 0);
 			turretSetpoint = turretProfile.calculate(LOOP_PERIOD, turretSetpoint, turretGoal);
 		}
 

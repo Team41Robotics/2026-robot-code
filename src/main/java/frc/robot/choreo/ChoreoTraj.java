@@ -83,9 +83,9 @@ public record ChoreoTraj(
 	public static final ChoreoTraj OutpostAuto_2 = new ChoreoTraj(
 	    "OutpostAuto_2",
 	    OptionalInt.empty(),
-	    1.67973,
+	    1.76145,
 	    new Pose2d(4.188, 0.547, Rotation2d.fromRadians(0)),
-	    new Pose2d(7.762, 3.503, Rotation2d.fromRadians(1.391))
+	    new Pose2d(7.762, 3.503, Rotation2d.fromRadians(1.392))
 	);
 
     /**

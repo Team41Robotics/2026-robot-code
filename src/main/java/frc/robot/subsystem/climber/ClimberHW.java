@@ -50,7 +50,7 @@ public class ClimberHW {
 		follower.setNeutralMode(NeutralModeValue.Brake);
 		follower.setControl(new Follower(60, MotorAlignmentValue.Aligned));
 
-		actuator = new SparkMax(9, MotorType.kBrushed); // TODO: CAN ID
+		actuator = new SparkMax(9, MotorType.kBrushed);
 		SparkMaxConfig actuatorConfig = new SparkMaxConfig();
 		actuatorConfig.smartCurrentLimit(60);
 		actuatorConfig.idleMode(IdleMode.kBrake);

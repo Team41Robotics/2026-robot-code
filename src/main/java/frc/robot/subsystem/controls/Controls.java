@@ -26,6 +26,8 @@ public interface Controls {
 
 	public Trigger pov(int angle);
 
+	public Trigger rightPov(int angle);
+
 	public double thirdX();
 
 	public double thirdY();
@@ -47,4 +49,6 @@ public interface Controls {
 	public Trigger eStopShooter();
 
 	public Trigger eStopAll();
+
+	public Trigger hoodZero();
 }

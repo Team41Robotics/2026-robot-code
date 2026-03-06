@@ -29,7 +29,7 @@ public class ShooterHW {
 	// public static final double TURRET_kP = 128.0;
 	// public static final double TURRET_kI = 36.0;
 	// public static final double TURRET_kD = 0.1;
-	public static final double TURRET_kP = 30;
+	public static final double TURRET_kP = 40;
 	public static final double TURRET_kI = 0;
 	public static final double TURRET_kD = 0;
 
@@ -118,7 +118,7 @@ public class ShooterHW {
 		turretConfig.Slot0.kI = TURRET_kI;
 		turretConfig.Slot0.kD = TURRET_kD;
 		turretConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		turretConfig.CurrentLimits.SupplyCurrentLimit = 40;
+		turretConfig.CurrentLimits.SupplyCurrentLimit = 60;
 		turretConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		turretConfig.CurrentLimits.StatorCurrentLimit = 120;
 		turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

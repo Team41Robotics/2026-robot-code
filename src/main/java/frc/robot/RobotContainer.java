@@ -28,6 +28,7 @@ import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.indexer.StopIndexer;
 import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.intake.IntakeUp;
+import frc.robot.commands.shooter.HoodZero;
 import frc.robot.commands.shooter.ManualShoot;
 import frc.robot.commands.shooter.ShootOnTheFly;
 import frc.robot.commands.shooter.ShootTeleop;
@@ -127,25 +128,29 @@ public class RobotContainer {
 		controls.intakeUp().onTrue(new IntakeUp());
 		controls.intakeReverse().whileTrue(new IntakeDown(-IntakeDown.HIGH_VOLTAGE));
 		controls.indexerReverse()
-				.whileTrue(new RunIndexer(-RunIndexer.DEFAULT_SPIN_VOLTAGE, -RunIndexer.DEFAULT_ELEVATOR_VOLTAGE));
+				.whileTrue(new RunIndexer(-RunIndexer.DEFAULT_SPIN_VOLTAGE, RunIndexer.DEFAULT_ELEVATOR_VOLTAGE));
 
 		controls.climberForward().whileTrue(new PrepareClimb());
 		controls.climberUp().whileTrue(new ClimberUp());
 		controls.climberDown().whileTrue(new ClimberDown());
+
+		controls.hoodZero().whileTrue(new HoodZero());
 
 		// Emergency stops
 		controls.eStopShooter()
 				.whileTrue(new RunCommand(
 						() -> {
 							shooter.targetFlywheelRPM = 0;
-							shooter.targetTurretVel = 0;
+							shooter.targetTurretPos = shooter.inputs.turretPosRadians;
+							shooter.targetHoodPos = shooter.inputs.hoodPosRadians;
 						},
 						shooter));
 		controls.eStopAll()
 				.whileTrue(new RunCommand(
 						() -> {
 							shooter.targetFlywheelRPM = 0;
-							shooter.targetTurretVel = 0;
+							shooter.targetTurretPos = shooter.inputs.turretPosRadians;
+							shooter.targetHoodPos = shooter.inputs.hoodPosRadians;
 							intake.targetJointVoltage = 0;
 							intake.targetIntakeVoltage = 0;
 							indexer.targetSpinVoltage = 0;
@@ -197,9 +202,9 @@ public class RobotContainer {
 
 		updateMatchPeriod();
 
-		// drive.actuate();
-		// intake.actuate();
-		// shooter.actuate();
+		drive.actuate();
+		intake.actuate();
+		shooter.actuate();
 		indexer.actuate();
 		climber.actuate();
 		leds.actuate();

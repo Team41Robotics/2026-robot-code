@@ -23,7 +23,7 @@ public class IntakeDown extends Command {
 	@Override
 	public void execute() {
 		intake.targetJointVoltage =
-				-JOINT_kP * intake.inputs.jointPosRadians - JOINT_kD * intake.inputs.jointVelRadiansPerSec; // TODO DOTHISWORK?
+				-JOINT_kP * intake.inputs.jointPosRadians - JOINT_kD * intake.inputs.jointVelRadiansPerSec;
 		intake.targetIntakeVoltage = voltage;
 	}
 

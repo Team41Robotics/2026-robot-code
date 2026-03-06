@@ -6,7 +6,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class XboxControls implements Controls {
 	public static CommandXboxController xbox = new CommandXboxController(1);
-	public static CommandJoystick driverStation = new CommandJoystick(2);
+	public static CommandJoystick thirdJoystick = new CommandJoystick(2);
+	public static CommandJoystick driverStation = new CommandJoystick(5);
 
 	public Trigger sysidQuasiForward() {
 		return xbox.y();
@@ -53,10 +54,46 @@ public class XboxControls implements Controls {
 	}
 
 	public double thirdX() {
-		return 0;
+		return -thirdJoystick.getX();
 	}
 
 	public double thirdY() {
-		return 0;
+		return -thirdJoystick.getY();
+	}
+
+	public Trigger intakeDown() {
+		return driverStation.button(12);
+	}
+
+	public Trigger intakeUp() {
+		return driverStation.button(11);
+	}
+
+	public Trigger intakeReverse() {
+		return driverStation.button(10);
+	}
+
+	public Trigger indexerReverse() {
+		return driverStation.button(9);
+	}
+
+	public Trigger climberForward() {
+		return driverStation.button(6);
+	}
+
+	public Trigger climberUp() {
+		return driverStation.button(8);
+	}
+
+	public Trigger climberDown() {
+		return driverStation.button(7);
+	}
+
+	public Trigger eStopShooter() {
+		return driverStation.button(15);
+	}
+
+	public Trigger eStopAll() {
+		return driverStation.button(14);
 	}
 }

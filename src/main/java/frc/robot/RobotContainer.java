@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.autos.Autos;
 import frc.robot.commands.autos.StupidShootAuto;
 import frc.robot.commands.climber.Climb;
@@ -29,6 +30,7 @@ import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.intake.IntakeUp;
 import frc.robot.commands.shooter.ManualShoot;
 import frc.robot.commands.shooter.ShootOnTheFly;
+import frc.robot.commands.shooter.ShootTeleop;
 import frc.robot.commands.shooter.ShooterIdle;
 import frc.robot.commands.shooter.ShooterStartup;
 import frc.robot.commands.shooter.StaticShootAtTarget;
@@ -84,17 +86,9 @@ public class RobotContainer {
 		vision.init();
 
 		drive.setDefaultCommand(new FieldOrientedDrive());
-		// drive.setDefaultCommand(new RobotOrientedDrive());
-		shooter.setDefaultCommand(new ShootOnTheFly());
+		shooter.setDefaultCommand(new ShootTeleop());
 		intake.setDefaultCommand(new IntakeDown());
 		indexer.setDefaultCommand(new RunIndexer(0.5, 0));
-
-		// controls.shoot().onTrue(new PrintSwervePos());
-
-		// DriveSysID sysid = new DriveSysID();
-		// TurnSysID sysid = new TurnSysID();
-		// ShooterFlywheelSysID sysid = new ShooterFlywheelSysID();
-		// sysid.init();
 
 		SmartDashboard.putData("DrivePIDTest", new DrivePIDTestCommand());
 		SmartDashboard.putData("TurnPIDTest", new TurnPIDTestCommand());
@@ -128,6 +122,41 @@ public class RobotContainer {
 
 		controls.intake().whileTrue(new IntakeUp());
 		controls.shoot().whileTrue(new RunIndexer());
+
+		controls.intakeDown().onTrue(new IntakeDown());
+		controls.intakeUp().onTrue(new IntakeUp());
+		controls.intakeReverse().whileTrue(new IntakeDown(-IntakeDown.HIGH_VOLTAGE));
+		controls.indexerReverse()
+				.whileTrue(new RunIndexer(-RunIndexer.DEFAULT_SPIN_VOLTAGE, -RunIndexer.DEFAULT_ELEVATOR_VOLTAGE));
+
+		controls.climberForward().whileTrue(new PrepareClimb());
+		controls.climberUp().whileTrue(new ClimberUp());
+		controls.climberDown().whileTrue(new ClimberDown());
+
+		// Emergency stops
+		controls.eStopShooter()
+				.whileTrue(new RunCommand(
+						() -> {
+							shooter.targetFlywheelRPM = 0;
+							shooter.targetTurretVel = 0;
+						},
+						shooter));
+		controls.eStopAll()
+				.whileTrue(new RunCommand(
+						() -> {
+							shooter.targetFlywheelRPM = 0;
+							shooter.targetTurretVel = 0;
+							intake.targetJointVoltage = 0;
+							intake.targetIntakeVoltage = 0;
+							indexer.targetSpinVoltage = 0;
+							indexer.targetElevatorVoltage = 0;
+							climber.targetVoltage = 0;
+							climber.actuatorTargetVoltage = 0;
+						},
+						shooter,
+						intake,
+						indexer,
+						climber));
 
 		Autos.init();
 		autoChooser.addRoutine("TestPath", Autos::testPath);

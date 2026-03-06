@@ -29,4 +29,22 @@ public interface Controls {
 	public double thirdX();
 
 	public double thirdY();
+
+	public Trigger intakeDown();
+
+	public Trigger intakeUp();
+
+	public Trigger intakeReverse();
+
+	public Trigger indexerReverse();
+
+	public Trigger climberForward();
+
+	public Trigger climberUp();
+
+	public Trigger climberDown();
+
+	public Trigger eStopShooter();
+
+	public Trigger eStopAll();
 }

@@ -54,10 +54,46 @@ public class JoystickControls implements Controls {
 	}
 
 	public double thirdX() {
-		return thirdJoystick.getX();
+		return -thirdJoystick.getX();
 	}
 
 	public double thirdY() {
-		return thirdJoystick.getY();
+		return -thirdJoystick.getY();
+	}
+
+	public Trigger intakeDown() {
+		return driverStation.button(12);
+	}
+
+	public Trigger intakeUp() {
+		return driverStation.button(11);
+	}
+
+	public Trigger intakeReverse() {
+		return driverStation.button(10);
+	}
+
+	public Trigger indexerReverse() {
+		return driverStation.button(9);
+	}
+
+	public Trigger climberForward() {
+		return driverStation.button(6);
+	}
+
+	public Trigger climberUp() {
+		return driverStation.button(8);
+	}
+
+	public Trigger climberDown() {
+		return driverStation.button(7);
+	}
+
+	public Trigger eStopShooter() {
+		return driverStation.button(15);
+	}
+
+	public Trigger eStopAll() {
+		return driverStation.button(14);
 	}
 }

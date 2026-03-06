@@ -25,4 +25,8 @@ public interface Controls {
 	public Trigger intake();
 
 	public Trigger pov(int angle);
+
+	public double thirdX();
+
+	public double thirdY();
 }

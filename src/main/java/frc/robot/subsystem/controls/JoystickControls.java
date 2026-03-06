@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class JoystickControls implements Controls {
 	public static CommandJoystick leftJoystick = new CommandJoystick(3);
 	public static CommandJoystick rightJoystick = new CommandJoystick(4);
+	public static CommandJoystick thirdJoystick = new CommandJoystick(5);
 	public static CommandJoystick driverStation = new CommandJoystick(2);
 
 	public Trigger sysidQuasiForward() {
@@ -50,5 +51,13 @@ public class JoystickControls implements Controls {
 
 	public Trigger pov(int angle) {
 		return leftJoystick.pov(angle);
+	}
+
+	public double thirdX() {
+		return thirdJoystick.getX();
+	}
+
+	public double thirdY() {
+		return thirdJoystick.getY();
 	}
 }

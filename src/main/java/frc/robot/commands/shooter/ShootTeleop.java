@@ -8,24 +8,25 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.FieldConstants;
 import frc.robot.Util;
 import frc.robot.commands.shooter.Targetting.ShotParameters;
 import org.littletonrobotics.junction.Logger;
 
 public class ShootTeleop extends Command {
-	public Translation2d origTarget, target;
+	public static final double JOYSTICK_SCALE = 1.0; // meters per full joystick deflection
 
 	public ShootTeleop() {
 		addRequirements(shooter);
 	}
 
 	@Override
-	public void initialize() {
-		target = Util.flipIfRed(origTarget);
-	}
-
-	@Override
 	public void execute() {
+		Translation2d hubCenter = FieldConstants.Hub.innerCenterPoint.toTranslation2d();
+		Translation2d offset = new Translation2d(
+				controls.thirdX() * JOYSTICK_SCALE, controls.thirdY() * JOYSTICK_SCALE);
+		Translation2d target = Util.flipIfRed(hubCenter.plus(offset));
+
 		Translation2d virtualTarget = Targetting.shootOnTheFly(target);
 		double fieldAngle = Targetting.shotAngle(virtualTarget);
 		shooter.targetTurretPos =
@@ -38,6 +39,8 @@ public class ShootTeleop extends Command {
 		shooter.targetHoodPos = params.hoodAngle();
 
 		Logger.recordOutput("/Targetting/targetPose", virtualTarget);
+		Logger.recordOutput("/Targetting/joystickTarget", target);
+		Logger.recordOutput("/Targetting/distance", distance);
 		field.getObject("shootTarget").setPose(new Pose2d(virtualTarget, new Rotation2d()));
 	}
 

@@ -51,4 +51,12 @@ public class XboxControls implements Controls {
 	public Trigger pov(int angle) {
 		return xbox.pov(angle);
 	}
+
+	public double thirdX() {
+		return 0;
+	}
+
+	public double thirdY() {
+		return 0;
+	}
 }

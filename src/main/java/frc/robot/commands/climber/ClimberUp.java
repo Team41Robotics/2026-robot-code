@@ -21,12 +21,12 @@ public class ClimberUp extends Command {
 
 	@Override
 	public void execute() {
-		if (!climber.inputs.limit) released = true;
+		if (!climber.inputs.limitTop) released = true;
 	}
 
 	@Override
 	public boolean isFinished() {
-		return released && climber.inputs.limit;
+		return released && climber.inputs.limitTop;
 	}
 
 	@Override

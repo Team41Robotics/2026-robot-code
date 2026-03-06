@@ -27,7 +27,8 @@ public class ClimberHW {
 	public TalonFX leader;
 	public TalonFX follower;
 
-	public DigitalInput limitSwitch;
+	public DigitalInput limitSwitchTop;
+	public DigitalInput limitSwitchBottom;
 
 	public SparkMax actuator;
 	public DigitalInput limitSwitchActuator;
@@ -42,7 +43,8 @@ public class ClimberHW {
 		leader = new TalonFX(60);
 		follower = new TalonFX(61);
 
-		limitSwitch = new DigitalInput(0); // TODO: DIO port
+		limitSwitchTop = new DigitalInput(0); // TODO: DIO port
+		limitSwitchBottom = new DigitalInput(1); // TODO: DIO port
 
 		leader.setNeutralMode(NeutralModeValue.Brake);
 		follower.setNeutralMode(NeutralModeValue.Brake);
@@ -83,7 +85,8 @@ public class ClimberHW {
 		inputs.voltageVolts = motorVoltage.getValueAsDouble();
 		inputs.currentAmps = statorCurrent.getValueAsDouble();
 
-		inputs.limit = !limitSwitch.get();
+		inputs.limitTop = !limitSwitchTop.get();
+		inputs.limitBottom = !limitSwitchBottom.get();
 
 		inputs.actuatorVoltageVolts = actuator.getBusVoltage() * actuator.getAppliedOutput();
 		inputs.actuatorCurrentAmps = actuator.getOutputCurrent();

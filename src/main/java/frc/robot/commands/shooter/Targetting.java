@@ -10,7 +10,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class Targetting {
 	public static final Transform2d TURRET_POS =
-			new Transform2d(new Translation2d(0.174, 0.159), new Rotation2d(0)); // TODO
+			new Transform2d(new Translation2d(0.174, 0.159), new Rotation2d(0));
 
 	public record ShotParameters(double flywheelRPM, double hoodAngle, double timeOfFlight, double distance) {}
 
@@ -28,7 +28,7 @@ public class Targetting {
 
 	public static ShotParameters shotSpeeds(double distance) {
 		// double flywheelRPM = flywhheelRPMtemp; // TODO
-		double flywheelRPM = 370 * distance + 1041;
+		double flywheelRPM = 400 * distance + 952;
 		double hoodAngle = 0; // TODO
 		double timeOfFlight = 2.5; // TODO
 		return new ShotParameters(flywheelRPM, hoodAngle, timeOfFlight, distance);

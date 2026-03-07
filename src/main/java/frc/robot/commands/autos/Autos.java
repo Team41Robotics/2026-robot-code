@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.FieldConstants;
 import frc.robot.choreo.ChoreoTraj;
 import frc.robot.choreo.ChoreoVars;
+import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.shooter.ShooterStartup;
 import org.littletonrobotics.junction.Logger;
 
@@ -93,6 +94,7 @@ public class Autos {
 		AutoTrajectory traj = ChoreoTraj.DepotAuto.asAutoTraj(routine);
 
 		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
+		routine.active().whileTrue(new RunIndexer());
 
 		return routine;
 	}
@@ -102,6 +104,7 @@ public class Autos {
 		AutoTrajectory traj = ChoreoTraj.OutpostAuto_1.asAutoTraj(routine);
 
 		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
+		routine.active().whileTrue(new RunIndexer());
 
 		return routine;
 	}
@@ -111,6 +114,7 @@ public class Autos {
 		AutoTrajectory traj = ChoreoTraj.OutpostAuto_2.asAutoTraj(routine);
 
 		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
+		routine.active().whileTrue(new RunIndexer());
 
 		return routine;
 	}
@@ -120,6 +124,7 @@ public class Autos {
 		AutoTrajectory traj = ChoreoTraj.TrenchAuto.asAutoTraj(routine);
 
 		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
+		routine.active().whileTrue(new RunIndexer());
 
 		return routine;
 	}
@@ -129,6 +134,7 @@ public class Autos {
 		AutoTrajectory traj = ChoreoTraj.MiddletoHP.asAutoTraj(routine);
 
 		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
+		routine.active().whileTrue(new RunIndexer());
 
 		return routine;
 	}

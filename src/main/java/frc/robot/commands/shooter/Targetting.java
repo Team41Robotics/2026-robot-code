@@ -24,14 +24,62 @@ public class Targetting {
 		return toTarget.getAngle().getRadians();
 	}
 
-	public static double flywhheelRPMtemp = 2000;
+	// {distance (m), flywheelRPM, hoodAngle (rad), timeOfFlight (s)}
+	public static final double[][] SHOT_TABLE = {
+		// dist,  rpm,   hood,  tof
+		{1.0, 1650, 0, 0.83},
+		{1.5, 1700, 0, 0.87},
+		{2.0, 1750, 0, 0.936},
+		{2.5, 1800, 0, 1.137},
+		{3.0, 1850, 0.0175, 1.262},
+		{3.29, 1900, 0.0349, 1.284},
+		{3.5, 1950, 0.0524, 1.271},
+		{4.0, 2000, 0.0698, 1.356},
+		{4.5, 2050, 0.0873, 1.428},
+		{5, 2100, 0.1047, 1.49},
+		{5.5, 2150, 0.1396, 1.487},
+		{6, 2250, 0.1571, 1.498}
+	};
 
 	public static ShotParameters shotSpeeds(double distance) {
-		// double flywheelRPM = flywhheelRPMtemp; // TODO
-		double flywheelRPM = 400 * distance + 952;
-		double hoodAngle = 0; // TODO
-		double timeOfFlight = 2.5; // TODO
-		return new ShotParameters(flywheelRPM, hoodAngle, timeOfFlight, distance);
+		// extrapolate below table
+		if (distance <= SHOT_TABLE[0][0]) {
+			double[] lo = SHOT_TABLE[0];
+			double[] hi = SHOT_TABLE[1];
+			double t = (distance - lo[0]) / (hi[0] - lo[0]);
+			return new ShotParameters(
+					lo[1] + t * (hi[1] - lo[1]),
+					lo[2] + t * (hi[2] - lo[2]),
+					lo[3] + t * (hi[3] - lo[3]),
+					distance);
+		}
+		// extrapolate above table
+		if (distance >= SHOT_TABLE[SHOT_TABLE.length - 1][0]) {
+			double[] lo = SHOT_TABLE[SHOT_TABLE.length - 2];
+			double[] hi = SHOT_TABLE[SHOT_TABLE.length - 1];
+			double t = (distance - lo[0]) / (hi[0] - lo[0]);
+			return new ShotParameters(
+					lo[1] + t * (hi[1] - lo[1]),
+					lo[2] + t * (hi[2] - lo[2]),
+					lo[3] + t * (hi[3] - lo[3]),
+					distance);
+		}
+
+		// linear interpolation between bracketing rows
+		for (int i = 0; i < SHOT_TABLE.length - 1; i++) {
+			double[] lo = SHOT_TABLE[i];
+			double[] hi = SHOT_TABLE[i + 1];
+			if (distance >= lo[0] && distance <= hi[0]) {
+				double t = (distance - lo[0]) / (hi[0] - lo[0]);
+				double rpm = lo[1] + t * (hi[1] - lo[1]);
+				double hood = lo[2] + t * (hi[2] - lo[2]);
+				double tof = lo[3] + t * (hi[3] - lo[3]);
+				return new ShotParameters(rpm, hood, tof, distance);
+			}
+		}
+
+		// fallback (should never reach here)
+		return new ShotParameters(0, 0, 0, distance);
 	}
 
 	public static Translation2d targetOnTheFly(Translation2d target, double timeOfFlight) {

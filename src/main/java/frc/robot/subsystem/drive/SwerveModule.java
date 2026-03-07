@@ -25,7 +25,7 @@ public class SwerveModule {
 
 	public static final double MAX_VEL = 6.0; // TUNEME. max wheel velocity (m/s)
 
-	public static final Constraints DRIVE_CONSTRAINTS = new Constraints(15, 1e9); // TUNEME
+	public static final Constraints DRIVE_CONSTRAINTS = new Constraints(1e9, 1e9); // TUNEME
 	public static TrapezoidProfile driveProfile = new TrapezoidProfile(DRIVE_CONSTRAINTS);
 
 	public static final Constraints TURN_CONSTRAINTS = new Constraints(20, 80); // TUNEME

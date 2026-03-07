@@ -50,8 +50,6 @@ public class Shooter extends SubsystemBase {
 
 		turretSetpoint = new State(inputs.turretPosRadians, inputs.turretVelRadiansPerSec);
 		hoodSetpoint = new State(inputs.hoodPosRadians, inputs.hoodVelRadiansPerSec);
-		controls.pov(45).onTrue(new InstantCommand(() -> Targetting.flywhheelRPMtemp += 100));
-		controls.pov(270).onTrue(new InstantCommand(() -> Targetting.flywhheelRPMtemp -= 100));
 	}
 
 	public void sense() {

@@ -25,17 +25,17 @@ public class SimpleDepotAuto extends ParallelCommandGroup {
 	public static final double SPEED = 0.5; // m/s
 
 	public SimpleDepotAuto() {
-		addCommands(
-				// Drive sequence: zero shooter, reset pose, drive to depot, turn, drive to end
-				Commands.sequence(
-						new ShooterStartup(),
-						new ResetPose(START_X, START_Y, START_HEADING),
-						new DriveForward(START_X, START_Y, DEPOT_X, DEPOT_Y, SPEED, 10),
-						new TurnAngle(END_HEADING),
-						new DriveForward(DEPOT_X, DEPOT_Y, END_X, END_Y, SPEED, 8)),
-				// Run continuously until auto is interrupted
-				new IntakeDown(),
-				new ShootOnTheFly(),
-				new RunIndexer());
+		// addCommands(
+		// 		// Drive sequence: zero shooter, reset pose, drive to depot, turn, drive to end
+		// 		Commands.sequence(
+		// 				new ShooterStartup(),
+		// 				new ResetPose(START_X, START_Y, START_HEADING),
+		// 				new DriveForward(START_X, START_Y, DEPOT_X, DEPOT_Y, SPEED, 10),
+		// 				new TurnAngle(END_HEADING),
+		// 				new DriveForward(DEPOT_X, DEPOT_Y, END_X, END_Y, SPEED, 8)),
+		// 		// Run continuously until auto is interrupted
+		// 		new IntakeDown(),
+		// 		new ShootOnTheFly(),
+		// 		new RunIndexer());
 	}
 }

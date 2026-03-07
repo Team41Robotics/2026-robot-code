@@ -106,6 +106,6 @@ public class JoystickControls implements Controls {
 	}
 
 	public Trigger passToOwnSide() {
-		return driverStation.button(13); // TODO
+		return driverStation.button(2);
 	}
 }

@@ -8,10 +8,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.shooter.ShooterStartup;
-import frc.robot.commands.shooter.Targetting;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
@@ -20,7 +18,7 @@ public class Shooter extends SubsystemBase {
 
 	public static final double TURRET_POS_MIN = -2.029; // TUNEME
 	// public static final double TURRET_POS_MAX = 1.087;
-	public static final double TURRET_POS_MAX = PI/2;
+	public static final double TURRET_POS_MAX = PI / 2;
 	public static final double HOOD_POS_MIN = 0; //  TUNEME
 	// FIXME MATCH HOOD POS WITH REAL INCLINE
 	public static final double HOOD_POS_MAX = 35 / 180.0 * PI;
@@ -60,7 +58,7 @@ public class Shooter extends SubsystemBase {
 			targetHoodPos = inputs.hoodPosRadians;
 			targetTurretPos = inputs.turretPosRadians;
 		}
-		if (!zeroed) {
+		if (!zeroed && robot.isTeleopEnabled()) {
 			CommandScheduler.getInstance().schedule(new ShooterStartup());
 		}
 	}

@@ -36,5 +36,7 @@ public class VisionHW {
 		encodePacket.encodeList(results);
 
 		inputs.data = encodePacket.getDataReference();
+		inputs.cameraMatrix = cam.getCameraMatrix().map(m -> m.getData()).orElse(new double[0]);
+		inputs.distCoeffs = cam.getDistCoeffs().map(m -> m.getData()).orElse(new double[0]);
 	}
 }

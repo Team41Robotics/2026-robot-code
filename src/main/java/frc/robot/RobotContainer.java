@@ -181,7 +181,7 @@ public class RobotContainer {
 		autoChooser.addRoutine("MiddletoHP", Autos::middleToHP);
 
 		SmartDashboard.putData("AutoChooser", autoChooser);
-		SmartDashboard.putData("StartPoseChooser", Autos.startPoseChooser);
+		SmartDashboard.putData("StartPoseChooser", Autos.startPoseChooser.getSendableChooser());
 
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());
 		SmartDashboard.putData("Field", field);

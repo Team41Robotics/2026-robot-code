@@ -9,8 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class Targetting {
-	public static final Transform2d TURRET_POS =
-			new Transform2d(new Translation2d(0.174, 0.159), new Rotation2d(0));
+	public static final Transform2d TURRET_POS = new Transform2d(new Translation2d(0.174, 0.159), new Rotation2d(0));
 
 	public record ShotParameters(double flywheelRPM, double hoodAngle, double timeOfFlight, double distance) {}
 
@@ -48,10 +47,7 @@ public class Targetting {
 			double[] hi = SHOT_TABLE[1];
 			double t = (distance - lo[0]) / (hi[0] - lo[0]);
 			return new ShotParameters(
-					lo[1] + t * (hi[1] - lo[1]),
-					lo[2] + t * (hi[2] - lo[2]),
-					lo[3] + t * (hi[3] - lo[3]),
-					distance);
+					lo[1] + t * (hi[1] - lo[1]), lo[2] + t * (hi[2] - lo[2]), lo[3] + t * (hi[3] - lo[3]), distance);
 		}
 		// extrapolate above table
 		if (distance >= SHOT_TABLE[SHOT_TABLE.length - 1][0]) {
@@ -59,10 +55,7 @@ public class Targetting {
 			double[] hi = SHOT_TABLE[SHOT_TABLE.length - 1];
 			double t = (distance - lo[0]) / (hi[0] - lo[0]);
 			return new ShotParameters(
-					lo[1] + t * (hi[1] - lo[1]),
-					lo[2] + t * (hi[2] - lo[2]),
-					lo[3] + t * (hi[3] - lo[3]),
-					distance);
+					lo[1] + t * (hi[1] - lo[1]), lo[2] + t * (hi[2] - lo[2]), lo[3] + t * (hi[3] - lo[3]), distance);
 		}
 
 		// linear interpolation between bracketing rows

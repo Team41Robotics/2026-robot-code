@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.numbers.N8;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -124,17 +125,21 @@ public class Vision extends SubsystemBase {
 				Logger.recordOutput("/Vision/" + cam.name + "/seenTags", seenTagPoses2d);
 
 				Optional<EstimatedRobotPose> constrainedPnPpose;
-				try {
-					constrainedPnPpose = poseEsts[i].estimateConstrainedSolvepnpPose(
-							result,
-							cam.cam.getCameraMatrix().orElseThrow(),
-							cam.cam.getDistCoeffs().orElseThrow(),
-							new Pose3d(drive.pose),
-							!enableHeading,
-							1);
-				} catch (Exception e) {
+				if (input.cameraMatrix.length == 0 || input.distCoeffs.length == 0) {
 					constrainedPnPpose = Optional.empty();
-					System.out.println("Constrained PnP failed for " + cam.name + ": " + e.getMessage());
+				} else {
+					try {
+						constrainedPnPpose = poseEsts[i].estimateConstrainedSolvepnpPose(
+								result,
+								new Matrix<>(N3.instance, N3.instance, input.cameraMatrix),
+								new Matrix<>(N8.instance, N1.instance, input.distCoeffs),
+								new Pose3d(drive.pose),
+								!enableHeading,
+								1);
+					} catch (Exception e) {
+						constrainedPnPpose = Optional.empty();
+						System.out.println("Constrained PnP failed for " + cam.name + ": " + e.getMessage());
+					}
 				}
 				Optional<EstimatedRobotPose> coprocPnPpose;
 				try {

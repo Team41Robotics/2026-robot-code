@@ -2,12 +2,7 @@ package frc.robot.commands.autos;
 
 import static java.lang.Math.*;
 
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.commands.indexer.RunIndexer;
-import frc.robot.commands.intake.IntakeDown;
-import frc.robot.commands.shooter.ShootOnTheFly;
-import frc.robot.commands.shooter.ShooterStartup;
 
 public class SimpleDepotAuto extends ParallelCommandGroup {
 	// Choreo waypoints (blue alliance)

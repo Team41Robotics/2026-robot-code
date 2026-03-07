@@ -12,19 +12,21 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.FieldConstants;
+import frc.robot.Util;
 import frc.robot.choreo.ChoreoTraj;
 import frc.robot.choreo.ChoreoVars;
 import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.shooter.ShooterStartup;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class Autos {
 	public static AutoFactory factory;
 
-	public static SendableChooser<Pose2d> startPoseChooser = new SendableChooser<>();
+	public static LoggedDashboardChooser<Pose2d> startPoseChooser = new LoggedDashboardChooser<>(null);
 
 	// TUNEME: trajectory tracking PID gains
 	public static PIDController xController = new PIDController(5.0, 0, 0);
@@ -36,7 +38,7 @@ public class Autos {
 
 		factory = new AutoFactory(() -> drive.pose, drive::resetPose, Autos::choreoController, true, drive);
 
-		startPoseChooser.setDefaultOption("null", new Pose2d());
+		startPoseChooser.addDefaultOption("null", new Pose2d());
 		startPoseChooser.addOption("testStart", ChoreoVars.Poses.testStart);
 		startPoseChooser.addOption("TestPath start", ChoreoTraj.TestPath.initialPoseBlue());
 		startPoseChooser.addOption(
@@ -89,12 +91,36 @@ public class Autos {
 		return routine;
 	}
 
+	public static boolean isOnCloseSide() {
+		Translation2d robotPos = Util.flipIfRed(drive.pose.getTranslation());
+		double xTrenchMin = FieldConstants.LinesVertical.hubCenter - FieldConstants.LeftBump.width / 2.0;
+		return robotPos.getX() < xTrenchMin;
+	}
+
+	public static Command runIndexerOnCloseSide() {
+		return Commands.run(
+						() -> {
+							if (isOnCloseSide()) {
+								indexer.targetSpinVoltage = RunIndexer.DEFAULT_SPIN_VOLTAGE;
+								indexer.targetElevatorVoltage = RunIndexer.DEFAULT_ELEVATOR_VOLTAGE;
+							} else {
+								indexer.targetSpinVoltage = 0;
+								indexer.targetElevatorVoltage = 0;
+							}
+						},
+						indexer)
+				.finallyDo(() -> {
+					indexer.targetSpinVoltage = 0;
+					indexer.targetElevatorVoltage = 0;
+				});
+	}
+
 	public static AutoRoutine depotAuto() {
 		AutoRoutine routine = factory.newRoutine("DepotAuto");
 		AutoTrajectory traj = ChoreoTraj.DepotAuto.asAutoTraj(routine);
 
 		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
-		routine.active().whileTrue(new RunIndexer());
+		routine.active().whileTrue(runIndexerOnCloseSide());
 
 		return routine;
 	}
@@ -104,7 +130,7 @@ public class Autos {
 		AutoTrajectory traj = ChoreoTraj.OutpostAuto_1.asAutoTraj(routine);
 
 		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
-		routine.active().whileTrue(new RunIndexer());
+		routine.active().whileTrue(runIndexerOnCloseSide());
 
 		return routine;
 	}
@@ -114,7 +140,7 @@ public class Autos {
 		AutoTrajectory traj = ChoreoTraj.OutpostAuto_2.asAutoTraj(routine);
 
 		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
-		routine.active().whileTrue(new RunIndexer());
+		routine.active().whileTrue(runIndexerOnCloseSide());
 
 		return routine;
 	}
@@ -124,7 +150,7 @@ public class Autos {
 		AutoTrajectory traj = ChoreoTraj.TrenchAuto.asAutoTraj(routine);
 
 		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
-		routine.active().whileTrue(new RunIndexer());
+		routine.active().whileTrue(runIndexerOnCloseSide());
 
 		return routine;
 	}
@@ -134,7 +160,7 @@ public class Autos {
 		AutoTrajectory traj = ChoreoTraj.MiddletoHP.asAutoTraj(routine);
 
 		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
-		routine.active().whileTrue(new RunIndexer());
+		routine.active().whileTrue(runIndexerOnCloseSide());
 
 		return routine;
 	}

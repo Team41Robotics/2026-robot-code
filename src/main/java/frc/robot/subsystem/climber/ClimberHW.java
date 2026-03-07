@@ -34,6 +34,7 @@ public class ClimberHW {
 
 	public SparkMax actuator;
 	public DigitalInput limitSwitchActuator;
+	public DigitalInput retractSwitch;
 
 	// Cached StatusSignals
 	public StatusSignal<Angle> position;
@@ -49,6 +50,7 @@ public class ClimberHW {
 		limitSwitchBottom = new DigitalInput(3); // TODO: DIO port
 		limitSwitchTop2 = new DigitalInput(4); // TODO: DIO port
 		limitSwitchBottom2 = new DigitalInput(5); // TODO: DIO port
+		retractSwitch = new DigitalInput(7);
 
 		leader.setNeutralMode(NeutralModeValue.Brake);
 		follower.setNeutralMode(NeutralModeValue.Brake);
@@ -60,7 +62,7 @@ public class ClimberHW {
 		actuatorConfig.idleMode(IdleMode.kBrake);
 		actuatorConfig.inverted(true);
 		actuator.configure(actuatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-		limitSwitchActuator = new DigitalInput(6); // TODO: DIO port
+		limitSwitchActuator = new DigitalInput(8); // TODO: DIO port
 
 		// Initialize cached signals
 		position = leader.getPosition(false);
@@ -95,6 +97,7 @@ public class ClimberHW {
 		inputs.limitTop2 = !limitSwitchTop2.get();
 		inputs.limitBottom = !limitSwitchBottom.get();
 		inputs.limitBottom2 = !limitSwitchBottom2.get();
+		inputs.retractSwitch = !retractSwitch.get();
 
 		inputs.actuatorVoltageVolts = actuator.getBusVoltage() * actuator.getAppliedOutput();
 		inputs.actuatorCurrentAmps = actuator.getOutputCurrent();

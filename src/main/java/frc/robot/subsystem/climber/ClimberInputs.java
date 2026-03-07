@@ -13,6 +13,7 @@ public class ClimberInputs {
 	public boolean limitTop2;
 	public boolean limitBottom;
 	public boolean limitBottom2;
+	public boolean retractSwitch;
 
 	public double actuatorVoltageVolts;
 	public double actuatorCurrentAmps;

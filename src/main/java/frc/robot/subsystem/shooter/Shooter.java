@@ -19,7 +19,8 @@ public class Shooter extends SubsystemBase {
 	public ShooterInputsAutoLogged inputs = new ShooterInputsAutoLogged();
 
 	public static final double TURRET_POS_MIN = -2.029; // TUNEME
-	public static final double TURRET_POS_MAX = 1.087;
+	// public static final double TURRET_POS_MAX = 1.087;
+	public static final double TURRET_POS_MAX = PI/2;
 	public static final double HOOD_POS_MIN = 0; //  TUNEME
 	// FIXME MATCH HOOD POS WITH REAL INCLINE
 	public static final double HOOD_POS_MAX = 35 / 180.0 * PI;

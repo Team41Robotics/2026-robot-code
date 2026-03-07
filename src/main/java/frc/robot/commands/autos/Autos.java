@@ -42,7 +42,7 @@ public class Autos {
 				"PITTEST",
 				new Pose2d(
 						FieldConstants.Hub.innerCenterPoint.toTranslation2d().plus(new Translation2d(-1, 0)),
-						Rotation2d.kCW_Pi_2));
+						Rotation2d.kCCW_Pi_2));
 	}
 
 	public static void choreoController(SwerveSample sample) {

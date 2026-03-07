@@ -203,11 +203,11 @@ public class RobotContainer {
 			leds.control = leds.DISABLED_ANIMATION;
 			autonomousCommand = autoChooser.selectedCommand();
 
-			Pose2d selected = Autos.startPoseChooser.getSelected();
-			if (selected != null && selected != prevStartPose) {
-				prevStartPose = selected;
-				drive.resetPose(selected);
-			}
+			// Pose2d selected = Util.flipIfRed(Autos.startPoseChooser.getSelected()); // TODO STUPID
+			// if (selected != null && selected != prevStartPose) {
+			// 	prevStartPose = selected;
+			// 	drive.resetPose(selected);
+			// }
 		} else {
 			leds.control = shooter.onTarget ? leds.SHOOTING_ANIMATION : leds.IDLE_ANIMATION;
 		}

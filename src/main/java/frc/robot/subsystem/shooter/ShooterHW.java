@@ -146,7 +146,7 @@ public class ShooterHW {
 		hoodTalonFX.setPosition(0);
 		hoodTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
-		hoodLimitSwitch = new DigitalInput(1);
+		hoodLimitSwitch = new DigitalInput(9);
 
 		// --- Flywheel (leader) ---
 		flywheelTalonFX = new TalonFX(53);

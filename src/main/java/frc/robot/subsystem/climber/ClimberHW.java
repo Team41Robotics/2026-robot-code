@@ -46,11 +46,11 @@ public class ClimberHW {
 		leader = new TalonFX(60);
 		follower = new TalonFX(61);
 
-		limitSwitchTop = new DigitalInput(2); // TODO: DIO port
-		limitSwitchBottom = new DigitalInput(3); // TODO: DIO port
-		limitSwitchTop2 = new DigitalInput(4); // TODO: DIO port
-		limitSwitchBottom2 = new DigitalInput(5); // TODO: DIO port
-		retractSwitch = new DigitalInput(7);
+		limitSwitchTop = new DigitalInput(2);
+		limitSwitchBottom = new DigitalInput(5);
+		limitSwitchTop2 = new DigitalInput(6);
+		limitSwitchBottom2 = new DigitalInput(4);
+		retractSwitch = new DigitalInput(1);
 
 		leader.setNeutralMode(NeutralModeValue.Brake);
 		follower.setNeutralMode(NeutralModeValue.Brake);
@@ -62,7 +62,7 @@ public class ClimberHW {
 		actuatorConfig.idleMode(IdleMode.kBrake);
 		actuatorConfig.inverted(true);
 		actuator.configure(actuatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-		limitSwitchActuator = new DigitalInput(8); // TODO: DIO port
+		limitSwitchActuator = new DigitalInput(3);
 
 		// Initialize cached signals
 		position = leader.getPosition(false);

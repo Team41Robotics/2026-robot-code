@@ -14,7 +14,7 @@ import frc.robot.commands.shooter.Targetting.ShotParameters;
 import org.littletonrobotics.junction.Logger;
 
 public class ShootTeleop extends Command {
-	public static final double JOYSTICK_SCALE = 1.0; // meters per full joystick deflection
+	public static final double JOYSTICK_SCALE = 0.3; // meters per full joystick deflection
 	public static final double TRENCH_Y_OFFSET = 1.7; // meters offset when shooting over trench
 
 	public ShootTeleop() {

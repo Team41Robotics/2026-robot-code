@@ -130,7 +130,8 @@ public class RobotContainer {
 
 		controls.intakeDown().onTrue(new IntakeDown());
 		controls.intakeUp().onTrue(new IntakeUp());
-		controls.intakeReverse().whileTrue(new IntakeDown(-IntakeDown.HIGH_VOLTAGE));
+		// controls.intakeReverse().whileTrue(new IntakeDown(-IntakeDown.HIGH_VOLTAGE));
+		controls.intakeReverse().whileTrue(new IntakeUp());
 		controls.indexerReverse()
 				.whileTrue(new RunIndexer(-RunIndexer.DEFAULT_SPIN_VOLTAGE, RunIndexer.DEFAULT_ELEVATOR_VOLTAGE));
 
@@ -173,7 +174,7 @@ public class RobotContainer {
 		Autos.init();
 		autoChooser.addRoutine("TestPath", Autos::testPath);
 		autoChooser.addRoutine("StupidShootAuto", Autos::stupidShootAuto);
-		autoChooser.addRoutine("SimpleDepotAuto", Autos::simpleDepotAuto);
+		// autoChooser.addRoutine("SimpleDepotAuto", Autos::simpleDepotAuto);
 		autoChooser.addRoutine("DepotAuto", Autos::depotAuto);
 		autoChooser.addRoutine("OutpostAuto_1", Autos::outpostAuto1);
 		autoChooser.addRoutine("OutpostAuto_2", Autos::outpostAuto2);
@@ -181,7 +182,7 @@ public class RobotContainer {
 		autoChooser.addRoutine("MiddletoHP", Autos::middleToHP);
 
 		SmartDashboard.putData("AutoChooser", autoChooser);
-		SmartDashboard.putData("StartPoseChooser", Autos.startPoseChooser.getSendableChooser());
+		SmartDashboard.putData("StartPoseChooser", Autos.startPoseChooser);
 
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());
 		SmartDashboard.putData("Field", field);

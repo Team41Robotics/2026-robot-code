@@ -9,15 +9,14 @@ import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.FieldConstants;
 import frc.robot.choreo.ChoreoTraj;
 import frc.robot.choreo.ChoreoVars;
-import frc.robot.commands.indexer.RunIndexer;
-import frc.robot.commands.intake.IntakeDown;
-import frc.robot.commands.shooter.ShootOnTheFly;
 import frc.robot.commands.shooter.ShooterStartup;
 import org.littletonrobotics.junction.Logger;
 
@@ -39,6 +38,11 @@ public class Autos {
 		startPoseChooser.setDefaultOption("null", new Pose2d());
 		startPoseChooser.addOption("testStart", ChoreoVars.Poses.testStart);
 		startPoseChooser.addOption("TestPath start", ChoreoTraj.TestPath.initialPoseBlue());
+		startPoseChooser.addOption(
+				"PITTEST",
+				new Pose2d(
+						FieldConstants.Hub.innerCenterPoint.toTranslation2d().plus(new Translation2d(-1, 0)),
+						Rotation2d.kCW_Pi_2));
 	}
 
 	public static void choreoController(SwerveSample sample) {
@@ -88,14 +92,43 @@ public class Autos {
 		AutoRoutine routine = factory.newRoutine("DepotAuto");
 		AutoTrajectory traj = ChoreoTraj.DepotAuto.asAutoTraj(routine);
 
-		routine.active()
-				.onTrue(Commands.sequence(
-						new ShooterStartup(),
-						traj.cmd(),
-						new ParallelCommandGroup(new IntakeDown(), new ShootOnTheFly(), new RunIndexer())));
-		traj.active().whileTrue(new IntakeDown());
-		traj.active().whileTrue(new ShootOnTheFly());
-		traj.active().whileTrue(new RunIndexer());
+		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
+
+		return routine;
+	}
+
+	public static AutoRoutine outpostAuto1() {
+		AutoRoutine routine = factory.newRoutine("OutpostAuto_1");
+		AutoTrajectory traj = ChoreoTraj.OutpostAuto_1.asAutoTraj(routine);
+
+		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
+
+		return routine;
+	}
+
+	public static AutoRoutine outpostAuto2() {
+		AutoRoutine routine = factory.newRoutine("OutpostAuto_2");
+		AutoTrajectory traj = ChoreoTraj.OutpostAuto_2.asAutoTraj(routine);
+
+		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
+
+		return routine;
+	}
+
+	public static AutoRoutine trenchAuto() {
+		AutoRoutine routine = factory.newRoutine("TrenchAuto");
+		AutoTrajectory traj = ChoreoTraj.TrenchAuto.asAutoTraj(routine);
+
+		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
+
+		return routine;
+	}
+
+	public static AutoRoutine middleToHP() {
+		AutoRoutine routine = factory.newRoutine("MiddletoHP");
+		AutoTrajectory traj = ChoreoTraj.MiddletoHP.asAutoTraj(routine);
+
+		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
 
 		return routine;
 	}

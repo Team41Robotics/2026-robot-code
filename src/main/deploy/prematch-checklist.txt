@@ -1,0 +1,36 @@
+=== PRE-MATCH CHECKLIST ===
+
+[ ] BATTERY
+    - Battery voltage > 12.5V
+    - Battery securely strapped
+    - Main breaker ON, Anderson connector seated
+
+[ ] MECHANICAL
+    - Bumpers attached, correct color facing out
+    - All wheels spinning freely, no debris
+    - Belts/chains tensioned (intake, shooter, climber)
+    - Bolts tight on swerve modules
+    - Hood and turret move freely by hand
+
+[ ] ELECTRICAL
+    - Radio powered, solid lights
+    - CAN wiring seated (check Ducky bus connector)
+    - All breakers ON in PDP
+    - Camera USB/Ethernet connected (DuckyNE, DuckySE)
+    - Limit switches wired (hood DIO 1, turret DIO 0, climber DIO 6/7/8)
+
+[ ] SOFTWARE
+    - Connect to robot via Driver Station
+    - Run PreMatchCheck from SmartDashboard
+    - Verify all checks green in NetworkAlerts widget
+    - Select autonomous routine in AutoChooser
+    - Select start pose in StartPoseChooser
+    - Verify alliance color correct in Driver Station
+    - Verify shooter zeros (ShooterStartup completes)
+
+[ ] PRE-ENABLE
+    - Robot positioned on field correctly
+    - Intake stowed
+    - Climber retracted
+    - All personnel clear of robot
+    - Driver/operator joysticks connected and mapped

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.commands.PreMatchCheck;
 import frc.robot.commands.autos.Autos;
 import frc.robot.commands.autos.StupidShootAuto;
 import frc.robot.commands.climber.Climb;
@@ -121,6 +122,9 @@ public class RobotContainer {
 
 		SmartDashboard.putData("StupidShootAuto", new StupidShootAuto());
 
+		SmartDashboard.putData("PreMatchCheck", new PreMatchCheck());
+		CommandScheduler.getInstance().schedule(new PreMatchCheck());
+
 		// controls.intake().whileTrue(new IntakeUp());
 		controls.shoot().whileTrue(new RunIndexer());
 
@@ -143,8 +147,11 @@ public class RobotContainer {
 							shooter.targetFlywheelRPM = 0;
 							shooter.targetTurretPos = shooter.inputs.turretPosRadians;
 							shooter.targetHoodPos = shooter.inputs.hoodPosRadians;
+							indexer.targetSpinVoltage = 0;
+							indexer.targetElevatorVoltage = 0;
 						},
-						shooter));
+						shooter,
+						indexer));
 		controls.eStopAll()
 				.whileTrue(new RunCommand(
 						() -> {
@@ -167,6 +174,11 @@ public class RobotContainer {
 		autoChooser.addRoutine("TestPath", Autos::testPath);
 		autoChooser.addRoutine("StupidShootAuto", Autos::stupidShootAuto);
 		autoChooser.addRoutine("SimpleDepotAuto", Autos::simpleDepotAuto);
+		autoChooser.addRoutine("DepotAuto", Autos::depotAuto);
+		autoChooser.addRoutine("OutpostAuto_1", Autos::outpostAuto1);
+		autoChooser.addRoutine("OutpostAuto_2", Autos::outpostAuto2);
+		autoChooser.addRoutine("TrenchAuto", Autos::trenchAuto);
+		autoChooser.addRoutine("MiddletoHP", Autos::middleToHP);
 
 		SmartDashboard.putData("AutoChooser", autoChooser);
 		SmartDashboard.putData("StartPoseChooser", Autos.startPoseChooser);

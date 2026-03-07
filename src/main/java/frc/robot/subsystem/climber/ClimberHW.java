@@ -28,7 +28,9 @@ public class ClimberHW {
 	public TalonFX follower;
 
 	public DigitalInput limitSwitchTop;
+	public DigitalInput limitSwitchTop2;
 	public DigitalInput limitSwitchBottom;
+	public DigitalInput limitSwitchBottom2;
 
 	public SparkMax actuator;
 	public DigitalInput limitSwitchActuator;
@@ -43,8 +45,10 @@ public class ClimberHW {
 		leader = new TalonFX(60);
 		follower = new TalonFX(61);
 
-		limitSwitchTop = new DigitalInput(6); // TODO: DIO port
-		limitSwitchBottom = new DigitalInput(7); // TODO: DIO port
+		limitSwitchTop = new DigitalInput(2); // TODO: DIO port
+		limitSwitchBottom = new DigitalInput(3); // TODO: DIO port
+		limitSwitchTop2 = new DigitalInput(4); // TODO: DIO port
+		limitSwitchBottom2 = new DigitalInput(5); // TODO: DIO port
 
 		leader.setNeutralMode(NeutralModeValue.Brake);
 		follower.setNeutralMode(NeutralModeValue.Brake);
@@ -56,7 +60,7 @@ public class ClimberHW {
 		actuatorConfig.idleMode(IdleMode.kBrake);
 		actuatorConfig.inverted(true);
 		actuator.configure(actuatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-		limitSwitchActuator = new DigitalInput(8); // TODO: DIO port
+		limitSwitchActuator = new DigitalInput(6); // TODO: DIO port
 
 		// Initialize cached signals
 		position = leader.getPosition(false);
@@ -88,7 +92,9 @@ public class ClimberHW {
 		inputs.currentAmps = statorCurrent.getValueAsDouble();
 
 		inputs.limitTop = !limitSwitchTop.get();
+		inputs.limitTop2 = !limitSwitchTop2.get();
 		inputs.limitBottom = !limitSwitchBottom.get();
+		inputs.limitBottom2 = !limitSwitchBottom2.get();
 
 		inputs.actuatorVoltageVolts = actuator.getBusVoltage() * actuator.getAppliedOutput();
 		inputs.actuatorCurrentAmps = actuator.getOutputCurrent();

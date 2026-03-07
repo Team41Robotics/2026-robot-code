@@ -34,7 +34,7 @@ public class ManualShoot extends Command {
 				angleModulus(fieldAngle - drive.pose.getRotation().getRadians() + PI);
 
 		// Left POV: hood
-		boolean povUp = controls.pov(0).getAsBoolean();
+		boolean povUp = controls.pov(45).getAsBoolean();
 		boolean povDown = controls.pov(180).getAsBoolean();
 
 		if (povUp && !prevPovUp) shooter.targetHoodPos += HOOD_INCREMENT;

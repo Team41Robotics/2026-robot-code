@@ -104,4 +104,8 @@ public class XboxControls implements Controls {
 	public Trigger hoodZero() {
 		return driverStation.button(3);
 	}
+
+	public Trigger passToOwnSide() {
+		return driverStation.button(13);
+	}
 }

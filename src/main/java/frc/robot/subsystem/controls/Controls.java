@@ -51,4 +51,6 @@ public interface Controls {
 	public Trigger eStopAll();
 
 	public Trigger hoodZero();
+
+	public Trigger passToOwnSide();
 }

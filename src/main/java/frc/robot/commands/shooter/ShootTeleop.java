@@ -48,11 +48,17 @@ public class ShootTeleop extends Command {
 			target = Util.flipIfRed(hubCenter);
 			overrideHood = true;
 			state = "TRENCH";
-		} else {
-			// Past trench - pass to left or right side, NOT through middle
+		} else if (controls.passToOwnSide().getAsBoolean()) {
+			// Past trench with pass button held - pass to left or right side, NOT through middle
 			double yOffset = (robotY < centerY) ? -TRENCH_Y_OFFSET : TRENCH_Y_OFFSET;
 			target = Util.flipIfRed(hubCenter.plus(new Translation2d(0, yOffset)));
 			state = "PASS";
+		} else {
+			// Past trench without pass button - shoot at hub with joystick offset
+			Translation2d offset =
+					new Translation2d(controls.thirdY() * JOYSTICK_SCALE, controls.thirdX() * JOYSTICK_SCALE);
+			target = Util.flipIfRed(hubCenter.plus(offset));
+			state = "SHOOT_HUB";
 		}
 
 		Translation2d virtualTarget = Targetting.shootOnTheFly(target);

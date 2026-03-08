@@ -17,10 +17,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.FieldConstants;
-import frc.robot.Util;
 import frc.robot.choreo.ChoreoTraj;
-import frc.robot.choreo.ChoreoVars;
 import frc.robot.commands.indexer.RunIndexer;
+import frc.robot.commands.shooter.ShootTeleop;
 import frc.robot.commands.shooter.ShooterStartup;
 import org.littletonrobotics.junction.Logger;
 
@@ -81,89 +80,20 @@ public class Autos {
 		return routine;
 	}
 
-	public static AutoRoutine stupidShootAuto() {
-		AutoRoutine routine = factory.newRoutine("StupidShootAuto");
-		routine.active().onTrue(new StupidShootAuto());
-		return routine;
-	}
-
-	public static AutoRoutine simpleDepotAuto() {
-		AutoRoutine routine = factory.newRoutine("SimpleDepotAuto");
-		routine.active().onTrue(new SimpleDepotAuto());
-		return routine;
-	}
-
-	public static boolean isOnCloseSide() {
-		Translation2d robotPos = Util.flipIfRed(drive.pose.getTranslation());
-		double xTrenchMin = FieldConstants.LinesVertical.hubCenter - FieldConstants.LeftBump.width / 2.0;
-		return robotPos.getX() < xTrenchMin;
-	}
-
 	public static Command runIndexerOnCloseSide() {
 		return Commands.run(
-						() -> {
-							if (isOnCloseSide() && shooter.onTarget) {
-								indexer.targetSpinVoltage = RunIndexer.DEFAULT_SPIN_VOLTAGE;
-								indexer.targetElevatorVoltage = RunIndexer.DEFAULT_ELEVATOR_VOLTAGE;
-							} else {
-								indexer.targetSpinVoltage = 0;
-								indexer.targetElevatorVoltage = 0;
-							}
-						},
-						indexer);
-	}
-
-	public static AutoRoutine depotAuto() {
-		AutoRoutine routine = factory.newRoutine("DepotAuto");
-		AutoTrajectory traj = ChoreoTraj.DepotAuto.asAutoTraj(routine);
-
-		routine.active().onTrue(new ShooterStartup());
-		routine.active().onTrue(Commands.sequence(new WaitCommand(5), traj.cmd()));
-		routine.active().onTrue(runIndexerOnCloseSide());
-
-		return routine;
-	}
-
-	public static AutoRoutine outpostAuto1() {
-		AutoRoutine routine = factory.newRoutine("OutpostAuto_1");
-		AutoTrajectory traj = ChoreoTraj.OutpostAuto_1.asAutoTraj(routine);
-
-		routine.active().onTrue(new ShooterStartup());
-		routine.active().onTrue(Commands.sequence(new WaitCommand(5), traj.cmd()));
-		routine.active().onTrue(runIndexerOnCloseSide());
-
-		return routine;
-	}
-
-	public static AutoRoutine outpostAuto2() {
-		AutoRoutine routine = factory.newRoutine("OutpostAuto_2");
-		AutoTrajectory traj = ChoreoTraj.OutpostAuto_2.asAutoTraj(routine);
-
-		routine.active().onTrue(new ShooterStartup());
-		routine.active().onTrue(Commands.sequence(new WaitCommand(5), traj.cmd()));
-		routine.active().onTrue(runIndexerOnCloseSide());
-
-		return routine;
+				() -> {
+					indexer.targetSpinVoltage = RunIndexer.DEFAULT_SPIN_VOLTAGE;
+					indexer.targetElevatorVoltage = RunIndexer.DEFAULT_ELEVATOR_VOLTAGE;
+				},
+				indexer);
 	}
 
 	public static AutoRoutine trenchAuto() {
 		AutoRoutine routine = factory.newRoutine("TrenchAuto");
-		AutoTrajectory traj = ChoreoTraj.TrenchAuto.asAutoTraj(routine);
 
-		routine.active().onTrue(new ShooterStartup());
-		routine.active().onTrue(Commands.sequence(new WaitCommand(5), traj.cmd()));
-		routine.active().onTrue(runIndexerOnCloseSide());
-
-		return routine;
-	}
-
-	public static AutoRoutine middleToHP() {
-		AutoRoutine routine = factory.newRoutine("MiddletoHP");
-		AutoTrajectory traj = ChoreoTraj.MiddletoHP.asAutoTraj(routine);
-
-		routine.active().onTrue(new ShooterStartup());
-		routine.active().onTrue(Commands.sequence(new WaitCommand(5), traj.cmd()));
-		routine.active().onTrue(runIndexerOnCloseSide());
+		routine.active().onTrue(Commands.sequence(new ShooterStartup(), new ShootTeleop()));
+		routine.active().onTrue(Commands.sequence(new WaitCommand(5), runIndexerOnCloseSide()));
 
 		return routine;
 	}

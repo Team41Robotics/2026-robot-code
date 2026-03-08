@@ -2,6 +2,7 @@ package frc.robot;
 
 import choreo.auto.AutoChooser;
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -9,40 +10,21 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.commands.PreMatchCheck;
 import frc.robot.commands.autos.Autos;
-import frc.robot.commands.autos.StupidShootAuto;
-import frc.robot.commands.climber.Climb;
 import frc.robot.commands.climber.ClimberDown;
 import frc.robot.commands.climber.ClimberUp;
 import frc.robot.commands.climber.PrepareClimb;
-import frc.robot.commands.drive.DrivePIDTestCommand;
-import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
-import frc.robot.commands.drive.FieldSnakeDrive;
-import frc.robot.commands.drive.NoDrive;
-import frc.robot.commands.drive.PrintSwervePos;
-import frc.robot.commands.drive.RobotOrientedDrive;
-import frc.robot.commands.drive.TurnPIDTestCommand;
 import frc.robot.commands.indexer.RunIndexer;
-import frc.robot.commands.indexer.StopIndexer;
-import frc.robot.commands.intake.IntakeDown;
-import frc.robot.commands.intake.IntakeUp;
-import frc.robot.commands.shooter.HoodZero;
-import frc.robot.commands.shooter.ManualShoot;
-import frc.robot.commands.shooter.ShootOnTheFly;
-import frc.robot.commands.shooter.ShootTeleop;
 import frc.robot.commands.shooter.ShooterIdle;
-import frc.robot.commands.shooter.ShooterStartup;
-import frc.robot.commands.shooter.StaticShootAtTarget;
 import frc.robot.subsystem.climber.Climber;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.JoystickControls;
 import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;
 import frc.robot.subsystem.indexer.Indexer;
-import frc.robot.subsystem.intake.Intake;
 import frc.robot.subsystem.leds.LEDS;
 import frc.robot.subsystem.shooter.Shooter;
 import frc.robot.subsystem.vision.Vision;
@@ -60,7 +42,6 @@ public class RobotContainer {
 	public static SwerveDrive drive = new SwerveDrive();
 	public static IMU imu = new IMU();
 	public static Vision vision = new Vision();
-	public static Intake intake = new Intake();
 	public static Shooter shooter = new Shooter();
 	public static Indexer indexer = new Indexer();
 	public static LEDS leds = new LEDS();
@@ -79,7 +60,6 @@ public class RobotContainer {
 
 	public static void init() { // TODO change Akit mode to live mode
 		imu.init();
-		intake.init();
 		shooter.init();
 		indexer.init();
 		leds.init();
@@ -88,58 +68,12 @@ public class RobotContainer {
 		vision.init();
 
 		drive.setDefaultCommand(new FieldOrientedDrive());
-		shooter.setDefaultCommand(new ShootTeleop());
-		intake.setDefaultCommand(new IntakeDown());
-		indexer.setDefaultCommand(new RunIndexer(0.5, 0));
-
-		SmartDashboard.putData("DrivePIDTest", new DrivePIDTestCommand());
-		SmartDashboard.putData("TurnPIDTest", new TurnPIDTestCommand());
-
-		SmartDashboard.putData("NoDrive", new NoDrive());
-		SmartDashboard.putData("RobotOrientedDrive", new RobotOrientedDrive());
-		SmartDashboard.putData("FieldOrientedDrive", new FieldOrientedDrive());
-		SmartDashboard.putData("FieldHeadingDrive", new FieldHeadingDrive());
-		SmartDashboard.putData("FieldSnakeDrive", new FieldSnakeDrive());
-
-		SmartDashboard.putData("IntakeDown", new IntakeDown());
-		SmartDashboard.putData("IntakeUp", new IntakeUp());
-
-		SmartDashboard.putData("RunIndexer", new RunIndexer());
-		SmartDashboard.putData("StopIndexer", new StopIndexer());
-
-		SmartDashboard.putData("ShooterIdle", new ShooterIdle());
-		SmartDashboard.putData("ShooterStartup", new ShooterStartup());
-		SmartDashboard.putData("StaticShootAtTarget", new StaticShootAtTarget());
-		SmartDashboard.putData("ShootOnTheFly", new ShootOnTheFly());
-		SmartDashboard.putData("ManualShoot", new ManualShoot());
-
-		SmartDashboard.putData("PrintSwervePos", new PrintSwervePos());
-
-		SmartDashboard.putData("Climb", new Climb());
-		SmartDashboard.putData("ClimberUp", new ClimberUp());
-		SmartDashboard.putData("ClimberDown", new ClimberDown());
-		SmartDashboard.putData("PrepareClimb", new PrepareClimb());
-
-		SmartDashboard.putData("StupidShootAuto", new StupidShootAuto());
-
-		SmartDashboard.putData("PreMatchCheck", new PreMatchCheck());
-		CommandScheduler.getInstance().schedule(new PreMatchCheck());
-
-		// controls.intake().whileTrue(new IntakeUp());
-		controls.shoot().whileTrue(new RunIndexer());
-
-		controls.intakeDown().onTrue(new IntakeDown());
-		controls.intakeUp().onTrue(new IntakeUp());
-		// controls.intakeReverse().whileTrue(new IntakeDown(-IntakeDown.HIGH_VOLTAGE));
-		controls.intakeReverse().whileTrue(new IntakeUp());
-		controls.indexerReverse()
-				.whileTrue(new RunIndexer(-RunIndexer.DEFAULT_SPIN_VOLTAGE, RunIndexer.DEFAULT_ELEVATOR_VOLTAGE));
+		shooter.setDefaultCommand(new ShooterIdle());
+		indexer.setDefaultCommand(new RunIndexer(0, 0));
 
 		controls.climberForward().whileTrue(new PrepareClimb());
 		controls.climberUp().whileTrue(new ClimberUp());
 		controls.climberDown().whileTrue(new ClimberDown());
-
-		controls.hoodZero().whileTrue(new HoodZero());
 
 		// Emergency stops
 		controls.eStopShooter()
@@ -153,33 +87,19 @@ public class RobotContainer {
 						},
 						shooter,
 						indexer));
-		controls.eStopAll()
-				.whileTrue(new RunCommand(
-						() -> {
-							shooter.targetFlywheelRPM = 0;
-							shooter.targetTurretPos = shooter.inputs.turretPosRadians;
-							shooter.targetHoodPos = shooter.inputs.hoodPosRadians;
-							intake.targetJointVoltage = 0;
-							intake.targetIntakeVoltage = 0;
-							indexer.targetSpinVoltage = 0;
-							indexer.targetElevatorVoltage = 0;
-							climber.targetVoltage = 0;
-							climber.actuatorTargetVoltage = 0;
-						},
-						shooter,
-						intake,
-						indexer,
-						climber));
+		controls.eStopAll().whileTrue(new InstantCommand(() -> {
+			for (int i = 0; i < 4; i++) {
+				drive.modules[i]
+						.hw
+						.driveTalonFX
+						.getConfigurator()
+						.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(40));
+			}
+		}));
 
 		Autos.init();
 		autoChooser.addRoutine("TestPath", Autos::testPath);
-		autoChooser.addRoutine("StupidShootAuto", Autos::stupidShootAuto);
-		// autoChooser.addRoutine("SimpleDepotAuto", Autos::simpleDepotAuto);
-		autoChooser.addRoutine("DepotAuto", Autos::depotAuto);
-		autoChooser.addRoutine("OutpostAuto_1", Autos::outpostAuto1);
-		autoChooser.addRoutine("OutpostAuto_2", Autos::outpostAuto2);
 		autoChooser.addRoutine("TrenchAuto", Autos::trenchAuto);
-		autoChooser.addRoutine("MiddletoHP", Autos::middleToHP);
 
 		SmartDashboard.putData("AutoChooser", autoChooser);
 		SmartDashboard.putData("StartPoseChooser", Autos.startPoseChooser);
@@ -191,7 +111,6 @@ public class RobotContainer {
 	public static void periodic() {
 		imu.sense();
 		drive.sense();
-		intake.sense();
 		shooter.sense();
 		indexer.sense();
 		vision.sense();
@@ -203,20 +122,13 @@ public class RobotContainer {
 		if (DriverStation.isDisabled()) {
 			leds.control = leds.DISABLED_ANIMATION;
 			autonomousCommand = autoChooser.selectedCommand();
-
-			// Pose2d selected = Util.flipIfRed(Autos.startPoseChooser.getSelected()); // TODO STUPID
-			// if (selected != null && selected != prevStartPose) {
-			// 	prevStartPose = selected;
-			// 	drive.resetPose(selected);
-			// }
 		} else {
-			leds.control = shooter.onTarget ? leds.SHOOTING_ANIMATION : leds.IDLE_ANIMATION;
+			leds.control = leds.DISABLED_ANIMATION;
 		}
 
 		updateMatchPeriod();
 
 		drive.actuate();
-		intake.actuate();
 		shooter.actuate();
 		indexer.actuate();
 		climber.actuate();

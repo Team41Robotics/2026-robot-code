@@ -72,7 +72,7 @@ public class SwerveHW {
 		driveConfig.Feedback.SensorToMechanismRatio = 1.0 / (DRIVE_RATIO * 2 * PI * WHEEL_RAD);
 		driveConfig.Slot0.kP = DRIVE_kP;
 		driveConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		driveConfig.CurrentLimits.SupplyCurrentLimit = 80;
+		driveConfig.CurrentLimits.SupplyCurrentLimit = 40;
 		driveConfig.CurrentLimits.SupplyCurrentLowerTime = 2.0;
 		driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		driveConfig.CurrentLimits.StatorCurrentLimit = 90;
@@ -88,7 +88,7 @@ public class SwerveHW {
 		turnConfig.Slot0.kP = TURN_kP;
 		turnConfig.Slot0.kD = TURN_kD;
 		turnConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		turnConfig.CurrentLimits.SupplyCurrentLimit = 30;
+		turnConfig.CurrentLimits.SupplyCurrentLimit = 20;
 		turnConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 		turnTalonFX.getConfigurator().apply(turnConfig);
 		turnTalonFX.clearStickyFaults();

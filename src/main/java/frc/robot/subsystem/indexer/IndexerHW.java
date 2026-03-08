@@ -37,7 +37,7 @@ public class IndexerHW {
 		spinTalonFX = new TalonFX(43);
 		TalonFXConfiguration spinConfig = new TalonFXConfiguration();
 		spinConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		spinConfig.CurrentLimits.SupplyCurrentLimit = 60;
+		spinConfig.CurrentLimits.SupplyCurrentLimit = 20;
 		spinConfig.CurrentLimits.StatorCurrentLimitEnable = false;
 		spinConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
@@ -62,7 +62,7 @@ public class IndexerHW {
 		elevatorTalonFX = new TalonFX(41);
 		TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
 		elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		elevatorConfig.CurrentLimits.SupplyCurrentLimit = 60;
+		elevatorConfig.CurrentLimits.SupplyCurrentLimit = 30;
 		elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
 		elevatorTalonFX.getConfigurator().apply(elevatorConfig);

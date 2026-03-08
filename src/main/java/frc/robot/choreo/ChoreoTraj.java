@@ -27,65 +27,65 @@ public record ChoreoTraj(
     public static final ChoreoTraj DepotAuto = new ChoreoTraj(
 	    "DepotAuto",
 	    OptionalInt.empty(),
-	    2.92084,
+	    3.82139,
 	    new Pose2d(3.672, 6.862, Rotation2d.fromRadians(1.571)),
 	    new Pose2d(0.359, 6.784, Rotation2d.fromRadians(1.545))
+	);
+	public static final ChoreoTraj MiddletoHP = new ChoreoTraj(
+	    "MiddletoHP",
+	    OptionalInt.empty(),
+	    2.18834,
+	    new Pose2d(3.747, 2.925, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(0.347, 0.7, Rotation2d.fromRadians(-3.142))
 	);
 	public static final ChoreoTraj OutpostAuto_1 = new ChoreoTraj(
 	    "OutpostAuto_1",
 	    OptionalInt.empty(),
-	    1.10939,
+	    1.95449,
 	    new Pose2d(3.936, 0.655, Rotation2d.fromRadians(0)),
 	    new Pose2d(0.347, 0.7, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj OutpostAuto_2 = new ChoreoTraj(
+	    "OutpostAuto_2",
+	    OptionalInt.empty(),
+	    3.37993,
+	    new Pose2d(4.188, 0.547, Rotation2d.fromRadians(0)),
+	    new Pose2d(7.762, 3.503, Rotation2d.fromRadians(1.388))
 	);
 	public static final ChoreoTraj TestPath = new ChoreoTraj(
 	    "TestPath",
 	    OptionalInt.empty(),
-	    3.25215,
+	    26.58345,
 	    new Pose2d(2.404, 6.412, Rotation2d.fromRadians(0)),
 	    new Pose2d(2.404, 6.412, Rotation2d.fromRadians(0))
 	);
 	public static final ChoreoTraj TestPath$0 = new ChoreoTraj(
 	    "TestPath",
 	    OptionalInt.of(0),
-	    1.14363,
+	    11.90039,
 	    new Pose2d(2.404, 6.412, Rotation2d.fromRadians(0)),
 	    new Pose2d(2.042, 4.02, Rotation2d.fromRadians(2.729))
 	);
 	public static final ChoreoTraj TestPath$1 = new ChoreoTraj(
 	    "TestPath",
 	    OptionalInt.of(1),
-	    0.89385,
+	    5.413300000000001,
 	    new Pose2d(2.042, 4.02, Rotation2d.fromRadians(2.729)),
 	    new Pose2d(3.376, 4.224, Rotation2d.fromRadians(0))
 	);
 	public static final ChoreoTraj TestPath$2 = new ChoreoTraj(
 	    "TestPath",
 	    OptionalInt.of(2),
-	    1.21467,
+	    9.269759999999998,
 	    new Pose2d(3.376, 4.224, Rotation2d.fromRadians(0)),
 	    new Pose2d(2.404, 6.412, Rotation2d.fromRadians(0))
 	);
 	public static final ChoreoTraj TrenchAuto = new ChoreoTraj(
 	    "TrenchAuto",
 	    OptionalInt.empty(),
-	    3.57279,
-	    new Pose2d(4.004, 7.417, Rotation2d.fromRadians(-1.571)),
-	    new Pose2d(4.004, 7.417, Rotation2d.fromRadians(1.668))
-	);
-	public static final ChoreoTraj MiddletoHP = new ChoreoTraj(
-	    "MiddletoHP",
-	    OptionalInt.empty(),
-	    1.18758,
-	    new Pose2d(3.747, 2.925, Rotation2d.fromRadians(3.142)),
-	    new Pose2d(0.347, 0.7, Rotation2d.fromRadians(3.142))
-	);
-	public static final ChoreoTraj OutpostAuto_2 = new ChoreoTraj(
-	    "OutpostAuto_2",
-	    OptionalInt.empty(),
-	    1.76145,
-	    new Pose2d(4.188, 0.547, Rotation2d.fromRadians(0)),
-	    new Pose2d(7.762, 3.503, Rotation2d.fromRadians(1.392))
+	    7.68142,
+	    new Pose2d(3.616, 7.48, Rotation2d.fromRadians(1.572)),
+	    new Pose2d(2.861, 7.48, Rotation2d.fromRadians(1.668))
 	);
 
     /**
@@ -94,14 +94,14 @@ public record ChoreoTraj(
      */
     public static final Map<String, ChoreoTraj> ALL_TRAJECTORIES = Map.ofEntries(
     	Map.entry("DepotAuto", DepotAuto),
+		Map.entry("MiddletoHP", MiddletoHP),
 		Map.entry("OutpostAuto_1", OutpostAuto_1),
+		Map.entry("OutpostAuto_2", OutpostAuto_2),
 		Map.entry("TestPath", TestPath),
 		Map.entry("TestPath$0", TestPath$0),
 		Map.entry("TestPath$1", TestPath$1),
 		Map.entry("TestPath$2", TestPath$2),
-		Map.entry("TrenchAuto", TrenchAuto),
-		Map.entry("MiddletoHP", MiddletoHP),
-		Map.entry("OutpostAuto_2", OutpostAuto_2)
+		Map.entry("TrenchAuto", TrenchAuto)
     );
 
     /**

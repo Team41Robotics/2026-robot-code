@@ -72,8 +72,8 @@ public class ShootTeleop extends Command {
 		shooter.targetHoodPos = overrideHood ? 0 : params.hoodAngle();
 
 		Logger.recordOutput("/Targetting/state", state);
-		Logger.recordOutput("/Targetting/targetPose", virtualTarget);
-		Logger.recordOutput("/Targetting/joystickTarget", target);
+		Logger.recordOutput("/Targetting/targetPose", new Pose2d(virtualTarget, new Rotation2d()));
+		Logger.recordOutput("/Targetting/joystickTarget", new Pose2d(target, new Rotation2d()));
 		Logger.recordOutput("/Targetting/distance", distance);
 		field.getObject("shootTarget").setPose(new Pose2d(virtualTarget, new Rotation2d()));
 	}

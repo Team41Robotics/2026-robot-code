@@ -53,8 +53,8 @@ public class IntakeHW {
 		jointConfig.inverted(true);
 		jointConfig.encoder.positionConversionFactor(JOINT_RATIO * 2 * PI);
 		jointConfig.encoder.velocityConversionFactor(JOINT_RATIO * 2 * PI / 60);
-		jointConfig.smartCurrentLimit(80);
-		jointConfig.secondaryCurrentLimit(60);
+		jointConfig.smartCurrentLimit(30);
+		jointConfig.secondaryCurrentLimit(30);
 		jointConfig.idleMode(IdleMode.kBrake);
 		jointSparkMax.configure(jointConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 		jointEncoder = jointSparkMax.getEncoder();
@@ -65,7 +65,7 @@ public class IntakeHW {
 		intakeTalonFX = new TalonFX(31);
 		TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
 		intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		intakeConfig.CurrentLimits.SupplyCurrentLimit = 60;
+		intakeConfig.CurrentLimits.SupplyCurrentLimit = 30;
 		intakeConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		intakeConfig.CurrentLimits.StatorCurrentLimit = 120;
 		intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;

@@ -11,16 +11,17 @@ public class IntakeUp extends Command {
 	public static final double TURRET_UP_POS = -PI / 2;
 
 	public IntakeUp() {
-		addRequirements(intake, shooter);
+		// addRequirements(intake, shooter);
+		addRequirements(intake);
 	}
 
 	@Override
 	public void execute() {
 		intake.targetJointVoltage = intake.inputs.jointPosRadians < JOINT_UP_POS ? JOINT_UP_VOLTAGE : 0;
 		intake.targetIntakeVoltage = 0;
-		shooter.targetTurretPos = TURRET_UP_POS;
-		shooter.targetFlywheelRPM = 0;
-		shooter.targetHoodPos = 0;
+		// shooter.targetTurretPos = TURRET_UP_POS;
+		// shooter.targetFlywheelRPM = 0;
+		// shooter.targetHoodPos = 0;
 	}
 
 	@Override

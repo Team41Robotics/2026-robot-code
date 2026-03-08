@@ -118,7 +118,7 @@ public class ShooterHW {
 		turretConfig.Slot0.kI = TURRET_kI;
 		turretConfig.Slot0.kD = TURRET_kD;
 		turretConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		turretConfig.CurrentLimits.SupplyCurrentLimit = 60;
+		turretConfig.CurrentLimits.SupplyCurrentLimit = 30;
 		turretConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		turretConfig.CurrentLimits.StatorCurrentLimit = 120;
 		turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -137,7 +137,7 @@ public class ShooterHW {
 		hoodConfig.Slot0.kI = HOOD_kI;
 		hoodConfig.Slot0.kD = HOOD_kD;
 		hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		hoodConfig.CurrentLimits.SupplyCurrentLimit = 40;
+		hoodConfig.CurrentLimits.SupplyCurrentLimit = 10;
 		hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		hoodConfig.CurrentLimits.StatorCurrentLimit = 80;
 		hoodConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -149,28 +149,29 @@ public class ShooterHW {
 		hoodLimitSwitch = new DigitalInput(9);
 
 		// --- Flywheel (leader) ---
-		flywheelTalonFX = new TalonFX(53);
+		flywheelTalonFX = new TalonFX(51);
 		TalonFXConfiguration flywheelConfig = new TalonFXConfiguration();
 		flywheelConfig.Feedback.SensorToMechanismRatio = 1.0 / FLYWHEEL_RATIO;
 		flywheelConfig.Slot0.kP = FLYWHEEL_kP;
 		flywheelConfig.Slot0.kV = FLYWHEEL_kV;
 		flywheelConfig.Slot0.kS = FLYWHEEL_kS;
 		flywheelConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		flywheelConfig.CurrentLimits.SupplyCurrentLimit = 80;
+		flywheelConfig.CurrentLimits.SupplyCurrentLimit = 40;
 		flywheelConfig.CurrentLimits.SupplyCurrentLowerTime = 3.0;
 		flywheelConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		flywheelConfig.CurrentLimits.StatorCurrentLimit = 180;
-		flywheelConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+		// flywheelConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+		flywheelConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 		flywheelTalonFX.getConfigurator().apply(flywheelConfig);
 		flywheelTalonFX.clearStickyFaults();
 		flywheelTalonFX.setNeutralMode(NeutralModeValue.Coast);
 
 		// --- Flywheel follower ---
-		flywheelFollowerTalonFX = new TalonFX(51);
+		flywheelFollowerTalonFX = new TalonFX(53);
 		flywheelFollowerTalonFX.getConfigurator().apply(new TalonFXConfiguration());
 		flywheelFollowerTalonFX.clearStickyFaults();
 		flywheelFollowerTalonFX.setNeutralMode(NeutralModeValue.Coast);
-		flywheelFollowerTalonFX.setControl(new Follower(53, MotorAlignmentValue.Opposed));
+		flywheelFollowerTalonFX.setControl(new Follower(51, MotorAlignmentValue.Opposed));
 
 		// --- Cache StatusSignals ---
 		turretPosition = turretTalonFX.getPosition(false);
@@ -293,8 +294,8 @@ public class ShooterHW {
 		inputs.isHoodLimitSwitchOn = !hoodLimitSwitch.get();
 		inputs.hoodPosRadians = hoodPosition.getValueAsDouble();
 		if (inputs.isHoodLimitSwitchOn) {
-			hoodTalonFX.setPosition(0, 0);
-			inputs.hoodPosRadians = 0;
+			// hoodTalonFX.setPosition(0, 0);
+			// inputs.hoodPosRadians = 0;
 		}
 
 		inputs.hoodVelRadiansPerSec = hoodVelocity.getValueAsDouble();

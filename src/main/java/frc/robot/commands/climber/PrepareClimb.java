@@ -5,7 +5,7 @@ import static frc.robot.RobotContainer.*;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class PrepareClimb extends Command {
-	public static final double ACTUATOR_VOLTAGE = 5; // TUNEME
+	public static final double ACTUATOR_VOLTAGE = 12; // TUNEME
 
 	public PrepareClimb() {
 		addRequirements(climber);

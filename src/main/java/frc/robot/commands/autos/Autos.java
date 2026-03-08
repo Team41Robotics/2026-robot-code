@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.FieldConstants;
 import frc.robot.Util;
 import frc.robot.choreo.ChoreoTraj;
@@ -39,8 +40,9 @@ public class Autos {
 		factory = new AutoFactory(() -> drive.pose, drive::resetPose, Autos::choreoController, true, drive);
 
 		startPoseChooser.setDefaultOption("null", new Pose2d());
-		startPoseChooser.addOption("testStart", ChoreoVars.Poses.testStart);
-		startPoseChooser.addOption("TestPath start", ChoreoTraj.TestPath.initialPoseBlue());
+		// startPoseChooser.addOption("testStart", ChoreoVars.Poses.testStart);
+		// startPoseChooser.addOption("TestPath start", ChoreoTraj.TestPath.initialPoseBlue());
+		startPoseChooser.addOption("TrenchStart", ChoreoTraj.TrenchAuto.initialPoseBlue());
 		startPoseChooser.addOption(
 				"PITTEST",
 				new Pose2d(
@@ -100,7 +102,7 @@ public class Autos {
 	public static Command runIndexerOnCloseSide() {
 		return Commands.run(
 						() -> {
-							if (isOnCloseSide()) {
+							if (isOnCloseSide() && shooter.onTarget) {
 								indexer.targetSpinVoltage = RunIndexer.DEFAULT_SPIN_VOLTAGE;
 								indexer.targetElevatorVoltage = RunIndexer.DEFAULT_ELEVATOR_VOLTAGE;
 							} else {
@@ -108,19 +110,16 @@ public class Autos {
 								indexer.targetElevatorVoltage = 0;
 							}
 						},
-						indexer)
-				.finallyDo(() -> {
-					indexer.targetSpinVoltage = 0;
-					indexer.targetElevatorVoltage = 0;
-				});
+						indexer);
 	}
 
 	public static AutoRoutine depotAuto() {
 		AutoRoutine routine = factory.newRoutine("DepotAuto");
 		AutoTrajectory traj = ChoreoTraj.DepotAuto.asAutoTraj(routine);
 
-		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
-		routine.active().whileTrue(runIndexerOnCloseSide());
+		routine.active().onTrue(new ShooterStartup());
+		routine.active().onTrue(Commands.sequence(new WaitCommand(5), traj.cmd()));
+		routine.active().onTrue(runIndexerOnCloseSide());
 
 		return routine;
 	}
@@ -129,8 +128,9 @@ public class Autos {
 		AutoRoutine routine = factory.newRoutine("OutpostAuto_1");
 		AutoTrajectory traj = ChoreoTraj.OutpostAuto_1.asAutoTraj(routine);
 
-		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
-		routine.active().whileTrue(runIndexerOnCloseSide());
+		routine.active().onTrue(new ShooterStartup());
+		routine.active().onTrue(Commands.sequence(new WaitCommand(5), traj.cmd()));
+		routine.active().onTrue(runIndexerOnCloseSide());
 
 		return routine;
 	}
@@ -139,8 +139,9 @@ public class Autos {
 		AutoRoutine routine = factory.newRoutine("OutpostAuto_2");
 		AutoTrajectory traj = ChoreoTraj.OutpostAuto_2.asAutoTraj(routine);
 
-		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
-		routine.active().whileTrue(runIndexerOnCloseSide());
+		routine.active().onTrue(new ShooterStartup());
+		routine.active().onTrue(Commands.sequence(new WaitCommand(5), traj.cmd()));
+		routine.active().onTrue(runIndexerOnCloseSide());
 
 		return routine;
 	}
@@ -149,8 +150,9 @@ public class Autos {
 		AutoRoutine routine = factory.newRoutine("TrenchAuto");
 		AutoTrajectory traj = ChoreoTraj.TrenchAuto.asAutoTraj(routine);
 
-		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
-		routine.active().whileTrue(runIndexerOnCloseSide());
+		routine.active().onTrue(new ShooterStartup());
+		routine.active().onTrue(Commands.sequence(new WaitCommand(5), traj.cmd()));
+		routine.active().onTrue(runIndexerOnCloseSide());
 
 		return routine;
 	}
@@ -159,8 +161,9 @@ public class Autos {
 		AutoRoutine routine = factory.newRoutine("MiddletoHP");
 		AutoTrajectory traj = ChoreoTraj.MiddletoHP.asAutoTraj(routine);
 
-		routine.active().onTrue(Commands.sequence(new ShooterStartup(), traj.cmd()));
-		routine.active().whileTrue(runIndexerOnCloseSide());
+		routine.active().onTrue(new ShooterStartup());
+		routine.active().onTrue(Commands.sequence(new WaitCommand(5), traj.cmd()));
+		routine.active().onTrue(runIndexerOnCloseSide());
 
 		return routine;
 	}

@@ -42,6 +42,18 @@ public class Robot extends LoggedRobot {
 
 		LoggedPowerDistribution.getInstance(1, ModuleType.kRev);
 
+		Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+		Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+		Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+		Logger.recordMetadata(
+				"GitDirty",
+				switch (BuildConstants.DIRTY) {
+					case 0 -> "Clean";
+					case 1 -> "Dirty";
+					default -> "Unknown";
+				});
+		Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+
 		Logger.start();
 
 		RobotContainer.init();

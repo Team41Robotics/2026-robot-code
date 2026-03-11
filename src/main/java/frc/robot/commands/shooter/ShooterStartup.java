@@ -21,7 +21,7 @@ public class ShooterStartup extends Command {
 		if (shooter.inputs.turretLimitSwitchOn) {
 			turretLimitSwitchTriggered = true;
 		}
-		hoodLimitSwitchTriggered = true;
+		hoodLimitSwitchTriggered = true; // hood limit switch is dead
 	}
 
 	@Override

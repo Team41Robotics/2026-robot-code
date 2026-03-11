@@ -136,22 +136,22 @@ public class Vision extends SubsystemBase {
 								new Pose3d(drive.pose),
 								!enableHeading,
 								1);
-					} catch (Exception e) {
+					} catch (Throwable e) {
 						constrainedPnPpose = Optional.empty();
-						System.out.println("Constrained PnP failed for " + cam.name + ": " + e.getMessage());
+						// Constrained PnP JNI not available in sim
 					}
 				}
 				Optional<EstimatedRobotPose> coprocPnPpose;
 				try {
 					coprocPnPpose = poseEsts[i].estimateCoprocMultiTagPose(result);
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					coprocPnPpose = Optional.empty();
 					System.out.println("Co-processor PnP failed for " + cam.name + ": " + e.getMessage());
 				}
 				Optional<EstimatedRobotPose> pnpDistTrigPose;
 				try {
 					pnpDistTrigPose = poseEsts[i].estimatePnpDistanceTrigSolvePose(result);
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					pnpDistTrigPose = Optional.empty();
 					System.out.println("PnP Distance+Trig failed for " + cam.name + ": " + e.getMessage());
 				}

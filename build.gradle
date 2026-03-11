@@ -3,6 +3,7 @@ plugins {
     id "edu.wpi.first.GradleRIO" version "2026.2.1"
     id "com.diffplug.spotless" version "8.1.0"
     id "io.freefair.lombok" version "8.4"
+    id "com.peterabeles.gversion" version "1.10.3"
 }
 
 java {
@@ -53,6 +54,17 @@ spotless {
         endWithNewline()
     }
 }
+
+gversion {
+    srcDir = "src/main/java/"
+    classPackage = "frc.robot"
+    className = "BuildConstants"
+    dateFormat = "yyyy-MM-dd HH:mm:ss z"
+    timeZone = "America/New_York"
+    indent = "\t"
+}
+
+project.compileJava.dependsOn(createVersionFile)
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 

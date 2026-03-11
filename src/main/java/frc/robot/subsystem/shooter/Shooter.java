@@ -24,7 +24,7 @@ public class Shooter extends SubsystemBase {
 	public static final double HOOD_POS_MAX = 35 / 180.0 * PI;
 
 	public static final double FLYWHEEL_THRES = 100;
-	public static final double HOOD_POS_THRES = 2 / 180.8 * PI;
+	public static final double HOOD_POS_THRES = 2 / 180.0 * PI;
 	public static final double TURRET_POS_THRES = 2 / 180.0 * PI;
 
 	public static final Constraints TURRET_CONSTRAINTS = new Constraints(6.0, 240.0); // TUNEME
@@ -88,7 +88,7 @@ public class Shooter extends SubsystemBase {
 				&& abs(inputs.hoodPosRadians - targetHoodPos) < HOOD_POS_THRES
 				&& abs(inputs.flywheelVelocityRPM - targetFlywheelRPM) < FLYWHEEL_THRES) {
 			onTarget = true;
-		} else if (targetFlywheelRPM < TURRET_POS_THRES) {
+		} else if (targetFlywheelRPM < FLYWHEEL_THRES) {
 			onTarget = true;
 		} else {
 			onTarget = false;

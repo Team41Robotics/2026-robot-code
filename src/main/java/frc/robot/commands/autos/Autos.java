@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.FieldConstants;
 import frc.robot.Util;
 import frc.robot.choreo.ChoreoTraj;
-import frc.robot.choreo.ChoreoVars;
 import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.shooter.ShooterStartup;
 import org.littletonrobotics.junction.Logger;
@@ -101,16 +100,16 @@ public class Autos {
 
 	public static Command runIndexerOnCloseSide() {
 		return Commands.run(
-						() -> {
-							if (isOnCloseSide() && shooter.onTarget) {
-								indexer.targetSpinVoltage = RunIndexer.DEFAULT_SPIN_VOLTAGE;
-								indexer.targetElevatorVoltage = RunIndexer.DEFAULT_ELEVATOR_VOLTAGE;
-							} else {
-								indexer.targetSpinVoltage = 0;
-								indexer.targetElevatorVoltage = 0;
-							}
-						},
-						indexer);
+				() -> {
+					if (isOnCloseSide() && shooter.onTarget) {
+						indexer.targetSpinVoltage = RunIndexer.DEFAULT_SPIN_VOLTAGE;
+						indexer.targetElevatorVoltage = RunIndexer.DEFAULT_ELEVATOR_VOLTAGE;
+					} else {
+						indexer.targetSpinVoltage = 0;
+						indexer.targetElevatorVoltage = 0;
+					}
+				},
+				indexer);
 	}
 
 	public static AutoRoutine depotAuto() {

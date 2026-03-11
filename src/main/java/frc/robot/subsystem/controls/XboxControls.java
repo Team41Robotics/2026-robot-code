@@ -81,18 +81,6 @@ public class XboxControls implements Controls {
 		return driverStation.button(9);
 	}
 
-	public Trigger climberForward() {
-		return driverStation.button(6);
-	}
-
-	public Trigger climberUp() {
-		return driverStation.button(8);
-	}
-
-	public Trigger climberDown() {
-		return driverStation.button(7);
-	}
-
 	public Trigger eStopShooter() {
 		return driverStation.button(15);
 	}

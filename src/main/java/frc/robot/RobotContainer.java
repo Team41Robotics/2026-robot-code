@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
-import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,10 +14,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.PreMatchCheck;
 import frc.robot.commands.autos.Autos;
 import frc.robot.commands.autos.StupidShootAuto;
-import frc.robot.commands.climber.Climb;
-import frc.robot.commands.climber.ClimberDown;
-import frc.robot.commands.climber.ClimberUp;
-import frc.robot.commands.climber.PrepareClimb;
 import frc.robot.commands.drive.DrivePIDTestCommand;
 import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
@@ -38,7 +33,6 @@ import frc.robot.commands.shooter.ShootTeleop;
 import frc.robot.commands.shooter.ShooterIdle;
 import frc.robot.commands.shooter.ShooterStartup;
 import frc.robot.commands.shooter.StaticShootAtTarget;
-import frc.robot.subsystem.climber.Climber;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.JoystickControls;
 import frc.robot.subsystem.drive.SwerveDrive;
@@ -48,6 +42,7 @@ import frc.robot.subsystem.intake.Intake;
 import frc.robot.subsystem.leds.LEDS;
 import frc.robot.subsystem.shooter.Shooter;
 import frc.robot.subsystem.vision.Vision;
+import org.littletonrobotics.junction.Logger;
 
 @SuppressWarnings("static-access")
 public class RobotContainer {
@@ -66,7 +61,6 @@ public class RobotContainer {
 	public static Shooter shooter = new Shooter();
 	public static Indexer indexer = new Indexer();
 	public static LEDS leds = new LEDS();
-	public static Climber climber = new Climber();
 
 	public static Field2d field = new Field2d();
 
@@ -85,7 +79,6 @@ public class RobotContainer {
 		shooter.init();
 		indexer.init();
 		leds.init();
-		climber.init();
 		drive.init(new Pose2d());
 		vision.init();
 
@@ -117,11 +110,6 @@ public class RobotContainer {
 
 		SmartDashboard.putData("PrintSwervePos", new PrintSwervePos());
 
-		SmartDashboard.putData("Climb", new Climb());
-		SmartDashboard.putData("ClimberUp", new ClimberUp());
-		SmartDashboard.putData("ClimberDown", new ClimberDown());
-		SmartDashboard.putData("PrepareClimb", new PrepareClimb());
-
 		SmartDashboard.putData("StupidShootAuto", new StupidShootAuto());
 
 		SmartDashboard.putData("PreMatchCheck", new PreMatchCheck());
@@ -136,10 +124,6 @@ public class RobotContainer {
 		controls.intakeReverse().whileTrue(new IntakeUp());
 		controls.indexerReverse()
 				.whileTrue(new RunIndexer(-RunIndexer.DEFAULT_SPIN_VOLTAGE, RunIndexer.DEFAULT_ELEVATOR_VOLTAGE));
-
-		controls.climberForward().whileTrue(new PrepareClimb());
-		controls.climberUp().whileTrue(new ClimberUp());
-		controls.climberDown().whileTrue(new ClimberDown());
 
 		controls.hoodZero().whileTrue(new HoodZero());
 
@@ -165,13 +149,10 @@ public class RobotContainer {
 							intake.targetIntakeVoltage = 0;
 							indexer.targetSpinVoltage = 0;
 							indexer.targetElevatorVoltage = 0;
-							climber.targetVoltage = 0;
-							climber.actuatorTargetVoltage = 0;
 						},
 						shooter,
 						intake,
-						indexer,
-						climber));
+						indexer));
 
 		Autos.init();
 		autoChooser.addRoutine("TestPath", Autos::testPath);
@@ -218,10 +199,6 @@ public class RobotContainer {
 		Logger.recordOutput("Timing/Vision_sense_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();
-		climber.sense();
-		Logger.recordOutput("Timing/Climber_sense_ms", (RobotController.getFPGATime() - t) / 1000.0);
-
-		t = RobotController.getFPGATime();
 		leds.sense();
 		Logger.recordOutput("Timing/LEDS_sense_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
@@ -256,10 +233,6 @@ public class RobotContainer {
 		t = RobotController.getFPGATime();
 		indexer.actuate();
 		Logger.recordOutput("Timing/Indexer_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
-
-		t = RobotController.getFPGATime();
-		climber.actuate();
-		Logger.recordOutput("Timing/Climber_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();
 		leds.actuate();

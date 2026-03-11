@@ -8,7 +8,7 @@
 [ ] MECHANICAL
     - Bumpers attached, correct color facing out
     - All wheels spinning freely, no debris
-    - Belts/chains tensioned (intake, shooter, climber)
+    - Belts/chains tensioned (intake, shooter)
     - Bolts tight on swerve modules
     - Hood and turret move freely by hand
 
@@ -17,7 +17,7 @@
     - CAN wiring seated (check Ducky bus connector)
     - All breakers ON in PDP
     - Camera USB/Ethernet connected (DuckyNE, DuckySE)
-    - Limit switches wired (hood DIO 1, turret DIO 0, climber DIO 6/7/8)
+    - Limit switches wired (hood DIO 1, turret DIO 0)
 
 [ ] SOFTWARE
     - Connect to robot via Driver Station
@@ -31,6 +31,5 @@
 [ ] PRE-ENABLE
     - Robot positioned on field correctly
     - Intake stowed
-    - Climber retracted
     - All personnel clear of robot
     - Driver/operator joysticks connected and mapped

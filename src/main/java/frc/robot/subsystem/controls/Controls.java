@@ -40,12 +40,6 @@ public interface Controls {
 
 	public Trigger indexerReverse();
 
-	public Trigger climberForward();
-
-	public Trigger climberUp();
-
-	public Trigger climberDown();
-
 	public Trigger eStopShooter();
 
 	public Trigger eStopAll();

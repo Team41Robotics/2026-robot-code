@@ -5,6 +5,8 @@ import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.RobotController;
+import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -189,16 +191,43 @@ public class RobotContainer {
 	}
 
 	public static void periodic() {
-		imu.sense();
-		drive.sense();
-		intake.sense();
-		shooter.sense();
-		indexer.sense();
-		vision.sense();
-		climber.sense();
-		leds.sense();
+		long t;
 
+		t = RobotController.getFPGATime();
+		imu.sense();
+		Logger.recordOutput("Timing/IMU_sense_ms", (RobotController.getFPGATime() - t) / 1000.0);
+
+		t = RobotController.getFPGATime();
+		drive.sense();
+		Logger.recordOutput("Timing/Drive_sense_ms", (RobotController.getFPGATime() - t) / 1000.0);
+
+		t = RobotController.getFPGATime();
+		intake.sense();
+		Logger.recordOutput("Timing/Intake_sense_ms", (RobotController.getFPGATime() - t) / 1000.0);
+
+		t = RobotController.getFPGATime();
+		shooter.sense();
+		Logger.recordOutput("Timing/Shooter_sense_ms", (RobotController.getFPGATime() - t) / 1000.0);
+
+		t = RobotController.getFPGATime();
+		indexer.sense();
+		Logger.recordOutput("Timing/Indexer_sense_ms", (RobotController.getFPGATime() - t) / 1000.0);
+
+		t = RobotController.getFPGATime();
+		vision.sense();
+		Logger.recordOutput("Timing/Vision_sense_ms", (RobotController.getFPGATime() - t) / 1000.0);
+
+		t = RobotController.getFPGATime();
+		climber.sense();
+		Logger.recordOutput("Timing/Climber_sense_ms", (RobotController.getFPGATime() - t) / 1000.0);
+
+		t = RobotController.getFPGATime();
+		leds.sense();
+		Logger.recordOutput("Timing/LEDS_sense_ms", (RobotController.getFPGATime() - t) / 1000.0);
+
+		t = RobotController.getFPGATime();
 		CommandScheduler.getInstance().run();
+		Logger.recordOutput("Timing/CommandScheduler_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		if (DriverStation.isDisabled()) {
 			leds.control = leds.DISABLED_ANIMATION;
@@ -215,12 +244,26 @@ public class RobotContainer {
 
 		updateMatchPeriod();
 
-		drive.actuate();
+		// drive.actuate();
+		t = RobotController.getFPGATime();
 		intake.actuate();
+		Logger.recordOutput("Timing/Intake_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
+
+		t = RobotController.getFPGATime();
 		shooter.actuate();
+		Logger.recordOutput("Timing/Shooter_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
+
+		t = RobotController.getFPGATime();
 		indexer.actuate();
+		Logger.recordOutput("Timing/Indexer_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
+
+		t = RobotController.getFPGATime();
 		climber.actuate();
+		Logger.recordOutput("Timing/Climber_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
+
+		t = RobotController.getFPGATime();
 		leds.actuate();
+		Logger.recordOutput("Timing/LEDS_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 	}
 
 	public static boolean redWonAuto() {

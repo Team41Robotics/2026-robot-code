@@ -7,9 +7,7 @@ import static java.lang.Math.*;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.shooter.ShooterStartup;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
@@ -58,9 +56,9 @@ public class Shooter extends SubsystemBase {
 			targetHoodPos = inputs.hoodPosRadians;
 			targetTurretPos = inputs.turretPosRadians;
 		}
-		if (!zeroed && robot.isTeleopEnabled()) {
-			CommandScheduler.getInstance().schedule(new ShooterStartup());
-		}
+		// if (!zeroed && robot.isTeleopEnabled()) {
+		// CommandScheduler.getInstance().schedule(new ShooterStartup());
+		// }
 	}
 
 	public void actuate() {

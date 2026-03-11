@@ -6,14 +6,20 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class PrepareClimb extends Command {
 	public static final double ACTUATOR_VOLTAGE = 12; // TUNEME
+	public double voltage;
 
 	public PrepareClimb() {
+		this(ACTUATOR_VOLTAGE);
+	}
+
+	public PrepareClimb(double voltage) {
+		this.voltage = voltage;
 		addRequirements(climber);
 	}
 
 	@Override
 	public void initialize() {
-		climber.actuatorTargetVoltage = ACTUATOR_VOLTAGE;
+		climber.actuatorTargetVoltage = voltage;
 	}
 
 	@Override

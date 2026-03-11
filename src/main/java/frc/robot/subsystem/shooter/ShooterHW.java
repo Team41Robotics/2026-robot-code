@@ -318,8 +318,8 @@ public class ShooterHW {
 
 		if (!Robot.isReal()) return;
 
-		turretTalonFX.setControl(turretControlRequest.withPosition(turretPosition));
-		hoodTalonFX.setControl(hoodControlRequest.withPosition(hoodPosition));
+		// turretTalonFX.setControl(turretControlRequest.withPosition(turretPosition));
+		// hoodTalonFX.setControl(hoodControlRequest.withPosition(hoodPosition));
 		if (!sysIdFlywheel) flywheelTalonFX.setControl(flywheelControlRequest.withVelocity(flywheelRPM / 60.0));
 	}
 }

@@ -87,6 +87,13 @@ public record ChoreoTraj(
 	    new Pose2d(3.616, 7.48, Rotation2d.fromRadians(1.572)),
 	    new Pose2d(2.861, 7.48, Rotation2d.fromRadians(1.668))
 	);
+	public static final ChoreoTraj auto = new ChoreoTraj(
+	    "auto",
+	    OptionalInt.empty(),
+	    5.5054,
+	    new Pose2d(4, 3.292, Rotation2d.fromRadians(-1.571)),
+	    new Pose2d(1.339, 3.292, Rotation2d.fromRadians(-1.568))
+	);
 
     /**
      * A map between trajectory names and their corresponding data.
@@ -101,7 +108,8 @@ public record ChoreoTraj(
 		Map.entry("TestPath$0", TestPath$0),
 		Map.entry("TestPath$1", TestPath$1),
 		Map.entry("TestPath$2", TestPath$2),
-		Map.entry("TrenchAuto", TrenchAuto)
+		Map.entry("TrenchAuto", TrenchAuto),
+		Map.entry("auto", auto)
     );
 
     /**

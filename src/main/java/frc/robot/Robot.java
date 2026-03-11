@@ -4,6 +4,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.autos.Autos;
+
+import static frc.robot.RobotContainer.climber;
+
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
@@ -16,6 +19,9 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class Robot extends LoggedRobot {
 	public MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
@@ -130,11 +136,16 @@ public class Robot extends LoggedRobot {
 	@Override
 	public void testInit() {
 		CommandScheduler.getInstance().cancelAll();
+		climber.hw.leader.getConfigurator().apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast));
+		climber.hw.leader.getConfigurator().apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast));
 	}
 
 	@Override
 	public void testPeriodic() {}
 
 	@Override
-	public void testExit() {}
+	public void testExit() {
+		climber.hw.leader.getConfigurator().apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake));
+		climber.hw.leader.getConfigurator().apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake));
+	}
 }

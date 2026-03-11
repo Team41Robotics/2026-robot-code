@@ -21,6 +21,6 @@ public class Climber extends SubsystemBase {
 	}
 
 	public void actuate() {
-		hw.actuate(targetVoltage, actuatorTargetVoltage);
+		hw.actuate(inputs, targetVoltage, actuatorTargetVoltage);
 	}
 }

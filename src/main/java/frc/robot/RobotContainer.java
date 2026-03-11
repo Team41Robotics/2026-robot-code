@@ -13,15 +13,14 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.autos.Autos;
-import frc.robot.commands.climber.ClimberDown;
-import frc.robot.commands.climber.ClimberUp;
-import frc.robot.commands.climber.PrepareClimb;
 import frc.robot.commands.drive.FieldOrientedDrive;
+import frc.robot.commands.drive.PrintSwervePos;
+import frc.robot.commands.drive.RobotOrientedDrive;
 import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.shooter.ShooterIdle;
 import frc.robot.subsystem.climber.Climber;
 import frc.robot.subsystem.controls.Controls;
-import frc.robot.subsystem.controls.JoystickControls;
+import frc.robot.subsystem.controls.XboxControls;
 import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;
 import frc.robot.subsystem.indexer.Indexer;
@@ -33,8 +32,8 @@ import frc.robot.subsystem.vision.Vision;
 public class RobotContainer {
 	public static final double LOOP_PERIOD = 0.020;
 
-	public static Controls controls = new JoystickControls();
-	// public static Controls controls = new XboxControls();
+	// public static Controls controls = new JoystickControls();
+	public static Controls controls = new XboxControls();
 
 	public static Robot robot;
 	public static CANBus driveBus = new CANBus("Ducky");
@@ -70,10 +69,19 @@ public class RobotContainer {
 		drive.setDefaultCommand(new FieldOrientedDrive());
 		shooter.setDefaultCommand(new ShooterIdle());
 		indexer.setDefaultCommand(new RunIndexer(0, 0));
+// 
+		// controls.climberForward().whileTrue(new PrepareClimb());
+		// controls.climberUp().whileTrue(new ClimberUp());
+		// controls.climberDown().whileTrue(new ClimberDown());
+		SmartDashboard.putData("RbotDRive", new RobotOrientedDrive());
 
-		controls.climberForward().whileTrue(new PrepareClimb());
-		controls.climberUp().whileTrue(new ClimberUp());
-		controls.climberDown().whileTrue(new ClimberDown());
+		// controls.climberForward().whileTrue(new PrepareClimb());
+		// controls.climberUp().whileTrue(new ClimberUp());
+		// controls.climberDown().whileTrue(new ClimberDown());
+		// controls.intakeUp().whileTrue(new PrepareClimb());
+		// controls.intakeDown().whileTrue(new PrepareClimb(-12));
+
+		SmartDashboard.putData("PrintSwerves", new PrintSwervePos());
 
 		// Emergency stops
 		controls.eStopShooter()
@@ -100,6 +108,7 @@ public class RobotContainer {
 		Autos.init();
 		autoChooser.addRoutine("TestPath", Autos::testPath);
 		autoChooser.addRoutine("TrenchAuto", Autos::trenchAuto);
+		autoChooser.addRoutine("auto", Autos::climbAuto);
 
 		SmartDashboard.putData("AutoChooser", autoChooser);
 		SmartDashboard.putData("StartPoseChooser", Autos.startPoseChooser);

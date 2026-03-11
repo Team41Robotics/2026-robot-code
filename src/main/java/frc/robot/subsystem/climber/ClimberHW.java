@@ -17,6 +17,9 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
+
+import static edu.wpi.first.math.MathUtil.clamp;
+
 import org.littletonrobotics.junction.Logger;
 
 public class ClimberHW {
@@ -104,8 +107,10 @@ public class ClimberHW {
 		inputs.limitActuator = !limitSwitchActuator.get();
 	}
 
-	public void actuate(double targetVoltage, double actuatorTargetVoltage) {
+	public void actuate(ClimberInputs inputs, double targetVoltage, double actuatorTargetVoltage) {
 		leader.setVoltage(targetVoltage);
+		if(inputs.limitActuator) actuatorTargetVoltage = clamp(actuatorTargetVoltage, -12, 0);
+		if(inputs.retractSwitch) actuatorTargetVoltage = clamp(actuatorTargetVoltage, 0, 12);
 		actuator.setVoltage(actuatorTargetVoltage);
 		Logger.recordOutput("Climber/targetVoltage", targetVoltage);
 		Logger.recordOutput("Climber/actuatorTargetVoltage", actuatorTargetVoltage);

@@ -15,9 +15,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.FieldConstants;
 import frc.robot.choreo.ChoreoTraj;
+import frc.robot.commands.climber.ClimberDown;
+import frc.robot.commands.climber.ClimberUp;
+import frc.robot.commands.climber.PrepareClimb;
 import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.shooter.ShootTeleop;
 import frc.robot.commands.shooter.ShooterStartup;
@@ -42,6 +46,7 @@ public class Autos {
 		// startPoseChooser.addOption("testStart", ChoreoVars.Poses.testStart);
 		// startPoseChooser.addOption("TestPath start", ChoreoTraj.TestPath.initialPoseBlue());
 		startPoseChooser.addOption("TrenchStart", ChoreoTraj.TrenchAuto.initialPoseBlue());
+		startPoseChooser.addOption("AUTO", ChoreoTraj.auto.initialPoseBlue());
 		startPoseChooser.addOption(
 				"PITTEST",
 				new Pose2d(
@@ -95,6 +100,27 @@ public class Autos {
 		routine.active().onTrue(Commands.sequence(new ShooterStartup(), new ShootTeleop()));
 		routine.active().onTrue(Commands.sequence(new WaitCommand(5), runIndexerOnCloseSide()));
 
+		return routine;
+	}
+
+	public static AutoRoutine climbAuto() {
+		AutoRoutine routine = factory.newRoutine("ClimbAuto");
+		AutoTrajectory traj = routine.trajectory("auto");
+
+		routine.active()
+				.onTrue(Commands.sequence(
+						new ClimberDown().withTimeout(1.5),
+						new PrepareClimb().withTimeout(1.5),
+						traj.cmd(),
+						new ClimberUp().withTimeout(1.5),
+						new InstantCommand(() -> {
+							shooter.targetFlywheelRPM = 2000;
+						}),
+						new WaitCommand(3),
+						new InstantCommand(() -> {
+							indexer.targetSpinVoltage = 10;
+							indexer.targetElevatorVoltage = 10;
+						})));
 		return routine;
 	}
 }

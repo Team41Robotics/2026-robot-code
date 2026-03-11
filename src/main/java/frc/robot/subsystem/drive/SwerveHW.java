@@ -72,7 +72,7 @@ public class SwerveHW {
 		driveConfig.Feedback.SensorToMechanismRatio = 1.0 / (DRIVE_RATIO * 2 * PI * WHEEL_RAD);
 		driveConfig.Slot0.kP = DRIVE_kP;
 		driveConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		driveConfig.CurrentLimits.SupplyCurrentLimit = 40;
+		driveConfig.CurrentLimits.SupplyCurrentLimit = 60;
 		driveConfig.CurrentLimits.SupplyCurrentLowerTime = 2.0;
 		driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		driveConfig.CurrentLimits.StatorCurrentLimit = 90;
@@ -91,6 +91,8 @@ public class SwerveHW {
 		turnConfig.Slot0.kD = TURN_kD;
 		turnConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		turnConfig.CurrentLimits.SupplyCurrentLimit = 20;
+		turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+		turnConfig.CurrentLimits.StatorCurrentLimit = 40;
 		turnConfig.Voltage.PeakForwardVoltage = 12.0;
 		turnConfig.Voltage.PeakReverseVoltage = -12.0;
 		turnConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;

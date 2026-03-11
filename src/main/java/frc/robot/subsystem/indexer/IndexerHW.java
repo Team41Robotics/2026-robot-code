@@ -37,8 +37,9 @@ public class IndexerHW {
 		spinTalonFX = new TalonFX(43);
 		TalonFXConfiguration spinConfig = new TalonFXConfiguration();
 		spinConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		spinConfig.CurrentLimits.SupplyCurrentLimit = 20;
-		spinConfig.CurrentLimits.StatorCurrentLimitEnable = false;
+		spinConfig.CurrentLimits.SupplyCurrentLimit = 10;
+		spinConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+		spinConfig.CurrentLimits.StatorCurrentLimit = 30;
 		spinConfig.Voltage.PeakForwardVoltage = 12.0;
 		spinConfig.Voltage.PeakReverseVoltage = -12.0;
 		spinConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
@@ -56,15 +57,17 @@ public class IndexerHW {
 		spinVelocity.setUpdateFrequency(50);
 		spinMotorVoltage.setUpdateFrequency(50);
 		spinStatorCurrent.setUpdateFrequency(50);
-		spinSupplyVoltage.setUpdateFrequency(50);
-		spinSupplyCurrent.setUpdateFrequency(50);
+		spinSupplyVoltage.setUpdateFrequency(10);
+		spinSupplyCurrent.setUpdateFrequency(10);
 
 		spinTalonFX.optimizeBusUtilization();
 
 		elevatorTalonFX = new TalonFX(41);
 		TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
 		elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		elevatorConfig.CurrentLimits.SupplyCurrentLimit = 30;
+		elevatorConfig.CurrentLimits.SupplyCurrentLimit = 20;
+		elevatorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+		elevatorConfig.CurrentLimits.StatorCurrentLimit = 40;
 		elevatorConfig.Voltage.PeakForwardVoltage = 12.0;
 		elevatorConfig.Voltage.PeakReverseVoltage = -12.0;
 		elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
@@ -82,8 +85,8 @@ public class IndexerHW {
 		elevatorVelocity.setUpdateFrequency(50);
 		elevatorMotorVoltage.setUpdateFrequency(50);
 		elevatorStatorCurrent.setUpdateFrequency(50);
-		elevatorSupplyVoltage.setUpdateFrequency(50);
-		elevatorSupplyCurrent.setUpdateFrequency(50);
+		elevatorSupplyVoltage.setUpdateFrequency(10);
+		elevatorSupplyCurrent.setUpdateFrequency(10);
 
 		elevatorTalonFX.optimizeBusUtilization();
 	}

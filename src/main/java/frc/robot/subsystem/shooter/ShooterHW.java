@@ -118,9 +118,9 @@ public class ShooterHW {
 		turretConfig.Slot0.kI = TURRET_kI;
 		turretConfig.Slot0.kD = TURRET_kD;
 		turretConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		turretConfig.CurrentLimits.SupplyCurrentLimit = 30;
+		turretConfig.CurrentLimits.SupplyCurrentLimit = 20;
 		turretConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		turretConfig.CurrentLimits.StatorCurrentLimit = 120;
+		turretConfig.CurrentLimits.StatorCurrentLimit = 30;
 		turretConfig.Voltage.PeakForwardVoltage = 12.0;
 		turretConfig.Voltage.PeakReverseVoltage = -12.0;
 		turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -141,7 +141,7 @@ public class ShooterHW {
 		hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		hoodConfig.CurrentLimits.SupplyCurrentLimit = 10;
 		hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		hoodConfig.CurrentLimits.StatorCurrentLimit = 80;
+		hoodConfig.CurrentLimits.StatorCurrentLimit = 30;
 		hoodConfig.Voltage.PeakForwardVoltage = 12.0;
 		hoodConfig.Voltage.PeakReverseVoltage = -12.0;
 		hoodConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -160,10 +160,10 @@ public class ShooterHW {
 		flywheelConfig.Slot0.kV = FLYWHEEL_kV;
 		flywheelConfig.Slot0.kS = FLYWHEEL_kS;
 		flywheelConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		flywheelConfig.CurrentLimits.SupplyCurrentLimit = 40;
+		flywheelConfig.CurrentLimits.SupplyCurrentLimit = 30;
 		flywheelConfig.CurrentLimits.SupplyCurrentLowerTime = 3.0;
 		flywheelConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		flywheelConfig.CurrentLimits.StatorCurrentLimit = 180;
+		flywheelConfig.CurrentLimits.StatorCurrentLimit = 60;
 		flywheelConfig.Voltage.PeakForwardVoltage = 12.0;
 		flywheelConfig.Voltage.PeakReverseVoltage = -12.0;
 		// flywheelConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -175,6 +175,10 @@ public class ShooterHW {
 		// --- Flywheel follower ---
 		flywheelFollowerTalonFX = new TalonFX(53);
 		TalonFXConfiguration flywheelFollowerConfig = new TalonFXConfiguration();
+		flywheelFollowerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+		flywheelFollowerConfig.CurrentLimits.SupplyCurrentLimit = 30;
+		flywheelFollowerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+		flywheelFollowerConfig.CurrentLimits.StatorCurrentLimit = 60;
 		flywheelFollowerConfig.Voltage.PeakForwardVoltage = 12.0;
 		flywheelFollowerConfig.Voltage.PeakReverseVoltage = -12.0;
 		flywheelFollowerTalonFX.getConfigurator().apply(flywheelFollowerConfig);
@@ -210,21 +214,21 @@ public class ShooterHW {
 		turretVelocity.setUpdateFrequency(50);
 		turretMotorVoltage.setUpdateFrequency(50);
 		turretStatorCurrent.setUpdateFrequency(50);
-		turretSupplyVoltage.setUpdateFrequency(50);
-		turretSupplyCurrent.setUpdateFrequency(50);
+		turretSupplyVoltage.setUpdateFrequency(10);
+		turretSupplyCurrent.setUpdateFrequency(10);
 
 		hoodPosition.setUpdateFrequency(50);
 		hoodVelocity.setUpdateFrequency(50);
 		hoodMotorVoltage.setUpdateFrequency(50);
 		hoodStatorCurrent.setUpdateFrequency(50);
-		hoodSupplyVoltage.setUpdateFrequency(50);
-		hoodSupplyCurrent.setUpdateFrequency(50);
+		hoodSupplyVoltage.setUpdateFrequency(10);
+		hoodSupplyCurrent.setUpdateFrequency(10);
 
 		flywheelVelocity.setUpdateFrequency(50);
 		flywheelMotorVoltage.setUpdateFrequency(50);
 		flywheelStatorCurrent.setUpdateFrequency(50);
-		flywheelSupplyVoltage.setUpdateFrequency(50);
-		flywheelSupplyCurrent.setUpdateFrequency(50);
+		flywheelSupplyVoltage.setUpdateFrequency(10);
+		flywheelSupplyCurrent.setUpdateFrequency(10);
 		flywheelDutyCycle.setUpdateFrequency(50);
 		flywheelTorqueCurrent.setUpdateFrequency(50);
 

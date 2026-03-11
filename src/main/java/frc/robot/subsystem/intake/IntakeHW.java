@@ -53,8 +53,8 @@ public class IntakeHW {
 		jointConfig.inverted(true);
 		jointConfig.encoder.positionConversionFactor(JOINT_RATIO * 2 * PI);
 		jointConfig.encoder.velocityConversionFactor(JOINT_RATIO * 2 * PI / 60);
-		jointConfig.smartCurrentLimit(30);
-		jointConfig.secondaryCurrentLimit(30);
+		jointConfig.smartCurrentLimit(20);
+		jointConfig.secondaryCurrentLimit(40);
 		jointConfig.idleMode(IdleMode.kBrake);
 		jointConfig.voltageCompensation(12.0);
 		jointSparkMax.configure(jointConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -68,7 +68,7 @@ public class IntakeHW {
 		intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		intakeConfig.CurrentLimits.SupplyCurrentLimit = 30;
 		intakeConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		intakeConfig.CurrentLimits.StatorCurrentLimit = 120;
+		intakeConfig.CurrentLimits.StatorCurrentLimit = 80;
 		intakeConfig.Voltage.PeakForwardVoltage = 12.0;
 		intakeConfig.Voltage.PeakReverseVoltage = -12.0;
 		intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
@@ -87,8 +87,8 @@ public class IntakeHW {
 		intakeVelocitySignal.setUpdateFrequency(50);
 		intakeMotorVoltageSignal.setUpdateFrequency(50);
 		intakeStatorCurrentSignal.setUpdateFrequency(50);
-		intakeSupplyVoltageSignal.setUpdateFrequency(50);
-		intakeSupplyCurrentSignal.setUpdateFrequency(50);
+		intakeSupplyVoltageSignal.setUpdateFrequency(10);
+		intakeSupplyCurrentSignal.setUpdateFrequency(10);
 
 		jointAbsoluteEncoder.optimizeBusUtilization();
 		intakeTalonFX.optimizeBusUtilization();

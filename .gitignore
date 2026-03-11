@@ -188,3 +188,6 @@ compile_commands.json
 .factorypath
 
 **/.venv
+
+# WPILib build constants (auto-generated, contains build metadata)
+src/main/java/frc/robot/BuildConstants.java

@@ -56,6 +56,7 @@ public class IntakeHW {
 		jointConfig.smartCurrentLimit(30);
 		jointConfig.secondaryCurrentLimit(30);
 		jointConfig.idleMode(IdleMode.kBrake);
+		jointConfig.voltageCompensation(12.0);
 		jointSparkMax.configure(jointConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 		jointEncoder = jointSparkMax.getEncoder();
 
@@ -68,6 +69,8 @@ public class IntakeHW {
 		intakeConfig.CurrentLimits.SupplyCurrentLimit = 30;
 		intakeConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		intakeConfig.CurrentLimits.StatorCurrentLimit = 120;
+		intakeConfig.Voltage.PeakForwardVoltage = 12.0;
+		intakeConfig.Voltage.PeakReverseVoltage = -12.0;
 		intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 		intakeTalonFX.getConfigurator().apply(intakeConfig);
 		intakeTalonFX.clearStickyFaults();

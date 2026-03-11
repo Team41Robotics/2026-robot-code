@@ -76,6 +76,8 @@ public class SwerveHW {
 		driveConfig.CurrentLimits.SupplyCurrentLowerTime = 2.0;
 		driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		driveConfig.CurrentLimits.StatorCurrentLimit = 90;
+		driveConfig.Voltage.PeakForwardVoltage = 12.0;
+		driveConfig.Voltage.PeakReverseVoltage = -12.0;
 		driveConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		driveTalonFX.getConfigurator().apply(driveConfig);
 		driveTalonFX.clearStickyFaults();
@@ -89,6 +91,8 @@ public class SwerveHW {
 		turnConfig.Slot0.kD = TURN_kD;
 		turnConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		turnConfig.CurrentLimits.SupplyCurrentLimit = 20;
+		turnConfig.Voltage.PeakForwardVoltage = 12.0;
+		turnConfig.Voltage.PeakReverseVoltage = -12.0;
 		turnConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 		turnTalonFX.getConfigurator().apply(turnConfig);
 		turnTalonFX.clearStickyFaults();

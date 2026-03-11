@@ -121,6 +121,8 @@ public class ShooterHW {
 		turretConfig.CurrentLimits.SupplyCurrentLimit = 30;
 		turretConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		turretConfig.CurrentLimits.StatorCurrentLimit = 120;
+		turretConfig.Voltage.PeakForwardVoltage = 12.0;
+		turretConfig.Voltage.PeakReverseVoltage = -12.0;
 		turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		turretTalonFX.getConfigurator().apply(turretConfig);
 		turretTalonFX.clearStickyFaults();
@@ -140,6 +142,8 @@ public class ShooterHW {
 		hoodConfig.CurrentLimits.SupplyCurrentLimit = 10;
 		hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		hoodConfig.CurrentLimits.StatorCurrentLimit = 80;
+		hoodConfig.Voltage.PeakForwardVoltage = 12.0;
+		hoodConfig.Voltage.PeakReverseVoltage = -12.0;
 		hoodConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		hoodTalonFX.getConfigurator().apply(hoodConfig);
 		hoodTalonFX.clearStickyFaults();
@@ -160,6 +164,8 @@ public class ShooterHW {
 		flywheelConfig.CurrentLimits.SupplyCurrentLowerTime = 3.0;
 		flywheelConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		flywheelConfig.CurrentLimits.StatorCurrentLimit = 180;
+		flywheelConfig.Voltage.PeakForwardVoltage = 12.0;
+		flywheelConfig.Voltage.PeakReverseVoltage = -12.0;
 		// flywheelConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		flywheelConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 		flywheelTalonFX.getConfigurator().apply(flywheelConfig);
@@ -168,7 +174,10 @@ public class ShooterHW {
 
 		// --- Flywheel follower ---
 		flywheelFollowerTalonFX = new TalonFX(53);
-		flywheelFollowerTalonFX.getConfigurator().apply(new TalonFXConfiguration());
+		TalonFXConfiguration flywheelFollowerConfig = new TalonFXConfiguration();
+		flywheelFollowerConfig.Voltage.PeakForwardVoltage = 12.0;
+		flywheelFollowerConfig.Voltage.PeakReverseVoltage = -12.0;
+		flywheelFollowerTalonFX.getConfigurator().apply(flywheelFollowerConfig);
 		flywheelFollowerTalonFX.clearStickyFaults();
 		flywheelFollowerTalonFX.setNeutralMode(NeutralModeValue.Coast);
 		flywheelFollowerTalonFX.setControl(new Follower(51, MotorAlignmentValue.Opposed));

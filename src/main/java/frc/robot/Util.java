@@ -12,9 +12,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
 public class Util {
-	/** Build a 3x1 covariance matrix from standard deviations (squares them for you). */
 	public static Matrix<N3, N1> buildCov(double stdX, double stdY, double stdTheta) {
-		return VecBuilder.fill(stdX * stdX, stdY * stdY, stdTheta * stdTheta);
+		return VecBuilder.fill(stdX, stdY, stdTheta);
 	}
 
 	public static double deadband(double x, double db) {

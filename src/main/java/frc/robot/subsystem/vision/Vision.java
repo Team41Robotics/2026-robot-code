@@ -34,12 +34,13 @@ public class Vision extends SubsystemBase {
 				"DuckyNE",
 				new Transform3d(
 						new Translation3d(SwerveDrive.ROBOT_LEN / 2, -SwerveDrive.ROBOT_WID / 2, 0.17),
-						new Rotation3d(0, -20. / 180. * PI, 0))),
+						new Rotation3d(0, -20. / 180. * PI, 0)),
+				"Ducky.json"),
 		new VisionHW(
 				"DuckySE",
 				new Transform3d(
-						new Translation3d(-SwerveDrive.ROBOT_LEN / 2, -SwerveDrive.ROBOT_WID / 2, 0.17),
-						new Rotation3d(0, -20. / 180. * PI, PI)))
+						new Rotation3d(0, -20. / 180. * PI, PI)),
+				"Kimmy.json")
 	};
 	public VisionInputsAutoLogged[] inputs = new VisionInputsAutoLogged[cameras.length];
 	public PhotonPoseEstimator[] poseEsts = new PhotonPoseEstimator[cameras.length];
@@ -57,6 +58,11 @@ public class Vision extends SubsystemBase {
 	public boolean enableHeading = false;
 
 	public void init() {
+		try {
+			System.loadLibrary("photontargetingJNI");
+		} catch (Throwable e) {
+			System.out.println("Warning: could not load photontargetingJNI: " + e.getMessage());
+		}
 		for (int i = 0; i < nCams; i++) {
 			VisionHW cam = cameras[i];
 			inputs[i] = new VisionInputsAutoLogged();
@@ -133,10 +139,12 @@ public class Vision extends SubsystemBase {
 								result,
 								new Matrix<>(N3.instance, N3.instance, input.cameraMatrix),
 								new Matrix<>(N8.instance, N1.instance, input.distCoeffs),
-								new Pose3d(drive.pose),
+								new Pose3d(drive.poseEst
+										.sampleAt(result.getTimestampSeconds())
+										.orElse(drive.pose)),
 								!enableHeading,
 								1);
-					} catch (Throwable e) {
+					} catch (Exception e) {
 						constrainedPnPpose = Optional.empty();
 						// Constrained PnP JNI not available in sim
 					}
@@ -144,14 +152,14 @@ public class Vision extends SubsystemBase {
 				Optional<EstimatedRobotPose> coprocPnPpose;
 				try {
 					coprocPnPpose = poseEsts[i].estimateCoprocMultiTagPose(result);
-				} catch (Throwable e) {
+				} catch (Exception e) {
 					coprocPnPpose = Optional.empty();
 					System.out.println("Co-processor PnP failed for " + cam.name + ": " + e.getMessage());
 				}
 				Optional<EstimatedRobotPose> pnpDistTrigPose;
 				try {
 					pnpDistTrigPose = poseEsts[i].estimatePnpDistanceTrigSolvePose(result);
-				} catch (Throwable e) {
+				} catch (Exception e) {
 					pnpDistTrigPose = Optional.empty();
 					System.out.println("PnP Distance+Trig failed for " + cam.name + ": " + e.getMessage());
 				}

@@ -23,6 +23,29 @@
                                 "panel": "new"
                         },
                         "problemMatcher": []
+                },
+                {
+                        "label": "replay",
+                        "type": "shell",
+                        "command": "./gradlew",
+                        "args": [
+                                "simulateJava"
+                        ],
+                        "windows": {
+                                "command": "gradlew.bat",
+                                "options": {
+                                        "shell": {
+                                                "executable": "cmd.exe",
+                                                "args": ["/c"]
+                                        }
+                                }
+                        },
+                        "group": "build",
+                        "presentation": {
+                                "reveal": "always",
+                                "panel": "new"
+                        },
+                        "problemMatcher": []
                 }
         ]
 }

@@ -39,6 +39,7 @@ public class Vision extends SubsystemBase {
 		new VisionHW(
 				"DuckySE",
 				new Transform3d(
+						new Translation3d(-SwerveDrive.ROBOT_LEN / 2, -SwerveDrive.ROBOT_WID / 2, 0.17),
 						new Rotation3d(0, -20. / 180. * PI, PI)),
 				"Kimmy.json")
 	};

@@ -35,7 +35,9 @@ public class Robot extends LoggedRobot {
 			Logger.addDataReceiver(new WPILOGWriter("/U"));
 		} else {
 			setUseTiming(false);
-			String logPath = LogFileUtil.findReplayLog();
+			// String logPath = LogFileUtil.findReplayLog();
+			String logPath =
+					"C:\\Users\\Robotics41\\Desktop\\2026-robot-code-new\\logs\\akit_26-03-07_23-51-56_njwas_q38.wpilog";
 			Logger.setReplaySource(new WPILOGReader(logPath));
 			Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
 		}
@@ -107,7 +109,9 @@ public class Robot extends LoggedRobot {
 	public void disabledPeriodic() {}
 
 	@Override
-	public void disabledExit() {}
+	public void disabledExit() {
+		System.gc();
+	}
 
 	@Override
 	public void autonomousInit() {

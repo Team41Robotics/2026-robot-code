@@ -13,6 +13,7 @@ public class StopIndexer extends Command {
 	public void initialize() {
 		indexer.targetSpinVoltage = 0;
 		indexer.targetElevatorVoltage = 0;
+		indexer.targetBackvatorVoltage = 0;
 	}
 
 	@Override

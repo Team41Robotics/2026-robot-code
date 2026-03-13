@@ -1,0 +1,1486 @@
+Found 9 log files in ../logs
+
+==========================================================================================
+  ANALYZING: akit_26-03-07_14-54-34_njwas_p4.wpilog
+==========================================================================================
+
+  Match window: 344.1s to 369.1s (enabled 21.0s)
+
+--- LOOP TIMING (enabled only) ---
+
+--- GARBAGE COLLECTION ---
+  Total GC collections during log: 1482
+  GC pauses: 1483 events, mean=6.3ms, max=159.0ms
+  ** 1 GC pauses >20ms — these cause loop overruns **
+     t=15.75s: 159ms
+
+--- CAN BUS ---
+  Utilization: mean=42.4%  max=100.0%
+  ** HIGH CAN UTILIZATION (100%) — may cause dropped frames **
+
+--- POWER (enabled only) ---
+  Battery: min=7.70V  mean=11.60V  max=12.46V
+  ** LOW VOLTAGE WARNING: min=7.70V **
+  ** RoboRIO brownout flag triggered 194 times **
+  Total current: mean=27.8A  p95=46.0A  max=178.0A
+  CPU temp: mean=50.4C  max=53.3C
+  Est. battery internal resistance: 22 mΩ
+
+--- SWERVE DRIVE (enabled only) ---
+
+  [NE]
+    Drive error (abs): mean=0.013 m/s  p95=0.041  max=0.051
+    Turn error (abs):  mean=0.51deg  p95=0.62deg  max=2.01deg
+    Drive current: mean=2.2A  max=16.2A
+    Turn current:  mean=0.3A  max=3.9A
+
+  [NW]
+    Drive error (abs): mean=0.027 m/s  p95=0.064  max=0.064
+    Turn error (abs):  mean=0.24deg  p95=0.18deg  max=7.34deg
+    Drive current: mean=3.5A  max=12.5A
+    Turn current:  mean=0.2A  max=18.9A
+
+  [SE]
+    Drive error (abs): mean=0.011 m/s  p95=0.053  max=0.053
+    Turn error (abs):  mean=0.13deg  p95=0.18deg  max=1.58deg
+    Drive current: mean=1.0A  max=10.6A
+    Turn current:  mean=0.2A  max=3.7A
+
+  [SW]
+    Drive error (abs): mean=0.025 m/s  p95=0.109  max=0.109
+    Turn error (abs):  mean=0.39deg  p95=0.44deg  max=2.15deg
+    Drive current: mean=4.0A  max=21.4A
+    Turn current:  mean=0.2A  max=5.8A
+
+  Cross-module comparison (mean drive error):
+    NE: 0.0130 m/s
+    NW: 0.0266 m/s
+    SE: 0.0110 m/s
+    SW: 0.0250 m/s
+
+--- SHOOTER ---
+  Shooting periods: 1, total 74.9s
+  Flywheel spinup: mean=0.36s  max=0.36s (1 events)
+  Flywheel tracking (after spinup): mean err=311RPM  max=1990RPM
+  Within 100RPM: 47.1%  Within 50RPM: 40.6%
+  ** FLYWHEEL TRACKING POOR — tune FLYWHEEL_kP (currently 0.17662) **
+  Flywheel current (shooting): mean=3.3A  max=154.3A
+  Bus voltage (shooting): min=6.03V  mean=9.65V
+  ** SEVERE VOLTAGE SAG during shooting (6.0V) **
+  Turret error: mean=0.76deg  max=28.86deg  within 2deg: 96.6%
+  Hood error:   mean=0.03deg  max=1.68deg  within 2deg: 100.0%
+  Turret limit switch triggers: 12
+  Turret range: -118.4deg to 33.8deg
+  ** Turret near MIN limit (-118.4deg, limit=-116.3deg) **
+  Hood range: -0.0deg to 3.7deg
+
+--- VISION ---
+
+  [DuckyNE]
+    Connected: 50.0%
+
+  [DuckySE]
+    ** 1 disconnect events **
+       t=19.13s
+    Connected: 50.0%
+    Tags seen: 0=0  1=12  2+=12
+
+--- ODOMETRY ---
+  X range: 13.33 to 13.34 m
+  Y range: 0.76 to 0.77 m
+
+--- INDEXER ---
+  Elevator active: 17/35 samples
+  Spin active: 36/38 samples
+  Elevator current: mean=0.2A  max=94.9A
+  ** HIGH ELEVATOR CURRENT (95A) — possible jam **
+  Spin current: mean=2.2A  max=64.7A
+
+--- IMU ---
+  Pitch: mean=-0.7deg  max=0.9deg
+  Roll:  mean=-37.4deg  max=180.0deg
+
+--- CONSOLE (567 messages) ---
+  Errors/warnings: 349
+    t=7.67s: ********** Robot program starting **********
+NT: Listening on NT3 port 1735, NT4 port 5810
+[AdvantageKit] Logging to "/U
+    t=15.75s: ********** Robot program startup complete **********
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverru
+    t=16.24s: CommandScheduler loop overrun
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive
+    t=16.80s: Warning at edu.wpi.first.wpilibj.DriverStation.reportJoystickUnpluggedWarning(DriverStation.java:1345): Joystick Button 
+    t=16.86s: Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:436): Loop time of 0
+    t=16.88s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.004229s
+
+    t=18.01s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.009553s
+
+    t=18.64s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000093s
+	IMU.pe
+    t=19.13s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.018160s
+
+    t=19.22s: disabledPeriodic(): 0.016843s
+
+Warning at org.photonvision.PhotonCamera.verifyVersion(PhotonCamera.java:545): PhotonVisi
+    t=24.29s: robotPeriodic(): 4.917847s
+	LiveWindow.updateValues(): 0.000019s
+	Shuffleboard.update(): 0.000019s
+	disabledPeriodic(): 
+    t=25.48s: IMU.periodic(): 0.000019s
+	buttons.run(): 0.000111s
+	Vision.periodic(): 0.000018s
+	Intake.periodic(): 0.000000s
+	Shooter
+    t=26.51s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.002375s
+
+    t=26.55s: LiveWindow.updateValues(): 0.000018s
+	Shuffleboard.update(): 0.000019s
+	disabledPeriodic(): 0.000315s
+
+Warning at edu.wp
+
+
+==========================================================================================
+  ANALYZING: akit_26-03-07_17-35-44_njwas_q9.wpilog
+==========================================================================================
+
+  Match window: 358.2s to 522.7s (enabled 143.6s)
+
+--- LOOP TIMING (enabled only) ---
+
+--- GARBAGE COLLECTION ---
+  Total GC collections during log: 2154
+  GC pauses: 2152 events, mean=6.2ms, max=186.0ms
+  ** 4 GC pauses >20ms — these cause loop overruns **
+     t=14.62s: 186ms
+     t=60.37s: 23ms
+     t=163.99s: 24ms
+     t=469.43s: 177ms
+
+--- CAN BUS ---
+  Utilization: mean=42.5%  max=100.0%
+  ** HIGH CAN UTILIZATION (100%) — may cause dropped frames **
+
+--- POWER (enabled only) ---
+  Battery: min=6.21V  mean=9.34V  max=12.52V
+  ** BROWNOUT: voltage dropped to 6.21V **
+     First brownout at t=358.57s, last at t=522.72s
+  ** RoboRIO brownout flag triggered 544 times **
+  Total current: mean=110.4A  p95=234.0A  max=276.0A
+  ** EXTREME CURRENT (276A) — battery/breaker stress **
+  CPU temp: mean=49.5C  max=52.4C
+  Est. battery internal resistance: -0 mΩ
+
+--- SWERVE DRIVE (enabled only) ---
+
+  [NE]
+    Drive error (abs): mean=2.477 m/s  p95=5.240  max=8.435
+    Drive error @ >1m/s target: mean=3.244  max=8.435
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=12.32deg  p95=38.53deg  max=89.65deg
+    ** TURN ALIGNMENT POOR — mean error 12.3deg **
+    Drive current: mean=10.6A  max=141.0A
+    Turn current:  mean=3.1A  max=38.0A
+
+  [NW]
+    Drive error (abs): mean=2.802 m/s  p95=5.340  max=7.880
+    Drive error @ >1m/s target: mean=3.481  max=7.880
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=11.32deg  p95=35.80deg  max=74.48deg
+    ** TURN ALIGNMENT POOR — mean error 11.3deg **
+    Drive current: mean=38.6A  max=115.7A
+    Turn current:  mean=4.7A  max=39.0A
+
+  [SE]
+    Drive error (abs): mean=2.440 m/s  p95=5.382  max=6.882
+    Drive error @ >1m/s target: mean=3.111  max=6.882
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=12.35deg  p95=37.42deg  max=78.03deg
+    ** TURN ALIGNMENT POOR — mean error 12.4deg **
+    Drive current: mean=29.8A  max=170.8A
+    Turn current:  mean=3.9A  max=39.9A
+
+  [SW]
+    Drive error (abs): mean=2.627 m/s  p95=5.478  max=7.669
+    Drive error @ >1m/s target: mean=3.292  max=7.669
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=11.53deg  p95=35.25deg  max=77.36deg
+    ** TURN ALIGNMENT POOR — mean error 11.5deg **
+    Drive current: mean=34.1A  max=135.3A
+    Turn current:  mean=4.2A  max=40.0A
+
+  Cross-module comparison (mean drive error):
+    NE: 2.4768 m/s
+    NW: 2.8017 m/s
+    SE: 2.4404 m/s
+    SW: 2.6273 m/s
+
+--- SHOOTER ---
+  Shooting periods: 2, total 161.5s
+  Flywheel spinup: mean=23.32s  max=24.86s (2 events)
+  ** SLOW SPINUP — consider increasing FLYWHEEL_kP or pre-spinning **
+  Flywheel tracking (after spinup): mean err=320RPM  max=2145RPM
+  Within 100RPM: 34.4%  Within 50RPM: 25.2%
+  ** FLYWHEEL TRACKING POOR — tune FLYWHEEL_kP (currently 0.17662) **
+  Flywheel current (shooting): mean=2.7A  max=129.0A
+  Bus voltage (shooting): min=6.00V  mean=9.18V
+  ** SEVERE VOLTAGE SAG during shooting (6.0V) **
+  Turret error: mean=9.38deg  max=110.05deg  within 2deg: 35.8%
+  Hood error:   mean=0.51deg  max=6.57deg  within 2deg: 97.4%
+  Turret limit switch triggers: 60
+  Turret range: -118.7deg to 86.1deg
+  ** Turret near MIN limit (-118.7deg, limit=-116.3deg) **
+  Hood range: -0.1deg to 12.4deg
+
+--- VISION ---
+
+  [DuckyNE]
+    Connected: 100.0%
+    104 vision updates during match:
+      none: 49 (47.1%)
+      constrainedPnP: 47 (45.2%)
+      pnpDistTrig: 8 (7.7%)
+    Useful updates: 55 (52.9%)
+    Tags seen: 0=0  1=36  2+=50
+
+  [DuckySE]
+    Connected: 100.0%
+    167 vision updates during match:
+      none: 83 (49.7%)
+      constrainedPnP: 83 (49.7%)
+      pnpDistTrig: 1 (0.6%)
+    Useful updates: 84 (50.3%)
+    Tags seen: 0=0  1=79  2+=307
+
+--- ODOMETRY ---
+  X range: 0.34 to 6.49 m
+  Y range: 0.34 to 8.07 m
+
+--- AUTO PATH TRACKING ---
+  X error: mean=-0.817m  max=0.388m  std=0.878m
+  Y error: mean=-0.641m  max=0.024m  std=0.625m
+  Distance error: mean=1.087m  max=2.877m
+  Within 10cm: 29.5%  Within 25cm: 34.5%
+  ** AUTO TRACKING POOR — check odometry, PID, or path **
+
+--- INDEXER ---
+  Elevator active: 61/123 samples
+  Spin active: 123/127 samples
+  Elevator current: mean=0.9A  max=108.0A
+  ** HIGH ELEVATOR CURRENT (108A) — possible jam **
+  Spin current: mean=3.0A  max=63.4A
+
+--- IMU ---
+  ** IMU disconnected for 1 samples **
+  Pitch: mean=-1.9deg  max=2.0deg
+  Roll:  mean=-134.3deg  max=180.0deg
+
+--- CONSOLE (721 messages) ---
+  Errors/warnings: 445
+    t=7.07s: ********** Robot program starting **********
+NT: Listening on NT3 port 1735, NT4 port 5810
+NT: Got a NT4 connection from
+    t=14.62s: ********** Robot program startup complete **********
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverru
+    t=15.76s: Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:436): Loop time of 0
+    t=16.28s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.012948s
+
+    t=16.39s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000111s
+	IMU.pe
+    t=17.40s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.004063s
+
+    t=17.80s: Warning at edu.wpi.first.wpilibj.DriverStation.reportJoystickUnpluggedWarning(DriverStation.java:1345): Joystick Button 
+    t=19.61s: CommandScheduler loop overrun
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive
+    t=21.26s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.002151s
+
+    t=22.20s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000130s
+	IMU.pe
+    t=22.31s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.001984s
+
+
+==========================================================================================
+  ANALYZING: akit_26-03-07_19-33-25_njwas_q15.wpilog
+==========================================================================================
+
+  Match window: 191.1s to 216.0s (enabled 20.9s)
+
+--- LOOP TIMING (enabled only) ---
+
+--- GARBAGE COLLECTION ---
+  Total GC collections during log: 696
+  GC pauses: 691 events, mean=6.3ms, max=180.0ms
+  ** 4 GC pauses >20ms — these cause loop overruns **
+     t=17.04s: 180ms
+     t=23.09s: 34ms
+     t=57.31s: 40ms
+     t=151.30s: 172ms
+
+--- CAN BUS ---
+  Utilization: mean=42.1%  max=100.0%
+  ** HIGH CAN UTILIZATION (100%) — may cause dropped frames **
+
+--- POWER (enabled only) ---
+  Battery: min=9.29V  mean=11.59V  max=11.95V
+  Total current: mean=38.1A  p95=50.0A  max=148.0A
+  CPU temp: mean=48.0C  max=50.2C
+  Est. battery internal resistance: 13 mΩ
+
+--- SWERVE DRIVE (enabled only) ---
+
+  [NE]
+    Drive error (abs): mean=0.025 m/s  p95=0.080  max=0.080
+    Turn error (abs):  mean=0.63deg  p95=0.70deg  max=3.16deg
+    Drive current: mean=3.7A  max=17.9A
+    Turn current:  mean=2.0A  max=4.8A
+
+  [NW]
+    Drive error (abs): mean=0.028 m/s  p95=0.115  max=0.115
+    Turn error (abs):  mean=0.41deg  p95=0.44deg  max=1.49deg
+    Drive current: mean=2.6A  max=17.6A
+    Turn current:  mean=0.2A  max=3.0A
+
+  [SE]
+    Drive error (abs): mean=0.024 m/s  p95=0.074  max=0.074
+    Turn error (abs):  mean=0.55deg  p95=0.62deg  max=0.62deg
+    Drive current: mean=1.7A  max=16.3A
+    Turn current:  mean=0.5A  max=2.2A
+
+  [SW]
+    Drive error (abs): mean=0.016 m/s  p95=0.059  max=0.070
+    Turn error (abs):  mean=0.32deg  p95=0.35deg  max=2.20deg
+    Drive current: mean=2.0A  max=15.1A
+    Turn current:  mean=0.2A  max=3.5A
+
+  Cross-module comparison (mean drive error):
+    NE: 0.0246 m/s
+    NW: 0.0280 m/s
+    SE: 0.0245 m/s
+    SW: 0.0162 m/s
+
+--- SHOOTER ---
+  Shooting periods: 1, total 0.1s
+  Flywheel current (shooting): mean=80.4A  max=80.4A
+  Bus voltage (shooting): min=10.35V  mean=10.35V
+  Turret error: mean=7.63deg  max=20.25deg  within 2deg: 40.5%
+  Hood error:   mean=0.08deg  max=0.34deg  within 2deg: 100.0%
+  Turret limit switch triggers: 0
+  Turret range: -119.8deg to 23.1deg
+  ** Turret near MIN limit (-119.8deg, limit=-116.3deg) **
+  Hood range: -0.1deg to 0.3deg
+
+--- VISION ---
+
+  [DuckyNE]
+    Connected: 100.0%
+
+  [DuckySE]
+    Connected: 100.0%
+    2 vision updates during match:
+      none: 1 (50.0%)
+      constrainedPnP: 1 (50.0%)
+    Useful updates: 1 (50.0%)
+    Tags seen: 0=0  1=142  2+=142
+
+--- ODOMETRY ---
+  X range: 3.22 to 3.24 m
+  Y range: 7.36 to 7.37 m
+
+--- INDEXER ---
+  Elevator active: 15/30 samples
+  Spin active: 30/33 samples
+  Elevator current: mean=4.3A  max=101.0A
+  ** HIGH ELEVATOR CURRENT (101A) — possible jam **
+  Spin current: mean=5.2A  max=60.1A
+
+--- IMU ---
+  Pitch: mean=-0.1deg  max=0.8deg
+  Roll:  mean=-178.0deg  max=-176.2deg
+
+--- CONSOLE (143 messages) ---
+  Errors/warnings: 81
+    t=6.66s: ********** Robot program starting **********
+NT: Listening on NT3 port 1735, NT4 port 5810
+NT: Got a NT4 connection from
+    t=17.04s: ********** Robot program startup complete **********
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverru
+    t=17.76s: Intake.periodic(): 0.000037s
+	Shooter.periodic(): 0.000018s
+	LEDS.periodic(): 0.000019s
+	Indexer.periodic(): 0.000019s
+	
+    t=18.13s: Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:436): Loop time of 0
+    t=18.71s: CommandScheduler loop overrun
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive
+    t=18.89s: Climber.periodic(): 0.000018s
+
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashb
+    t=19.80s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000092s
+	IMU.pe
+    t=19.91s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.005861s
+
+    t=20.83s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.015656s
+    t=21.85s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.002263s
+
+    t=22.68s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000093s
+	IMU.pe
+    t=22.86s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.007253s
+
+    t=23.52s: CommandScheduler loop overrun
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobot
+    t=23.92s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.002356s
+
+    t=24.03s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000427s
+	IMU.pe
+
+
+==========================================================================================
+  ANALYZING: akit_26-03-07_20-45-29_njwas_q22.wpilog
+==========================================================================================
+
+  Match window: 110.8s to 275.2s (enabled 97.6s)
+
+--- LOOP TIMING (enabled only) ---
+
+--- GARBAGE COLLECTION ---
+  Total GC collections during log: 1592
+  GC pauses: 1588 events, mean=6.2ms, max=180.0ms
+  ** 4 GC pauses >20ms — these cause loop overruns **
+     t=16.29s: 180ms
+     t=18.81s: 58ms
+     t=146.54s: 30ms
+     t=281.11s: 172ms
+
+--- CAN BUS ---
+  Utilization: mean=45.8%  max=100.0%
+  ** HIGH CAN UTILIZATION (100%) — may cause dropped frames **
+
+--- POWER (enabled only) ---
+  Battery: min=5.49V  mean=9.31V  max=12.52V
+  ** BROWNOUT: voltage dropped to 5.49V **
+     First brownout at t=116.50s, last at t=274.94s
+  ** RoboRIO brownout flag triggered 177 times **
+  Total current: mean=129.9A  p95=246.0A  max=292.0A
+  ** EXTREME CURRENT (292A) — battery/breaker stress **
+  CPU temp: mean=46.0C  max=49.5C
+  Est. battery internal resistance: 7 mΩ
+
+--- SWERVE DRIVE (enabled only) ---
+
+  [NE]
+    Drive error (abs): mean=2.446 m/s  p95=5.012  max=6.396
+    Drive error @ >1m/s target: mean=2.768  max=6.396
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=8.37deg  p95=31.37deg  max=65.10deg
+    ** TURN ALIGNMENT POOR — mean error 8.4deg **
+    Drive current: mean=43.1A  max=135.3A
+    Turn current:  mean=3.3A  max=154.8A
+
+  [NW]
+    Drive error (abs): mean=2.810 m/s  p95=5.181  max=6.289
+    Drive error @ >1m/s target: mean=3.088  max=6.289
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=7.91deg  p95=29.60deg  max=66.81deg
+    ** TURN ALIGNMENT POOR — mean error 7.9deg **
+    Drive current: mean=65.6A  max=117.5A
+    Turn current:  mean=4.5A  max=41.1A
+
+  [SE]
+    Drive error (abs): mean=2.366 m/s  p95=4.939  max=6.711
+    Drive error @ >1m/s target: mean=2.640  max=6.711
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=9.30deg  p95=31.16deg  max=63.59deg
+    ** TURN ALIGNMENT POOR — mean error 9.3deg **
+    Drive current: mean=58.8A  max=126.2A
+    Turn current:  mean=4.1A  max=40.2A
+
+  [SW]
+    Drive error (abs): mean=2.840 m/s  p95=6.543  max=7.729
+    Drive error @ >1m/s target: mean=3.147  max=7.729
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=8.74deg  p95=31.22deg  max=67.16deg
+    ** TURN ALIGNMENT POOR — mean error 8.7deg **
+    Drive current: mean=45.3A  max=133.8A
+    Turn current:  mean=4.8A  max=105.9A
+
+  Cross-module comparison (mean drive error):
+    NE: 2.4455 m/s
+    NW: 2.8101 m/s
+    SE: 2.3658 m/s
+    SW: 2.8402 m/s
+
+--- SHOOTER ---
+  Shooting periods: 2, total 143.6s
+  Flywheel spinup: mean=0.40s  max=0.50s (2 events)
+  Flywheel tracking (after spinup): mean err=377RPM  max=2883RPM
+  Within 100RPM: 50.4%  Within 50RPM: 38.2%
+  ** FLYWHEEL TRACKING POOR — tune FLYWHEEL_kP (currently 0.17662) **
+  Flywheel current (shooting): mean=11.2A  max=159.0A
+  Bus voltage (shooting): min=6.00V  mean=9.43V
+  ** SEVERE VOLTAGE SAG during shooting (6.0V) **
+  Turret error: mean=6.36deg  max=42.11deg  within 2deg: 39.9%
+  Hood error:   mean=0.77deg  max=12.51deg  within 2deg: 91.2%
+  Turret limit switch triggers: 22
+  Turret range: -118.9deg to 63.6deg
+  ** Turret near MIN limit (-118.9deg, limit=-116.3deg) **
+  Hood range: -1.2deg to 19.8deg
+
+--- VISION ---
+
+  [DuckyNE]
+    ** 1 disconnect events **
+       t=145.52s
+    Connected: 66.7%
+    56 vision updates during match:
+      none: 28 (50.0%)
+      constrainedPnP: 25 (44.6%)
+      pnpDistTrig: 3 (5.4%)
+    Useful updates: 28 (50.0%)
+    Tags seen: 0=0  1=39  2+=48
+
+  [DuckySE]
+    ** 1 disconnect events **
+       t=145.54s
+    Connected: 66.7%
+    143 vision updates during match:
+      none: 66 (46.2%)
+      constrainedPnP: 62 (43.4%)
+      pnpDistTrig: 15 (10.5%)
+    Useful updates: 77 (53.8%)
+    Tags seen: 0=0  1=104  2+=229
+
+--- ODOMETRY ---
+  X range: 2.43 to 12.31 m
+  Y range: 2.35 to 14.35 m
+  ** 935 out-of-field pose estimates **
+  Pose jumps (>0.5m): 1
+  ** 1 jumps >1.0m — vision covariance too trusting **
+     t=145.87s: 4.57m
+  ** IMU yaw jumps: 1 (>28deg instantaneous change) **
+
+--- AUTO PATH TRACKING ---
+  X error: mean=1.097m  max=2.991m  std=1.692m
+  Y error: mean=-0.558m  max=0.688m  std=0.928m
+  Distance error: mean=2.067m  max=3.405m
+  Within 10cm: 0.0%  Within 25cm: 0.0%
+  ** AUTO TRACKING POOR — check odometry, PID, or path **
+
+--- INDEXER ---
+  Elevator active: 11/23 samples
+  Spin active: 17/29 samples
+  Elevator current: mean=0.1A  max=87.3A
+  ** HIGH ELEVATOR CURRENT (87A) — possible jam **
+  Spin current: mean=1.8A  max=61.0A
+
+--- IMU ---
+  ** IMU disconnected for 1 samples **
+  Pitch: mean=-1.3deg  max=0.9deg
+  Roll:  mean=-71.9deg  max=180.0deg
+
+--- CONSOLE (563 messages) ---
+  Errors/warnings: 340
+    t=7.02s: ********** Robot program starting **********
+NT: Listening on NT3 port 1735, NT4 port 5810
+NT: Got a NT4 connection from
+    t=16.29s: ********** Robot program startup complete **********
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverru
+    t=17.14s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.014283s
+
+    t=18.81s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 1.149655s
+
+    t=19.85s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.008069s
+    t=19.91s: robotPeriodic(): 0.029662s
+	LiveWindow.updateValues(): 0.000000s
+	Shuffleboard.update(): 0.000019s
+	disabledPeriodic(): 
+    t=20.21s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000093s
+	IMU.pe
+    t=20.87s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.007532s
+
+    t=21.44s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000241s
+	IMU.pe
+    t=21.81s: CommandScheduler loop overrun
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobot
+    t=22.63s: [AdvantageKit] Renaming log to "/U/akit_26-03-07_20-45-29_njwas_q22.wpilog"
+CommandScheduler loop overrun
+Warning at edu
+    t=23.13s: Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:436): Loop time of 0
+    t=23.18s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.002579s
+
+    t=24.16s: Intake.periodic(): 0.000019s
+	Shooter.periodic(): 0.000018s
+	LEDS.periodic(): 0.000019s
+	Indexer.periodic(): 0.000000s
+	
+    t=25.16s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.001262s
+	IMU.pe
+    t=25.21s: Vision.periodic(): 0.000019s
+	Intake.periodic(): 0.000000s
+	Shooter.periodic(): 0.000018s
+	LEDS.periodic(): 0.000019s
+	I
+    t=25.27s: CommandScheduler loop overrun
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashbo
+    t=26.78s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000074s
+	IMU.pe
+
+
+==========================================================================================
+  ANALYZING: akit_26-03-07_21-46-37_njwas_q27.wpilog
+==========================================================================================
+
+  Match window: 564.7s to 729.0s (enabled 160.3s)
+
+--- LOOP TIMING (enabled only) ---
+
+--- GARBAGE COLLECTION ---
+  Total GC collections during log: 2509
+  GC pauses: 2503 events, mean=6.1ms, max=172.0ms
+  ** 3 GC pauses >20ms — these cause loop overruns **
+     t=14.91s: 171ms
+     t=24.96s: 94ms
+     t=394.01s: 172ms
+
+--- CAN BUS ---
+  Utilization: mean=42.5%  max=100.0%
+  ** HIGH CAN UTILIZATION (100%) — may cause dropped frames **
+
+--- POWER (enabled only) ---
+  Battery: min=6.89V  mean=9.94V  max=12.61V
+  ** BROWNOUT: voltage dropped to 6.89V **
+     First brownout at t=648.94s, last at t=681.06s
+  ** RoboRIO brownout flag triggered 7 times **
+  Total current: mean=100.8A  p95=194.0A  max=258.0A
+  ** EXTREME CURRENT (258A) — battery/breaker stress **
+  CPU temp: mean=48.4C  max=52.2C
+  Est. battery internal resistance: 18 mΩ
+
+--- SWERVE DRIVE (enabled only) ---
+
+  [NE]
+    Drive error (abs): mean=1.432 m/s  p95=4.357  max=6.966
+    Drive error @ >1m/s target: mean=2.325  max=6.966
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=6.74deg  p95=23.33deg  max=45.03deg
+    ** TURN ALIGNMENT POOR — mean error 6.7deg **
+    Drive current: mean=42.4A  max=110.1A
+    Turn current:  mean=4.2A  max=34.3A
+
+  [NW]
+    Drive error (abs): mean=1.741 m/s  p95=4.918  max=6.769
+    Drive error @ >1m/s target: mean=2.753  max=6.769
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=6.30deg  p95=21.69deg  max=40.98deg
+    ** TURN ALIGNMENT POOR — mean error 6.3deg **
+    Drive current: mean=52.6A  max=111.9A
+    Turn current:  mean=5.4A  max=32.7A
+
+  [SE]
+    Drive error (abs): mean=1.374 m/s  p95=4.448  max=6.845
+    Drive error @ >1m/s target: mean=2.257  max=6.845
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=6.30deg  p95=21.53deg  max=52.65deg
+    ** TURN ALIGNMENT POOR — mean error 6.3deg **
+    Drive current: mean=41.8A  max=109.8A
+    Turn current:  mean=4.3A  max=35.8A
+
+  [SW]
+    Drive error (abs): mean=1.226 m/s  p95=4.888  max=6.151
+    Drive error @ >1m/s target: mean=1.944  max=6.151
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=6.59deg  p95=23.14deg  max=44.97deg
+    ** TURN ALIGNMENT POOR — mean error 6.6deg **
+    Drive current: mean=35.1A  max=119.7A
+    Turn current:  mean=4.8A  max=38.6A
+
+  Cross-module comparison (mean drive error):
+    NE: 1.4323 m/s
+    NW: 1.7411 m/s
+    SE: 1.3740 m/s
+    SW: 1.2262 m/s
+
+--- SHOOTER ---
+  Shooting periods: 18, total 149.5s
+  Flywheel spinup: mean=1.28s  max=8.04s (18 events)
+  Flywheel tracking (after spinup): mean err=59RPM  max=2523RPM
+  Within 100RPM: 90.6%  Within 50RPM: 77.3%
+  Flywheel current (shooting): mean=12.4A  max=174.6A
+  Bus voltage (shooting): min=5.88V  mean=9.76V
+  ** SEVERE VOLTAGE SAG during shooting (5.9V) **
+  Turret error: mean=3.25deg  max=35.76deg  within 2deg: 62.4%
+  Hood error:   mean=0.33deg  max=11.25deg  within 2deg: 97.9%
+  Turret limit switch triggers: 75
+  Turret range: -119.0deg to 86.2deg
+  ** Turret near MIN limit (-119.0deg, limit=-116.3deg) **
+  Hood range: -2.7deg to 17.4deg
+
+--- VISION ---
+
+  [DuckyNE]
+    Connected: 100.0%
+    171 vision updates during match:
+      none: 80 (46.8%)
+      constrainedPnP: 78 (45.6%)
+      pnpDistTrig: 13 (7.6%)
+    Useful updates: 91 (53.2%)
+    Tags seen: 0=0  1=54  2+=76
+
+  [DuckySE]
+    Connected: 100.0%
+    152 vision updates during match:
+      none: 76 (50.0%)
+      constrainedPnP: 74 (48.7%)
+      pnpDistTrig: 2 (1.3%)
+    Useful updates: 76 (50.0%)
+    Tags seen: 0=0  1=103  2+=253
+
+--- ODOMETRY ---
+  X range: 4.47 to 19.46 m
+  Y range: 0.28 to 8.56 m
+  ** 94 out-of-field pose estimates **
+
+--- AUTO PATH TRACKING ---
+  X error: mean=-0.633m  max=2.633m  std=1.404m
+  Y error: mean=0.202m  max=1.751m  std=0.645m
+  Distance error: mean=1.474m  max=2.661m
+  Within 10cm: 5.5%  Within 25cm: 10.2%
+  ** AUTO TRACKING POOR — check odometry, PID, or path **
+
+--- INDEXER ---
+  Elevator active: 26/53 samples
+  Spin active: 46/57 samples
+  Elevator current: mean=0.6A  max=75.3A
+  ** HIGH ELEVATOR CURRENT (75A) — possible jam **
+  Spin current: mean=3.1A  max=62.7A
+
+--- IMU ---
+  Pitch: mean=-1.9deg  max=1.1deg
+  Roll:  mean=-158.8deg  max=180.0deg
+
+--- CONSOLE (795 messages) ---
+  Errors/warnings: 531
+    t=6.45s: ********** Robot program starting **********
+NT: Listening on NT3 port 1735, NT4 port 5810
+NT: Got a NT4 connection from
+    t=14.91s: ********** Robot program startup complete **********
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverru
+    t=15.49s: Intake.periodic(): 0.000019s
+	Shooter.periodic(): 0.000018s
+	LEDS.periodic(): 0.000019s
+	Indexer.periodic(): 0.000000s
+	
+    t=16.04s: Warning at edu.wpi.first.wpilibj.DriverStation.reportJoystickUnpluggedWarning(DriverStation.java:1345): Joystick Button 
+    t=16.47s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000093s
+	IMU.pe
+    t=16.54s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.007216s
+
+    t=17.05s: Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:436): Loop time of 0
+    t=17.57s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.004007s
+
+    t=17.99s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.001280s
+	IMU.pe
+    t=18.59s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.003729s
+
+    t=19.69s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.003190s
+
+    t=20.04s: NT: Got a NT4 connection from 10.0.41.20 port 50870
+NT: CONNECTED NT4 client 'Elastic@2' (from 10.0.41.20:50870)
+Warning
+    t=20.28s: LEDS.periodic(): 0.000019s
+	Indexer.periodic(): 0.000000s
+	Climber.periodic(): 0.000000s
+
+Warning at edu.wpi.first.wpili
+    t=24.96s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 4.350902s
+
+    t=25.15s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000074s
+	IMU.pe
+    t=26.05s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.014321s
+
+    t=26.17s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.001206s
+	IMU.pe
+
+--- CLIMBER ---
+  Active: 17 samples (from t=690.3s to t=728.8s)
+  Climb current: mean=19.0A  max=130.2A
+
+
+==========================================================================================
+  ANALYZING: akit_26-03-07_23-19-21_njwas_q35.wpilog
+==========================================================================================
+
+  Match window: 192.9s to 357.2s (enabled 160.3s)
+
+--- LOOP TIMING (enabled only) ---
+
+--- GARBAGE COLLECTION ---
+  Total GC collections during log: 1584
+  GC pauses: 1577 events, mean=6.0ms, max=188.0ms
+  ** 4 GC pauses >20ms — these cause loop overruns **
+     t=17.08s: 184ms
+     t=20.53s: 42ms
+     t=63.97s: 27ms
+     t=281.05s: 188ms
+
+--- CAN BUS ---
+  Utilization: mean=40.7%  max=100.0%
+  ** HIGH CAN UTILIZATION (100%) — may cause dropped frames **
+
+--- POWER (enabled only) ---
+  Battery: min=6.91V  mean=10.19V  max=12.76V
+  ** BROWNOUT: voltage dropped to 6.91V **
+     First brownout at t=308.25s, last at t=308.27s
+  ** RoboRIO brownout flag triggered 2 times **
+  Total current: mean=128.6A  p95=200.0A  max=274.0A
+  ** EXTREME CURRENT (274A) — battery/breaker stress **
+  CPU temp: mean=50.5C  max=52.9C
+  Est. battery internal resistance: 17 mΩ
+
+--- SWERVE DRIVE (enabled only) ---
+
+  [NE]
+    Drive error (abs): mean=1.281 m/s  p95=4.143  max=6.156
+    Drive error @ >1m/s target: mean=1.968  max=6.156
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=6.51deg  p95=21.59deg  max=48.73deg
+    ** TURN ALIGNMENT POOR — mean error 6.5deg **
+    Drive current: mean=42.0A  max=123.2A
+    Turn current:  mean=4.4A  max=38.7A
+
+  [NW]
+    Drive error (abs): mean=1.476 m/s  p95=4.410  max=7.010
+    Drive error @ >1m/s target: mean=2.206  max=7.010
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=6.08deg  p95=20.43deg  max=44.85deg
+    ** TURN ALIGNMENT POOR — mean error 6.1deg **
+    Drive current: mean=46.9A  max=117.8A
+    Turn current:  mean=4.8A  max=33.4A
+
+  [SE]
+    Drive error (abs): mean=1.348 m/s  p95=4.117  max=6.196
+    Drive error @ >1m/s target: mean=2.018  max=6.196
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=6.37deg  p95=21.40deg  max=52.48deg
+    ** TURN ALIGNMENT POOR — mean error 6.4deg **
+    Drive current: mean=44.4A  max=111.0A
+    Turn current:  mean=4.5A  max=36.8A
+
+  [SW]
+    Drive error (abs): mean=1.206 m/s  p95=4.127  max=7.614
+    Drive error @ >1m/s target: mean=1.772  max=7.614
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=6.99deg  p95=23.06deg  max=45.63deg
+    ** TURN ALIGNMENT POOR — mean error 7.0deg **
+    Drive current: mean=40.5A  max=111.4A
+    Turn current:  mean=5.4A  max=38.4A
+
+  Cross-module comparison (mean drive error):
+    NE: 1.2814 m/s
+    NW: 1.4761 m/s
+    SE: 1.3485 m/s
+    SW: 1.2056 m/s
+
+--- SHOOTER ---
+  Shooting periods: 2, total 120.0s
+  Flywheel spinup: mean=0.47s  max=0.59s (2 events)
+  Flywheel tracking (after spinup): mean err=1083RPM  max=2885RPM
+  Within 100RPM: 27.9%  Within 50RPM: 22.1%
+  ** FLYWHEEL TRACKING POOR — tune FLYWHEEL_kP (currently 0.17662) **
+  Flywheel current (shooting): mean=12.6A  max=171.8A
+  Bus voltage (shooting): min=5.10V  mean=9.60V
+  ** SEVERE VOLTAGE SAG during shooting (5.1V) **
+  Turret error: mean=12.04deg  max=113.64deg  within 2deg: 32.2%
+  Hood error:   mean=3.47deg  max=18.19deg  within 2deg: 50.5%
+  Turret limit switch triggers: 75
+  Turret range: -118.9deg to 88.0deg
+  ** Turret near MIN limit (-118.9deg, limit=-116.3deg) **
+  Hood range: -4.0deg to 14.3deg
+
+--- VISION ---
+
+  [DuckyNE]
+    Connected: 100.0%
+    266 vision updates during match:
+      none: 132 (49.6%)
+      constrainedPnP: 130 (48.9%)
+      pnpDistTrig: 4 (1.5%)
+    Useful updates: 134 (50.4%)
+    Tags seen: 0=0  1=56  2+=103
+
+  [DuckySE]
+    Connected: 100.0%
+    229 vision updates during match:
+      none: 115 (50.2%)
+      constrainedPnP: 114 (49.8%)
+    Useful updates: 114 (49.8%)
+    Tags seen: 0=0  1=114  2+=233
+
+--- ODOMETRY ---
+  X range: 6.45 to 16.33 m
+  Y range: -0.93 to 8.03 m
+  ** 107 out-of-field pose estimates **
+  ** IMU yaw jumps: 1 (>28deg instantaneous change) **
+
+--- AUTO PATH TRACKING ---
+  X error: mean=-0.141m  max=0.256m  std=0.385m
+  Y error: mean=-0.025m  max=0.146m  std=0.079m
+  Distance error: mean=0.278m  max=1.125m
+  Within 10cm: 23.2%  Within 25cm: 77.4%
+  ** AUTO TRACKING POOR — check odometry, PID, or path **
+
+--- INDEXER ---
+  Elevator active: 47/95 samples
+  Spin active: 83/98 samples
+  Elevator current: mean=1.5A  max=74.8A
+  ** HIGH ELEVATOR CURRENT (75A) — possible jam **
+  Spin current: mean=4.3A  max=59.2A
+
+--- IMU ---
+  ** IMU disconnected for 1 samples **
+  Pitch: mean=-1.6deg  max=8.3deg
+  Roll:  mean=-96.6deg  max=180.0deg
+
+--- CONSOLE (481 messages) ---
+  Errors/warnings: 286
+    t=7.88s: ********** Robot program starting **********
+NT: Listening on NT3 port 1735, NT4 port 5810
+NT: Got a NT4 connection from
+    t=17.08s: ********** Robot program startup complete **********
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverru
+    t=17.70s: Indexer.periodic(): 0.000018s
+	Climber.periodic(): 0.000000s
+
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs
+    t=18.23s: Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:436): Loop time of 0
+    t=18.72s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.004341s
+
+    t=18.77s: LiveWindow.updateValues(): 0.000018s
+	Shuffleboard.update(): 0.000019s
+	disabledPeriodic(): 0.000129s
+
+CommandScheduler 
+    t=20.53s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 1.068480s
+
+    t=20.76s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000092s
+	IMU.pe
+    t=21.57s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.013745s
+
+    t=22.21s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000074s
+	IMU.pe
+    t=22.56s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.003599s
+
+    t=23.62s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.007513s
+
+    t=23.72s: Shuffleboard.update(): 0.000018s
+	disabledPeriodic(): 0.000130s
+
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.pri
+    t=23.93s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000260s
+	IMU.pe
+    t=24.64s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.006363s
+
+    t=24.86s: CommandScheduler loop overrun
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive
+    t=25.60s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.002912s
+
+
+--- CLIMBER ---
+  Active: 11 samples (from t=318.3s to t=355.5s)
+  Climb current: mean=22.8A  max=121.1A
+
+
+==========================================================================================
+  ANALYZING: akit_26-03-07_23-51-56_njwas_q38.wpilog
+==========================================================================================
+
+  Match window: 92.4s to 256.9s (enabled 151.6s)
+
+--- LOOP TIMING (enabled only) ---
+
+--- GARBAGE COLLECTION ---
+  Total GC collections during log: 1375
+  GC pauses: 1368 events, mean=6.0ms, max=186.0ms
+  ** 4 GC pauses >20ms — these cause loop overruns **
+     t=16.93s: 186ms
+     t=19.50s: 62ms
+     t=23.33s: 21ms
+     t=266.31s: 167ms
+
+--- CAN BUS ---
+  Utilization: mean=42.0%  max=100.0%
+  ** HIGH CAN UTILIZATION (100%) — may cause dropped frames **
+
+--- POWER (enabled only) ---
+  Battery: min=7.22V  mean=9.96V  max=12.69V
+  ** LOW VOLTAGE WARNING: min=7.22V **
+  Total current: mean=108.6A  p95=188.0A  max=234.0A
+  ** EXTREME CURRENT (234A) — battery/breaker stress **
+  CPU temp: mean=52.9C  max=54.8C
+  Est. battery internal resistance: 18 mΩ
+
+--- SWERVE DRIVE (enabled only) ---
+
+  [NE]
+    Drive error (abs): mean=1.977 m/s  p95=5.078  max=7.108
+    Drive error @ >1m/s target: mean=2.403  max=7.108
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=7.45deg  p95=22.94deg  max=40.27deg
+    ** TURN ALIGNMENT POOR — mean error 7.4deg **
+    Drive current: mean=49.5A  max=116.5A
+    Turn current:  mean=4.2A  max=35.9A
+
+  [NW]
+    Drive error (abs): mean=2.131 m/s  p95=5.233  max=7.512
+    Drive error @ >1m/s target: mean=2.608  max=7.512
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=7.26deg  p95=22.06deg  max=66.87deg
+    ** TURN ALIGNMENT POOR — mean error 7.3deg **
+    Drive current: mean=53.4A  max=117.5A
+    Turn current:  mean=4.1A  max=35.1A
+
+  [SE]
+    Drive error (abs): mean=1.782 m/s  p95=4.660  max=6.758
+    Drive error @ >1m/s target: mean=2.207  max=6.758
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=7.80deg  p95=23.25deg  max=59.56deg
+    ** TURN ALIGNMENT POOR — mean error 7.8deg **
+    Drive current: mean=47.4A  max=123.1A
+    Turn current:  mean=3.3A  max=47.8A
+
+  [SW]
+    Drive error (abs): mean=1.384 m/s  p95=4.828  max=6.634
+    Drive error @ >1m/s target: mean=1.716  max=6.634
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=8.77deg  p95=26.90deg  max=82.24deg
+    ** TURN ALIGNMENT POOR — mean error 8.8deg **
+    Drive current: mean=32.9A  max=116.7A
+    Turn current:  mean=4.0A  max=40.5A
+
+  Cross-module comparison (mean drive error):
+    NE: 1.9774 m/s
+    NW: 2.1306 m/s
+    SE: 1.7821 m/s
+    SW: 1.3836 m/s
+
+--- SHOOTER ---
+  Shooting periods: 2, total 164.3s
+  Flywheel spinup: mean=0.70s  max=0.80s (2 events)
+  Flywheel tracking (after spinup): mean err=145RPM  max=2277RPM
+  Within 100RPM: 64.4%  Within 50RPM: 42.3%
+  ** FLYWHEEL TRACKING POOR — tune FLYWHEEL_kP (currently 0.17662) **
+  Flywheel current (shooting): mean=19.9A  max=147.7A
+  Bus voltage (shooting): min=6.85V  mean=9.63V
+  ** SEVERE VOLTAGE SAG during shooting (6.8V) **
+  Turret error: mean=7.39deg  max=125.02deg  within 2deg: 49.3%
+  Hood error:   mean=4.26deg  max=26.87deg  within 2deg: 70.5%
+  Turret limit switch triggers: 78
+  Turret range: -118.5deg to 86.6deg
+  ** Turret near MIN limit (-118.5deg, limit=-116.3deg) **
+  Hood range: -3.1deg to 20.9deg
+
+--- VISION ---
+
+  [DuckyNE]
+    Connected: 100.0%
+    196 vision updates during match:
+      none: 98 (50.0%)
+      constrainedPnP: 95 (48.5%)
+      pnpDistTrig: 2 (1.0%)
+      multiTag: 1 (0.5%)
+    Useful updates: 98 (50.0%)
+    Tags seen: 0=0  1=65  2+=95
+
+  [DuckySE]
+    Connected: 100.0%
+    289 vision updates during match:
+      none: 142 (49.1%)
+      constrainedPnP: 130 (45.0%)
+      pnpDistTrig: 14 (4.8%)
+      multiTag: 3 (1.0%)
+    Useful updates: 147 (50.9%)
+    Tags seen: 0=0  1=126  2+=349
+
+--- ODOMETRY ---
+  X range: 0.20 to 16.95 m
+  Y range: -1.17 to 9.49 m
+  ** 175 out-of-field pose estimates **
+  Pose jumps (>0.5m): 2
+  ** 1 jumps >1.0m — vision covariance too trusting **
+     t=132.29s: 4.92m
+
+--- AUTO PATH TRACKING ---
+  X error: mean=0.035m  max=0.267m  std=0.098m
+  Y error: mean=-0.022m  max=0.143m  std=0.081m
+  Distance error: mean=0.113m  max=0.267m
+  Within 10cm: 49.0%  Within 25cm: 94.6%
+
+--- INDEXER ---
+  Elevator active: 13/27 samples
+  Spin active: 22/31 samples
+  Elevator current: mean=0.5A  max=75.9A
+  ** HIGH ELEVATOR CURRENT (76A) — possible jam **
+  Spin current: mean=5.1A  max=60.4A
+
+--- IMU ---
+  Pitch: mean=-0.9deg  max=17.1deg
+  Roll:  mean=-104.6deg  max=180.0deg
+
+--- CONSOLE (451 messages) ---
+  Errors/warnings: 298
+    t=6.03s: ********** Robot program starting **********
+NT: Listening on NT3 port 1735, NT4 port 5810
+NT: Got a NT4 connection from
+    t=16.93s: ********** Robot program startup complete **********
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverru
+    t=17.49s: Intake.periodic(): 0.000019s
+	Shooter.periodic(): 0.000019s
+	LEDS.periodic(): 0.000019s
+	Indexer.periodic(): 0.000018s
+	
+    t=18.01s: NT: CONNECTED RTT client (from 10.0.41.20:56820)
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMes
+    t=19.50s: Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:436): Loop time of 0
+    t=19.84s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.002393s
+	IMU.pe
+    t=20.47s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.004285s
+
+    t=21.06s: CommandScheduler loop overrun
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive
+    t=21.43s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.007809s
+    t=22.23s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000167s
+	IMU.pe
+    t=22.47s: CommandScheduler loop overrun
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashbo
+    t=23.33s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000223s
+	IMU.pe
+    t=23.52s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.004118s
+
+    t=24.45s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.000353s
+	IMU.pe
+    t=24.73s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.012651s
+
+    t=25.70s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.011946s
+
+--- CLIMBER ---
+  Active: 10 samples (from t=233.5s to t=253.7s)
+  Climb current: mean=33.3A  max=121.7A
+
+
+==========================================================================================
+  ANALYZING: akit_26-03-08_13-50-38_njwas_q43.wpilog
+==========================================================================================
+
+  Match window: 80.7s to 244.8s (enabled 160.0s)
+
+--- LOOP TIMING (enabled only) ---
+
+--- GARBAGE COLLECTION ---
+  Total GC collections during log: 1268
+  GC pauses: 1268 events, mean=5.4ms, max=167.0ms
+  ** 2 GC pauses >20ms — these cause loop overruns **
+     t=15.71s: 167ms
+     t=17.51s: 71ms
+
+--- CAN BUS ---
+  Utilization: mean=36.8%  max=98.0%
+  ** HIGH CAN UTILIZATION (98%) — may cause dropped frames **
+  ** CAN BUS OFF events: 1 **
+
+--- POWER (enabled only) ---
+  Battery: min=8.28V  mean=10.36V  max=14.18V
+  ** LOW VOLTAGE WARNING: min=8.28V **
+  Total current: mean=90.6A  p95=156.0A  max=194.0A
+  CPU temp: mean=40.6C  max=44.3C
+  Est. battery internal resistance: 18 mΩ
+
+--- SWERVE DRIVE (enabled only) ---
+
+  [NE]
+    Drive error (abs): mean=1.900 m/s  p95=5.263  max=6.893
+    Drive error @ >1m/s target: mean=2.199  max=6.893
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=7.31deg  p95=23.30deg  max=49.19deg
+    ** TURN ALIGNMENT POOR — mean error 7.3deg **
+    Drive current: mean=51.8A  max=123.8A
+    Turn current:  mean=3.5A  max=46.5A
+
+  [NW]
+    Drive error (abs): mean=2.050 m/s  p95=5.066  max=7.534
+    Drive error @ >1m/s target: mean=2.303  max=7.534
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=6.84deg  p95=20.43deg  max=46.37deg
+    ** TURN ALIGNMENT POOR — mean error 6.8deg **
+    Drive current: mean=54.4A  max=124.1A
+    Turn current:  mean=4.0A  max=41.3A
+
+  [SE]
+    Drive error (abs): mean=1.814 m/s  p95=4.753  max=7.096
+    Drive error @ >1m/s target: mean=2.019  max=7.096
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=6.64deg  p95=20.53deg  max=43.47deg
+    ** TURN ALIGNMENT POOR — mean error 6.6deg **
+    Drive current: mean=51.4A  max=138.7A
+    Turn current:  mean=3.3A  max=41.6A
+
+  [SW]
+    Drive error (abs): mean=0.557 m/s  p95=1.326  max=5.375
+    Drive error @ >1m/s target: mean=0.602  max=5.375
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=6.95deg  p95=21.87deg  max=50.11deg
+    ** TURN ALIGNMENT POOR — mean error 7.0deg **
+    Drive current: mean=4.8A  max=92.8A
+    Turn current:  mean=3.4A  max=38.9A
+
+  Cross-module comparison (mean drive error):
+    NE: 1.8999 m/s
+    NW: 2.0497 m/s
+    SE: 1.8142 m/s
+    SW: 0.5565 m/s
+
+--- SHOOTER ---
+  Shooting periods: 1, total 13.9s
+  Flywheel spinup: mean=4.18s  max=4.18s (1 events)
+  ** SLOW SPINUP — consider increasing FLYWHEEL_kP or pre-spinning **
+  Flywheel tracking (after spinup): mean err=218RPM  max=2021RPM
+  Within 100RPM: 17.2%  Within 50RPM: 0.2%
+  ** FLYWHEEL TRACKING POOR — tune FLYWHEEL_kP (currently 0.17662) **
+  Flywheel current (shooting): mean=38.4A  max=111.9A
+  Bus voltage (shooting): min=8.32V  mean=10.64V
+  Turret limit switch triggers: 0
+  Turret range: -120.5deg to -102.0deg
+  ** Turret near MIN limit (-120.5deg, limit=-116.3deg) **
+
+--- VISION ---
+
+  [DuckyNE]
+    Connected: 100.0%
+    4 vision updates during match:
+      multiTag: 2 (50.0%)
+      none: 2 (50.0%)
+    Useful updates: 2 (50.0%)
+    Tags seen: 0=0  1=67  2+=130
+
+  [DuckySE]
+    Connected: 100.0%
+    2 vision updates during match:
+      multiTag: 1 (50.0%)
+      none: 1 (50.0%)
+    Useful updates: 1 (50.0%)
+    Tags seen: 0=0  1=82  2+=167
+
+--- ODOMETRY ---
+  X range: -5.34 to 49.03 m
+  Y range: -31.68 to 10.31 m
+  ** 7056 out-of-field pose estimates **
+
+--- AUTO PATH TRACKING ---
+  X error: mean=0.030m  max=0.143m  std=0.031m
+  Y error: mean=-0.001m  max=0.007m  std=0.005m
+  Distance error: mean=0.030m  max=0.144m
+  Within 10cm: 95.1%  Within 25cm: 100.0%
+
+--- INDEXER ---
+  Elevator active: 1/3 samples
+  Spin active: 1/3 samples
+  Elevator current: mean=0.2A  max=51.8A
+  ** HIGH ELEVATOR CURRENT (52A) — possible jam **
+  Spin current: mean=0.6A  max=64.1A
+
+--- IMU ---
+  Pitch: mean=-0.7deg  max=17.7deg
+  Roll:  mean=-77.5deg  max=180.0deg
+
+--- CONSOLE (129 messages) ---
+  Errors/warnings: 79
+    t=6.55s: ********** Robot program starting **********
+NT: Listening on NT3 port 1735, NT4 port 5810
+NT: Got a NT4 connection from
+    t=15.71s: ********** Robot program startup complete **********
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverru
+    t=17.51s: disabledPeriodic(): 0.000909s
+
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobo
+    t=18.47s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.001354s
+
+    t=18.73s: Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:436): Loop time of 0
+    t=19.59s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.002987s
+
+    t=20.79s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.005843s
+
+    t=21.35s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.001966s
+	IMU.pe
+    t=21.81s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.010907s
+
+    t=22.62s: CommandScheduler loop overrun
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive
+    t=22.91s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.004638s
+
+    t=24.55s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.007939s
+
+    t=26.16s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.010277s
+    t=27.90s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.002838s
+
+
+--- CLIMBER ---
+  Active: 2 samples (from t=80.7s to t=89.3s)
+  Climb current: mean=14.0A  max=85.0A
+
+
+==========================================================================================
+  ANALYZING: akit_26-03-08_14-58-00_njwas_q49.wpilog
+==========================================================================================
+
+  Match window: 61.6s to 145.2s (enabled 79.6s)
+
+--- LOOP TIMING (enabled only) ---
+
+--- GARBAGE COLLECTION ---
+  Total GC collections during log: 1241
+  GC pauses: 1241 events, mean=5.5ms, max=174.0ms
+  ** 2 GC pauses >20ms — these cause loop overruns **
+     t=18.71s: 174ms
+     t=21.27s: 28ms
+
+--- CAN BUS ---
+  Utilization: mean=37.3%  max=100.0%
+  ** HIGH CAN UTILIZATION (100%) — may cause dropped frames **
+
+--- POWER (enabled only) ---
+  Battery: min=8.36V  mean=11.10V  max=13.23V
+  ** LOW VOLTAGE WARNING: min=8.36V **
+  Total current: mean=79.9A  p95=154.0A  max=196.0A
+  CPU temp: mean=43.2C  max=46.4C
+  Est. battery internal resistance: 16 mΩ
+
+--- SWERVE DRIVE (enabled only) ---
+
+  [NE]
+    Drive error (abs): mean=2.119 m/s  p95=5.896  max=7.229
+    Drive error @ >1m/s target: mean=2.801  max=7.229
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=7.39deg  p95=25.18deg  max=41.39deg
+    ** TURN ALIGNMENT POOR — mean error 7.4deg **
+    Drive current: mean=53.2A  max=136.3A
+    Turn current:  mean=3.7A  max=32.8A
+
+  [NW]
+    Drive error (abs): mean=2.417 m/s  p95=5.342  max=6.448
+    Drive error @ >1m/s target: mean=3.062  max=6.448
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=6.76deg  p95=23.56deg  max=40.07deg
+    ** TURN ALIGNMENT POOR — mean error 6.8deg **
+    Drive current: mean=68.2A  max=145.3A
+    Turn current:  mean=5.2A  max=35.9A
+
+  [SE]
+    Drive error (abs): mean=1.847 m/s  p95=4.966  max=6.142
+    Drive error @ >1m/s target: mean=2.413  max=6.142
+    ** HIGH SPEED TRACKING POOR — check DRIVE_kP=4 or FF **
+    Turn error (abs):  mean=6.55deg  p95=22.83deg  max=48.33deg
+    ** TURN ALIGNMENT POOR — mean error 6.5deg **
+    Drive current: mean=59.8A  max=141.1A
+    Turn current:  mean=3.9A  max=35.7A
+
+  [SW]
+    Drive error (abs): mean=0.342 m/s  p95=1.098  max=8.951
+    Drive error @ >1m/s target: mean=0.408  max=8.951
+    Turn error (abs):  mean=7.16deg  p95=25.26deg  max=40.22deg
+    ** TURN ALIGNMENT POOR — mean error 7.2deg **
+    Drive current: mean=4.5A  max=100.0A
+    Turn current:  mean=2.1A  max=32.6A
+
+  Cross-module comparison (mean drive error):
+    NE: 2.1194 m/s
+    NW: 2.4169 m/s
+    SE: 1.8474 m/s
+    SW: 0.3425 m/s
+
+--- SHOOTER ---
+  Shooting periods: 1, total 14.4s
+  Flywheel spinup: mean=2.89s  max=2.89s (1 events)
+  ** SLOW SPINUP — consider increasing FLYWHEEL_kP or pre-spinning **
+  Flywheel tracking (after spinup): mean err=213RPM  max=2008RPM
+  Within 100RPM: 15.2%  Within 50RPM: 0.2%
+  ** FLYWHEEL TRACKING POOR — tune FLYWHEEL_kP (currently 0.17662) **
+  Flywheel current (shooting): mean=38.8A  max=123.0A
+  Bus voltage (shooting): min=8.65V  mean=10.78V
+  Turret limit switch triggers: 0
+  Turret range: -128.4deg to -118.9deg
+  ** Turret near MIN limit (-128.4deg, limit=-116.3deg) **
+
+--- VISION ---
+
+  [DuckyNE]
+    Connected: 50.0%
+    Tags seen: 0=0  1=142  2+=197
+
+  [DuckySE]
+    Connected: 50.0%
+    Tags seen: 0=0  1=43  2+=85
+
+--- ODOMETRY ---
+  X range: 0.78 to 19.28 m
+  Y range: 0.31 to 14.75 m
+  ** 1297 out-of-field pose estimates **
+  Pose jumps (>0.5m): 4
+  ** 3 jumps >1.0m — vision covariance too trusting **
+     t=106.52s: 2.65m
+     t=108.81s: 1.17m
+     t=129.51s: 8.82m
+
+--- AUTO PATH TRACKING ---
+  X error: mean=-0.021m  max=-0.001m  std=0.018m
+  Y error: mean=0.000m  max=0.004m  std=0.001m
+  Distance error: mean=0.021m  max=0.074m
+  Within 10cm: 100.0%  Within 25cm: 100.0%
+
+--- INDEXER ---
+  Elevator active: 1/3 samples
+  Spin active: 1/3 samples
+  Elevator current: mean=0.3A  max=53.3A
+  ** HIGH ELEVATOR CURRENT (53A) — possible jam **
+  Spin current: mean=0.6A  max=67.5A
+
+--- IMU ---
+  Pitch: mean=-1.4deg  max=4.1deg
+  Roll:  mean=-115.2deg  max=180.0deg
+
+--- CONSOLE (111 messages) ---
+  Errors/warnings: 67
+    t=7.96s: ********** Robot program starting **********
+NT: Listening on NT3 port 1735, NT4 port 5810
+[AdvantageKit] Logging to "/U
+    t=18.71s: ********** Robot program startup complete **********
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverru
+    t=19.87s: robotPeriodic(): 1.110699s
+	LiveWindow.updateValues(): 0.000093s
+	Shuffleboard.update(): 0.000055s
+	disabledPeriodic(): 
+    t=20.43s: NT: Got a NT4 connection from 10.0.41.20 port 32722
+NT: CONNECTED RTT client (from 10.0.41.20:32722)
+Warning at edu.wpi.
+    t=21.27s: LiveWindow.updateValues(): 0.000037s
+	Shuffleboard.update(): 0.000019s
+	disabledPeriodic(): 0.000111s
+
+Warning at edu.wp
+    t=22.37s: Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:436): Loop time of 0
+    t=22.55s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive.periodic(): 0.002634s
+	IMU.pe
+    t=23.49s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.002300s
+
+    t=23.78s: CommandScheduler loop overrun
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SwerveDrive
+    t=24.61s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.001002s
+
+    t=26.63s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.003172s
+
+    t=27.79s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.003191s
+
+    t=28.82s: Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): 	SmartDashboard.updateValues(): 0.000946s
+
+
+--- CLIMBER ---
+  Active: 5 samples (from t=61.6s to t=101.3s)
+  Climb current: mean=12.0A  max=97.6A
+

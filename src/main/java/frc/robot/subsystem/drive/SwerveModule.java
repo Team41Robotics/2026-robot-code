@@ -15,17 +15,17 @@ import org.littletonrobotics.junction.Logger;
 public class SwerveModule {
 	public static final double DRIVE_kS = 0.093052; // TUNEME. feedforward
 	public static final double DRIVE_kV = 1.8968;
-	public static final double DRIVE_kA = 0.15096;
+	public static final double DRIVE_kA = 0.015;
 	public static final SimpleMotorFeedforward DRIVE_FF = new SimpleMotorFeedforward(DRIVE_kS, DRIVE_kV, DRIVE_kA);
 
-	public static final double TURN_kS = 0.19431; // TUNEME. turn feedforward
-	public static final double TURN_kV = 0.36606;
+	public static final double TURN_kS = 0.08; // TUNEME. turn feedforward
+	public static final double TURN_kV = 0.38;
 	public static final double TURN_kA = 0.;
 	public static final SimpleMotorFeedforward TURN_FF = new SimpleMotorFeedforward(TURN_kS, TURN_kV, TURN_kA);
 
 	public static final double MAX_VEL = 6.0; // TUNEME. max wheel velocity (m/s)
 
-	public static final Constraints DRIVE_CONSTRAINTS = new Constraints(1e9, 1e9); // TUNEME
+	public static final Constraints DRIVE_CONSTRAINTS = new Constraints(10, 1e9); // TUNEME
 	public static TrapezoidProfile driveProfile = new TrapezoidProfile(DRIVE_CONSTRAINTS);
 
 	public static final Constraints TURN_CONSTRAINTS = new Constraints(20, 80); // TUNEME
@@ -69,14 +69,14 @@ public class SwerveModule {
 	}
 
 	public void drive(SwerveModuleState s) {
-		s.optimize(new Rotation2d(inputs.turnAbsPosRadians));
 		targetState = s;
 	}
 
 	public void actuate() {
+		targetState.optimize(new Rotation2d(inputs.turnAbsPosRadians));
 		double targetAng = targetState.angle.getRadians();
 		targetAng = setpointAng.position + angleModulus(targetAng - setpointAng.position);
-		double targetVel = targetState.speedMetersPerSecond * cos(angle - targetAng);
+		double targetVel = setpointVel * cos(angle - targetAng);
 
 		State newSetpointAng = turnProfile.calculate(LOOP_PERIOD, setpointAng, new State(targetAng, 0));
 		double turnFF = TURN_FF.calculateWithVelocities(setpointAng.velocity, newSetpointAng.velocity);
@@ -87,7 +87,7 @@ public class SwerveModule {
 		double driveFF = DRIVE_FF.calculateWithVelocities(setpointVel, newSetpointVel);
 		setpointVel = newSetpointVel;
 
-		hw.actuate(inputs, targetVel, driveFF, setpointAng.position, turnFF);
+		hw.actuate(inputs, setpointVel, driveFF, setpointAng.position, turnFF);
 
 		Logger.recordOutput(hw.logRoot + "/setpointVelMetersPerSec", setpointVel);
 		Logger.recordOutput(hw.logRoot + "/targetVelMetersPerSec", targetVel);

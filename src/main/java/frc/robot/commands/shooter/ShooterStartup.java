@@ -18,9 +18,9 @@ public class ShooterStartup extends Command {
 		shooter.targetFlywheelRPM = 0;
 		shooter.targetTurretPos = 20 * PI / 180.0;
 		shooter.targetHoodPos = 0;
-		if (shooter.inputs.turretLimitSwitchOn) {
+		// if (shooter.inputs.turretLimitSwitchOn) {
 			turretLimitSwitchTriggered = true;
-		}
+		// }
 		hoodLimitSwitchTriggered = true; // hood limit switch is dead
 	}
 

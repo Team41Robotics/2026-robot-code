@@ -85,7 +85,7 @@ public class RobotContainer {
 		drive.setDefaultCommand(new FieldOrientedDrive());
 		shooter.setDefaultCommand(new ShootTeleop());
 		intake.setDefaultCommand(new IntakeDown());
-		indexer.setDefaultCommand(new RunIndexer(0.5, 0));
+		indexer.setDefaultCommand(new RunIndexer(0.5, 0, 0));
 
 		SmartDashboard.putData("DrivePIDTest", new DrivePIDTestCommand());
 		SmartDashboard.putData("TurnPIDTest", new TurnPIDTestCommand());
@@ -123,7 +123,7 @@ public class RobotContainer {
 		// controls.intakeReverse().whileTrue(new IntakeDown(-IntakeDown.HIGH_VOLTAGE));
 		controls.intakeReverse().whileTrue(new IntakeUp());
 		controls.indexerReverse()
-				.whileTrue(new RunIndexer(-RunIndexer.DEFAULT_SPIN_VOLTAGE, RunIndexer.DEFAULT_ELEVATOR_VOLTAGE));
+				.whileTrue(new RunIndexer(-RunIndexer.DEFAULT_SPIN_VOLTAGE, 0, 0));
 
 		controls.hoodZero().whileTrue(new HoodZero());
 
@@ -222,11 +222,11 @@ public class RobotContainer {
 		updateMatchPeriod();
 
 		t = RobotController.getFPGATime();
-		drive.actuate();
+		// drive.actuate();
 		Logger.recordOutput("Timing/Drive_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();
-		intake.actuate();
+		// intake.actuate();
 		Logger.recordOutput("Timing/Intake_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();

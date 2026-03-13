@@ -15,4 +15,8 @@ public class IndexerInputs {
 	public double elevatorCurrentAmps;
 	public double elevatorBusVoltageVolts;
 	public double elevatorBusCurrentAmps;
+
+	public double backvatorVelocityRPM;
+	public double backvatorVoltageVolts;
+	public double backvatorCurrentAmps;
 }

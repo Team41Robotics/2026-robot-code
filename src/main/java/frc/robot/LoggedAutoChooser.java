@@ -83,7 +83,10 @@ public class LoggedAutoChooser extends LoggedNetworkInput {
 					&& DriverStation.isDSAttached()
 					&& DriverStation.getAlliance().isPresent()) {
 				String selectStr = selected.get();
-				if (selectStr.equals(lastCommandName)) return;
+				if (selectStr.equals(lastCommandName)) {
+					Logger.processInputs(prefix + " " + key, inputs);
+					return;
+				}
 				if (!autoRoutines.containsKey(selectStr) && !selectStr.equals(NONE_NAME)) {
 					selected.set(NONE_NAME);
 					selectStr = NONE_NAME;
@@ -94,7 +97,7 @@ public class LoggedAutoChooser extends LoggedNetworkInput {
 				lastCommandName = selectStr;
 			}
 		}
-		lastCommand = autoRoutines.get(lastCommandName).get();
+		lastCommand = autoRoutines.get(lastCommandName).get().withName(lastCommandName);
 		active.set(lastCommandName);
 		Logger.processInputs(prefix + " " + key, inputs);
 	}
@@ -114,6 +117,6 @@ public class LoggedAutoChooser extends LoggedNetworkInput {
 	}
 
 	public Command selectedCommand() {
-		return lastCommand.withName(lastCommandName);
+		return lastCommand;
 	}
 }

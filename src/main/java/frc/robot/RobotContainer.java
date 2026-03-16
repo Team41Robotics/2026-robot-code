@@ -122,8 +122,7 @@ public class RobotContainer {
 		controls.intakeUp().onTrue(new IntakeUp());
 		// controls.intakeReverse().whileTrue(new IntakeDown(-IntakeDown.HIGH_VOLTAGE));
 		controls.intakeReverse().whileTrue(new IntakeUp());
-		controls.indexerReverse()
-				.whileTrue(new RunIndexer(-RunIndexer.DEFAULT_SPIN_VOLTAGE, 0, 0));
+		controls.indexerReverse().whileTrue(new RunIndexer(-RunIndexer.DEFAULT_SPIN_VOLTAGE, 0, 0));
 
 		controls.hoodZero().whileTrue(new HoodZero());
 

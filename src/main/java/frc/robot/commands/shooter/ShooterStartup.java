@@ -19,7 +19,7 @@ public class ShooterStartup extends Command {
 		shooter.targetTurretPos = 20 * PI / 180.0;
 		shooter.targetHoodPos = 0;
 		// if (shooter.inputs.turretLimitSwitchOn) {
-			turretLimitSwitchTriggered = true;
+		turretLimitSwitchTriggered = true;
 		// }
 		hoodLimitSwitchTriggered = true; // hood limit switch is dead
 	}

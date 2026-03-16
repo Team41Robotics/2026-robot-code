@@ -3,14 +3,8 @@ package frc.robot.subsystem.intake;
 import static edu.wpi.first.math.MathUtil.*;
 import static java.lang.Math.*;
 
-import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -19,9 +13,6 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
@@ -32,18 +23,12 @@ public class IntakeHW {
 
 	public SparkMax jointSparkMax;
 	public RelativeEncoder jointEncoder;
-	public TalonFX intakeTalonFX;
+	public SparkMax intakeSparkMax;
+	public RelativeEncoder intakeEncoder;
 
 	public CANcoder jointAbsoluteEncoder;
 
 	public StatusSignal<Angle> jointAbsolutePositionSignal;
-	public StatusSignal<AngularVelocity> intakeVelocitySignal;
-	public StatusSignal<Voltage> intakeMotorVoltageSignal;
-	public StatusSignal<Current> intakeStatorCurrentSignal;
-	public StatusSignal<Voltage> intakeSupplyVoltageSignal;
-	public StatusSignal<Current> intakeSupplyCurrentSignal;
-
-	public VoltageOut intakeControlRequest = new VoltageOut(0);
 
 	public void init() {
 		if (!Robot.isReal()) return;
@@ -63,47 +48,25 @@ public class IntakeHW {
 		jointAbsoluteEncoder = new CANcoder(32);
 		jointAbsoluteEncoder.clearStickyFaults();
 
-		intakeTalonFX = new TalonFX(31);
-		TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
-		intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		intakeConfig.CurrentLimits.SupplyCurrentLimit = 30;
-		intakeConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		intakeConfig.CurrentLimits.StatorCurrentLimit = 80;
-		intakeConfig.Voltage.PeakForwardVoltage = 12.0;
-		intakeConfig.Voltage.PeakReverseVoltage = -12.0;
-		intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-		intakeTalonFX.getConfigurator().apply(intakeConfig);
-		intakeTalonFX.clearStickyFaults();
-		intakeTalonFX.setNeutralMode(NeutralModeValue.Coast);
+		intakeSparkMax = new SparkMax(31, MotorType.kBrushless);
+		SparkMaxConfig intakeConfig = new SparkMaxConfig();
+		intakeConfig.inverted(false);
+		intakeConfig.smartCurrentLimit(30);
+		intakeConfig.secondaryCurrentLimit(60);
+		intakeConfig.idleMode(IdleMode.kCoast);
+		intakeConfig.voltageCompensation(12.0);
+		intakeSparkMax.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+		intakeEncoder = intakeSparkMax.getEncoder();
 
 		jointAbsolutePositionSignal = jointAbsoluteEncoder.getPosition(false);
-		intakeVelocitySignal = intakeTalonFX.getVelocity(false);
-		intakeMotorVoltageSignal = intakeTalonFX.getMotorVoltage(false);
-		intakeStatorCurrentSignal = intakeTalonFX.getStatorCurrent(false);
-		intakeSupplyVoltageSignal = intakeTalonFX.getSupplyVoltage(false);
-		intakeSupplyCurrentSignal = intakeTalonFX.getSupplyCurrent(false);
-
 		jointAbsolutePositionSignal.setUpdateFrequency(50);
-		intakeVelocitySignal.setUpdateFrequency(50);
-		intakeMotorVoltageSignal.setUpdateFrequency(50);
-		intakeStatorCurrentSignal.setUpdateFrequency(50);
-		intakeSupplyVoltageSignal.setUpdateFrequency(10);
-		intakeSupplyCurrentSignal.setUpdateFrequency(10);
-
 		jointAbsoluteEncoder.optimizeBusUtilization();
-		intakeTalonFX.optimizeBusUtilization();
 	}
 
 	public void sense(IntakeInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		BaseStatusSignal.refreshAll(
-				jointAbsolutePositionSignal,
-				intakeVelocitySignal,
-				intakeMotorVoltageSignal,
-				intakeStatorCurrentSignal,
-				intakeSupplyVoltageSignal,
-				intakeSupplyCurrentSignal);
+		jointAbsolutePositionSignal.refresh();
 
 		inputs.jointPosRadians = jointAbsolutePositionSignal.getValueAsDouble() * 2 * PI;
 		inputs.jointPosRadians = angleModulus(inputs.jointPosRadians - JOINT_ENCODER_ZERO);
@@ -114,11 +77,10 @@ public class IntakeHW {
 		inputs.jointCurrentAmps = jointSparkMax.getOutputCurrent();
 		inputs.jointBusVoltageVolts = jointSparkMax.getBusVoltage();
 
-		inputs.intakeVelocityRPM = intakeVelocitySignal.getValueAsDouble() * 60.0;
-		inputs.intakeVoltageVolts = intakeMotorVoltageSignal.getValueAsDouble();
-		inputs.intakeCurrentAmps = intakeStatorCurrentSignal.getValueAsDouble();
-		inputs.intakeBusVoltageVolts = intakeSupplyVoltageSignal.getValueAsDouble();
-		inputs.intakeBusCurrentAmps = intakeSupplyCurrentSignal.getValueAsDouble();
+		inputs.intakeVelocityRPM = intakeEncoder.getVelocity();
+		inputs.intakeVoltageVolts = intakeSparkMax.getBusVoltage() * intakeSparkMax.getAppliedOutput();
+		inputs.intakeCurrentAmps = intakeSparkMax.getOutputCurrent();
+		inputs.intakeBusVoltageVolts = intakeSparkMax.getBusVoltage();
 	}
 
 	public void actuate(IntakeInputs inputs, double jointVoltage, double intakeVoltage) {
@@ -127,6 +89,6 @@ public class IntakeHW {
 		if (!Robot.isReal()) return;
 
 		jointSparkMax.setVoltage(jointVoltage);
-		intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
+		intakeSparkMax.setVoltage(intakeVoltage);
 	}
 }

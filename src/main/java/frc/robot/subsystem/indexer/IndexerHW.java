@@ -1,5 +1,7 @@
 package frc.robot.subsystem.indexer;
 
+import static frc.robot.RobotContainer.*;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -41,7 +43,7 @@ public class IndexerHW {
 	public void init() {
 		if (!Robot.isReal()) return;
 
-		spinTalonFX = new TalonFX(43);
+		spinTalonFX = new TalonFX(43, driveBus);
 		TalonFXConfiguration spinConfig = new TalonFXConfiguration();
 		spinConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		spinConfig.CurrentLimits.SupplyCurrentLimit = 30;
@@ -64,8 +66,8 @@ public class IndexerHW {
 		spinVelocity.setUpdateFrequency(50);
 		spinMotorVoltage.setUpdateFrequency(50);
 		spinStatorCurrent.setUpdateFrequency(50);
-		spinSupplyVoltage.setUpdateFrequency(10);
-		spinSupplyCurrent.setUpdateFrequency(10);
+		spinSupplyVoltage.setUpdateFrequency(50);
+		spinSupplyCurrent.setUpdateFrequency(50);
 
 		spinTalonFX.optimizeBusUtilization();
 
@@ -108,12 +110,9 @@ public class IndexerHW {
 	public void sense(IndexerInputs inputs) {
 		if (!Robot.isReal()) return;
 
+		BaseStatusSignal.waitForAll(
+				0, spinVelocity, spinMotorVoltage, spinStatorCurrent, spinSupplyVoltage, spinSupplyCurrent);
 		BaseStatusSignal.refreshAll(
-				spinVelocity,
-				spinMotorVoltage,
-				spinStatorCurrent,
-				spinSupplyVoltage,
-				spinSupplyCurrent,
 				elevatorVelocity,
 				elevatorMotorVoltage,
 				elevatorStatorCurrent,

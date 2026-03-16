@@ -54,7 +54,7 @@ public class Vision extends SubsystemBase {
 	public static final AprilTagFieldLayout TAG_LAYOUT =
 			AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
-	public static final double CPNP_MAX_TAG_DIST = 4.0; // meters — filter tags beyond this for constrainedPnP
+	public static final double CPNP_MAX_TAG_DIST = 6.0; // meters — filter tags beyond this for constrainedPnP
 
 	public int nCams = cameras.length;
 	public boolean enabled = true;
@@ -118,8 +118,6 @@ public class Vision extends SubsystemBase {
 
 			for (int j = 0; j < results.size(); j++) {
 				PhotonPipelineResult result = results.get(j);
-				Pose2d visionPose = null;
-				String method = "none";
 
 				if (result.targets.isEmpty()) {
 					Logger.recordOutput("/Vision/" + cam.name + "/method", "none");
@@ -194,11 +192,10 @@ public class Vision extends SubsystemBase {
 					ArrayList<PhotonTrackedTarget> weightedTargets = new ArrayList<>();
 					int uniqueCloseTagCount = 0;
 					for (PhotonTrackedTarget target : result.targets) {
-						double d =
-								target.getBestCameraToTarget().getTranslation().getNorm();
+						double d = target.getBestCameraToTarget().getTranslation().getNorm();
 						if (d > CPNP_MAX_TAG_DIST) continue;
 						uniqueCloseTagCount++;
-						int copies = (int) min(4, max(1, floor(CPNP_MAX_TAG_DIST / d)));
+						int copies = (int) min(CPNP_MAX_TAG_DIST, max(1, floor(CPNP_MAX_TAG_DIST / d)));
 						for (int k = 0; k < copies; k++) weightedTargets.add(target);
 					}
 					Logger.recordOutput("/Vision/" + cam.name + "/cpnpUniqueTags", uniqueCloseTagCount);
@@ -249,64 +246,59 @@ public class Vision extends SubsystemBase {
 						"/Vision/" + cam.name + "/pnpDistTrigPose",
 						pnpDistTrigPose.isPresent() ? pnpDistTrigPose.get().estimatedPose : null);
 
-				if (sane(constrainedPnPpose) && enableConstrainedPnP) {
-					visionPose = constrainedPnPpose.get().estimatedPose.toPose2d();
-					method = "constrainedPnP";
-				} else if (sane(pnpDistTrigPose) && enablePnpDistTrig) {
-					visionPose = pnpDistTrigPose.get().estimatedPose.toPose2d();
-					method = "pnpDistTrig";
-				} else if (sane(coprocPnPpose) && result.targets.size() >= 3 && enableMultiTag) {
-					visionPose = coprocPnPpose.get().estimatedPose.toPose2d();
-					method = "multiTag";
-				}
-
 				Logger.recordOutput("/Vision/" + cam.name + "/nTargets", result.targets.size());
-				Logger.recordOutput("/Vision/" + cam.name + "/method", method);
 
-				if (visionPose != null && enabled) {
-					// Distance and tag-count scaled covariance
-					int nTargets = method.equals("pnpDistTrig") ? trigSuccessCount : result.targets.size();
-					// avg(d²) not (avg d)² — far tags dominate error
-					double distScale = result.targets.stream()
-							.mapToDouble(t -> {
-								double d = t.getBestCameraToTarget()
-										.getTranslation()
-										.getNorm();
-								return d * d;
-							})
-							.average()
-							.orElse(16.0);
-					double tagScale = 1.0 / sqrt(nTargets);
+				// avg(d²) not (avg d)² — far tags dominate error
+				double distScale = result.targets.stream()
+						.mapToDouble(t -> {
+							double d = t.getBestCameraToTarget()
+									.getTranslation()
+									.getNorm();
+							return d * d;
+						})
+						.average()
+						.orElse(16.0);
+				Logger.recordOutput("/Vision/" + cam.name + "/avgDistSq", distScale);
 
-					// TUNEME. base stddevs at 1m distance, 1 tag
-					double xyBase, thetaBase;
-					switch (method) {
-						case "constrainedPnP":
-							xyBase = 0.08;
-							thetaBase = 0.5;
-							break;
-						case "multiTag":
-							xyBase = 0.12;
-							thetaBase = enableHeading ? 0.8 : 0.01;
-							break;
-						case "pnpDistTrig":
-							xyBase = 0.04;
-							thetaBase = 4.0;
-							break;
-						default:
-							throw new IllegalStateException("Unexpected vision method: " + method);
-					}
-					double xyStd = xyBase * distScale * tagScale;
-					double thetaStd = thetaBase * distScale * tagScale;
-					Matrix<N3, N1> cov = Util.buildCov(xyStd, xyStd, thetaStd);
+				// Fuse all sane methods into pose estimator independently
+				ArrayList<String> methods = new ArrayList<>();
 
-					Logger.recordOutput("/Vision/" + cam.name + "/covXY", xyStd);
-					Logger.recordOutput("/Vision/" + cam.name + "/covTheta", thetaStd);
-					Logger.recordOutput("/Vision/" + cam.name + "/avgDistSq", distScale);
-
-					drive.poseEst.addVisionMeasurement(visionPose, result.getTimestampSeconds(), cov);
-					Logger.recordOutput("/Vision/" + cam.name + "/estimatedPose", visionPose);
+				if (sane(constrainedPnPpose) && enableConstrainedPnP && enabled) {
+					Pose2d pose = constrainedPnPpose.get().estimatedPose.toPose2d();
+					double tagScale = 1.0 / sqrt(result.targets.size());
+					double xyStd = 0.08 * distScale * tagScale;
+					double thetaStd = 0.5 * distScale * tagScale;
+					drive.poseEst.addVisionMeasurement(
+							pose, result.getTimestampSeconds(), Util.buildCov(xyStd, xyStd, thetaStd));
+					Logger.recordOutput("/Vision/" + cam.name + "/constrainedPnPCovXY", xyStd);
+					methods.add("constrainedPnP");
 				}
+
+				if (sane(pnpDistTrigPose) && enablePnpDistTrig && enabled) {
+					Pose2d pose = pnpDistTrigPose.get().estimatedPose.toPose2d();
+					double tagScale = 1.0 / sqrt(trigSuccessCount);
+					double xyStd = 0.04 * distScale * tagScale;
+					double thetaStd = 4.0 * distScale * tagScale;
+					drive.poseEst.addVisionMeasurement(
+							pose, result.getTimestampSeconds(), Util.buildCov(xyStd, xyStd, thetaStd));
+					Logger.recordOutput("/Vision/" + cam.name + "/pnpDistTrigCovXY", xyStd);
+					methods.add("pnpDistTrig");
+				}
+
+				if (sane(coprocPnPpose) && result.targets.size() >= 3 && enableMultiTag && enabled) {
+					Pose2d pose = coprocPnPpose.get().estimatedPose.toPose2d();
+					double tagScale = 1.0 / sqrt(result.targets.size());
+					double xyStd = 0.12 * distScale * tagScale;
+					double thetaStd = (enableHeading ? 0.8 : 0.01) * distScale * tagScale;
+					drive.poseEst.addVisionMeasurement(
+							pose, result.getTimestampSeconds(), Util.buildCov(xyStd, xyStd, thetaStd));
+					Logger.recordOutput("/Vision/" + cam.name + "/multiTagCovXY", xyStd);
+					methods.add("multiTag");
+				}
+
+				String methodStr = methods.isEmpty() ? "none" : String.join("+", methods);
+				Logger.recordOutput("/Vision/" + cam.name + "/methods", methodStr);
+				Logger.recordOutput("/Vision/" + cam.name + "/methodCount", methods.size());
 			}
 		}
 	}

@@ -15,7 +15,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.numbers.N8;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.FieldConstants;
 import frc.robot.Robot;
@@ -25,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.common.dataflow.structures.ReusablePacket;
@@ -58,10 +58,10 @@ public class Vision extends SubsystemBase {
 
 	public int nCams = cameras.length;
 	public boolean enabled = true;
-	public boolean enableConstrainedPnP = true;
-	public boolean enableMultiTag = true;
-	public boolean enablePnpDistTrig = true;
-	public boolean enableHeading = false;
+	public LoggedNetworkBoolean enableConstrainedPnP = new LoggedNetworkBoolean("/Vision/enableConstrainedPnP", true);
+	public LoggedNetworkBoolean enableMultiTag = new LoggedNetworkBoolean("/Vision/enableMultiTag", true);
+	public LoggedNetworkBoolean enablePnpDistTrig = new LoggedNetworkBoolean("/Vision/enablePnpDistTrig", true);
+	public LoggedNetworkBoolean enableHeading = new LoggedNetworkBoolean("/Vision/enableHeading", false);
 
 	public void init() {
 		try {
@@ -76,10 +76,6 @@ public class Vision extends SubsystemBase {
 			decodePackets[i] = new ReusablePacket(0); // Pre-allocate decode packets
 			cam.init();
 		}
-		SmartDashboard.putBoolean("Vision/enableConstrainedPnP", enableConstrainedPnP);
-		SmartDashboard.putBoolean("Vision/enableMultiTag", enableMultiTag);
-		SmartDashboard.putBoolean("Vision/enablePnpDistTrig", enablePnpDistTrig);
-		SmartDashboard.putBoolean("Vision/enableHeading", enableHeading);
 		sense();
 	}
 
@@ -97,12 +93,8 @@ public class Vision extends SubsystemBase {
 
 	public void sense() {
 		Logger.recordOutput("/Vision/enabled", enabled);
-		enableConstrainedPnP = SmartDashboard.getBoolean("Vision/enableConstrainedPnP", enableConstrainedPnP);
-		enableMultiTag = SmartDashboard.getBoolean("Vision/enableMultiTag", enableMultiTag);
-		enablePnpDistTrig = SmartDashboard.getBoolean("Vision/enablePnpDistTrig", enablePnpDistTrig);
-		enableHeading = SmartDashboard.getBoolean("Vision/enableHeading", enableHeading);
 
-		if (!Robot.isReal() && robot.isTeleopEnabled()) enableHeading = true;
+		if (!Robot.isReal() && robot.isTeleopEnabled()) enableHeading.set(true);
 
 		for (int i = 0; i < nCams; i++) {
 			VisionHW cam = cameras[i];
@@ -219,7 +211,7 @@ public class Vision extends SubsystemBase {
 									new Matrix<>(N3.instance, N3.instance, input.cameraMatrix),
 									new Matrix<>(N8.instance, N1.instance, input.distCoeffs),
 									seedPose,
-									!enableHeading,
+									!enableHeading.get(),
 									1e3);
 						} catch (Exception e) {
 							constrainedPnPpose = Optional.empty();
@@ -263,7 +255,7 @@ public class Vision extends SubsystemBase {
 				// Fuse all sane methods into pose estimator independently
 				ArrayList<String> methods = new ArrayList<>();
 
-				if (sane(constrainedPnPpose) && enableConstrainedPnP && enabled) {
+				if (sane(constrainedPnPpose) && enableConstrainedPnP.get() && enabled) {
 					Pose2d pose = constrainedPnPpose.get().estimatedPose.toPose2d();
 					double tagScale = 1.0 / sqrt(result.targets.size());
 					double xyStd = 0.08 * distScale * tagScale;
@@ -274,7 +266,7 @@ public class Vision extends SubsystemBase {
 					methods.add("constrainedPnP");
 				}
 
-				if (sane(pnpDistTrigPose) && enablePnpDistTrig && enabled) {
+				if (sane(pnpDistTrigPose) && enablePnpDistTrig.get() && enabled) {
 					Pose2d pose = pnpDistTrigPose.get().estimatedPose.toPose2d();
 					double tagScale = 1.0 / sqrt(trigSuccessCount);
 					double xyStd = 0.04 * distScale * tagScale;
@@ -285,11 +277,11 @@ public class Vision extends SubsystemBase {
 					methods.add("pnpDistTrig");
 				}
 
-				if (sane(coprocPnPpose) && result.targets.size() >= 3 && enableMultiTag && enabled) {
+				if (sane(coprocPnPpose) && result.targets.size() >= 3 && enableMultiTag.get() && enabled) {
 					Pose2d pose = coprocPnPpose.get().estimatedPose.toPose2d();
 					double tagScale = 1.0 / sqrt(result.targets.size());
 					double xyStd = 0.12 * distScale * tagScale;
-					double thetaStd = (enableHeading ? 0.8 : 0.01) * distScale * tagScale;
+					double thetaStd = (enableHeading.get() ? 0.8 : 0.01) * distScale * tagScale;
 					drive.poseEst.addVisionMeasurement(
 							pose, result.getTimestampSeconds(), Util.buildCov(xyStd, xyStd, thetaStd));
 					Logger.recordOutput("/Vision/" + cam.name + "/multiTagCovXY", xyStd);

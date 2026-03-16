@@ -12,8 +12,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.FieldConstants;
@@ -26,7 +26,7 @@ import org.littletonrobotics.junction.Logger;
 public class Autos {
 	public static AutoFactory factory;
 
-	public static SendableChooser<Pose2d> startPoseChooser = new SendableChooser<>();
+	public static LoggedDashboardChooser<Pose2d> startPoseChooser = new LoggedDashboardChooser<>("StartPoseChooser");
 
 	// TUNEME: trajectory tracking PID gains
 	public static PIDController xController = new PIDController(5.0, 0, 0);
@@ -38,7 +38,7 @@ public class Autos {
 
 		factory = new AutoFactory(() -> drive.pose, drive::resetPose, Autos::choreoController, true, drive);
 
-		startPoseChooser.setDefaultOption("null", new Pose2d());
+		startPoseChooser.addDefaultOption("null", new Pose2d());
 		// startPoseChooser.addOption("testStart", ChoreoVars.Poses.testStart);
 		// startPoseChooser.addOption("TestPath start", ChoreoTraj.TestPath.initialPoseBlue());
 		startPoseChooser.addOption("TrenchStart", ChoreoTraj.TrenchAuto.initialPoseBlue());
@@ -47,6 +47,11 @@ public class Autos {
 				new Pose2d(
 						FieldConstants.Hub.innerCenterPoint.toTranslation2d().plus(new Translation2d(-1, 0)),
 						Rotation2d.kCCW_Pi_2));
+		startPoseChooser.onChange(pose -> {
+			if (pose != null && pose.getX() != 0 && pose.getY() != 0) {
+				drive.resetPose(Util.flipIfRed(pose));
+			}
+		});
 	}
 
 	public static void choreoController(SwerveSample sample) {

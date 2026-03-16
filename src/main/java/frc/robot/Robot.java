@@ -1,9 +1,7 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.autos.Autos;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
@@ -115,10 +113,6 @@ public class Robot extends LoggedRobot {
 
 	@Override
 	public void autonomousInit() {
-		Pose2d pose = Autos.startPoseChooser.getSelected();
-		if (pose != null && pose.getX() != 0 && pose.getY() != 0) {
-			RobotContainer.drive.resetPose(Util.flipIfRed(pose));
-		}
 		if (RobotContainer.autonomousCommand != null) {
 			CommandScheduler.getInstance().schedule(RobotContainer.autonomousCommand);
 		}

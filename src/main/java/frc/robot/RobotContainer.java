@@ -164,7 +164,6 @@ public class RobotContainer {
 		autoChooser.addRoutine("MiddletoHP", Autos::middleToHP);
 
 		SmartDashboard.putData("AutoChooser", autoChooser);
-		SmartDashboard.putData("StartPoseChooser", Autos.startPoseChooser);
 
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());
 		SmartDashboard.putData("Field", field);
@@ -208,12 +207,6 @@ public class RobotContainer {
 		if (DriverStation.isDisabled()) {
 			leds.control = leds.DISABLED_ANIMATION;
 			autonomousCommand = autoChooser.selectedCommand();
-
-			// Pose2d selected = Util.flipIfRed(Autos.startPoseChooser.getSelected()); // TODO STUPID
-			// if (selected != null && selected != prevStartPose) {
-			// 	prevStartPose = selected;
-			// 	drive.resetPose(selected);
-			// }
 		} else {
 			leds.control = shooter.onTarget ? leds.SHOOTING_ANIMATION : leds.IDLE_ANIMATION;
 		}

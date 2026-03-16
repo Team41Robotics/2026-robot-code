@@ -1,6 +1,5 @@
 package frc.robot;
 
-import choreo.auto.AutoChooser;
 import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -64,7 +63,7 @@ public class RobotContainer {
 
 	public static Field2d field = new Field2d();
 
-	public static AutoChooser autoChooser = new AutoChooser();
+	public static LoggedAutoChooser autoChooser = new LoggedAutoChooser();
 	public static Command autonomousCommand = null;
 
 	public static String currentPeriod = "DISABLED";
@@ -163,8 +162,6 @@ public class RobotContainer {
 		autoChooser.addRoutine("TrenchAuto", Autos::trenchAuto);
 		autoChooser.addRoutine("MiddletoHP", Autos::middleToHP);
 
-		SmartDashboard.putData("AutoChooser", autoChooser);
-
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());
 		SmartDashboard.putData("Field", field);
 	}
@@ -204,6 +201,7 @@ public class RobotContainer {
 		CommandScheduler.getInstance().run();
 		Logger.recordOutput("Timing/CommandScheduler_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
+		autoChooser.periodic();
 		if (DriverStation.isDisabled()) {
 			leds.control = leds.DISABLED_ANIMATION;
 			autonomousCommand = autoChooser.selectedCommand();

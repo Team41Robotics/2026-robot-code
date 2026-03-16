@@ -184,7 +184,8 @@ public class Vision extends SubsystemBase {
 					ArrayList<PhotonTrackedTarget> weightedTargets = new ArrayList<>();
 					int uniqueCloseTagCount = 0;
 					for (PhotonTrackedTarget target : result.targets) {
-						double d = target.getBestCameraToTarget().getTranslation().getNorm();
+						double d =
+								target.getBestCameraToTarget().getTranslation().getNorm();
 						if (d > CPNP_MAX_TAG_DIST) continue;
 						uniqueCloseTagCount++;
 						int copies = (int) min(CPNP_MAX_TAG_DIST, max(1, floor(CPNP_MAX_TAG_DIST / d)));
@@ -243,9 +244,8 @@ public class Vision extends SubsystemBase {
 				// avg(d²) not (avg d)² — far tags dominate error
 				double distScale = result.targets.stream()
 						.mapToDouble(t -> {
-							double d = t.getBestCameraToTarget()
-									.getTranslation()
-									.getNorm();
+							double d =
+									t.getBestCameraToTarget().getTranslation().getNorm();
 							return d * d;
 						})
 						.average()

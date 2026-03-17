@@ -4,6 +4,7 @@ import static edu.wpi.first.math.MathUtil.*;
 import static frc.robot.RobotContainer.*;
 import static java.lang.Math.*;
 
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -66,6 +67,10 @@ public class SwerveModule {
 			setpointAng = new State(inputs.turnAbsPosRadians, inputs.turnVelRadiansPerSec);
 			setpointVel = 0;
 		}
+	}
+
+	public void setDriveNeutralMode(NeutralModeValue mode) {
+		hw.setDriveNeutralMode(mode);
 	}
 
 	public void drive(SwerveModuleState s) {

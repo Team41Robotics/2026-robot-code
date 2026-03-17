@@ -47,4 +47,6 @@ public interface Controls {
 	public Trigger hoodZero();
 
 	public Trigger passToOwnSide();
+
+	public Trigger driveLock();
 }

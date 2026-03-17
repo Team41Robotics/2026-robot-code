@@ -90,10 +90,14 @@ public class XboxControls implements Controls {
 	}
 
 	public Trigger hoodZero() {
-		return driverStation.button(3);
+		return xbox.rightTrigger();
 	}
 
 	public Trigger passToOwnSide() {
-		return driverStation.button(13);
+		return driverStation.button(2);
+	}
+
+	public Trigger driveLock() {
+		return xbox.leftTrigger();
 	}
 }

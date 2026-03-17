@@ -3,6 +3,7 @@ package frc.robot.subsystem.drive;
 import static frc.robot.RobotContainer.*;
 import static java.lang.Math.*;
 
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,10 +25,10 @@ public class SwerveDrive extends SubsystemBase {
 	public static final double MAX_W = MAX_VEL / hypot(ROBOT_LEN / 2, ROBOT_WID / 2);
 
 	public SwerveModuleConfiguration[] configs = new SwerveModuleConfiguration[] {
-		new SwerveModuleConfiguration("NW", 19, 17, 18, 2.8746799964976915 + PI),
-		new SwerveModuleConfiguration("NE", 20, 22, 21, 1.7564080021290591),
-		new SwerveModuleConfiguration("SW", 14, 16, 15, 0.8237476830945893 + PI),
-		new SwerveModuleConfiguration("SE", 13, 11, 12, -0.6519418348513975)
+		new SwerveModuleConfiguration("NW", 19, 17, 18, 0.319), // BIG TODO
+		new SwerveModuleConfiguration("NE", 20, 22, 21, -1.644),
+		new SwerveModuleConfiguration("SW", 14, 16, 15, -1.647),
+		new SwerveModuleConfiguration("SE", 13, 11, 12, 2.499)
 	};
 
 	public SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
@@ -71,6 +72,12 @@ public class SwerveDrive extends SubsystemBase {
 	public void resetPose(Pose2d newPose) {
 		poseEst.resetPosition(new Rotation2d(imu.yaw), modulePos, newPose);
 		pose = newPose;
+	}
+
+	public void setDriveNeutralMode(NeutralModeValue mode) {
+		for (SwerveModule module : modules) {
+			module.setDriveNeutralMode(mode);
+		}
 	}
 
 	public void drive(ChassisSpeeds speeds) {

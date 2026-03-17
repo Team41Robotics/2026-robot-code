@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.PreMatchCheck;
 import frc.robot.commands.autos.Autos;
 import frc.robot.commands.autos.StupidShootAuto;
+import frc.robot.commands.drive.DriveLock;
 import frc.robot.commands.drive.DrivePIDTestCommand;
 import frc.robot.commands.drive.FieldHeadingDrive;
 import frc.robot.commands.drive.FieldOrientedDrive;
@@ -107,6 +108,7 @@ public class RobotContainer {
 		SmartDashboard.putData("ShootOnTheFly", new ShootOnTheFly());
 		SmartDashboard.putData("ManualShoot", new ManualShoot());
 
+		SmartDashboard.putData("DriveLock", new DriveLock());
 		SmartDashboard.putData("PrintSwervePos", new PrintSwervePos());
 
 		SmartDashboard.putData("StupidShootAuto", new StupidShootAuto());
@@ -124,6 +126,7 @@ public class RobotContainer {
 		controls.indexerReverse().whileTrue(new RunIndexer(-RunIndexer.DEFAULT_SPIN_VOLTAGE, 0, 0));
 
 		controls.hoodZero().whileTrue(new HoodZero());
+		controls.driveLock().whileTrue(new DriveLock());
 
 		// Emergency stops
 		controls.eStopShooter()

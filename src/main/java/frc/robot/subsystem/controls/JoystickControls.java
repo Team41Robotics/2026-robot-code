@@ -96,4 +96,8 @@ public class JoystickControls implements Controls {
 	public Trigger passToOwnSide() {
 		return driverStation.button(2);
 	}
+
+	public Trigger driveLock() {
+		return leftJoystick.button(2);
+	}
 }

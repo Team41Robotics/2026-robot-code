@@ -82,7 +82,7 @@ public class SwerveHW {
 		driveTalonFX.getConfigurator().apply(driveConfig);
 		driveTalonFX.clearStickyFaults();
 		driveTalonFX.setPosition(0);
-		driveTalonFX.setNeutralMode(NeutralModeValue.Coast);
+		setDriveNeutralMode(NeutralModeValue.Coast);
 
 		turnTalonFX = new TalonFX(config.turnMotorId, driveBus);
 		TalonFXConfiguration turnConfig = new TalonFXConfiguration();
@@ -180,6 +180,12 @@ public class SwerveHW {
 
 		inputs.turnAbsPosRadians = turnAbsolutePosition.getValueAsDouble() * 2 * PI;
 		inputs.turnAbsPosRadians = angleModulus(inputs.turnAbsPosRadians - angleOffset);
+	}
+
+	public void setDriveNeutralMode(NeutralModeValue mode) {
+		if (!Robot.isReal()) return;
+		driveTalonFX.setNeutralMode(mode);
+		Logger.recordOutput(logRoot + "/driveNeutralMode", mode.toString());
 	}
 
 	public void actuate(SwerveInputs inputs, double targetVel, double driveFF, double targetAng, double turnFF) {

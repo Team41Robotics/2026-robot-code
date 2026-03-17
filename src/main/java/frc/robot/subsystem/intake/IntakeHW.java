@@ -51,8 +51,8 @@ public class IntakeHW {
 		intakeSparkMax = new SparkMax(31, MotorType.kBrushless);
 		SparkMaxConfig intakeConfig = new SparkMaxConfig();
 		intakeConfig.inverted(false);
-		intakeConfig.smartCurrentLimit(30);
-		intakeConfig.secondaryCurrentLimit(60);
+		intakeConfig.smartCurrentLimit(100); // TODO
+		intakeConfig.secondaryCurrentLimit(120);
 		intakeConfig.idleMode(IdleMode.kCoast);
 		intakeConfig.voltageCompensation(12.0);
 		intakeSparkMax.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

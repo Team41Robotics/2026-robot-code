@@ -121,9 +121,8 @@ public class Vision extends SubsystemBase {
 					Optional<EstimatedRobotPose> singlePose =
 							poseEsts[i].estimatePnpDistanceTrigSolvePose(singleResult);
 					if (sane(singlePose)) {
-						double d = target.getBestCameraToTarget()
-								.getTranslation()
-								.getNorm();
+						double d =
+								target.getBestCameraToTarget().getTranslation().getNorm();
 						double w = 1.0 / (d * d);
 						Pose2d p = singlePose.get().estimatedPose.toPose2d();
 						fusedX += p.getX() * w;
@@ -162,9 +161,8 @@ public class Vision extends SubsystemBase {
 				Logger.recordOutput(prefix + "/nTargets", result.targets.size());
 
 				// Log per-tag info: IDs and distances
-				int[] tagIds = result.targets.stream()
-						.mapToInt(t -> t.fiducialId)
-						.toArray();
+				int[] tagIds =
+						result.targets.stream().mapToInt(t -> t.fiducialId).toArray();
 				double[] tagDists = result.targets.stream()
 						.mapToDouble(
 								t -> t.getBestCameraToTarget().getTranslation().getNorm())
@@ -196,7 +194,9 @@ public class Vision extends SubsystemBase {
 					Pose2d pose = coprocPnPpose.get().estimatedPose.toPose2d();
 					double distScale = result.targets.stream()
 							.mapToDouble(t -> {
-								double d = t.getBestCameraToTarget().getTranslation().getNorm();
+								double d = t.getBestCameraToTarget()
+										.getTranslation()
+										.getNorm();
 								return d * d;
 							})
 							.average()
@@ -212,8 +212,7 @@ public class Vision extends SubsystemBase {
 					Logger.recordOutput(prefix + "/multiTag/thetaStd", thetaStd);
 				}
 
-				Logger.recordOutput(
-						prefix + "/methods", methods.isEmpty() ? "none" : String.join("+", methods));
+				Logger.recordOutput(prefix + "/methods", methods.isEmpty() ? "none" : String.join("+", methods));
 			}
 		}
 	}

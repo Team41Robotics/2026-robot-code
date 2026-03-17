@@ -77,8 +77,15 @@ public class Targetting {
 
 	public static Translation2d targetOnTheFly(Translation2d target, double timeOfFlight) {
 		ChassisSpeeds speeds = drive.measuredSpeeds;
-		Translation2d vel = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
-		vel = vel.rotateBy(drive.rot);
+		double omega = speeds.omegaRadiansPerSecond;
+		Translation2d turretOffset = TURRET_POS.getTranslation();
+
+		// Turret velocity in robot frame = robot center velocity + omega cross turret offset
+		double vx = speeds.vxMetersPerSecond - omega * turretOffset.getY();
+		double vy = speeds.vyMetersPerSecond + omega * turretOffset.getX();
+
+		// Convert to field frame
+		Translation2d vel = new Translation2d(vx, vy).rotateBy(drive.rot);
 		return target.minus(vel.times(timeOfFlight));
 	}
 

@@ -19,6 +19,7 @@ public class Shooter extends SubsystemBase {
 	public static final double TURRET_POS_MIN = -2.029; // TUNEME
 	// public static final double TURRET_POS_MAX = 1.087;
 	public static final double TURRET_POS_MAX = PI / 2;
+	public static final double TURRET_SNAP_THRES = 60 / 180.0 * PI;
 	public static final double HOOD_POS_MIN = 0; //  TUNEME
 	// FIXME MATCH HOOD POS WITH REAL INCLINE
 	public static final double HOOD_POS_MAX = 35 / 180.0 * PI;
@@ -66,7 +67,15 @@ public class Shooter extends SubsystemBase {
 	public void actuate() {
 		targetTurretPos = angleModulus(targetTurretPos);
 		if (targetTurretPos < TURRET_POS_MIN || targetTurretPos > TURRET_POS_MAX) {
-			turretSetpoint = new State(inputs.turretPosRadians, 0);
+			double distToMin = abs(angleModulus(targetTurretPos - TURRET_POS_MIN));
+			double distToMax = abs(angleModulus(targetTurretPos - TURRET_POS_MAX));
+			double nearest = distToMin < distToMax ? TURRET_POS_MIN : TURRET_POS_MAX;
+			if (min(distToMin, distToMax) < TURRET_SNAP_THRES) {
+				State turretGoal = new State(nearest, 0);
+				turretSetpoint = turretProfile.calculate(LOOP_PERIOD, turretSetpoint, turretGoal);
+			} else {
+				turretSetpoint = new State(inputs.turretPosRadians, 0);
+			}
 		} else {
 			State turretGoal = new State(targetTurretPos, 0);
 			turretSetpoint = turretProfile.calculate(LOOP_PERIOD, turretSetpoint, turretGoal);

@@ -71,6 +71,11 @@ public class PreMatchCheck extends Command {
 	}
 
 	@Override
+	public boolean runsWhenDisabled() {
+		return true;
+	}
+
+	@Override
 	public void execute() {
 		allPassed = true;
 

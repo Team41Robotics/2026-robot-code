@@ -9,9 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class Targetting {
-	public static final Transform2d TURRET_POS = new Transform2d(new Translation2d(0.174, 0.159), new Rotation2d(0));
-
-	public record ShotParameters(double flywheelRPM, double hoodAngle, double timeOfFlight, double distance) {}
+	public record ShotParameters(double flywheelRPM, double timeOfFlight, double distance) {}
 
 	public static Translation2d targetRelative(Translation2d target) {
 		Pose2d turretPos = drive.pose.plus(TURRET_POS);

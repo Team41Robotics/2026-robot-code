@@ -12,14 +12,15 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Util;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveDrive extends SubsystemBase {
-	public static final double ROBOT_LEN = 20.750 * 2.54 / 100.;
-	public static final double ROBOT_WID = 23.3125 * 2.54 / 100.;
+	public static final double ROBOT_LEN = Units.inchesToMeters(20.750);
+	public static final double ROBOT_WID = Units.inchesToMeters(22.75);
 
 	public static final double MAX_VEL = SwerveModule.MAX_VEL;
 	public static final double MAX_W = MAX_VEL / hypot(ROBOT_LEN / 2, ROBOT_WID / 2);

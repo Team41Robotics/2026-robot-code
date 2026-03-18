@@ -1,24 +1,12 @@
 package frc.robot.subsystem.intake;
 
-import static edu.wpi.first.math.MathUtil.*;
-import static frc.robot.RobotContainer.intake;
-import static java.lang.Math.*;
-
-import java.io.ObjectInputFilter.Status;
-
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.PersistMode;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.ResetMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -30,6 +18,10 @@ public class IntakeHW {
 	public static final double EXTENSION_RATIO = 1.0; //TODO
 
 	public static final double EXTENSION_ZERO = 0.0; //TODO
+
+	public static final double EXTENSION_kP = 0; //TUNEME
+	public static final double EXTENSION_kI = 0; //TUNEME
+	public static final double EXTENSION_kD = 0; //TUNEME
 
 	public TalonFX extensionTalonFX;
 	public TalonFX intakeTalonFX;
@@ -47,12 +39,18 @@ public class IntakeHW {
 	public StatusSignal<Voltage> intakeSupplyVoltage;
 	public StatusSignal<Current> intakeSupplyCurrent;
 
+	public PositionVoltage extensionControlRequest = new PositionVoltage(0).withSlot(0);
+	public VoltageOut intakeControlRequest = new VoltageOut(0);
+
 	public void init() {
 		if (!Robot.isReal()) return;
 
 		extensionTalonFX = new TalonFX(33); //TODO
 		TalonFXConfiguration extensionConfig = new TalonFXConfiguration();
 		extensionConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+		extensionConfig.Slot0.kP = EXTENSION_kP;
+		extensionConfig.Slot0.kI = EXTENSION_kI;
+		extensionConfig.Slot0.kD = EXTENSION_kD;
 		extensionConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		extensionConfig.CurrentLimits.SupplyCurrentLimit = 30;
 		extensionConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -124,12 +122,13 @@ public class IntakeHW {
 		inputs.intakeBusCurrentAmps = intakeSupplyCurrent.getValueAsDouble();
 	}
 
-	public void actuate(IntakeInputs inputs, double jointVoltage, double intakeVoltage) {
-		Logger.recordOutput("/Intake/jointCommandVoltageVolts", jointVoltage);
+	public void actuate(IntakeInputs inputs, double extensionPosition, double intakeVoltage) {
+		Logger.recordOutput("/Intake/extensionTarget", extensionPosition);
+		Logger.recordOutput("/Intake/intakeVoltageVolts", intakeVoltage);
 
 		if (!Robot.isReal()) return;
-
-		extensionTalonFX.setVoltage(jointVoltage);
-		intakeTalonFX.setVoltage(intakeVoltage);
+		
+		extensionTalonFX.setControl(extensionControlRequest.withPosition(extensionPosition));
+		intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
 	}
 }

@@ -24,7 +24,7 @@ import frc.robot.commands.drive.RobotOrientedDrive;
 import frc.robot.commands.drive.TurnPIDTestCommand;
 import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.indexer.StopIndexer;
-import frc.robot.commands.intake.IntakeDown;
+import frc.robot.commands.intake.IntakeMove;
 import frc.robot.commands.intake.IntakeUp;
 import frc.robot.commands.shooter.HoodZero;
 import frc.robot.commands.shooter.ManualShoot;
@@ -84,8 +84,8 @@ public class RobotContainer {
 
 		drive.setDefaultCommand(new FieldOrientedDrive());
 		shooter.setDefaultCommand(new ShootTeleop());
-		intake.setDefaultCommand(new IntakeDown());
-		indexer.setDefaultCommand(new RunIndexer(0.5, 0, 0));
+		intake.setDefaultCommand(new IntakeMove());
+		indexer.setDefaultCommand(new RunIndexer(0.5, 0));
 
 		SmartDashboard.putData("DrivePIDTest", new DrivePIDTestCommand());
 		SmartDashboard.putData("TurnPIDTest", new TurnPIDTestCommand());
@@ -96,7 +96,7 @@ public class RobotContainer {
 		SmartDashboard.putData("FieldHeadingDrive", new FieldHeadingDrive());
 		SmartDashboard.putData("FieldSnakeDrive", new FieldSnakeDrive());
 
-		SmartDashboard.putData("IntakeDown", new IntakeDown());
+		SmartDashboard.putData("IntakeDown", new IntakeMove());
 		SmartDashboard.putData("IntakeUp", new IntakeUp());
 
 		SmartDashboard.putData("RunIndexer", new RunIndexer());
@@ -119,7 +119,7 @@ public class RobotContainer {
 		// controls.intake().whileTrue(new IntakeUp());
 		controls.shoot().whileTrue(new RunIndexer());
 
-		controls.intakeDown().onTrue(new IntakeDown());
+		controls.intakeDown().onTrue(new IntakeMove());
 		controls.intakeUp().onTrue(new IntakeUp());
 		// controls.intakeReverse().whileTrue(new IntakeDown(-IntakeDown.HIGH_VOLTAGE));
 		controls.intakeReverse().whileTrue(new IntakeUp());
@@ -133,9 +133,7 @@ public class RobotContainer {
 				.whileTrue(new RunCommand(
 						() -> {
 							shooter.targetFlywheelRPM = 0;
-							shooter.targetTurretPos = shooter.inputs.turretPosRadians;
-							shooter.targetHoodPos = shooter.inputs.hoodPosRadians;
-							indexer.targetSpinVoltage = 0;
+							indexer.targetRollersVoltage = 0;
 							indexer.targetElevatorVoltage = 0;
 						},
 						shooter,
@@ -144,11 +142,9 @@ public class RobotContainer {
 				.whileTrue(new RunCommand(
 						() -> {
 							shooter.targetFlywheelRPM = 0;
-							shooter.targetTurretPos = shooter.inputs.turretPosRadians;
-							shooter.targetHoodPos = shooter.inputs.hoodPosRadians;
-							intake.targetJointVoltage = 0;
+							intake.targetExtensionPosition = intake.inputs.extensionPosMeters; 
 							intake.targetIntakeVoltage = 0;
-							indexer.targetSpinVoltage = 0;
+							indexer.targetRollersVoltage = 0;
 							indexer.targetElevatorVoltage = 0;
 						},
 						shooter,

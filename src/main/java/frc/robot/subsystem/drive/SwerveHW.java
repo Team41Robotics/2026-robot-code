@@ -13,6 +13,8 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -21,9 +23,9 @@ import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveHW {
-	public static final double DRIVE_RATIO = 1 / 5.27; // motor * ratio = mechanism
-	public static final double TURN_RATIO = 11.0 / 287;
-	public static final double WHEEL_RAD = 2 * 2.54 / 100.;
+	public static final double DRIVE_RATIO = 1 / 5.36; // motor * ratio = mechanism
+	public static final double TURN_RATIO = 1 / 18.75;
+	public static final double WHEEL_RAD = Units.inchesToMeters(2); 
 
 	public static final double DRIVE_kP = 4; // TUNEME. drive PID P
 	public static final double TURN_kP = 20; // TUNEME. turn PID P

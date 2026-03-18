@@ -75,7 +75,7 @@ public class SwerveHW {
 		driveConfig.CurrentLimits.SupplyCurrentLimit = 60;
 		driveConfig.CurrentLimits.SupplyCurrentLowerTime = 2.0;
 		driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		driveConfig.CurrentLimits.StatorCurrentLimit = 90;
+		driveConfig.CurrentLimits.StatorCurrentLimit = 70;
 		driveConfig.Voltage.PeakForwardVoltage = 12.0;
 		driveConfig.Voltage.PeakReverseVoltage = -12.0;
 		driveConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

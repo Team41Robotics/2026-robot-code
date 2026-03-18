@@ -1,10 +1,17 @@
 package frc.robot.subsystem.intake;
 
 import static edu.wpi.first.math.MathUtil.*;
+import static frc.robot.RobotContainer.intake;
 import static java.lang.Math.*;
 
+import java.io.ObjectInputFilter.Status;
+
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -13,74 +20,108 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class IntakeHW {
-	public static final double JOINT_RATIO = 1.0 / 27.0;
+	public static final double EXTENSION_RATIO = 1.0; //TODO
 
-	public static final double JOINT_ENCODER_ZERO = 3.005 + PI / 3;
+	public static final double EXTENSION_ZERO = 0.0; //TODO
 
-	public SparkMax jointSparkMax;
-	public RelativeEncoder jointEncoder;
-	public SparkMax intakeSparkMax;
-	public RelativeEncoder intakeEncoder;
+	public TalonFX extensionTalonFX;
+	public TalonFX intakeTalonFX;
 
-	public CANcoder jointAbsoluteEncoder;
+	public StatusSignal<Angle> extensionAbsolutePosition;
+	public StatusSignal<AngularVelocity> extensionVelocity;
+	public StatusSignal<Voltage> extensionMotorVoltage;
+	public StatusSignal<Current> extensionStatorCurrent;
+	public StatusSignal<Voltage> extensionSupplyVoltage;
+	public StatusSignal<Current> extensionSupplyCurrent;
 
-	public StatusSignal<Angle> jointAbsolutePositionSignal;
+	public StatusSignal<AngularVelocity> intakeVelocity;
+	public StatusSignal<Voltage> intakeMotorVoltage;
+	public StatusSignal<Current> intakeStatorCurrent;
+	public StatusSignal<Voltage> intakeSupplyVoltage;
+	public StatusSignal<Current> intakeSupplyCurrent;
 
 	public void init() {
 		if (!Robot.isReal()) return;
 
-		jointSparkMax = new SparkMax(33, MotorType.kBrushless);
-		SparkMaxConfig jointConfig = new SparkMaxConfig();
-		jointConfig.inverted(true);
-		jointConfig.encoder.positionConversionFactor(JOINT_RATIO * 2 * PI);
-		jointConfig.encoder.velocityConversionFactor(JOINT_RATIO * 2 * PI / 60);
-		jointConfig.smartCurrentLimit(20);
-		jointConfig.secondaryCurrentLimit(40);
-		jointConfig.idleMode(IdleMode.kBrake);
-		jointConfig.voltageCompensation(12.0);
-		jointSparkMax.configure(jointConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-		jointEncoder = jointSparkMax.getEncoder();
+		extensionTalonFX = new TalonFX(33); //TODO
+		TalonFXConfiguration extensionConfig = new TalonFXConfiguration();
+		extensionConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+		extensionConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+		extensionConfig.CurrentLimits.SupplyCurrentLimit = 30;
+		extensionConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+		extensionConfig.CurrentLimits.StatorCurrentLimit = 120;
+		extensionConfig.Voltage.PeakForwardVoltage = 12.0;
+		extensionConfig.Voltage.PeakReverseVoltage = -12.0;
+		extensionTalonFX.getConfigurator().apply(extensionConfig);
+		extensionTalonFX.clearStickyFaults();
+		extensionTalonFX.setNeutralMode(NeutralModeValue.Brake);
+		extensionTalonFX.optimizeBusUtilization();
 
-		jointAbsoluteEncoder = new CANcoder(32);
-		jointAbsoluteEncoder.clearStickyFaults();
+		intakeTalonFX = new TalonFX(31); //TODO
+		TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
+		intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+		intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+		intakeConfig.CurrentLimits.SupplyCurrentLimit = 30;
+		intakeConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+		intakeConfig.CurrentLimits.StatorCurrentLimit = 120;
+		intakeConfig.Voltage.PeakForwardVoltage = 12.0;
+		intakeConfig.Voltage.PeakReverseVoltage = -12.0;
+		intakeTalonFX.getConfigurator().apply(intakeConfig);
+		intakeTalonFX.clearStickyFaults();
+		intakeTalonFX.setNeutralMode(NeutralModeValue.Brake);
+		intakeTalonFX.optimizeBusUtilization();
 
-		intakeSparkMax = new SparkMax(31, MotorType.kBrushless);
-		SparkMaxConfig intakeConfig = new SparkMaxConfig();
-		intakeConfig.inverted(false);
-		intakeConfig.smartCurrentLimit(100); // TODO
-		intakeConfig.secondaryCurrentLimit(120);
-		intakeConfig.idleMode(IdleMode.kCoast);
-		intakeConfig.voltageCompensation(12.0);
-		intakeSparkMax.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-		intakeEncoder = intakeSparkMax.getEncoder();
+		extensionAbsolutePosition = extensionTalonFX.getPosition(false);
+		extensionVelocity = extensionTalonFX.getVelocity(false);
+		extensionMotorVoltage = extensionTalonFX.getMotorVoltage(false);
+		extensionStatorCurrent = extensionTalonFX.getStatorCurrent(false);
+		extensionSupplyVoltage = extensionTalonFX.getSupplyVoltage(false);
+		extensionSupplyCurrent = extensionTalonFX.getSupplyCurrent(false);
 
-		jointAbsolutePositionSignal = jointAbsoluteEncoder.getPosition(false);
-		jointAbsolutePositionSignal.setUpdateFrequency(50);
-		jointAbsoluteEncoder.optimizeBusUtilization();
+		intakeVelocity = intakeTalonFX.getVelocity(false);
+		intakeMotorVoltage = intakeTalonFX.getMotorVoltage(false);
+		intakeStatorCurrent = intakeTalonFX.getStatorCurrent(false);
+		intakeSupplyVoltage = intakeTalonFX.getSupplyVoltage(false);
+		intakeSupplyCurrent = intakeTalonFX.getSupplyCurrent(false);
+
+		extensionAbsolutePosition.setUpdateFrequency(50);
+		extensionVelocity.setUpdateFrequency(50);
+		extensionMotorVoltage.setUpdateFrequency(50);
+		extensionStatorCurrent.setUpdateFrequency(50);
+		extensionSupplyVoltage.setUpdateFrequency(10);
+		extensionSupplyCurrent.setUpdateFrequency(10);
+
+		intakeVelocity.setUpdateFrequency(50);
+		intakeMotorVoltage.setUpdateFrequency(50);
+		intakeStatorCurrent.setUpdateFrequency(50);
+		intakeSupplyVoltage.setUpdateFrequency(10);
+		intakeSupplyCurrent.setUpdateFrequency(10);
 	}
 
 	public void sense(IntakeInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		jointAbsolutePositionSignal.refresh();
+		extensionAbsolutePosition.refresh();
 
-		inputs.jointPosRadians = jointAbsolutePositionSignal.getValueAsDouble() * 2 * PI;
-		inputs.jointPosRadians = angleModulus(inputs.jointPosRadians - JOINT_ENCODER_ZERO);
-		jointEncoder.setPosition(inputs.jointPosRadians);
+		inputs.extensionPosMeters = extensionAbsolutePosition.getValueAsDouble() * 2 * Math.PI * EXTENSION_RATIO - EXTENSION_ZERO;
+		inputs.extensionVelMetersPerSec = extensionVelocity.getValueAsDouble() * 2 * Math.PI * EXTENSION_RATIO;
+		inputs.extensionVoltageVolts = extensionMotorVoltage.getValueAsDouble();
+		inputs.extensionCurrentAmps = extensionStatorCurrent.getValueAsDouble();
+		inputs.extensionBusVoltageVolts = extensionSupplyVoltage.getValueAsDouble();
+		inputs.extensionBusCurrentAmps = extensionSupplyCurrent.getValueAsDouble();	
 
-		inputs.jointVelRadiansPerSec = jointEncoder.getVelocity();
-		inputs.jointVoltageVolts = jointSparkMax.getBusVoltage() * jointSparkMax.getAppliedOutput();
-		inputs.jointCurrentAmps = jointSparkMax.getOutputCurrent();
-		inputs.jointBusVoltageVolts = jointSparkMax.getBusVoltage();
-
-		inputs.intakeVelocityRPM = intakeEncoder.getVelocity();
-		inputs.intakeVoltageVolts = intakeSparkMax.getBusVoltage() * intakeSparkMax.getAppliedOutput();
-		inputs.intakeCurrentAmps = intakeSparkMax.getOutputCurrent();
-		inputs.intakeBusVoltageVolts = intakeSparkMax.getBusVoltage();
+		inputs.intakeVelocityRPM = intakeVelocity.getValueAsDouble() * 60;
+		inputs.intakeVoltageVolts = intakeMotorVoltage.getValueAsDouble();
+		inputs.intakeCurrentAmps = intakeStatorCurrent.getValueAsDouble();
+		inputs.intakeBusVoltageVolts = intakeSupplyVoltage.getValueAsDouble();
+		inputs.intakeBusCurrentAmps = intakeSupplyCurrent.getValueAsDouble();
 	}
 
 	public void actuate(IntakeInputs inputs, double jointVoltage, double intakeVoltage) {
@@ -88,7 +129,7 @@ public class IntakeHW {
 
 		if (!Robot.isReal()) return;
 
-		jointSparkMax.setVoltage(jointVoltage);
-		intakeSparkMax.setVoltage(intakeVoltage);
+		extensionTalonFX.setVoltage(jointVoltage);
+		intakeTalonFX.setVoltage(intakeVoltage);
 	}
 }

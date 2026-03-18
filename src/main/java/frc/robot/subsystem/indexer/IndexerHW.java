@@ -9,30 +9,23 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.PersistMode;
-import com.revrobotics.ResetMode;
-import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Robot;
 
 public class IndexerHW {
-	public TalonFX spinTalonFX;
+	public TalonFX rollersTalonFX;
 	public TalonFX elevatorTalonFX;
-	public SparkFlex backvatorSparkFlex;
 
-	public VoltageOut spinControlRequest = new VoltageOut(0);
+	public VoltageOut rollersControlRequest = new VoltageOut(0);
 	public VoltageOut elevatorControlRequest = new VoltageOut(0);
 
-	public StatusSignal<AngularVelocity> spinVelocity;
-	public StatusSignal<Voltage> spinMotorVoltage;
-	public StatusSignal<Current> spinStatorCurrent;
-	public StatusSignal<Voltage> spinSupplyVoltage;
-	public StatusSignal<Current> spinSupplyCurrent;
+	public StatusSignal<AngularVelocity> rollersVelocity;
+	public StatusSignal<Voltage> rollersMotorVoltage;
+	public StatusSignal<Current> rollersStatorCurrent;
+	public StatusSignal<Voltage> rollersSupplyVoltage;
+	public StatusSignal<Current> rollersSupplyCurrent;
 
 	public StatusSignal<AngularVelocity> elevatorVelocity;
 	public StatusSignal<Voltage> elevatorMotorVoltage;
@@ -43,35 +36,34 @@ public class IndexerHW {
 	public void init() {
 		if (!Robot.isReal()) return;
 
-		spinTalonFX = new TalonFX(43, driveBus);
-		TalonFXConfiguration spinConfig = new TalonFXConfiguration();
-		spinConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-		spinConfig.CurrentLimits.SupplyCurrentLimit = 30;
-		spinConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		spinConfig.CurrentLimits.StatorCurrentLimit = 120;
-		spinConfig.Voltage.PeakForwardVoltage = 12.0;
-		spinConfig.Voltage.PeakReverseVoltage = -12.0;
-		spinConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+		rollersTalonFX = new TalonFX(43, driveBus); //TODO
+		TalonFXConfiguration rollersConfig = new TalonFXConfiguration();
+		rollersConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+		rollersConfig.CurrentLimits.SupplyCurrentLimit = 30;
+		rollersConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+		rollersConfig.CurrentLimits.StatorCurrentLimit = 120;
+		rollersConfig.Voltage.PeakForwardVoltage = 12.0;
+		rollersConfig.Voltage.PeakReverseVoltage = -12.0;
+		rollersConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
-		spinTalonFX.getConfigurator().apply(spinConfig);
-		spinTalonFX.clearStickyFaults();
-		spinTalonFX.setNeutralMode(NeutralModeValue.Brake);
+		rollersTalonFX.getConfigurator().apply(rollersConfig);
+		rollersTalonFX.clearStickyFaults();
+		rollersTalonFX.setNeutralMode(NeutralModeValue.Brake);
+		rollersVelocity = rollersTalonFX.getVelocity(false);
+		rollersMotorVoltage = rollersTalonFX.getMotorVoltage(false);
+		rollersStatorCurrent = rollersTalonFX.getStatorCurrent(false);
+		rollersSupplyVoltage = rollersTalonFX.getSupplyVoltage(false);
+		rollersSupplyCurrent = rollersTalonFX.getSupplyCurrent(false);
 
-		spinVelocity = spinTalonFX.getVelocity(false);
-		spinMotorVoltage = spinTalonFX.getMotorVoltage(false);
-		spinStatorCurrent = spinTalonFX.getStatorCurrent(false);
-		spinSupplyVoltage = spinTalonFX.getSupplyVoltage(false);
-		spinSupplyCurrent = spinTalonFX.getSupplyCurrent(false);
+		rollersVelocity.setUpdateFrequency(50);
+		rollersMotorVoltage.setUpdateFrequency(50);
+		rollersStatorCurrent.setUpdateFrequency(50);
+		rollersSupplyVoltage.setUpdateFrequency(50);
+		rollersSupplyCurrent.setUpdateFrequency(50);
 
-		spinVelocity.setUpdateFrequency(50);
-		spinMotorVoltage.setUpdateFrequency(50);
-		spinStatorCurrent.setUpdateFrequency(50);
-		spinSupplyVoltage.setUpdateFrequency(50);
-		spinSupplyCurrent.setUpdateFrequency(50);
+		rollersTalonFX.optimizeBusUtilization();
 
-		spinTalonFX.optimizeBusUtilization();
-
-		elevatorTalonFX = new TalonFX(41);
+		elevatorTalonFX = new TalonFX(41); //TODO
 		TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
 		elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		elevatorConfig.CurrentLimits.SupplyCurrentLimit = 20;
@@ -99,19 +91,13 @@ public class IndexerHW {
 
 		elevatorTalonFX.optimizeBusUtilization();
 
-		backvatorSparkFlex = new SparkFlex(44, MotorType.kBrushless); // TUNEME: CAN ID
-		SparkFlexConfig backvatorConfig = new SparkFlexConfig();
-		backvatorConfig.smartCurrentLimit(30);
-		backvatorConfig.idleMode(IdleMode.kBrake);
-		backvatorConfig.inverted(false); // TUNEME
-		backvatorSparkFlex.configure(backvatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 	}
 
 	public void sense(IndexerInputs inputs) {
 		if (!Robot.isReal()) return;
 
 		BaseStatusSignal.waitForAll(
-				0, spinVelocity, spinMotorVoltage, spinStatorCurrent, spinSupplyVoltage, spinSupplyCurrent);
+				0, rollersVelocity, rollersMotorVoltage, rollersStatorCurrent, rollersSupplyVoltage, rollersSupplyCurrent);
 		BaseStatusSignal.refreshAll(
 				elevatorVelocity,
 				elevatorMotorVoltage,
@@ -119,28 +105,23 @@ public class IndexerHW {
 				elevatorSupplyVoltage,
 				elevatorSupplyCurrent);
 
-		inputs.spinVelocityRPM = spinVelocity.getValueAsDouble() * 60.0;
-		inputs.spinVoltageVolts = spinMotorVoltage.getValueAsDouble();
-		inputs.spinCurrentAmps = spinStatorCurrent.getValueAsDouble();
-		inputs.spinBusVoltageVolts = spinSupplyVoltage.getValueAsDouble();
-		inputs.spinBusCurrentAmps = spinSupplyCurrent.getValueAsDouble();
+		inputs.rollersVelocityRPM = rollersVelocity.getValueAsDouble() * 60.0;
+		inputs.rollersVoltageVolts = rollersMotorVoltage.getValueAsDouble();
+		inputs.rollersCurrentAmps = rollersStatorCurrent.getValueAsDouble();
+		inputs.rollersBusVoltageVolts = rollersSupplyVoltage.getValueAsDouble();
+		inputs.rollersBusCurrentAmps = rollersSupplyCurrent.getValueAsDouble();
 
 		inputs.elevatorVelocityRPM = elevatorVelocity.getValueAsDouble() * 60.0;
 		inputs.elevatorVoltageVolts = elevatorMotorVoltage.getValueAsDouble();
 		inputs.elevatorCurrentAmps = elevatorStatorCurrent.getValueAsDouble();
 		inputs.elevatorBusVoltageVolts = elevatorSupplyVoltage.getValueAsDouble();
 		inputs.elevatorBusCurrentAmps = elevatorSupplyCurrent.getValueAsDouble();
-
-		inputs.backvatorVoltageVolts = backvatorSparkFlex.getBusVoltage() * backvatorSparkFlex.getAppliedOutput();
-		inputs.backvatorCurrentAmps = backvatorSparkFlex.getOutputCurrent();
-		inputs.backvatorVelocityRPM = backvatorSparkFlex.getEncoder().getVelocity();
 	}
 
-	public void actuate(IndexerInputs inputs, double spinVoltage, double elevatorVoltage, double backvatorVoltage) {
+	public void actuate(IndexerInputs inputs, double spinVoltage, double elevatorVoltage) {
 		if (!Robot.isReal()) return;
 
-		spinTalonFX.setControl(spinControlRequest.withOutput(spinVoltage));
+		rollersTalonFX.setControl(rollersControlRequest.withOutput(spinVoltage));
 		elevatorTalonFX.setControl(elevatorControlRequest.withOutput(elevatorVoltage));
-		backvatorSparkFlex.setVoltage(backvatorVoltage);
 	}
 }

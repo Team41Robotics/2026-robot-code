@@ -7,7 +7,7 @@ import static java.lang.Math.*;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -28,6 +28,9 @@ public class SwerveHW {
 	public static final double DRIVE_kP = 4; // TUNEME. drive PID P
 	public static final double TURN_kP = 20; // TUNEME. turn PID P
 	public static final double TURN_kD = 0.4; // TUNEME. turn PID D
+	public static final double TURN_kS = 0.08; // TUNEME. turn feedforward
+	public static final double TURN_kV = 0.38;
+	public static final double TURN_kA = 0.010; // from plant identification analysis
 
 	public TalonFX driveTalonFX;
 	public TalonFX turnTalonFX;
@@ -40,7 +43,7 @@ public class SwerveHW {
 	public boolean sysIdTurn = false;
 
 	public VelocityVoltage driveControlRequest = new VelocityVoltage(0).withSlot(0);
-	public PositionVoltage turnControlRequest = new PositionVoltage(0).withSlot(0);
+	public MotionMagicExpoVoltage turnControlRequest = new MotionMagicExpoVoltage(0).withSlot(0);
 
 	// Cached StatusSignals — drive motor
 	public StatusSignal<Angle> drivePosition;
@@ -89,6 +92,12 @@ public class SwerveHW {
 		turnConfig.Feedback.SensorToMechanismRatio = 1.0 / (TURN_RATIO * 2 * PI);
 		turnConfig.Slot0.kP = TURN_kP;
 		turnConfig.Slot0.kD = TURN_kD;
+		turnConfig.Slot0.kS = TURN_kS;
+		turnConfig.Slot0.kV = TURN_kV;
+		turnConfig.Slot0.kA = TURN_kA;
+		turnConfig.MotionMagic.MotionMagicCruiseVelocity = 0; // unlimited — expo profile handles it
+		turnConfig.MotionMagic.MotionMagicExpo_kV = TURN_kV;
+		turnConfig.MotionMagic.MotionMagicExpo_kA = TURN_kA;
 		turnConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		turnConfig.CurrentLimits.SupplyCurrentLimit = 20;
 		turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -188,7 +197,7 @@ public class SwerveHW {
 		Logger.recordOutput(logRoot + "/driveNeutralMode", mode.toString());
 	}
 
-	public void actuate(SwerveInputs inputs, double targetVel, double driveFF, double targetAng, double turnFF) {
+	public void actuate(SwerveInputs inputs, double targetVel, double driveFF, double targetAng) {
 		if (!Robot.isReal()) return;
 
 		if (!sysIdDrive && !sysIdTurn) {
@@ -202,8 +211,7 @@ public class SwerveHW {
 
 		if (!sysIdTurn) {
 			turnTalonFX.setControl(turnControlRequest
-					.withPosition(inputs.turnPosRadians + diff)
-					.withFeedForward(turnFF));
+					.withPosition(inputs.turnPosRadians + diff));
 		}
 	}
 }

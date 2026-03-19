@@ -19,18 +19,10 @@ public class SwerveModule {
 	public static final double DRIVE_kA = 0.015;
 	public static final SimpleMotorFeedforward DRIVE_FF = new SimpleMotorFeedforward(DRIVE_kS, DRIVE_kV, DRIVE_kA);
 
-	public static final double TURN_kS = 0.08; // TUNEME. turn feedforward
-	public static final double TURN_kV = 0.38;
-	public static final double TURN_kA = 0.;
-	public static final SimpleMotorFeedforward TURN_FF = new SimpleMotorFeedforward(TURN_kS, TURN_kV, TURN_kA);
-
 	public static final double MAX_VEL = 6.0; // TUNEME. max wheel velocity (m/s)
 
 	public static final Constraints DRIVE_CONSTRAINTS = new Constraints(10, 1e9); // TUNEME
 	public static TrapezoidProfile driveProfile = new TrapezoidProfile(DRIVE_CONSTRAINTS);
-
-	public static final Constraints TURN_CONSTRAINTS = new Constraints(20, 80); // TUNEME
-	public static TrapezoidProfile turnProfile = new TrapezoidProfile(TURN_CONSTRAINTS);
 
 	public SwerveHW hw = new SwerveHW();
 	public SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
@@ -42,7 +34,6 @@ public class SwerveModule {
 	public double drivePos;
 
 	public SwerveModuleState targetState = new SwerveModuleState();
-	public State setpointAng = new State();
 	public double setpointVel = 0;
 
 	public void init(SwerveModuleConfiguration config) {
@@ -50,7 +41,6 @@ public class SwerveModule {
 
 		hw.init(config);
 		sense();
-		setpointAng = new State(inputs.turnAbsPosRadians, inputs.turnVelRadiansPerSec);
 	}
 
 	public void sense() {
@@ -64,7 +54,6 @@ public class SwerveModule {
 
 		if (robot.isDisabled()) {
 			targetState = state;
-			setpointAng = new State(inputs.turnAbsPosRadians, inputs.turnVelRadiansPerSec);
 			setpointVel = 0;
 		}
 	}
@@ -80,26 +69,21 @@ public class SwerveModule {
 	public void actuate() {
 		targetState.optimize(new Rotation2d(inputs.turnAbsPosRadians));
 		double targetAng = targetState.angle.getRadians();
-		targetAng = setpointAng.position + angleModulus(targetAng - setpointAng.position);
-		double targetVel = setpointVel * cos(angle - targetAng);
 
-		State newSetpointAng = turnProfile.calculate(LOOP_PERIOD, setpointAng, new State(targetAng, 0));
-		double turnFF = TURN_FF.calculateWithVelocities(setpointAng.velocity, newSetpointAng.velocity);
-		setpointAng = newSetpointAng;
+		// cos² correction: reduce drive speed when module is misaligned, preserve sign
+		double cosErr = cos(angleModulus(angle - targetAng));
+		double targetVel = targetState.speedMetersPerSecond * cosErr * abs(cosErr);
 
 		double newSetpointVel =
 				driveProfile.calculate(LOOP_PERIOD, new State(setpointVel, 0), new State(targetVel, 0)).position;
 		double driveFF = DRIVE_FF.calculateWithVelocities(setpointVel, newSetpointVel);
 		setpointVel = newSetpointVel;
 
-		hw.actuate(inputs, setpointVel, driveFF, setpointAng.position, turnFF);
+		hw.actuate(inputs, setpointVel, driveFF, targetAng);
 
 		Logger.recordOutput(hw.logRoot + "/setpointVelMetersPerSec", setpointVel);
 		Logger.recordOutput(hw.logRoot + "/targetVelMetersPerSec", targetVel);
 		Logger.recordOutput(hw.logRoot + "/targetAngRadians", angleModulus(targetAng));
-		Logger.recordOutput(hw.logRoot + "/setpointAngRadians", angleModulus(setpointAng.position));
-		Logger.recordOutput(hw.logRoot + "/setpointAngVelRadiansPerSec", setpointAng.velocity);
 		Logger.recordOutput(hw.logRoot + "/driveFFVolts", driveFF);
-		Logger.recordOutput(hw.logRoot + "/turnFFVolts", turnFF);
 	}
 }

@@ -14,9 +14,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule {
-	public static final double DRIVE_kS = 0.093052; // TUNEME. feedforward
-	public static final double DRIVE_kV = 1.8968;
-	public static final double DRIVE_kA = 0.015;
+	public static final double DRIVE_kS = 0.975; // TUNEME. feedforward
+	public static final double DRIVE_kV = 2.010;
+	public static final double DRIVE_kA = 0.144;
 	public static final SimpleMotorFeedforward DRIVE_FF = new SimpleMotorFeedforward(DRIVE_kS, DRIVE_kV, DRIVE_kA);
 
 	public static final double MAX_VEL = 6.0; // TUNEME. max wheel velocity (m/s)

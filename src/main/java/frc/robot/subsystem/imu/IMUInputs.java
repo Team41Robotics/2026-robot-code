@@ -9,4 +9,5 @@ public class IMUInputs {
 	public double yawRadians;
 	public double pitchRadians;
 	public double rollRadians;
+	public double yawTsSec;
 }

@@ -10,20 +10,29 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.PersistMode;
+import com.revrobotics.REVLibError;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Robot;
 
 public class IndexerHW {
+	// Spark heartbeat tuning (competition-safe): poll 5–20 Hz, timeout 100–200 ms
+	public static final double SPARK_HEARTBEAT_PERIOD_Sec = 0.10;
+
 	public TalonFX spinTalonFX;
 	public TalonFX elevatorTalonFX;
 	public SparkFlex backvatorSparkFlex;
+
+	private double backvatorLastHeartbeatPollTimeSec = Double.NEGATIVE_INFINITY;
+	private double backvatorLastGoodTimeSec = Double.NEGATIVE_INFINITY;
+	private int backvatorLastErrorCode = 0;
 
 	public VoltageOut spinControlRequest = new VoltageOut(0);
 	public VoltageOut elevatorControlRequest = new VoltageOut(0);
@@ -42,6 +51,10 @@ public class IndexerHW {
 
 	public void init() {
 		if (!Robot.isReal()) return;
+
+		double now = Timer.getTimestamp();
+		backvatorLastHeartbeatPollTimeSec = now;
+		backvatorLastGoodTimeSec = now;
 
 		spinTalonFX = new TalonFX(43, driveBus);
 		TalonFXConfiguration spinConfig = new TalonFXConfiguration();
@@ -110,6 +123,17 @@ public class IndexerHW {
 	public void sense(IndexerInputs inputs) {
 		if (!Robot.isReal()) return;
 
+		double now = Timer.getTimestamp();
+		if ((now - backvatorLastHeartbeatPollTimeSec) >= SPARK_HEARTBEAT_PERIOD_Sec) {
+			backvatorLastHeartbeatPollTimeSec = now;
+			backvatorSparkFlex.getMotorTemperature();
+			REVLibError err = backvatorSparkFlex.getLastError();
+			backvatorLastErrorCode = err.value;
+			if (err == REVLibError.kOk) {
+				backvatorLastGoodTimeSec = now;
+			}
+		}
+
 		BaseStatusSignal.waitForAll(
 				0, spinVelocity, spinMotorVoltage, spinStatorCurrent, spinSupplyVoltage, spinSupplyCurrent);
 		BaseStatusSignal.refreshAll(
@@ -124,16 +148,21 @@ public class IndexerHW {
 		inputs.spinCurrentAmps = spinStatorCurrent.getValueAsDouble();
 		inputs.spinBusVoltageVolts = spinSupplyVoltage.getValueAsDouble();
 		inputs.spinBusCurrentAmps = spinSupplyCurrent.getValueAsDouble();
+		inputs.spinTsSec = spinVelocity.getTimestamp().getTime();
 
 		inputs.elevatorVelocityRPM = elevatorVelocity.getValueAsDouble() * 60.0;
 		inputs.elevatorVoltageVolts = elevatorMotorVoltage.getValueAsDouble();
 		inputs.elevatorCurrentAmps = elevatorStatorCurrent.getValueAsDouble();
 		inputs.elevatorBusVoltageVolts = elevatorSupplyVoltage.getValueAsDouble();
 		inputs.elevatorBusCurrentAmps = elevatorSupplyCurrent.getValueAsDouble();
+		inputs.elevatorTsSec = elevatorVelocity.getTimestamp().getTime();
 
 		inputs.backvatorVoltageVolts = backvatorSparkFlex.getBusVoltage() * backvatorSparkFlex.getAppliedOutput();
 		inputs.backvatorCurrentAmps = backvatorSparkFlex.getOutputCurrent();
 		inputs.backvatorVelocityRPM = backvatorSparkFlex.getEncoder().getVelocity();
+		inputs.backvatorLastGoodTimeSec = backvatorLastGoodTimeSec;
+		inputs.backvatorLastHeartbeatPollTimeSec = backvatorLastHeartbeatPollTimeSec;
+		inputs.backvatorLastErrorCode = backvatorLastErrorCode;
 	}
 
 	public void actuate(IndexerInputs inputs, double spinVoltage, double elevatorVoltage, double backvatorVoltage) {

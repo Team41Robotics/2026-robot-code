@@ -11,6 +11,7 @@ public class ShooterInputs {
 	public double turretBusVoltageVolts;
 	public double turretBusCurrentAmps;
 	public boolean turretLimitSwitchOn;
+	public double turretTsSec;
 
 	public double hoodPosRadians;
 	public double hoodVelRadiansPerSec;
@@ -19,10 +20,12 @@ public class ShooterInputs {
 	public double hoodBusVoltageVolts;
 	public double hoodBusCurrentAmps;
 	public boolean isHoodLimitSwitchOn;
+	public double hoodTsSec;
 
 	public double flywheelVelocityRPM;
 	public double flywheelVoltageVolts;
 	public double flywheelCurrentAmps;
 	public double flywheelBusVoltageVolts;
 	public double flywheelBusCurrentAmps;
+	public double flywheelTsSec;
 }

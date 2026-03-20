@@ -303,6 +303,7 @@ public class ShooterHW {
 		inputs.turretCurrentAmps = turretStatorCurrent.getValueAsDouble();
 		inputs.turretBusVoltageVolts = turretSupplyVoltage.getValueAsDouble();
 		inputs.turretBusCurrentAmps = turretSupplyCurrent.getValueAsDouble();
+		inputs.turretTsSec = turretPosition.getTimestamp().getTime();
 
 		inputs.isHoodLimitSwitchOn = !hoodLimitSwitch.get();
 		inputs.hoodPosRadians = hoodPosition.getValueAsDouble();
@@ -316,12 +317,14 @@ public class ShooterHW {
 		inputs.hoodCurrentAmps = hoodStatorCurrent.getValueAsDouble();
 		inputs.hoodBusVoltageVolts = hoodSupplyVoltage.getValueAsDouble();
 		inputs.hoodBusCurrentAmps = hoodSupplyCurrent.getValueAsDouble();
+		inputs.hoodTsSec = hoodPosition.getTimestamp().getTime();
 
 		inputs.flywheelVelocityRPM = flywheelVelocity.getValueAsDouble() * 60;
 		inputs.flywheelVoltageVolts = flywheelMotorVoltage.getValueAsDouble();
 		inputs.flywheelCurrentAmps = flywheelStatorCurrent.getValueAsDouble();
 		inputs.flywheelBusVoltageVolts = flywheelSupplyVoltage.getValueAsDouble();
 		inputs.flywheelBusCurrentAmps = flywheelSupplyCurrent.getValueAsDouble();
+		inputs.flywheelTsSec = flywheelVelocity.getTimestamp().getTime();
 	}
 
 	public void actuate(ShooterInputs inputs, double turretPosition, double hoodPosition, double flywheelRPM) {
@@ -331,8 +334,8 @@ public class ShooterHW {
 
 		if (!Robot.isReal()) return;
 
-		turretTalonFX.setControl(turretControlRequest.withPosition(turretPosition));
-		hoodTalonFX.setControl(hoodControlRequest.withPosition(hoodPosition));
+		// turretTalonFX.setControl(turretControlRequest.withPosition(turretPosition));
+		// hoodTalonFX.setControl(hoodControlRequest.withPosition(hoodPosition));
 		if (!sysIdFlywheel) flywheelTalonFX.setControl(flywheelControlRequest.withVelocity(flywheelRPM / 60.0));
 	}
 }

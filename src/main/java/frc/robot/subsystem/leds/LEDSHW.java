@@ -67,6 +67,7 @@ public class LEDSHW {
 		inputs.fiveVRailVoltageVolts = fiveVRailVoltage.getValueAsDouble();
 		inputs.boardTempCelsius = deviceTemp.getValueAsDouble();
 		inputs.vBatModulation = vBatModulation.getValueAsDouble();
+		inputs.tsSec = supplyVoltage.getTimestamp().getTime();
 	}
 
 	public void actuate(LEDSInputs inputs, ControlRequest request) {

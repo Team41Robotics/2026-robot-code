@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.commands.MatchAlerts;
 import frc.robot.commands.PreMatchCheck;
 import frc.robot.commands.autos.Autos;
 import frc.robot.commands.autos.StupidShootAuto;
@@ -115,6 +116,7 @@ public class RobotContainer {
 
 		SmartDashboard.putData("PreMatchCheck", new PreMatchCheck());
 		CommandScheduler.getInstance().schedule(new PreMatchCheck());
+		CommandScheduler.getInstance().schedule(new MatchAlerts());
 
 		// controls.intake().whileTrue(new IntakeUp());
 		controls.shoot().whileTrue(new RunIndexer());

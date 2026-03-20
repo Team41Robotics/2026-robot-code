@@ -51,5 +51,6 @@ public class IMUPigeonHW {
 		inputs.yawRadians = yawSignal.getValueAsDouble() / 180 * PI;
 		inputs.pitchRadians = pitchSignal.getValueAsDouble() / 180 * PI;
 		inputs.rollRadians = rollSignal.getValueAsDouble() / 180 * PI;
+		inputs.yawTsSec = yawSignal.getTimestamp().getTime();
 	}
 }

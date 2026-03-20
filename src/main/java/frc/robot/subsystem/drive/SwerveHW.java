@@ -63,6 +63,7 @@ public class SwerveHW {
 
 	// Cached StatusSignals — CANcoder
 	public StatusSignal<Angle> turnAbsolutePosition;
+	public StatusSignal<Voltage> turnAbsoluteSupplyVoltage;
 
 	public void init(SwerveModuleConfiguration config) {
 		logRoot = "Swerve/" + config.name;
@@ -128,6 +129,7 @@ public class SwerveHW {
 		turnStatorCurrent = turnTalonFX.getStatorCurrent(false);
 
 		turnAbsolutePosition = turnAbsoluteEncoder.getAbsolutePosition(false);
+		turnAbsoluteSupplyVoltage = turnAbsoluteEncoder.getSupplyVoltage(false);
 
 		// Set update frequencies
 		drivePosition.setUpdateFrequency(50);
@@ -145,6 +147,7 @@ public class SwerveHW {
 		turnStatorCurrent.setUpdateFrequency(50);
 
 		turnAbsolutePosition.setUpdateFrequency(50);
+		turnAbsoluteSupplyVoltage.setUpdateFrequency(50);
 
 		// Optimize bus utilization — disable signals we don't use
 		driveTalonFX.optimizeBusUtilization();
@@ -169,7 +172,8 @@ public class SwerveHW {
 				turnVelocity,
 				turnMotorVoltage,
 				turnStatorCurrent,
-				turnAbsolutePosition);
+				turnAbsolutePosition,
+				turnAbsoluteSupplyVoltage);
 
 		inputs.drivePosMeters = drivePosition.getValueAsDouble();
 		inputs.driveVelMetersPerSec = driveVelocity.getValueAsDouble();
@@ -178,6 +182,7 @@ public class SwerveHW {
 		inputs.driveBusCurrentAmps = driveSupplyCurrent.getValueAsDouble();
 		inputs.driveVoltageVolts = driveMotorVoltage.getValueAsDouble();
 		inputs.driveCurrentAmps = driveStatorCurrent.getValueAsDouble();
+		inputs.driveTsSec = drivePosition.getTimestamp().getTime();
 
 		inputs.turnBusVoltageVolts = turnSupplyVoltage.getValueAsDouble();
 		inputs.turnBusCurrentAmps = turnSupplyCurrent.getValueAsDouble();
@@ -186,9 +191,12 @@ public class SwerveHW {
 
 		inputs.turnVoltageVolts = turnMotorVoltage.getValueAsDouble();
 		inputs.turnCurrentAmps = turnStatorCurrent.getValueAsDouble();
+		inputs.turnTsSec = turnPosition.getTimestamp().getTime();
 
 		inputs.turnAbsPosRadians = turnAbsolutePosition.getValueAsDouble() * 2 * PI;
 		inputs.turnAbsPosRadians = angleModulus(inputs.turnAbsPosRadians - angleOffset);
+		inputs.turnAbsBusVoltageVolts = turnAbsoluteSupplyVoltage.getValueAsDouble();
+		inputs.turnAbsTsSec = turnAbsolutePosition.getTimestamp().getTime();
 	}
 
 	public void setDriveNeutralMode(NeutralModeValue mode) {
@@ -210,8 +218,7 @@ public class SwerveHW {
 		Logger.recordOutput(logRoot + "/turnErrorRadians", diff);
 
 		if (!sysIdTurn) {
-			turnTalonFX.setControl(turnControlRequest
-					.withPosition(inputs.turnPosRadians + diff));
+			turnTalonFX.setControl(turnControlRequest.withPosition(inputs.turnPosRadians + diff));
 		}
 	}
 }

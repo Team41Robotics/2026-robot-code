@@ -9,4 +9,5 @@ public class LEDSInputs {
 	public double fiveVRailVoltageVolts;
 	public double boardTempCelsius;
 	public double vBatModulation;
+	public double tsSec;
 }

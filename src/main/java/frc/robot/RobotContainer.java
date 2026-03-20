@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.MatchAlerts;
 import frc.robot.commands.PreMatchCheck;
 import frc.robot.commands.autos.Autos;
-import frc.robot.commands.autos.StupidShootAuto;
+import frc.robot.choreo.ChoreoTraj;
 import frc.robot.commands.drive.DriveLock;
 import frc.robot.commands.drive.DrivePIDTestCommand;
 import frc.robot.commands.drive.FieldHeadingDrive;
@@ -112,8 +112,6 @@ public class RobotContainer {
 		SmartDashboard.putData("DriveLock", new DriveLock());
 		SmartDashboard.putData("PrintSwervePos", new PrintSwervePos());
 
-		SmartDashboard.putData("StupidShootAuto", new StupidShootAuto());
-
 		SmartDashboard.putData("PreMatchCheck", new PreMatchCheck());
 		CommandScheduler.getInstance().schedule(new PreMatchCheck());
 		CommandScheduler.getInstance().schedule(new MatchAlerts());
@@ -158,14 +156,9 @@ public class RobotContainer {
 						indexer));
 
 		Autos.init();
-		autoChooser.addRoutine("TestPath", Autos::testPath);
-		autoChooser.addRoutine("StupidShootAuto", Autos::stupidShootAuto);
-		// autoChooser.addRoutine("SimpleDepotAuto", Autos::simpleDepotAuto);
-		autoChooser.addRoutine("DepotAuto", Autos::depotAuto);
-		autoChooser.addRoutine("OutpostAuto_1", Autos::outpostAuto1);
-		autoChooser.addRoutine("OutpostAuto_2", Autos::outpostAuto2);
-		autoChooser.addRoutine("TrenchAuto", Autos::trenchAuto);
-		autoChooser.addRoutine("MiddletoHP", Autos::middleToHP);
+		ChoreoTraj.ALL_TRAJECTORIES.forEach((name, traj) -> {
+			autoChooser.addRoutine(name, () -> Autos.buildAuto(traj));
+		});
 
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());
 		SmartDashboard.putData("Field", field);
@@ -217,19 +210,19 @@ public class RobotContainer {
 		updateMatchPeriod();
 
 		t = RobotController.getFPGATime();
-		drive.actuate();
+		// drive.actuate();
 		Logger.recordOutput("Timing/Drive_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();
-		// intake.actuate();
+		intake.actuate();
 		Logger.recordOutput("Timing/Intake_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();
-		// shooter.actuate();
+		shooter.actuate();
 		Logger.recordOutput("Timing/Shooter_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();
-		// indexer.actuate();
+		indexer.actuate();
 		Logger.recordOutput("Timing/Indexer_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();

@@ -99,13 +99,7 @@ public class MatchAlerts extends Command {
 	 * Once a device has ever been down, the error alert is latched for the rest of the program run.
 	 * Both alerts include cumulative downtime.
 	 */
-	static void check(
-			Alert warnAlert,
-			Alert errorAlert,
-			String name,
-			int canId,
-			double[] values,
-			double[] tsSec) {
+	static void check(Alert warnAlert, Alert errorAlert, String name, int canId, double[] values, double[] tsSec) {
 		double now = Timer.getTimestamp();
 
 		long h = 0xcbf29ce484222325L; // FNV-1a 64-bit offset
@@ -163,19 +157,14 @@ public class MatchAlerts extends Command {
 		if (downNow) {
 			double currentDown = now - downStartTimeSec[canId];
 			warnAlert.setText(
-					name
-							+ " is DOWN"
-							+ String.format(" (down %.2fs total)", totalDownSec[canId] + currentDown));
+					name + " is DOWN" + String.format(" (down %.2fs total)", totalDownSec[canId] + currentDown));
 			warnAlert.set(true);
 		}
 
 		if (hasDisconnectedOnce[canId]) {
 			double everDown = totalEverDownSec[canId];
 			if (downNow) everDown += (now - downStartTimeSec[canId]);
-			errorAlert.setText(
-					name
-							+ " has disconnected"
-							+ String.format(" (down %.2fs total)", everDown));
+			errorAlert.setText(name + " has disconnected" + String.format(" (down %.2fs total)", everDown));
 			errorAlert.set(true);
 		} else {
 			errorAlert.set(false);
@@ -228,7 +217,8 @@ public class MatchAlerts extends Command {
 				swerveSEEncoderError,
 				"Swerve SE CANcoder (12)",
 				12,
-				new double[] {drive.modules[3].inputs.turnAbsBusVoltageVolts, drive.modules[3].inputs.turnAbsPosRadians},
+				new double[] {drive.modules[3].inputs.turnAbsBusVoltageVolts, drive.modules[3].inputs.turnAbsPosRadians
+				},
 				new double[] {drive.modules[3].inputs.turnAbsTsSec});
 		check(
 				swerveSEDrive,
@@ -264,7 +254,8 @@ public class MatchAlerts extends Command {
 				swerveSWEncoderError,
 				"Swerve SW CANcoder (15)",
 				15,
-				new double[] {drive.modules[2].inputs.turnAbsBusVoltageVolts, drive.modules[2].inputs.turnAbsPosRadians},
+				new double[] {drive.modules[2].inputs.turnAbsBusVoltageVolts, drive.modules[2].inputs.turnAbsPosRadians
+				},
 				new double[] {drive.modules[2].inputs.turnAbsTsSec});
 		check(
 				swerveSWTurn,
@@ -300,7 +291,8 @@ public class MatchAlerts extends Command {
 				swerveNWEncoderError,
 				"Swerve NW CANcoder (18)",
 				18,
-				new double[] {drive.modules[0].inputs.turnAbsBusVoltageVolts, drive.modules[0].inputs.turnAbsPosRadians},
+				new double[] {drive.modules[0].inputs.turnAbsBusVoltageVolts, drive.modules[0].inputs.turnAbsPosRadians
+				},
 				new double[] {drive.modules[0].inputs.turnAbsTsSec});
 		check(
 				swerveNWDrive,
@@ -336,7 +328,8 @@ public class MatchAlerts extends Command {
 				swerveNEEncoderError,
 				"Swerve NE CANcoder (21)",
 				21,
-				new double[] {drive.modules[1].inputs.turnAbsBusVoltageVolts, drive.modules[1].inputs.turnAbsPosRadians},
+				new double[] {drive.modules[1].inputs.turnAbsBusVoltageVolts, drive.modules[1].inputs.turnAbsPosRadians
+				},
 				new double[] {drive.modules[1].inputs.turnAbsTsSec});
 		check(
 				swerveNETurn,

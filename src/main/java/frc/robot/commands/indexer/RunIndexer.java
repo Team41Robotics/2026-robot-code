@@ -12,24 +12,35 @@ public class RunIndexer extends Command {
 	public double spinVoltage;
 	public double elevatorVoltage;
 	public double backvatorVoltage;
+	public boolean waitForOnTarget;
 
 	public RunIndexer() {
-		this(DEFAULT_SPIN_VOLTAGE, DEFAULT_ELEVATOR_VOLTAGE, DEFAULT_BACKVATOR_VOLTAGE);
+		this(DEFAULT_SPIN_VOLTAGE, DEFAULT_ELEVATOR_VOLTAGE, DEFAULT_BACKVATOR_VOLTAGE, true);
 	}
 
 	public RunIndexer(double spinVoltage, double elevatorVoltage, double backvatorVoltage) {
+		this(spinVoltage, elevatorVoltage, backvatorVoltage, false);
+	}
+
+	public RunIndexer(double spinVoltage, double elevatorVoltage, double backvatorVoltage, boolean waitForOnTarget) {
 		this.spinVoltage = spinVoltage;
 		this.elevatorVoltage = elevatorVoltage;
 		this.backvatorVoltage = backvatorVoltage;
+		this.waitForOnTarget = waitForOnTarget;
 		addRequirements(indexer);
 	}
 
 	@Override
-	public void initialize() {
-		// FIXME shoot only when on target?
-		indexer.targetSpinVoltage = spinVoltage;
-		indexer.targetElevatorVoltage = elevatorVoltage;
-		indexer.targetBackvatorVoltage = backvatorVoltage;
+	public void execute() {
+		if (!waitForOnTarget || shooter.onTarget) {
+			indexer.targetSpinVoltage = spinVoltage;
+			indexer.targetElevatorVoltage = elevatorVoltage;
+			indexer.targetBackvatorVoltage = backvatorVoltage;
+		} else {
+			indexer.targetSpinVoltage = 0;
+			indexer.targetElevatorVoltage = 0;
+			indexer.targetBackvatorVoltage = 0;
+		}
 	}
 
 	@Override

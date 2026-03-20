@@ -93,15 +93,10 @@ public class Shooter extends SubsystemBase {
 		Logger.recordOutput("/Shooter/turretProfileVelRadiansPerSec", turretSetpoint.velocity);
 		Logger.recordOutput("/Shooter/hoodProfileVelRadiansPerSec", hoodSetpoint.velocity);
 
-		if (abs(inputs.turretPosRadians - targetTurretPos) < TURRET_POS_THRES
+		onTarget = abs(inputs.turretPosRadians - targetTurretPos) < TURRET_POS_THRES
 				&& abs(inputs.hoodPosRadians - targetHoodPos) < HOOD_POS_THRES
-				&& abs(inputs.flywheelVelocityRPM - targetFlywheelRPM) < FLYWHEEL_THRES) {
-			onTarget = true;
-		} else if (targetFlywheelRPM < FLYWHEEL_THRES) {
-			onTarget = false;
-		} else {
-			onTarget = false;
-		}
+				&& abs(inputs.flywheelVelocityRPM - targetFlywheelRPM) < FLYWHEEL_THRES;
+		Logger.recordOutput("/Shooter/onTarget", onTarget);
 		hw.actuate(inputs, turretSetpoint.position, hoodSetpoint.position, targetFlywheelRPM);
 	}
 }

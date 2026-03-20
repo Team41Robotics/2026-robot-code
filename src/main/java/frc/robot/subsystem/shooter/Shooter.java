@@ -59,7 +59,7 @@ public class Shooter extends SubsystemBase {
 			targetHoodPos = inputs.hoodPosRadians;
 			targetTurretPos = inputs.turretPosRadians;
 		}
-		if (!zeroed && robot.isTeleopEnabled()) {
+		if (!zeroed && robot.isTeleopEnabled() && !(getCurrentCommand() instanceof ShooterStartup)) {
 			CommandScheduler.getInstance().schedule(new ShooterStartup());
 		}
 	}
@@ -98,7 +98,7 @@ public class Shooter extends SubsystemBase {
 				&& abs(inputs.flywheelVelocityRPM - targetFlywheelRPM) < FLYWHEEL_THRES) {
 			onTarget = true;
 		} else if (targetFlywheelRPM < FLYWHEEL_THRES) {
-			onTarget = true;
+			onTarget = false;
 		} else {
 			onTarget = false;
 		}

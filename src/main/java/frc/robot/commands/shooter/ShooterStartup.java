@@ -30,6 +30,11 @@ public class ShooterStartup extends Command {
 	}
 
 	@Override
+	public InterruptionBehavior getInterruptionBehavior() {
+		return InterruptionBehavior.kCancelIncoming;
+	}
+
+	@Override
 	public void end(boolean interrupted) {
 		if (!interrupted) {
 			shooter.zeroed = true;

@@ -137,23 +137,17 @@ public class RobotContainer {
 							shooter.targetHoodPos = shooter.inputs.hoodPosRadians;
 							indexer.targetSpinVoltage = 0;
 							indexer.targetElevatorVoltage = 0;
+							indexer.targetBackvatorVoltage = 0;
 						},
 						shooter,
 						indexer));
 		controls.eStopAll()
 				.whileTrue(new RunCommand(
 						() -> {
-							shooter.targetFlywheelRPM = 0;
-							shooter.targetTurretPos = shooter.inputs.turretPosRadians;
-							shooter.targetHoodPos = shooter.inputs.hoodPosRadians;
 							intake.targetJointVoltage = 0;
 							intake.targetIntakeVoltage = 0;
-							indexer.targetSpinVoltage = 0;
-							indexer.targetElevatorVoltage = 0;
 						},
-						shooter,
-						intake,
-						indexer));
+						intake));
 
 		Autos.init();
 		ChoreoTraj.ALL_TRAJECTORIES.forEach((name, traj) -> {

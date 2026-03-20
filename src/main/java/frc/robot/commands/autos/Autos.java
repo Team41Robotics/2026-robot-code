@@ -88,9 +88,11 @@ public class Autos {
 					if (isOnCloseSide() && shooter.onTarget) {
 						indexer.targetSpinVoltage = RunIndexer.DEFAULT_SPIN_VOLTAGE;
 						indexer.targetElevatorVoltage = RunIndexer.DEFAULT_ELEVATOR_VOLTAGE;
+						indexer.targetBackvatorVoltage = RunIndexer.DEFAULT_BACKVATOR_VOLTAGE;
 					} else {
 						indexer.targetSpinVoltage = 0;
 						indexer.targetElevatorVoltage = 0;
+						indexer.targetBackvatorVoltage = 0;
 					}
 				},
 				indexer);
@@ -100,8 +102,7 @@ public class Autos {
 		AutoRoutine routine = factory.newRoutine(choreoTraj.name());
 		AutoTrajectory traj = choreoTraj.asAutoTraj(routine);
 
-		routine.active().onTrue(new ShooterStartup());
-		routine.active().onTrue(new ShootTeleop());
+		routine.active().onTrue(Commands.sequence(new ShooterStartup(), new ShootTeleop()));
 		routine.active().onTrue(new IntakeDown());
 		routine.active().onTrue(traj.cmd());
 		routine.active().onTrue(runIndexerOnCloseSide());

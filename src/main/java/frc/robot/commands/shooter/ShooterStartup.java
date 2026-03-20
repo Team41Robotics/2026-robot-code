@@ -11,6 +11,7 @@ public class ShooterStartup extends Command {
 
 	@Override
 	public void execute() {
+		Targetting.loadData();
 		shooter.targetFlywheelRPM = 0;
 	}
 

@@ -24,23 +24,17 @@ public class PreMatchCheck extends Command {
 	public static Alert[] visionOk = new Alert[2];
 	public static Alert[] visionFail = new Alert[2];
 
-	public static Alert turretOk = new Alert("PreMatch", "", AlertType.kInfo);
-	public static Alert turretFail = new Alert("PreMatch", "", AlertType.kError);
-
-	public static Alert hoodOk = new Alert("PreMatch", "", AlertType.kInfo);
-	public static Alert hoodFail = new Alert("PreMatch", "", AlertType.kError);
-
 	public static Alert flywheelOk = new Alert("PreMatch", "", AlertType.kInfo);
 	public static Alert flywheelFail = new Alert("PreMatch", "", AlertType.kError);
 
-	public static Alert intakeJointOk = new Alert("PreMatch", "", AlertType.kInfo);
-	public static Alert intakeJointFail = new Alert("PreMatch", "", AlertType.kError);
+	public static Alert intakeExtOk = new Alert("PreMatch", "", AlertType.kInfo);
+	public static Alert intakeExtFail = new Alert("PreMatch", "", AlertType.kError);
 
 	public static Alert intakeRollerOk = new Alert("PreMatch", "", AlertType.kInfo);
 	public static Alert intakeRollerFail = new Alert("PreMatch", "", AlertType.kError);
 
-	public static Alert indexerSpinOk = new Alert("PreMatch", "", AlertType.kInfo);
-	public static Alert indexerSpinFail = new Alert("PreMatch", "", AlertType.kError);
+	public static Alert indexerRollersOk = new Alert("PreMatch", "", AlertType.kInfo);
+	public static Alert indexerRollersFail = new Alert("PreMatch", "", AlertType.kError);
 
 	public static Alert indexerElevOk = new Alert("PreMatch", "", AlertType.kInfo);
 	public static Alert indexerElevFail = new Alert("PreMatch", "", AlertType.kError);
@@ -99,14 +93,14 @@ public class PreMatchCheck extends Command {
 					check(visionOk[i], visionFail[i], "Vision " + vision.cameras[i].name, vision.inputs[i].isConnected);
 		}
 
-		allPassed &= check(turretOk, turretFail, "Shooter Turret", shooter.inputs.turretBusVoltageVolts > 0);
-		allPassed &= check(hoodOk, hoodFail, "Shooter Hood", shooter.inputs.hoodBusVoltageVolts > 0);
 		allPassed &= check(flywheelOk, flywheelFail, "Shooter Flywheel", shooter.inputs.flywheelBusVoltageVolts > 0);
 
-		allPassed &= check(intakeJointOk, intakeJointFail, "Intake Joint", intake.inputs.jointBusVoltageVolts > 0);
+		allPassed &=
+				check(intakeExtOk, intakeExtFail, "Intake Extension", intake.inputs.extensionBusVoltageVolts > 0);
 		allPassed &= check(intakeRollerOk, intakeRollerFail, "Intake Roller", intake.inputs.intakeBusVoltageVolts > 0);
 
-		allPassed &= check(indexerSpinOk, indexerSpinFail, "Indexer Spin", indexer.inputs.spinBusVoltageVolts > 0);
+		allPassed &=
+				check(indexerRollersOk, indexerRollersFail, "Indexer Rollers", indexer.inputs.rollersBusVoltageVolts > 0);
 		allPassed &=
 				check(indexerElevOk, indexerElevFail, "Indexer Elevator", indexer.inputs.elevatorBusVoltageVolts > 0);
 

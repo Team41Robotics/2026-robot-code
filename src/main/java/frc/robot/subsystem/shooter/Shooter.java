@@ -10,8 +10,6 @@ public class Shooter extends SubsystemBase {
 	public ShooterHW hw = new ShooterHW();
 	public ShooterInputsAutoLogged inputs = new ShooterInputsAutoLogged();
 
-	public static final double FLYWHEEL_THRES = 100;
-
 	public double targetFlywheelRPM = 0;
 	public boolean onTarget = false;
 
@@ -32,11 +30,6 @@ public class Shooter extends SubsystemBase {
 	public void actuate() {
 		Logger.recordOutput("/Shooter/targetFlywheelRPM", targetFlywheelRPM);
 		
-		if (targetFlywheelRPM < FLYWHEEL_THRES) {
-			onTarget = true;
-		} else {
-			onTarget = false;
-		}
 		hw.actuate(inputs, targetFlywheelRPM);
 	}
 }

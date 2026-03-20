@@ -25,14 +25,9 @@ import frc.robot.commands.drive.TurnPIDTestCommand;
 import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.indexer.StopIndexer;
 import frc.robot.commands.intake.IntakeMove;
-import frc.robot.commands.intake.IntakeUp;
-import frc.robot.commands.shooter.HoodZero;
-import frc.robot.commands.shooter.ManualShoot;
-import frc.robot.commands.shooter.ShootOnTheFly;
-import frc.robot.commands.shooter.ShootTeleop;
+import frc.robot.commands.shooter.ShootAtTarget;
 import frc.robot.commands.shooter.ShooterIdle;
 import frc.robot.commands.shooter.ShooterStartup;
-import frc.robot.commands.shooter.StaticShootAtTarget;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.JoystickControls;
 import frc.robot.subsystem.drive.SwerveDrive;
@@ -83,7 +78,7 @@ public class RobotContainer {
 		vision.init();
 
 		drive.setDefaultCommand(new FieldOrientedDrive());
-		shooter.setDefaultCommand(new ShootTeleop());
+		shooter.setDefaultCommand(new ShooterIdle());
 		intake.setDefaultCommand(new IntakeMove());
 		indexer.setDefaultCommand(new RunIndexer(0.5, 0));
 
@@ -96,17 +91,14 @@ public class RobotContainer {
 		SmartDashboard.putData("FieldHeadingDrive", new FieldHeadingDrive());
 		SmartDashboard.putData("FieldSnakeDrive", new FieldSnakeDrive());
 
-		SmartDashboard.putData("IntakeDown", new IntakeMove());
-		SmartDashboard.putData("IntakeUp", new IntakeUp());
+		SmartDashboard.putData("IntakeMove", new IntakeMove());
 
 		SmartDashboard.putData("RunIndexer", new RunIndexer());
 		SmartDashboard.putData("StopIndexer", new StopIndexer());
 
 		SmartDashboard.putData("ShooterIdle", new ShooterIdle());
 		SmartDashboard.putData("ShooterStartup", new ShooterStartup());
-		SmartDashboard.putData("StaticShootAtTarget", new StaticShootAtTarget());
-		SmartDashboard.putData("ShootOnTheFly", new ShootOnTheFly());
-		SmartDashboard.putData("ManualShoot", new ManualShoot());
+		SmartDashboard.putData("ShootAtHub", new ShootAtTarget(FieldConstants.Hub.innerCenterPoint.toTranslation2d()));
 
 		SmartDashboard.putData("DriveLock", new DriveLock());
 		SmartDashboard.putData("PrintSwervePos", new PrintSwervePos());
@@ -116,16 +108,14 @@ public class RobotContainer {
 		SmartDashboard.putData("PreMatchCheck", new PreMatchCheck());
 		CommandScheduler.getInstance().schedule(new PreMatchCheck());
 
-		// controls.intake().whileTrue(new IntakeUp());
 		controls.shoot().whileTrue(new RunIndexer());
-
 		controls.intakeDown().onTrue(new IntakeMove());
-		controls.intakeUp().onTrue(new IntakeUp());
-		// controls.intakeReverse().whileTrue(new IntakeDown(-IntakeDown.HIGH_VOLTAGE));
-		controls.intakeReverse().whileTrue(new IntakeUp());
-		controls.indexerReverse().whileTrue(new RunIndexer(-RunIndexer.DEFAULT_SPIN_VOLTAGE, 0, 0));
+		controls.intakeUp().onTrue(new IntakeMove(0,0));
 
-		controls.hoodZero().whileTrue(new HoodZero());
+		// controls.intakeReverse().whileTrue(new IntakeDown(-IntakeDown.HIGH_VOLTAGE));
+		controls.intakeReverse().whileTrue(new IntakeMove(-IntakeMove.INTAKE_VOLTAGE, IntakeMove.EXTENSION_POSITION));
+		controls.indexerReverse().whileTrue(new RunIndexer(-RunIndexer.DEFAULT_ROLLERS_VOLTAGE, -RunIndexer.DEFAULT_ELEVATOR_VOLTAGE));
+
 		controls.driveLock().whileTrue(new DriveLock());
 
 		// Emergency stops

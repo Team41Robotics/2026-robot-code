@@ -5,9 +5,9 @@ import static frc.robot.RobotContainer.*;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class RunIndexer extends Command {
-	public static final double DEFAULT_SPIN_VOLTAGE = 2.0; // TUNEME
-	public static final double DEFAULT_ELEVATOR_VOLTAGE = 8.0; // TUNEME
-	public static final double DEFAULT_BACKVATOR_VOLTAGE = 8.0; // TUNEME
+	public static final double DEFAULT_SPIN_VOLTAGE = 2.0;
+	public static final double DEFAULT_ELEVATOR_VOLTAGE = 8.0;
+	public static final double DEFAULT_BACKVATOR_VOLTAGE = 8.0;
 
 	public double spinVoltage;
 	public double elevatorVoltage;

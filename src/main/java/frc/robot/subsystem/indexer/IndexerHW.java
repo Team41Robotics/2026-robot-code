@@ -112,11 +112,11 @@ public class IndexerHW {
 
 		elevatorTalonFX.optimizeBusUtilization();
 
-		backvatorSparkFlex = new SparkFlex(44, MotorType.kBrushless); // TUNEME: CAN ID
+		backvatorSparkFlex = new SparkFlex(44, MotorType.kBrushless);
 		SparkFlexConfig backvatorConfig = new SparkFlexConfig();
 		backvatorConfig.smartCurrentLimit(30);
 		backvatorConfig.idleMode(IdleMode.kBrake);
-		backvatorConfig.inverted(false); // TUNEME
+		backvatorConfig.inverted(false);
 		backvatorSparkFlex.configure(backvatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 	}
 

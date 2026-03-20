@@ -85,17 +85,6 @@ public class Autos {
 		return routine;
 	}
 
-	public static AutoRoutine stupidShootAuto() {
-		AutoRoutine routine = factory.newRoutine("StupidShootAuto");
-		routine.active().onTrue(new StupidShootAuto());
-		return routine;
-	}
-
-	public static AutoRoutine simpleDepotAuto() {
-		AutoRoutine routine = factory.newRoutine("SimpleDepotAuto");
-		routine.active().onTrue(new SimpleDepotAuto());
-		return routine;
-	}
 
 	public static boolean isOnCloseSide() {
 		Translation2d robotPos = Util.flipIfRed(drive.pose.getTranslation());

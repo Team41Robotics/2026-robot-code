@@ -36,6 +36,7 @@ import frc.robot.subsystem.indexer.Indexer;
 import frc.robot.subsystem.intake.Intake;
 import frc.robot.subsystem.leds.LEDS;
 import frc.robot.subsystem.shooter.Shooter;
+import frc.robot.subsystem.shooter.ShooterFlywheelSysID;
 import frc.robot.subsystem.vision.Vision;
 import org.littletonrobotics.junction.Logger;
 
@@ -66,6 +67,7 @@ public class RobotContainer {
 	public static double periodTimeRemaining = 0;
 	public static String allianceHubStatus = "Unknown";
 
+	//public static ShooterFlywheelSysID shooterFlywheelSysID = new ShooterFlywheelSysID();
 
 	static Pose2d prevStartPose = null;
 
@@ -78,6 +80,7 @@ public class RobotContainer {
 		leds.init();
 		drive.init(new Pose2d());
 		vision.init();
+		//shooterFlywheelSysID.init();
 
 		drive.setDefaultCommand(new FieldOrientedDrive());
 		shooter.setDefaultCommand(new ShooterIdle());
@@ -203,7 +206,7 @@ public class RobotContainer {
 		updateMatchPeriod();
 
 		t = RobotController.getFPGATime();
-		drive.actuate();
+		//drive.actuate();
 		Logger.recordOutput("Timing/Drive_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();
@@ -219,7 +222,7 @@ public class RobotContainer {
 		Logger.recordOutput("Timing/Indexer_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();
-		leds.actuate();
+		//leds.actuate();
 		Logger.recordOutput("Timing/LEDS_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 	}
 

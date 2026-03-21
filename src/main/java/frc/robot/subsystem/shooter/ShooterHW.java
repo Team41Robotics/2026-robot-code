@@ -18,7 +18,7 @@ import org.littletonrobotics.junction.Logger;
 public class ShooterHW {
 	public static final double FLYWHEEL_RATIO = 1.0;
 
-	public static final double FLYWHEEL_kP = 0; // TUNEME
+	public static final double FLYWHEEL_kP = 5; // TUNEME
 	public static final double FLYWHEEL_kV = 0; //TUNEME
 	public static final double FLYWHEEL_kS = 0; //TUNEME
 
@@ -117,6 +117,7 @@ public class ShooterHW {
 
 	public void actuate(ShooterInputs inputs, double flywheelRPM) {
 		Logger.recordOutput("/Shooter/flywheelErrorRPM", inputs.flywheelVelocityRPM - flywheelRPM);
+		Logger.recordOutput("/Shooter/currentFlywheelRPM", inputs.flywheelVelocityRPM);
 
 		if (!Robot.isReal()) return;
 

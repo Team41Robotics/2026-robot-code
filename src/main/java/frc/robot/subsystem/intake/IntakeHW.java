@@ -1,5 +1,6 @@
 package frc.robot.subsystem.intake;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -7,6 +8,8 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -15,11 +18,11 @@ import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class IntakeHW {
-	public static final double EXTENSION_RATIO = 1.0; //TODO
+	public static final double PINION_RADIUS_METERS = Units.inchesToMeters(1.0); //TODO}
 
 	public static final double EXTENSION_ZERO = 0.0; //TODO
 
-	public static final double EXTENSION_kP = 0; //TUNEME
+	public static final double EXTENSION_kP = 5; //TUNEME
 	public static final double EXTENSION_kI = 0; //TUNEME
 	public static final double EXTENSION_kD = 0; //TUNEME
 
@@ -73,7 +76,7 @@ public class IntakeHW {
 		intakeConfig.Voltage.PeakReverseVoltage = -12.0;
 		intakeTalonFX.getConfigurator().apply(intakeConfig);
 		intakeTalonFX.clearStickyFaults();
-		intakeTalonFX.setNeutralMode(NeutralModeValue.Brake);
+		intakeTalonFX.setNeutralMode(NeutralModeValue.Coast);
 		intakeTalonFX.optimizeBusUtilization();
 
 		extensionAbsolutePosition = extensionTalonFX.getPosition(false);
@@ -106,10 +109,22 @@ public class IntakeHW {
 	public void sense(IntakeInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		extensionAbsolutePosition.refresh();
-
-		inputs.extensionPosMeters = extensionAbsolutePosition.getValueAsDouble() * 2 * Math.PI * EXTENSION_RATIO - EXTENSION_ZERO;
-		inputs.extensionVelMetersPerSec = extensionVelocity.getValueAsDouble() * 2 * Math.PI * EXTENSION_RATIO;
+		BaseStatusSignal.refreshAll(
+				 extensionAbsolutePosition, 
+				 extensionVelocity, 
+				 extensionMotorVoltage, 
+				 extensionStatorCurrent, 
+				 extensionSupplyVoltage, 
+				 extensionSupplyCurrent,
+				 intakeVelocity, 
+				 intakeMotorVoltage, 
+				 intakeStatorCurrent, 
+				 intakeSupplyVoltage, 
+				 intakeSupplyCurrent
+		);
+		
+		inputs.extensionPosMeters = extensionAbsolutePosition.getValueAsDouble() * 2 * Math.PI * PINION_RADIUS_METERS - EXTENSION_ZERO;
+		inputs.extensionVelMetersPerSec = extensionVelocity.getValueAsDouble() * 2 * Math.PI * PINION_RADIUS_METERS;
 		inputs.extensionVoltageVolts = extensionMotorVoltage.getValueAsDouble();
 		inputs.extensionCurrentAmps = extensionStatorCurrent.getValueAsDouble();
 		inputs.extensionBusVoltageVolts = extensionSupplyVoltage.getValueAsDouble();
@@ -127,8 +142,10 @@ public class IntakeHW {
 		Logger.recordOutput("/Intake/intakeVoltageVolts", intakeVoltage);
 
 		if (!Robot.isReal()) return;
-		
-		extensionTalonFX.setControl(extensionControlRequest.withPosition(extensionPosition));
+
+		double extensionPositionRotations = (extensionPosition + EXTENSION_ZERO) / (2 * Math.PI * PINION_RADIUS_METERS);
+
+		extensionTalonFX.setControl(extensionControlRequest.withPosition(extensionPositionRotations));
 		intakeTalonFX.setControl(intakeControlRequest.withOutput(intakeVoltage));
 	}
 }

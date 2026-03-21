@@ -107,10 +107,10 @@ public class Autos {
 		return Commands.run(
 				() -> {
 					if (isOnCloseSide() && shooter.onTarget) {
-						indexer.targetSpinVoltage = RunIndexer.DEFAULT_SPIN_VOLTAGE;
+						indexer.targetRollersVoltage = RunIndexer.DEFAULT_ROLLERS_VOLTAGE;
 						indexer.targetElevatorVoltage = RunIndexer.DEFAULT_ELEVATOR_VOLTAGE;
 					} else {
-						indexer.targetSpinVoltage = 0;
+						indexer.targetRollersVoltage = 0;
 						indexer.targetElevatorVoltage = 0;
 					}
 				},

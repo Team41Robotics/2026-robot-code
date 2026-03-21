@@ -48,7 +48,7 @@ public class IndexerHW {
 
 		rollersTalonFX.getConfigurator().apply(rollersConfig);
 		rollersTalonFX.clearStickyFaults();
-		rollersTalonFX.setNeutralMode(NeutralModeValue.Brake);
+		rollersTalonFX.setNeutralMode(NeutralModeValue.Coast);
 		rollersVelocity = rollersTalonFX.getVelocity(false);
 		rollersMotorVoltage = rollersTalonFX.getMotorVoltage(false);
 		rollersStatorCurrent = rollersTalonFX.getStatorCurrent(false);
@@ -75,7 +75,7 @@ public class IndexerHW {
 
 		elevatorTalonFX.getConfigurator().apply(elevatorConfig);
 		elevatorTalonFX.clearStickyFaults();
-		elevatorTalonFX.setNeutralMode(NeutralModeValue.Brake);
+		elevatorTalonFX.setNeutralMode(NeutralModeValue.Coast);
 
 		elevatorVelocity = elevatorTalonFX.getVelocity(false);
 		elevatorMotorVoltage = elevatorTalonFX.getMotorVoltage(false);
@@ -96,14 +96,18 @@ public class IndexerHW {
 	public void sense(IndexerInputs inputs) {
 		if (!Robot.isReal()) return;
 
-		BaseStatusSignal.waitForAll(
-				0, rollersVelocity, rollersMotorVoltage, rollersStatorCurrent, rollersSupplyVoltage, rollersSupplyCurrent);
 		BaseStatusSignal.refreshAll(
 				elevatorVelocity,
 				elevatorMotorVoltage,
 				elevatorStatorCurrent,
 				elevatorSupplyVoltage,
-				elevatorSupplyCurrent);
+				elevatorSupplyCurrent,
+				rollersVelocity,
+				rollersMotorVoltage,
+				rollersStatorCurrent,
+				rollersSupplyVoltage,
+				rollersSupplyCurrent
+		);
 
 		inputs.rollersVelocityRPM = rollersVelocity.getValueAsDouble() * 60.0;
 		inputs.rollersVoltageVolts = rollersMotorVoltage.getValueAsDouble();

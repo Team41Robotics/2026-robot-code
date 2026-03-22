@@ -28,6 +28,7 @@ import frc.robot.commands.intake.IntakeMove;
 import frc.robot.commands.shooter.ShootAtTarget;
 import frc.robot.commands.shooter.ShooterIdle;
 import frc.robot.commands.shooter.ShooterStartup;
+import frc.robot.commands.shooter.Targetting;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.JoystickControls;
 import frc.robot.subsystem.drive.SwerveDrive;
@@ -71,7 +72,6 @@ public class RobotContainer {
 
 	static Pose2d prevStartPose = null;
 
-
 	public static void init() { // TODO change Akit mode to live mode
 		imu.init();
 		intake.init();
@@ -81,6 +81,7 @@ public class RobotContainer {
 		drive.init(new Pose2d());
 		vision.init();
 		shooterFlywheelSysID.init();
+		Targetting.loadData();
 
 		drive.setDefaultCommand(new FieldOrientedDrive());
 		shooter.setDefaultCommand(new ShooterIdle());
@@ -115,11 +116,12 @@ public class RobotContainer {
 
 		controls.shoot().whileTrue(new RunIndexer());
 		controls.intakeDown().onTrue(new IntakeMove());
-		controls.intakeUp().onTrue(new IntakeMove(0,0));
+		controls.intakeUp().onTrue(new IntakeMove(0, 0));
 
 		// controls.intakeReverse().whileTrue(new IntakeDown(-IntakeDown.HIGH_VOLTAGE));
 		controls.intakeReverse().whileTrue(new IntakeMove(-IntakeMove.INTAKE_VOLTAGE, IntakeMove.EXTENSION_POSITION));
-		controls.indexerReverse().whileTrue(new RunIndexer(-RunIndexer.DEFAULT_ROLLERS_VOLTAGE, -RunIndexer.DEFAULT_ELEVATOR_VOLTAGE));
+		controls.indexerReverse()
+				.whileTrue(new RunIndexer(-RunIndexer.DEFAULT_ROLLERS_VOLTAGE, -RunIndexer.DEFAULT_ELEVATOR_VOLTAGE));
 
 		controls.driveLock().whileTrue(new DriveLock());
 
@@ -137,7 +139,7 @@ public class RobotContainer {
 				.whileTrue(new RunCommand(
 						() -> {
 							shooter.targetFlywheelRPM = 0;
-							intake.targetExtensionPosition = intake.inputs.extensionPosMeters; 
+							intake.targetExtensionPosition = intake.inputs.extensionPosMeters;
 							intake.targetIntakeVoltage = 0;
 							indexer.targetRollersVoltage = 0;
 							indexer.targetElevatorVoltage = 0;
@@ -206,7 +208,7 @@ public class RobotContainer {
 		updateMatchPeriod();
 
 		t = RobotController.getFPGATime();
-		//drive.actuate();
+		// drive.actuate();
 		Logger.recordOutput("Timing/Drive_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();
@@ -218,11 +220,11 @@ public class RobotContainer {
 		Logger.recordOutput("Timing/Shooter_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();
-		//indexer.actuate();
+		// indexer.actuate();
 		Logger.recordOutput("Timing/Indexer_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();
-		//leds.actuate();
+		// leds.actuate();
 		Logger.recordOutput("Timing/LEDS_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 	}
 

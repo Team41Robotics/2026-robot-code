@@ -19,8 +19,8 @@ public class ShooterHW {
 	public static final double FLYWHEEL_RATIO = 1.0;
 
 	public static final double FLYWHEEL_kP = 5; // TUNEME
-	public static final double FLYWHEEL_kV = 0; //TUNEME
-	public static final double FLYWHEEL_kS = 0; //TUNEME
+	public static final double FLYWHEEL_kV = 0; // TUNEME
+	public static final double FLYWHEEL_kS = 0; // TUNEME
 
 	public TalonFX flywheelTalonFX;
 	public TalonFX flywheelFollowerTalonFX;
@@ -40,7 +40,7 @@ public class ShooterHW {
 		if (!Robot.isReal()) return;
 
 		// --- Flywheel (leader) ---
-		flywheelTalonFX = new TalonFX(0); 
+		flywheelTalonFX = new TalonFX(0);
 		TalonFXConfiguration flywheelConfig = new TalonFXConfiguration();
 		flywheelConfig.Feedback.SensorToMechanismRatio = 1.0 / FLYWHEEL_RATIO;
 		flywheelConfig.Slot0.kP = FLYWHEEL_kP;
@@ -60,7 +60,7 @@ public class ShooterHW {
 		flywheelTalonFX.setNeutralMode(NeutralModeValue.Coast);
 
 		// --- Flywheel follower ---
-		flywheelFollowerTalonFX = new TalonFX(61); 
+		flywheelFollowerTalonFX = new TalonFX(61);
 		TalonFXConfiguration flywheelFollowerConfig = new TalonFXConfiguration();
 		flywheelFollowerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		flywheelFollowerConfig.CurrentLimits.SupplyCurrentLimit = 30;

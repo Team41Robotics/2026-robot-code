@@ -1,6 +1,5 @@
 package frc.robot.subsystem.intake;
 
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 

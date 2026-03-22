@@ -1,6 +1,7 @@
 package frc.robot.subsystem.shooter;
 
 import static frc.robot.RobotContainer.*;
+
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.shooter.ShooterStartup;
@@ -29,7 +30,7 @@ public class Shooter extends SubsystemBase {
 
 	public void actuate() {
 		Logger.recordOutput("/Shooter/targetFlywheelRPM", targetFlywheelRPM);
-		
+
 		hw.actuate(inputs, targetFlywheelRPM);
 	}
 }

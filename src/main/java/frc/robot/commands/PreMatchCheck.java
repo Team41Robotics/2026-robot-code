@@ -95,12 +95,11 @@ public class PreMatchCheck extends Command {
 
 		allPassed &= check(flywheelOk, flywheelFail, "Shooter Flywheel", shooter.inputs.flywheelBusVoltageVolts > 0);
 
-		allPassed &=
-				check(intakeExtOk, intakeExtFail, "Intake Extension", intake.inputs.extensionBusVoltageVolts > 0);
+		allPassed &= check(intakeExtOk, intakeExtFail, "Intake Extension", intake.inputs.extensionBusVoltageVolts > 0);
 		allPassed &= check(intakeRollerOk, intakeRollerFail, "Intake Roller", intake.inputs.intakeBusVoltageVolts > 0);
 
-		allPassed &=
-				check(indexerRollersOk, indexerRollersFail, "Indexer Rollers", indexer.inputs.rollersBusVoltageVolts > 0);
+		allPassed &= check(
+				indexerRollersOk, indexerRollersFail, "Indexer Rollers", indexer.inputs.rollersBusVoltageVolts > 0);
 		allPassed &=
 				check(indexerElevOk, indexerElevFail, "Indexer Elevator", indexer.inputs.elevatorBusVoltageVolts > 0);
 

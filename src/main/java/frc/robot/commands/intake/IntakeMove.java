@@ -10,7 +10,7 @@ public class IntakeMove extends Command {
 
 	public double voltage;
 	public double extensionPosition;
-	
+
 	public IntakeMove() {
 		this(INTAKE_VOLTAGE, EXTENSION_POSITION);
 	}

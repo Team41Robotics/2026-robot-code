@@ -36,7 +36,7 @@ public class IndexerHW {
 	public void init() {
 		if (!Robot.isReal()) return;
 
-		rollersTalonFX = new TalonFX(43, driveBus); //TODO
+		rollersTalonFX = new TalonFX(43, driveBus); // TODO
 		TalonFXConfiguration rollersConfig = new TalonFXConfiguration();
 		rollersConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		rollersConfig.CurrentLimits.SupplyCurrentLimit = 30;
@@ -63,7 +63,7 @@ public class IndexerHW {
 
 		rollersTalonFX.optimizeBusUtilization();
 
-		elevatorTalonFX = new TalonFX(32); 
+		elevatorTalonFX = new TalonFX(32);
 		TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
 		elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		elevatorConfig.CurrentLimits.SupplyCurrentLimit = 20;
@@ -90,7 +90,6 @@ public class IndexerHW {
 		elevatorSupplyCurrent.setUpdateFrequency(10);
 
 		elevatorTalonFX.optimizeBusUtilization();
-
 	}
 
 	public void sense(IndexerInputs inputs) {
@@ -106,8 +105,7 @@ public class IndexerHW {
 				rollersMotorVoltage,
 				rollersStatorCurrent,
 				rollersSupplyVoltage,
-				rollersSupplyCurrent
-		);
+				rollersSupplyCurrent);
 
 		inputs.rollersVelocityRPM = rollersVelocity.getValueAsDouble() * 60.0;
 		inputs.rollersVoltageVolts = rollersMotorVoltage.getValueAsDouble();

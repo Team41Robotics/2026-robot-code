@@ -10,7 +10,7 @@ public class RunIndexer extends Command {
 
 	public double rollersVoltage;
 	public double elevatorVoltage;
-	
+
 	public RunIndexer() {
 		this(DEFAULT_ROLLERS_VOLTAGE, DEFAULT_ELEVATOR_VOLTAGE);
 	}

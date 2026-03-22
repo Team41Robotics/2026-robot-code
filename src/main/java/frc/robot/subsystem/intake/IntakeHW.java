@@ -8,7 +8,6 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -18,13 +17,13 @@ import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class IntakeHW {
-	public static final double PINION_RADIUS_METERS = Units.inchesToMeters(1.0); //TODO}
+	public static final double PINION_RADIUS_METERS = Units.inchesToMeters(1.0); // TODO}
 
-	public static final double EXTENSION_ZERO = 0.0; //TODO
+	public static final double EXTENSION_ZERO = 0.0; // TODO
 
-	public static final double EXTENSION_kP = 5; //TUNEME
-	public static final double EXTENSION_kI = 0; //TUNEME
-	public static final double EXTENSION_kD = 0; //TUNEME
+	public static final double EXTENSION_kP = 5; // TUNEME
+	public static final double EXTENSION_kI = 0; // TUNEME
+	public static final double EXTENSION_kD = 0; // TUNEME
 
 	public TalonFX extensionTalonFX;
 	public TalonFX intakeTalonFX;
@@ -48,7 +47,7 @@ public class IntakeHW {
 	public void init() {
 		if (!Robot.isReal()) return;
 
-		extensionTalonFX = new TalonFX(33); //TODO
+		extensionTalonFX = new TalonFX(33); // TODO
 		TalonFXConfiguration extensionConfig = new TalonFXConfiguration();
 		extensionConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 		extensionConfig.Slot0.kP = EXTENSION_kP;
@@ -65,7 +64,7 @@ public class IntakeHW {
 		extensionTalonFX.setNeutralMode(NeutralModeValue.Brake);
 		extensionTalonFX.optimizeBusUtilization();
 
-		intakeTalonFX = new TalonFX(31); //TODO
+		intakeTalonFX = new TalonFX(31); // TODO
 		TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
 		intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 		intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -110,25 +109,25 @@ public class IntakeHW {
 		if (!Robot.isReal()) return;
 
 		BaseStatusSignal.refreshAll(
-				 extensionAbsolutePosition, 
-				 extensionVelocity, 
-				 extensionMotorVoltage, 
-				 extensionStatorCurrent, 
-				 extensionSupplyVoltage, 
-				 extensionSupplyCurrent,
-				 intakeVelocity, 
-				 intakeMotorVoltage, 
-				 intakeStatorCurrent, 
-				 intakeSupplyVoltage, 
-				 intakeSupplyCurrent
-		);
-		
-		inputs.extensionPosMeters = extensionAbsolutePosition.getValueAsDouble() * 2 * Math.PI * PINION_RADIUS_METERS - EXTENSION_ZERO;
+				extensionAbsolutePosition,
+				extensionVelocity,
+				extensionMotorVoltage,
+				extensionStatorCurrent,
+				extensionSupplyVoltage,
+				extensionSupplyCurrent,
+				intakeVelocity,
+				intakeMotorVoltage,
+				intakeStatorCurrent,
+				intakeSupplyVoltage,
+				intakeSupplyCurrent);
+
+		inputs.extensionPosMeters =
+				extensionAbsolutePosition.getValueAsDouble() * 2 * Math.PI * PINION_RADIUS_METERS - EXTENSION_ZERO;
 		inputs.extensionVelMetersPerSec = extensionVelocity.getValueAsDouble() * 2 * Math.PI * PINION_RADIUS_METERS;
 		inputs.extensionVoltageVolts = extensionMotorVoltage.getValueAsDouble();
 		inputs.extensionCurrentAmps = extensionStatorCurrent.getValueAsDouble();
 		inputs.extensionBusVoltageVolts = extensionSupplyVoltage.getValueAsDouble();
-		inputs.extensionBusCurrentAmps = extensionSupplyCurrent.getValueAsDouble();	
+		inputs.extensionBusCurrentAmps = extensionSupplyCurrent.getValueAsDouble();
 
 		inputs.intakeVelocityRPM = intakeVelocity.getValueAsDouble() * 60;
 		inputs.intakeVoltageVolts = intakeMotorVoltage.getValueAsDouble();

@@ -21,27 +21,25 @@ public class Targetting {
 		//Key: distance to target, Value: time of flight
 		TIME_OF_FLIGHT_MAP.put(1.0, 0.5);
 	}
-	
-	/*public static Translation2d targetOnTheFly(Translation2d target, double timeOfFlight) {
-		ChassisSpeeds speeds = drive.measuredSpeeds;
-		double omega = speeds.omegaRadiansPerSecond;
-		Translation2d turretOffset = TURRET_POS.getTranslation();
 
-		// Turret velocity in robot frame = robot center velocity + omega cross turret offset
-		double vx = speeds.vxMetersPerSecond - omega * turretOffset.getY();
-		double vy = speeds.vyMetersPerSecond + omega * turretOffset.getX();
-
-		// Convert to field frame
-		Translation2d vel = new Translation2d(vx, vy).rotateBy(drive.rot);
-		return target.minus(vel.times(timeOfFlight));
+	public static Translation2d getShooterPosition() {
+		return drive.pose.getTranslation().plus(new Translation2d(0.0,0.0)); //TODO: add actual shooter offset	
 	}
-
-	public static Translation2d shootOnTheFly(Translation2d target) {
-		Translation2d newTarget = target;
-		for (int i = 0; i < 5; i++) {
-			ShotParameters params = shotSpeeds(targetRelative(newTarget).getNorm());
-			newTarget = targetOnTheFly(target, params.timeOfFlight());
+	public static double shooterToTarget(Translation2d target) {
+		return target.minus(getShooterPosition()).getNorm();
+	}
+	
+	public static Pose2d shootOnTheFly(Translation2d target) {
+		double timeOfFlight = TIME_OF_FLIGHT_MAP.get((shooterToTarget(target)));
+		Pose2d newPose = new Pose2d(getShooterPosition(), drive.pose.getRotation());
+		double distance = target.minus(getShooterPosition()).getNorm();
+		for (int i = 0; i < 20; i++) {
+			timeOfFlight = TIME_OF_FLIGHT_MAP.get(distance);
+			double offSetX = timeOfFlight * drive.measuredSpeeds.vxMetersPerSecond;
+			double offSetY = timeOfFlight * drive.measuredSpeeds.vyMetersPerSecond;
+			newPose = new Pose2d(getShooterPosition().plus(new Translation2d(offSetX, offSetY)), drive.pose.getRotation());
+			distance = target.minus(newPose.getTranslation()).getNorm();
 		}
-		return newTarget;
-	}*/
+		return newPose;
+	}
 }

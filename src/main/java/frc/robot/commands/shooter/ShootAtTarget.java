@@ -44,7 +44,7 @@ public class ShootAtTarget extends Command {
                 ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omega, drive.rot);
                 drive.drive(speeds);
 
-                double distance = target.minus(drive.pose.getTranslation()).getNorm();
+                double distance = Targetting.shooterToTarget(target);
                 double targetRPM = Targetting.FLYWHEELRPM_MAP.get(distance);
                 shooter.targetFlywheelRPM = targetRPM;
         }

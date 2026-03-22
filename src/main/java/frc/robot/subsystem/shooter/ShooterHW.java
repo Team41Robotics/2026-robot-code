@@ -40,7 +40,7 @@ public class ShooterHW {
 		if (!Robot.isReal()) return;
 
 		// --- Flywheel (leader) ---
-		flywheelTalonFX = new TalonFX(51); //TODO 
+		flywheelTalonFX = new TalonFX(0); 
 		TalonFXConfiguration flywheelConfig = new TalonFXConfiguration();
 		flywheelConfig.Feedback.SensorToMechanismRatio = 1.0 / FLYWHEEL_RATIO;
 		flywheelConfig.Slot0.kP = FLYWHEEL_kP;
@@ -60,7 +60,7 @@ public class ShooterHW {
 		flywheelTalonFX.setNeutralMode(NeutralModeValue.Coast);
 
 		// --- Flywheel follower ---
-		flywheelFollowerTalonFX = new TalonFX(53); //TODO
+		flywheelFollowerTalonFX = new TalonFX(61); 
 		TalonFXConfiguration flywheelFollowerConfig = new TalonFXConfiguration();
 		flywheelFollowerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		flywheelFollowerConfig.CurrentLimits.SupplyCurrentLimit = 30;

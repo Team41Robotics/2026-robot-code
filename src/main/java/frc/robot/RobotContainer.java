@@ -67,7 +67,7 @@ public class RobotContainer {
 	public static double periodTimeRemaining = 0;
 	public static String allianceHubStatus = "Unknown";
 
-	//public static ShooterFlywheelSysID shooterFlywheelSysID = new ShooterFlywheelSysID();
+	public static ShooterFlywheelSysID shooterFlywheelSysID = new ShooterFlywheelSysID();
 
 	static Pose2d prevStartPose = null;
 
@@ -80,7 +80,7 @@ public class RobotContainer {
 		leds.init();
 		drive.init(new Pose2d());
 		vision.init();
-		//shooterFlywheelSysID.init();
+		shooterFlywheelSysID.init();
 
 		drive.setDefaultCommand(new FieldOrientedDrive());
 		shooter.setDefaultCommand(new ShooterIdle());
@@ -218,7 +218,7 @@ public class RobotContainer {
 		Logger.recordOutput("Timing/Shooter_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();
-		// indexer.actuate();
+		//indexer.actuate();
 		Logger.recordOutput("Timing/Indexer_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();

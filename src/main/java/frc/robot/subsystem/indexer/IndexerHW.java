@@ -63,7 +63,7 @@ public class IndexerHW {
 
 		rollersTalonFX.optimizeBusUtilization();
 
-		elevatorTalonFX = new TalonFX(41); //TODO
+		elevatorTalonFX = new TalonFX(32); 
 		TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
 		elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		elevatorConfig.CurrentLimits.SupplyCurrentLimit = 20;

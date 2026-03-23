@@ -26,11 +26,11 @@ public class JoystickControls implements Controls {
 	}
 
 	public double leftX() {
-		return leftJoystick.getX();
+		return -leftJoystick.getX();
 	}
 
 	public double leftY() {
-		return leftJoystick.getY();
+		return -leftJoystick.getY();
 	}
 
 	public double rightX() {

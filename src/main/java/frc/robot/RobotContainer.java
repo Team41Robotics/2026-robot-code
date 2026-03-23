@@ -204,7 +204,7 @@ public class RobotContainer {
 		updateMatchPeriod();
 
 		t = RobotController.getFPGATime();
-		// drive.actuate();
+		drive.actuate();
 		Logger.recordOutput("Timing/Drive_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();

@@ -76,6 +76,17 @@ public class ShootTeleop extends Command {
 		Logger.recordOutput("/Targetting/joystickTarget", new Pose2d(target, new Rotation2d()));
 		Logger.recordOutput("/Targetting/distance", distance);
 		field.getObject("shootTarget").setPose(new Pose2d(virtualTarget, new Rotation2d()));
+
+		// Zone boundary lines (vertical lines spanning field width)
+		double fieldW = FieldConstants.fieldWidth;
+		Pose2d[] trenchMinLine = new Pose2d[] {
+			new Pose2d(xTrenchMin, 0, new Rotation2d()), new Pose2d(xTrenchMin, fieldW, new Rotation2d())
+		};
+		Pose2d[] trenchMaxLine = new Pose2d[] {
+			new Pose2d(xTrenchMax, 0, new Rotation2d()), new Pose2d(xTrenchMax, fieldW, new Rotation2d())
+		};
+		Logger.recordOutput("/Targetting/trenchMinLine", trenchMinLine);
+		Logger.recordOutput("/Targetting/trenchMaxLine", trenchMaxLine);
 	}
 
 	@Override

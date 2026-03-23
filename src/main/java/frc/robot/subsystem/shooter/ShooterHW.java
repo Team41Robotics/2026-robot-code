@@ -16,8 +16,6 @@ import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class ShooterHW {
-	public static final double FLYWHEEL_RATIO = 1.0;
-
 	public static final double FLYWHEEL_kP = 5; // TUNEME
 	public static final double FLYWHEEL_kV = 0; // TUNEME
 	public static final double FLYWHEEL_kS = 0; // TUNEME
@@ -42,7 +40,6 @@ public class ShooterHW {
 		// --- Flywheel (leader) ---
 		flywheelTalonFX = new TalonFX(0);
 		TalonFXConfiguration flywheelConfig = new TalonFXConfiguration();
-		flywheelConfig.Feedback.SensorToMechanismRatio = 1.0 / FLYWHEEL_RATIO;
 		flywheelConfig.Slot0.kP = FLYWHEEL_kP;
 		flywheelConfig.Slot0.kV = FLYWHEEL_kV;
 		flywheelConfig.Slot0.kS = FLYWHEEL_kS;

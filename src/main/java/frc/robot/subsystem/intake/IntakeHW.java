@@ -18,6 +18,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class IntakeHW {
 	public static final double PINION_RADIUS_METERS = Units.inchesToMeters(1.0); // TODO}
+	public static final double GEAR_RATIO = 1.6;
 
 	public static final double EXTENSION_ZERO = 0.0; // TODO
 
@@ -122,8 +123,8 @@ public class IntakeHW {
 				intakeSupplyCurrent);
 
 		inputs.extensionPosMeters =
-				extensionAbsolutePosition.getValueAsDouble() * 2 * Math.PI * PINION_RADIUS_METERS - EXTENSION_ZERO;
-		inputs.extensionVelMetersPerSec = extensionVelocity.getValueAsDouble() * 2 * Math.PI * PINION_RADIUS_METERS;
+				extensionAbsolutePosition.getValueAsDouble()* GEAR_RATIO * 2 * Math.PI * PINION_RADIUS_METERS - EXTENSION_ZERO;
+		inputs.extensionVelMetersPerSec = extensionVelocity.getValueAsDouble() * GEAR_RATIO * 2 * Math.PI * PINION_RADIUS_METERS;
 		inputs.extensionVoltageVolts = extensionMotorVoltage.getValueAsDouble();
 		inputs.extensionCurrentAmps = extensionStatorCurrent.getValueAsDouble();
 		inputs.extensionBusVoltageVolts = extensionSupplyVoltage.getValueAsDouble();

@@ -3,7 +3,6 @@ package frc.robot.commands.autos;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.indexer.RunIndexer;
-import frc.robot.commands.shooter.ShootOnTheFly;
 import frc.robot.commands.shooter.ShooterStartup;
 
 public class StupidShootAuto extends SequentialCommandGroup {

@@ -42,6 +42,8 @@ public class StaticShootAtTarget extends Command {
 		shooter.targetHoodPos = params.hoodAngle();
 
 		Logger.recordOutput("/Targetting/targetPose", target);
+		Logger.recordOutput("/Targetting/distance", distance);
+		Logger.recordOutput("/Targetting/timeOfFlight", params.timeOfFlight());
 		field.getObject("shootTarget").setPose(new Pose2d(target, new Rotation2d()));
 	}
 

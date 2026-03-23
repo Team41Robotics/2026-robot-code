@@ -44,6 +44,7 @@ public class ShootOnTheFly extends Command {
 
 		Logger.recordOutput("/Targetting/targetPose", virtualTarget);
 		Logger.recordOutput("/Targetting/distance", distance);
+		Logger.recordOutput("/Targetting/timeOfFlight", params.timeOfFlight());
 		field.getObject("shootTarget").setPose(new Pose2d(virtualTarget, new Rotation2d()));
 	}
 

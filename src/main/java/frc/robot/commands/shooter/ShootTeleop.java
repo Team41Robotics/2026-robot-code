@@ -48,17 +48,11 @@ public class ShootTeleop extends Command {
 			target = Util.flipIfRed(hubCenter);
 			overrideHood = true;
 			state = "TRENCH";
-		} else if (controls.passToOwnSide().getAsBoolean()) {
-			// Past trench with pass button held - pass to left or right side, NOT through middle
+		} else {
+			// Past trench - always pass to own side, NOT through middle
 			double yOffset = (robotY < centerY) ? -TRENCH_Y_OFFSET : TRENCH_Y_OFFSET;
 			target = Util.flipIfRed(hubCenter.plus(new Translation2d(0, yOffset)));
 			state = "PASS";
-		} else {
-			// Past trench without pass button - shoot at hub with joystick offset
-			Translation2d offset =
-					new Translation2d(controls.thirdY() * JOYSTICK_SCALE, controls.thirdX() * JOYSTICK_SCALE);
-			target = Util.flipIfRed(hubCenter.plus(offset));
-			state = "SHOOT_HUB";
 		}
 
 		Translation2d virtualTarget = Targetting.shootOnTheFly(target);
@@ -75,6 +69,7 @@ public class ShootTeleop extends Command {
 		Logger.recordOutput("/Targetting/targetPose", new Pose2d(virtualTarget, new Rotation2d()));
 		Logger.recordOutput("/Targetting/joystickTarget", new Pose2d(target, new Rotation2d()));
 		Logger.recordOutput("/Targetting/distance", distance);
+		Logger.recordOutput("/Targetting/timeOfFlight", params.timeOfFlight());
 		field.getObject("shootTarget").setPose(new Pose2d(virtualTarget, new Rotation2d()));
 
 		// Zone boundary lines (vertical lines spanning field width)

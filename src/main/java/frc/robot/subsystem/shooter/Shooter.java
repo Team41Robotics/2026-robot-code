@@ -111,6 +111,10 @@ public class Shooter extends SubsystemBase {
 		double turretFieldAngle = robotAngle + inputs.turretPosRadians;
 		Logger.recordOutput("/Shooter/turretPose", new Pose2d(turretPos, new Rotation2d(turretFieldAngle)));
 
+		// Target direction arrow
+		double targetTurretFieldAngle = robotAngle + targetTurretPos;
+		Logger.recordOutput("/Shooter/targetTurretPose", new Pose2d(turretPos, new Rotation2d(targetTurretFieldAngle)));
+
 		// Wedge outline: center -> min ray arc -> max ray -> center
 		double WEDGE_RANGE = 3.0; // meters, visual only
 		int arcPoints = 20;

@@ -25,7 +25,6 @@ public class Shooter extends SubsystemBase {
 	public static final double TURRET_POS_MAX = PI / 2;
 	public static final double TURRET_SNAP_THRES = 60 / 180.0 * PI;
 	public static final double HOOD_POS_MIN = 0; //  TUNEME
-	// FIXME MATCH HOOD POS WITH REAL INCLINE
 	public static final double HOOD_POS_MAX = 35 / 180.0 * PI;
 
 	public static final double FLYWHEEL_THRES = 100;

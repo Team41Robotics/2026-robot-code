@@ -33,7 +33,6 @@ public class MatchAlerts extends Command {
 	}
 
 	// Alerts ordered by CAN ID
-	public static Alert ledsAlert = new Alert("MatchAlerts", "", AlertType.kWarning); // 6
 	public static Alert swerveSETurn = new Alert("MatchAlerts", "", AlertType.kWarning); // 11
 	public static Alert swerveSEEncoder = new Alert("MatchAlerts", "", AlertType.kWarning); // 12
 	public static Alert swerveSEDrive = new Alert("MatchAlerts", "", AlertType.kWarning); // 13
@@ -58,7 +57,6 @@ public class MatchAlerts extends Command {
 	public static Alert hoodAlert = new Alert("MatchAlerts", "", AlertType.kWarning); // 52
 
 	// Persistent error alerts: device has disconnected at least once during the enabled period
-	public static Alert ledsError = new Alert("MatchAlerts", "", AlertType.kError); // 6
 	public static Alert swerveSETurnError = new Alert("MatchAlerts", "", AlertType.kError); // 11
 	public static Alert swerveSEEncoderError = new Alert("MatchAlerts", "", AlertType.kError); // 12
 	public static Alert swerveSEDriveError = new Alert("MatchAlerts", "", AlertType.kError); // 13
@@ -183,20 +181,6 @@ public class MatchAlerts extends Command {
 		// since it reflects real bus silence). If you'd rather pause timers in disabled,
 		// we can gate the accumulation on DriverStation.isEnabled().
 
-		// CAN ID 6
-		check(
-				ledsAlert,
-				ledsError,
-				"LEDs CANdle (6)",
-				6,
-				new double[] {
-					leds.inputs.busVoltageVolts,
-					leds.inputs.outputCurrentAmps,
-					leds.inputs.fiveVRailVoltageVolts,
-					leds.inputs.boardTempCelsius,
-					leds.inputs.vBatModulation
-				},
-				new double[] {leds.inputs.tsSec});
 		// CAN ID 11-13: SE module
 		check(
 				swerveSETurn,

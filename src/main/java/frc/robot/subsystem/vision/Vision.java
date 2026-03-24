@@ -11,9 +11,10 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.FieldConstants;
-import frc.robot.Robot;
 import frc.robot.Util;
 import frc.robot.subsystem.drive.SwerveDrive;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class Vision extends SubsystemBase {
 						new Rotation3d(0, -20. / 180. * PI, 0)),
 				"Ducky.json"),
 		new VisionHW(
-				"DuckySE",
+				"KimmySE",
 				new Transform3d(
 						new Translation3d(-SwerveDrive.ROBOT_LEN / 2, -SwerveDrive.ROBOT_WID / 2, 0.17),
 						new Rotation3d(0, -20. / 180. * PI, PI)),
@@ -53,7 +54,7 @@ public class Vision extends SubsystemBase {
 	public int nCams = cameras.length;
 	public boolean enabled = true;
 	public LoggedNetworkBoolean enableMultiTag = new LoggedNetworkBoolean("/Vision/enableMultiTag", true);
-	public LoggedNetworkBoolean enablePnpDistTrig = new LoggedNetworkBoolean("/Vision/enablePnpDistTrig", true);
+	public LoggedNetworkBoolean enablePnpDistTrig = new LoggedNetworkBoolean("/Vision/enablePnpDistTrig", false);
 
 	public void init() {
 		try {
@@ -68,6 +69,12 @@ public class Vision extends SubsystemBase {
 			decodePackets[i] = new ReusablePacket(0); // Pre-allocate decode packets
 			cam.init();
 		}
+
+		new Trigger(() -> robot.isEnabled()).onTrue(new InstantCommand(() -> {
+			enableMultiTag.set(false);
+			enablePnpDistTrig.set(true);
+		}));
+
 		sense();
 	}
 
@@ -85,8 +92,6 @@ public class Vision extends SubsystemBase {
 
 	public void sense() {
 		Logger.recordOutput("/Vision/enabled", enabled);
-
-		if (!Robot.isReal() && robot.isTeleopEnabled()) enableMultiTag.set(false);
 
 		for (int i = 0; i < nCams; i++) {
 			VisionHW cam = cameras[i];

@@ -22,8 +22,6 @@ public interface Controls {
 
 	public Trigger shoot();
 
-	public Trigger intake();
-
 	public Trigger pov(int angle);
 
 	public Trigger rightPov(int angle);
@@ -45,8 +43,6 @@ public interface Controls {
 	public Trigger eStopAll();
 
 	public Trigger hoodZero();
-
-	public Trigger passToOwnSide();
 
 	public Trigger driveLock();
 }

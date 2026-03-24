@@ -45,10 +45,6 @@ public class XboxControls implements Controls {
 		return xbox.rightBumper();
 	}
 
-	public Trigger intake() {
-		return xbox.leftBumper();
-	}
-
 	public Trigger pov(int angle) {
 		return xbox.pov(angle);
 	}
@@ -91,10 +87,6 @@ public class XboxControls implements Controls {
 
 	public Trigger hoodZero() {
 		return xbox.rightTrigger();
-	}
-
-	public Trigger passToOwnSide() {
-		return driverStation.button(2);
 	}
 
 	public Trigger driveLock() {

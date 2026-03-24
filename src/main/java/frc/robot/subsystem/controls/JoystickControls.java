@@ -42,10 +42,6 @@ public class JoystickControls implements Controls {
 	}
 
 	public Trigger shoot() {
-		return rightJoystick.button(1);
-	}
-
-	public Trigger intake() {
 		return leftJoystick.button(1);
 	}
 
@@ -91,10 +87,6 @@ public class JoystickControls implements Controls {
 
 	public Trigger hoodZero() {
 		return rightJoystick.button(2);
-	}
-
-	public Trigger passToOwnSide() {
-		return driverStation.button(2);
 	}
 
 	public Trigger driveLock() {

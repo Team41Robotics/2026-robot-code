@@ -40,6 +40,7 @@ import frc.robot.subsystem.drive.SwerveDrive;
 import frc.robot.subsystem.imu.IMU;
 import frc.robot.subsystem.indexer.Indexer;
 import frc.robot.subsystem.intake.Intake;
+import frc.robot.subsystem.leds.LEDS;
 import frc.robot.subsystem.shooter.Shooter;
 import frc.robot.subsystem.vision.Vision;
 import org.littletonrobotics.junction.Logger;
@@ -60,6 +61,7 @@ public class RobotContainer {
 	public static Intake intake = new Intake();
 	public static Shooter shooter = new Shooter();
 	public static Indexer indexer = new Indexer();
+	public static LEDS leds = new LEDS();
 
 	public static Field2d field = new Field2d();
 
@@ -77,6 +79,7 @@ public class RobotContainer {
 		intake.init();
 		shooter.init();
 		indexer.init();
+		leds.init();
 		drive.init(new Pose2d());
 		vision.init();
 
@@ -183,13 +186,23 @@ public class RobotContainer {
 		Logger.recordOutput("Timing/Vision_sense_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		t = RobotController.getFPGATime();
+		leds.sense();
+		Logger.recordOutput("Timing/LEDS_sense_ms", (RobotController.getFPGATime() - t) / 1000.0);
+
 		t = RobotController.getFPGATime();
 		CommandScheduler.getInstance().run();
 		Logger.recordOutput("Timing/CommandScheduler_ms", (RobotController.getFPGATime() - t) / 1000.0);
 
 		autoChooser.periodic();
 		if (DriverStation.isDisabled()) {
+			leds.control = LEDS.DISABLED_ANIMATION;
 			autonomousCommand = autoChooser.selectedCommand();
+		} else if (shooter.onTarget) {
+			leds.control = LEDS.ON_TARGET_ANIMATION;
+		} else if (isHubActive()) {
+			leds.control = isRed() ? LEDS.ALLIANCE_RED_ANIMATION : LEDS.ALLIANCE_BLUE_ANIMATION;
+		} else {
+			leds.control = LEDS.HUB_INACTIVE_ANIMATION;
 		}
 
 		updateMatchPeriod();
@@ -209,6 +222,10 @@ public class RobotContainer {
 		t = RobotController.getFPGATime();
 		indexer.actuate();
 		Logger.recordOutput("Timing/Indexer_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
+
+		t = RobotController.getFPGATime();
+		leds.actuate();
+		Logger.recordOutput("Timing/LEDS_actuate_ms", (RobotController.getFPGATime() - t) / 1000.0);
 	}
 
 	public static boolean redWonAuto() {

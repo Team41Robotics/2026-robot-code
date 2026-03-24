@@ -20,11 +20,12 @@ import org.littletonrobotics.junction.Logger;
 
 public class IntakeHW {
 	public static final double JOINT_RATIO = 1.0 / 27.0;
-
-	public static final double JOINT_ENCODER_ZERO = 3.005 + PI / 3;
+	public static final double JOINT_ENCODER_ZERO = 1.5 + PI / 3;
 
 	// Spark heartbeat tuning (competition-safe): poll 5–20 Hz, timeout 100–200 ms
 	public static final double SPARK_HEARTBEAT_PERIOD_Sec = 0.10;
+	// Don't push relative encoder position every 20ms (writes to the controller). Sync at a lower rate.
+	public static final double JOINT_REL_SYNC_PERIOD_Sec = 0.10;
 
 	public SparkMax jointSparkMax;
 	public RelativeEncoder jointEncoder;
@@ -43,6 +44,8 @@ public class IntakeHW {
 	private double intakeLastGoodTimeSec = Double.NEGATIVE_INFINITY;
 	private int intakeLastErrorCode = 0;
 
+	private double jointLastRelSyncTimeSec = Double.NEGATIVE_INFINITY;
+
 	public void init() {
 		if (!Robot.isReal()) return;
 
@@ -51,12 +54,13 @@ public class IntakeHW {
 		jointLastGoodTimeSec = now;
 		intakeLastHeartbeatPollTimeSec = now;
 		intakeLastGoodTimeSec = now;
+		jointLastRelSyncTimeSec = now;
 
 		jointSparkMax = new SparkMax(33, MotorType.kBrushless);
 		SparkMaxConfig jointConfig = new SparkMaxConfig();
 		jointConfig.inverted(true);
-		jointConfig.encoder.positionConversionFactor(JOINT_RATIO * 2 * PI);
-		jointConfig.encoder.velocityConversionFactor(JOINT_RATIO * 2 * PI / 60);
+		jointConfig.encoder.positionConversionFactor(JOINT_RATIO * 2.0 * PI);
+		jointConfig.encoder.velocityConversionFactor(JOINT_RATIO * 2.0 * PI / 60);
 		jointConfig.smartCurrentLimit(20);
 		jointConfig.secondaryCurrentLimit(40);
 		jointConfig.idleMode(IdleMode.kBrake);
@@ -78,7 +82,8 @@ public class IntakeHW {
 		intakeEncoder = intakeSparkMax.getEncoder();
 
 		jointAbsolutePositionSignal = jointAbsoluteEncoder.getPosition(false);
-		jointAbsolutePositionSignal.setUpdateFrequency(50);
+		// Joint angle doesn't need 50Hz on the CAN bus; keep it lighter to avoid loop overruns.
+		jointAbsolutePositionSignal.setUpdateFrequency(20);
 		jointAbsoluteEncoder.optimizeBusUtilization();
 	}
 
@@ -109,20 +114,30 @@ public class IntakeHW {
 
 		jointAbsolutePositionSignal.refresh();
 
-		inputs.jointPosRadians = jointAbsolutePositionSignal.getValueAsDouble() * 2 * PI;
+		inputs.jointPosRadians = jointAbsolutePositionSignal.getValueAsDouble() * 2.0 * PI;
 		inputs.jointPosRadians = angleModulus(inputs.jointPosRadians - JOINT_ENCODER_ZERO);
-		jointEncoder.setPosition(inputs.jointPosRadians);
+		// Sync the Spark's relative encoder occasionally for downstream code that reads it.
+		// Writing setPosition every 20ms forces extra controller work + bus traffic.
+		if ((now - jointLastRelSyncTimeSec) >= JOINT_REL_SYNC_PERIOD_Sec) {
+			jointLastRelSyncTimeSec = now;
+			jointEncoder.setPosition(inputs.jointPosRadians);
+		}
 		inputs.jointAbsTsSec = jointAbsolutePositionSignal.getTimestamp().getTime();
 
+		// Cache Spark reads to avoid repeated native calls (some may trigger CAN frames).
+		final double jointBusV = jointSparkMax.getBusVoltage();
+		final double jointApplied = jointSparkMax.getAppliedOutput();
 		inputs.jointVelRadiansPerSec = jointEncoder.getVelocity();
-		inputs.jointVoltageVolts = jointSparkMax.getBusVoltage() * jointSparkMax.getAppliedOutput();
+		inputs.jointVoltageVolts = jointBusV * jointApplied;
 		inputs.jointCurrentAmps = jointSparkMax.getOutputCurrent();
-		inputs.jointBusVoltageVolts = jointSparkMax.getBusVoltage();
+		inputs.jointBusVoltageVolts = jointBusV;
 
+		final double intakeBusV = intakeSparkMax.getBusVoltage();
+		final double intakeApplied = intakeSparkMax.getAppliedOutput();
 		inputs.intakeVelocityRPM = intakeEncoder.getVelocity();
-		inputs.intakeVoltageVolts = intakeSparkMax.getBusVoltage() * intakeSparkMax.getAppliedOutput();
+		inputs.intakeVoltageVolts = intakeBusV * intakeApplied;
 		inputs.intakeCurrentAmps = intakeSparkMax.getOutputCurrent();
-		inputs.intakeBusVoltageVolts = intakeSparkMax.getBusVoltage();
+		inputs.intakeBusVoltageVolts = intakeBusV;
 
 		inputs.jointLastGoodTimeSec = jointLastGoodTimeSec;
 		inputs.jointLastHeartbeatPollTimeSec = jointLastHeartbeatPollTimeSec;

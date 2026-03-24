@@ -46,7 +46,6 @@ public class PreMatchCheck extends Command {
 	public static Alert indexerElevOk = new Alert("PreMatch", "", AlertType.kInfo);
 	public static Alert indexerElevFail = new Alert("PreMatch", "", AlertType.kError);
 
-
 	public static Alert summaryOk = new Alert("PreMatch", "", AlertType.kInfo);
 	public static Alert summaryFail = new Alert("PreMatch", "", AlertType.kError);
 
@@ -118,7 +117,6 @@ public class PreMatchCheck extends Command {
 		allPassed &= check(indexerSpinOk, indexerSpinFail, "Indexer Spin", indexer.inputs.spinBusVoltageVolts > 0);
 		allPassed &=
 				check(indexerElevOk, indexerElevFail, "Indexer Elevator", indexer.inputs.elevatorBusVoltageVolts > 0);
-
 
 		check(summaryOk, summaryFail, "ALL SYSTEMS", allPassed);
 	}

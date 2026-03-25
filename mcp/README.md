@@ -17,7 +17,7 @@ The `.mcp.json` at the project root auto-registers the server. Restart Claude Co
 /mcp
 ```
 
-Should show `frc41: connected` with 30 tools.
+Should show `frc41: connected` with 26 tools.
 
 ### Manual Registration
 
@@ -25,7 +25,7 @@ Should show `frc41: connected` with 30 tools.
 claude mcp add --scope user frc41 -- python mcp/server.py
 ```
 
-## Tools (30)
+## Tools (26)
 
 ### Live Robot (NT4)
 | Tool | What it does |
@@ -48,14 +48,6 @@ claude mcp add --scope user frc41 -- python mcp/server.py
 | `vision_status` | Camera tag counts, pose estimates |
 | `subsystem_timing` | Per-subsystem loop times |
 | `match_status` | Match period + time remaining |
-
-### Build & Deploy
-| Tool | What it does |
-|------|-------------|
-| `gradle_build` | Build robot code |
-| `gradle_deploy` | Deploy to RoboRIO |
-| `gradle_task` | Run any Gradle task |
-| `format_code` | Run spotlessApply |
 
 ### Log Analysis (offline)
 | Tool | What it does |
@@ -95,7 +87,7 @@ claude mcp add --scope user frc41 -- python mcp/server.py
 # Find all PID gains
 > search_code "kP|kD|kI|kV|kS"
 
-# Scan CAN bus
+ # Scan CAN bus
 > check_can_ids
 ```
 

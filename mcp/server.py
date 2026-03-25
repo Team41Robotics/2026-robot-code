@@ -14,9 +14,21 @@ import subprocess
 import sys
 from pathlib import Path
 
-from mcp.server import Server
-from mcp.server.stdio import stdio_server
-from mcp.types import TextContent, Tool
+try:
+    from mcp.server import Server
+    from mcp.server.stdio import stdio_server
+    from mcp.types import TextContent, Tool
+except ModuleNotFoundError as e:
+    missing = getattr(e, "name", None) or str(e)
+    raise ModuleNotFoundError(
+        "Missing Python dependency for frc41 MCP server. "
+        "Install deps into the *same* Python you use to launch the server.\n\n"
+        "If you're using the repo venv, run:\n"
+        "  ./.venv/Scripts/python.exe -m pip install -r mcp/requirements.txt\n\n"
+        "If you're using system Python, run:\n"
+        "  python -m pip install -r mcp/requirements.txt\n\n"
+        f"Original error: {missing}"
+    ) from e
 
 # Local modules
 sys.path.insert(0, str(Path(__file__).parent))
@@ -25,9 +37,46 @@ import log_reader
 import java_tools
 
 PROJECT_ROOT = Path(__file__).parent.parent
-JAVA_HOME = "C:/Users/Public/wpilib/2026/jdk"
+
+
+def _default_java_home() -> str | None:
+    """Best-effort WPILib JDK location.
+
+    Returns None if not found; in that case we fall back to whatever JAVA_HOME
+    the environment already has (or Gradle's own toolchain).
+    """
+    candidates = [
+        Path("C:/Users/Public/wpilib/2026/jdk"),
+        Path("C:/Users/Public/wpilib/2026/jdk64"),
+        Path("C:/Users/Public/wpilib/2025/jdk"),
+    ]
+    for c in candidates:
+        if c.exists():
+            return str(c)
+    return None
+
+
+JAVA_HOME = os.environ.get("JAVA_HOME") or (_default_java_home() or "")
 
 app = Server("frc41-mcp")
+
+
+def _startup_diag() -> None:
+    """Print a small banner to stderr for MCP host troubleshooting."""
+    try:
+        sys.stderr.write(
+            "[frc41-mcp] starting\n"
+            f"[frc41-mcp] python={sys.executable}\n"
+            f"[frc41-mcp] cwd={os.getcwd()}\n"
+            f"[frc41-mcp] project_root={PROJECT_ROOT}\n"
+        )
+        if JAVA_HOME:
+            sys.stderr.write(f"[frc41-mcp] JAVA_HOME={JAVA_HOME}\n")
+        else:
+            sys.stderr.write("[frc41-mcp] JAVA_HOME=(not set)\n")
+        sys.stderr.flush()
+    except Exception:
+        pass
 
 
 # ── Helpers ─────────────────────────────────────────────────────────────────
@@ -39,20 +88,25 @@ def _text(data) -> list[TextContent]:
     return [TextContent(type="text", text=str(data))]
 
 
-def _run_gradle(task: str, timeout: int = 180) -> str:
+def _run_gradle(task: str, timeout: int = 120) -> str:
     """Run a Gradle task with WPILib JDK."""
     env = os.environ.copy()
-    env["JAVA_HOME"] = JAVA_HOME
-    env["PATH"] = f"{JAVA_HOME}/bin;{env.get('PATH', '')}"
+    if JAVA_HOME:
+        env["JAVA_HOME"] = JAVA_HOME
+        env["PATH"] = f"{JAVA_HOME}/bin;{env.get('PATH', '')}"
 
-    gradlew = str(PROJECT_ROOT / "gradlew.bat") if os.name == "nt" else "./gradlew"
+    try:
+        sys.stderr.write(f"[frc41-mcp] gradle task={task} timeout_s={timeout}\n")
+        sys.stderr.flush()
+    except Exception:
+        pass
+
+    # Always use an absolute wrapper path to avoid cwd surprises under MCP hosts.
+    gradlew = str((PROJECT_ROOT / "gradlew.bat").resolve()) if os.name == "nt" else str((PROJECT_ROOT / "gradlew").resolve())
     cmd = [gradlew, task] if os.name != "nt" else ["cmd", "/c", gradlew, task]
 
     try:
-        result = subprocess.run(
-            cmd, cwd=str(PROJECT_ROOT),
-            capture_output=True, text=True, timeout=timeout, env=env,
-        )
+        result = subprocess.run(cmd, cwd=str(PROJECT_ROOT), capture_output=True, text=True, timeout=timeout, env=env)
         output = result.stdout
         if result.stderr:
             output += "\n--- STDERR ---\n" + result.stderr
@@ -102,16 +156,6 @@ async def list_tools() -> list[Tool]:
         Tool(name="subsystem_timing", description="Loop timing breakdown: sense/actuate time per subsystem and CommandScheduler. Flags any >5ms.",
              inputSchema={"type": "object", "properties": {}}),
         Tool(name="match_status", description="Match state: period (AUTO/TELEOP/etc), time remaining, alliance hub status.",
-             inputSchema={"type": "object", "properties": {}}),
-
-        # Build & Deploy (4)
-        Tool(name="gradle_build", description="Run 'gradlew build' with WPILib JDK. Returns stdout/stderr.",
-             inputSchema={"type": "object", "properties": {}}),
-        Tool(name="gradle_deploy", description="Run 'gradlew deploy' to deploy code to RoboRIO.",
-             inputSchema={"type": "object", "properties": {}}),
-        Tool(name="gradle_task", description="Run an arbitrary Gradle task (e.g., 'simulateJava', 'test', 'spotlessCheck').",
-             inputSchema={"type": "object", "properties": {"task": {"type": "string", "description": "Gradle task name"}}, "required": ["task"]}),
-        Tool(name="format_code", description="Run 'gradlew spotlessApply' to auto-format all code.",
              inputSchema={"type": "object", "properties": {}}),
 
         # Log Analysis (4)
@@ -213,16 +257,6 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
             return _text(await _subsystem_timing())
         elif name == "match_status":
             return _text(await _match_status())
-
-        # ── Build & Deploy ──
-        elif name == "gradle_build":
-            return _text(await asyncio.to_thread(_run_gradle, "build"))
-        elif name == "gradle_deploy":
-            return _text(await asyncio.to_thread(_run_gradle, "deploy"))
-        elif name == "gradle_task":
-            return _text(await asyncio.to_thread(_run_gradle, arguments["task"]))
-        elif name == "format_code":
-            return _text(await asyncio.to_thread(_run_gradle, "spotlessApply"))
 
         # ── Log Analysis ──
         elif name == "list_logs":
@@ -444,6 +478,7 @@ async def _match_status() -> dict:
 # ── Main ───────────────────────────────────────────────────────────────────
 
 async def main():
+    _startup_diag()
     async with stdio_server() as (read_stream, write_stream):
         await app.run(read_stream, write_stream, app.create_initialization_options())
 

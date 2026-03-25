@@ -3,9 +3,9 @@
     "frc41": {
       "type": "stdio",
       "command": "c:/Users/Robotics41/Desktop/2026-robot-code-new/.venv/Scripts/python.exe",
-      "args": ["mcp/server.py"],
+      "args": ["c:/Users/Robotics41/Desktop/2026-robot-code-new/mcp/server.py"],
       "env": {
-        "PYTHONPATH": "mcp"
+        "PYTHONPATH": "c:/Users/Robotics41/Desktop/2026-robot-code-new"
       }
     }
   }

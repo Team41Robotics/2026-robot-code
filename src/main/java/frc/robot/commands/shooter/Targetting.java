@@ -23,6 +23,31 @@ public class Targetting {
 		return toTarget.getAngle().getRadians();
 	}
 
+	// {dist (m), offset (m)} — offset compensates for overshoot at that distance
+	// e.g. setting offset to 1.0 at 3m means "at 3m, act as if target is 1m closer"
+	public static final double[][] OFFSET_TABLE = {
+		{1.5, 0.0},
+		{6.0, 0.0},
+	};
+
+	public static double lerpOffset(double distance) {
+		if (distance <= OFFSET_TABLE[0][0]) {
+			return OFFSET_TABLE[0][1];
+		}
+		if (distance >= OFFSET_TABLE[OFFSET_TABLE.length - 1][0]) {
+			return OFFSET_TABLE[OFFSET_TABLE.length - 1][1];
+		}
+		for (int i = 0; i < OFFSET_TABLE.length - 1; i++) {
+			double[] lo = OFFSET_TABLE[i];
+			double[] hi = OFFSET_TABLE[i + 1];
+			if (distance >= lo[0] && distance <= hi[0]) {
+				double t = (distance - lo[0]) / (hi[0] - lo[0]);
+				return lo[1] + t * (hi[1] - lo[1]);
+			}
+		}
+		return 0.0;
+	}
+
 	public static final double[][] SHOT_TABLE = {
 		// {dist (m), rpm, hood (rad), tof (s)}
 		{1.5, 1500, 0.0, 0.948},
@@ -44,6 +69,8 @@ public class Targetting {
 	};
 
 	public static ShotParameters shotSpeeds(double distance) {
+		distance -= lerpOffset(distance);
+
 		// extrapolate below table
 		if (distance <= SHOT_TABLE[0][0]) {
 			double[] lo = SHOT_TABLE[0];

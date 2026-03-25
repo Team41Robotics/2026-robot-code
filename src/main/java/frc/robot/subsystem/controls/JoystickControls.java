@@ -66,7 +66,8 @@ public class JoystickControls implements Controls {
 	}
 
 	public Trigger intakeUp() {
-		return driverStation.button(11);
+		// return driverStation.button(11);
+		return rightJoystick.button(1);
 	}
 
 	public Trigger intakeReverse() {

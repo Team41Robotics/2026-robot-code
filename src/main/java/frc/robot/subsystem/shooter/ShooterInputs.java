@@ -19,7 +19,7 @@ public class ShooterInputs {
 	public double hoodCurrentAmps;
 	public double hoodBusVoltageVolts;
 	public double hoodBusCurrentAmps;
-	public boolean isHoodLimitSwitchOn;
+
 	public double hoodTsSec;
 
 	public double flywheelVelocityRPM;

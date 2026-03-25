@@ -11,7 +11,6 @@ public class ShooterStartup extends Command {
 	}
 
 	public boolean turretLimitSwitchTriggered = false;
-	public boolean hoodLimitSwitchTriggered = false;
 
 	@Override
 	public void execute() {
@@ -21,12 +20,11 @@ public class ShooterStartup extends Command {
 		if (shooter.inputs.turretLimitSwitchOn) {
 			turretLimitSwitchTriggered = true;
 		}
-		hoodLimitSwitchTriggered = true; // hood limit switch is dead
 	}
 
 	@Override
 	public boolean isFinished() {
-		return turretLimitSwitchTriggered && hoodLimitSwitchTriggered;
+		return turretLimitSwitchTriggered;
 	}
 
 	@Override

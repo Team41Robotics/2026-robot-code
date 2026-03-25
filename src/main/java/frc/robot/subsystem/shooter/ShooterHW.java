@@ -61,7 +61,6 @@ public class ShooterHW {
 	public VelocityVoltage flywheelControlRequest = new VelocityVoltage(0).withSlot(0);
 	public boolean sysIdFlywheel = false;
 
-	public DigitalInput hoodLimitSwitch;
 	public DigitalInput turretLimitSwitch;
 
 	// Cached StatusSignals — turret
@@ -149,8 +148,6 @@ public class ShooterHW {
 		hoodTalonFX.clearStickyFaults();
 		hoodTalonFX.setPosition(0);
 		hoodTalonFX.setNeutralMode(NeutralModeValue.Brake);
-
-		hoodLimitSwitch = new DigitalInput(9);
 
 		// --- Flywheel (leader) ---
 		flywheelTalonFX = new TalonFX(51);
@@ -305,12 +302,7 @@ public class ShooterHW {
 		inputs.turretBusCurrentAmps = turretSupplyCurrent.getValueAsDouble();
 		inputs.turretTsSec = turretPosition.getTimestamp().getTime();
 
-		inputs.isHoodLimitSwitchOn = !hoodLimitSwitch.get();
 		inputs.hoodPosRadians = hoodPosition.getValueAsDouble();
-		if (inputs.isHoodLimitSwitchOn) {
-			// hoodTalonFX.setPosition(0, 0);
-			// inputs.hoodPosRadians = 0;
-		}
 
 		inputs.hoodVelRadiansPerSec = hoodVelocity.getValueAsDouble();
 		inputs.hoodVoltageVolts = hoodMotorVoltage.getValueAsDouble();

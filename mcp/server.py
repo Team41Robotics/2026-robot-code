@@ -45,7 +45,7 @@ def _run_gradle(task: str, timeout: int = 180) -> str:
     env["JAVA_HOME"] = JAVA_HOME
     env["PATH"] = f"{JAVA_HOME}/bin;{env.get('PATH', '')}"
 
-    gradlew = "gradlew.bat" if os.name == "nt" else "./gradlew"
+    gradlew = str(PROJECT_ROOT / "gradlew.bat") if os.name == "nt" else "./gradlew"
     cmd = [gradlew, task] if os.name != "nt" else ["cmd", "/c", gradlew, task]
 
     try:

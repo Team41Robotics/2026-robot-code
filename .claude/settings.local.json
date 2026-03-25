@@ -2,11 +2,39 @@
   "permissions": {
     "allow": [
       "Bash(*)",
-      "WebFetch(*)"
+      "WebFetch(*)",
+      "mcp__frc41__gradle_build",
+      "mcp__frc41__list_subsystems",
+      "mcp__frc41__list_commands",
+      "mcp__frc41__search_code",
+      "mcp__frc41__read_file",
+      "mcp__frc41__analyze_subsystem",
+      "mcp__frc41__check_can_ids",
+      "mcp__frc41__generate_command",
+      "mcp__frc41__generate_subsystem",
+      "mcp__frc41__list_logs",
+      "mcp__frc41__nt_status",
+      "mcp__frc41__nt_get",
+      "mcp__frc41__nt_list",
+      "mcp__frc41__drive_status",
+      "mcp__frc41__shooter_status",
+      "mcp__frc41__vision_status",
+      "mcp__frc41__match_status",
+      "mcp__frc41__robot_health",
+      "mcp__frc41__subsystem_timing",
+      "mcp__frc41__select_auto",
+      "mcp__frc41__log_keys",
+      "mcp__frc41__nt_connect",
+      "mcp__frc41__nt_get_subtable",
+      "mcp__frc41__nt_set",
+      "mcp__frc41__log_query",
+      "mcp__frc41__log_summary",
+      "mcp__frc41__nt_disconnect",
+      "mcp__frc41__gradle_task"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "frc41"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }

@@ -20,7 +20,6 @@ import frc.robot.choreo.ChoreoTraj;
 import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.shooter.ShootTeleop;
-import frc.robot.commands.shooter.ShooterStartup;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -102,7 +101,7 @@ public class Autos {
 		AutoRoutine routine = factory.newRoutine(choreoTraj.name());
 		AutoTrajectory traj = choreoTraj.asAutoTraj(routine);
 
-		routine.active().onTrue(Commands.sequence(new ShooterStartup(), new ShootTeleop()));
+		routine.active().onTrue(new ShootTeleop());
 		routine.active().onTrue(new IntakeDown());
 		routine.active().onTrue(traj.cmd());
 		routine.active().onTrue(runIndexerOnCloseSide());

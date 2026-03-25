@@ -42,7 +42,7 @@ public class ShooterHW {
 	public static final double FLYWHEEL_kV = 0.11494;
 	public static final double FLYWHEEL_kS = 0.24333;
 
-	public static final double TURRET_START_POS = -2 * PI / 3;
+	public static final double TURRET_NOMINAL_POS = -PI / 2;
 	public static double K = PI - 14 / 180.0 * PI;
 	public static double ENCODER_LIM_POS1RIGHT = angleModulus(-(-95.3 - 95.903) / 180.0 * PI + K);
 	public static double ENCODER_LIM_POS1LEFT = angleModulus(-(-87.7 - 95.903) / 180.0 * PI + K);
@@ -125,8 +125,16 @@ public class ShooterHW {
 		turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 		turretTalonFX.getConfigurator().apply(turretConfig);
 		turretTalonFX.clearStickyFaults();
-		turretTalonFX.setPosition(TURRET_START_POS);
 		turretTalonFX.setNeutralMode(NeutralModeValue.Brake);
+
+		// Use Kraken X60 absolute encoder to compute initial turret position
+		// instead of requiring limit switch homing
+		double absRotorPos = turretTalonFX.getRotorPosition().waitForUpdate(2.5).getValueAsDouble();
+		double expectedMotorRot = TURRET_NOMINAL_POS / (TURRET_RATIO * 2 * PI);
+		double N = Math.round(expectedMotorRot - absRotorPos);
+		double actualMotorRot = N + absRotorPos;
+		double turretPos = actualMotorRot * TURRET_RATIO * 2 * PI;
+		turretTalonFX.setPosition(turretPos);
 
 		turretLimitSwitch = new DigitalInput(0);
 

@@ -32,7 +32,6 @@ import frc.robot.commands.shooter.ManualShoot;
 import frc.robot.commands.shooter.ShootOnTheFly;
 import frc.robot.commands.shooter.ShootTeleop;
 import frc.robot.commands.shooter.ShooterIdle;
-import frc.robot.commands.shooter.ShooterStartup;
 import frc.robot.commands.shooter.StaticShootAtTarget;
 import frc.robot.subsystem.controls.Controls;
 import frc.robot.subsystem.controls.JoystickControls;
@@ -101,7 +100,6 @@ public class RobotContainer {
 		SmartDashboard.putData("StopIndexer", new StopIndexer());
 
 		SmartDashboard.putData("ShooterIdle", new ShooterIdle());
-		SmartDashboard.putData("ShooterStartup", new ShooterStartup());
 		SmartDashboard.putData("StaticShootAtTarget", new StaticShootAtTarget());
 		SmartDashboard.putData("ShootOnTheFly", new ShootOnTheFly());
 		SmartDashboard.putData("ManualShoot", new ManualShoot());

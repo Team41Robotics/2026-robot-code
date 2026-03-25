@@ -10,9 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.shooter.ShooterStartup;
 import frc.robot.commands.shooter.Targetting;
 import org.littletonrobotics.junction.Logger;
 
@@ -44,8 +42,6 @@ public class Shooter extends SubsystemBase {
 	public double targetFlywheelRPM = 0;
 	public boolean onTarget = false;
 
-	public boolean zeroed = false;
-
 	public void init() {
 		hw.init();
 		sense();
@@ -61,9 +57,6 @@ public class Shooter extends SubsystemBase {
 		if (robot.isDisabled()) {
 			targetHoodPos = inputs.hoodPosRadians;
 			targetTurretPos = inputs.turretPosRadians;
-		}
-		if (!zeroed && robot.isTeleopEnabled() && !(getCurrentCommand() instanceof ShooterStartup)) {
-			CommandScheduler.getInstance().schedule(new ShooterStartup());
 		}
 	}
 

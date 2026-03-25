@@ -4,5 +4,9 @@
       "Bash(*)",
       "WebFetch(*)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "frc41"
+  ],
+  "enableAllProjectMcpServers": true
 }

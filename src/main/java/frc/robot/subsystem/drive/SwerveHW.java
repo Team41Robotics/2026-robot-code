@@ -25,12 +25,12 @@ public class SwerveHW {
 	public static final double TURN_RATIO = 11.0 / 287;
 	public static final double WHEEL_RAD = 2 * 2.54 / 100.;
 
-	public static final double DRIVE_kP = 4; // TUNEME. drive PID P
+	public static final double DRIVE_kP = 5; // TUNEME. drive PID P
 	public static final double TURN_kP = 20; // TUNEME. turn PID P
 	public static final double TURN_kD = 0.4; // TUNEME. turn PID D
-	public static final double TURN_kS = 0.08; // TUNEME. turn feedforward
-	public static final double TURN_kV = 0.38;
-	public static final double TURN_kA = 0.010; // from plant identification analysis
+	public static final double TURN_kS = 0.64481; // TUNEME. turn feedforward
+	public static final double TURN_kV = 0.40292;
+	public static final double TURN_kA = 0; // from plant identification analysis
 
 	public TalonFX driveTalonFX;
 	public TalonFX turnTalonFX;

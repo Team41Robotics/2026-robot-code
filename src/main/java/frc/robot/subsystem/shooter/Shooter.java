@@ -18,22 +18,21 @@ public class Shooter extends SubsystemBase {
 	public ShooterHW hw = new ShooterHW();
 	public ShooterInputsAutoLogged inputs = new ShooterInputsAutoLogged();
 
-	public static final double TURRET_POS_MIN = -2.029; // TUNEME
-	// public static final double TURRET_POS_MAX = 1.087;
+	public static final double TURRET_POS_MIN = -2.029;
 	public static final double TURRET_POS_MAX = PI / 2;
 	public static final double TURRET_SNAP_THRES = 60 / 180.0 * PI;
-	public static final double HOOD_POS_MIN = 0; //  TUNEME
+	public static final double HOOD_POS_MIN = 0;
 	public static final double HOOD_POS_MAX = 35 / 180.0 * PI;
 
 	public static final double FLYWHEEL_THRES = 200;
 	public static final double HOOD_POS_THRES = 3 / 180.0 * PI;
 	public static final double TURRET_POS_THRES = 3 / 180.0 * PI;
 
-	public static final Constraints TURRET_CONSTRAINTS = new Constraints(6.0, 240.0); // TUNEME
+	public static final Constraints TURRET_CONSTRAINTS = new Constraints(6.0, 240.0);
 	public static TrapezoidProfile turretProfile = new TrapezoidProfile(TURRET_CONSTRAINTS);
 	public State turretSetpoint = new State();
 
-	public static final Constraints HOOD_CONSTRAINTS = new Constraints(2.0, 16.0); // TUNEME
+	public static final Constraints HOOD_CONSTRAINTS = new Constraints(2.0, 16.0);
 	public static TrapezoidProfile hoodProfile = new TrapezoidProfile(HOOD_CONSTRAINTS);
 	public State hoodSetpoint = new State();
 

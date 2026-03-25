@@ -14,14 +14,14 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule {
-	public static final double DRIVE_kS = 0.63438; // TUNEME. feedforward
+	public static final double DRIVE_kS = 0.63438;
 	public static final double DRIVE_kV = 2.0456;
 	public static final double DRIVE_kA = 1.4392;
 	public static final SimpleMotorFeedforward DRIVE_FF = new SimpleMotorFeedforward(DRIVE_kS, DRIVE_kV, DRIVE_kA);
 
-	public static final double MAX_VEL = 6.0; // TUNEME. max wheel velocity (m/s)
+	public static final double MAX_VEL = 6.0; 
 
-	public static final Constraints DRIVE_CONSTRAINTS = new Constraints(10, 1e9); // TUNEME
+	public static final Constraints DRIVE_CONSTRAINTS = new Constraints(10, 1e9);
 	public static TrapezoidProfile driveProfile = new TrapezoidProfile(DRIVE_CONSTRAINTS);
 
 	public SwerveHW hw = new SwerveHW();

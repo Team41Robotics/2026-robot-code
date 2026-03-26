@@ -10,7 +10,6 @@ public class ShooterInputs {
 	public double turretCurrentAmps;
 	public double turretBusVoltageVolts;
 	public double turretBusCurrentAmps;
-	public boolean turretLimitSwitchOn;
 	public double turretTsSec;
 
 	public double hoodPosRadians;

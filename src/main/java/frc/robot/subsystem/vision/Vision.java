@@ -31,10 +31,10 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class Vision extends SubsystemBase {
 	public VisionHW[] cameras = new VisionHW[] {
 		new VisionHW(
-				"DuckyNE",
+				"DuckyE",
 				new Transform3d(
-						new Translation3d(SwerveDrive.ROBOT_LEN / 2, -SwerveDrive.ROBOT_WID / 2, 0.17),
-						new Rotation3d(0, -20. / 180. * PI, 0)),
+						new Translation3d(0, -SwerveDrive.ROBOT_WID / 2, 0.17), // BIG TODO make sure this is right
+						new Rotation3d(0, -20. / 180. * PI, -PI / 2)),
 				"Ducky.json"),
 		new VisionHW(
 				"KimmySE",

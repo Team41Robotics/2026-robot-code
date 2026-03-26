@@ -1,6 +1,5 @@
 package frc.robot.subsystem.shooter;
 
-import static edu.wpi.first.math.MathUtil.*;
 import static java.lang.Math.*;
 
 import com.ctre.phoenix6.BaseStatusSignal;
@@ -17,7 +16,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
-import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
@@ -43,13 +41,6 @@ public class ShooterHW {
 	public static final double FLYWHEEL_kS = 0.24333;
 
 	public static final double TURRET_NOMINAL_POS = -PI / 2;
-	public static double K = PI - 14 / 180.0 * PI;
-	public static double ENCODER_LIM_POS1RIGHT = angleModulus(-(-95.3 - 95.903) / 180.0 * PI + K);
-	public static double ENCODER_LIM_POS1LEFT = angleModulus(-(-87.7 - 95.903) / 180.0 * PI + K);
-	public static double ENCODER_LIM_POS2RIGHT = angleModulus(-(0.2 - 95.903) / 180.0 * PI + K);
-	public static double ENCODER_LIM_POS2LEFT = angleModulus(-(8.1 - 95.903) / 180.0 * PI + K);
-	public static double ENCODER_LIM_POS3RIGHT = angleModulus(-(-183.3 - 95.903) / 180.0 * PI + K);
-	public static double ENCODER_LIM_POS3LEFT = angleModulus(-(-177.3 - 95.903) / 180.0 * PI + K);
 
 	public TalonFX turretTalonFX;
 	public TalonFX hoodTalonFX;
@@ -60,8 +51,6 @@ public class ShooterHW {
 	public PositionVoltage hoodControlRequest = new PositionVoltage(0).withSlot(0);
 	public VelocityVoltage flywheelControlRequest = new VelocityVoltage(0).withSlot(0);
 	public boolean sysIdFlywheel = false;
-
-	public DigitalInput turretLimitSwitch;
 
 	// Cached StatusSignals — turret
 	public StatusSignal<Angle> turretPosition;
@@ -88,23 +77,6 @@ public class ShooterHW {
 	public StatusSignal<Double> flywheelDutyCycle;
 	public StatusSignal<Current> flywheelTorqueCurrent;
 
-	public ShooterHW() {
-		if (ENCODER_LIM_POS1LEFT > ENCODER_LIM_POS1RIGHT) {
-			double temp = ENCODER_LIM_POS1LEFT;
-			ENCODER_LIM_POS1LEFT = ENCODER_LIM_POS1RIGHT;
-			ENCODER_LIM_POS1RIGHT = temp;
-		}
-		if (ENCODER_LIM_POS2LEFT > ENCODER_LIM_POS2RIGHT) {
-			double temp = ENCODER_LIM_POS2LEFT;
-			ENCODER_LIM_POS2LEFT = ENCODER_LIM_POS2RIGHT;
-			ENCODER_LIM_POS2RIGHT = temp;
-		}
-		if (ENCODER_LIM_POS3LEFT > ENCODER_LIM_POS3RIGHT) {
-			double temp = ENCODER_LIM_POS3LEFT;
-			ENCODER_LIM_POS3LEFT = ENCODER_LIM_POS3RIGHT;
-			ENCODER_LIM_POS3RIGHT = temp;
-		}
-	}
 
 	public void init() {
 		if (!Robot.isReal()) return;
@@ -127,16 +99,7 @@ public class ShooterHW {
 		turretTalonFX.clearStickyFaults();
 		turretTalonFX.setNeutralMode(NeutralModeValue.Brake);
 
-		// Use Kraken X60 absolute encoder to compute initial turret position
-		// instead of requiring limit switch homing
-		double absRotorPos = turretTalonFX.getRotorPosition().waitForUpdate(2.5).getValueAsDouble();
-		double expectedMotorRot = TURRET_NOMINAL_POS / (TURRET_RATIO * 2 * PI);
-		double N = Math.round(expectedMotorRot - absRotorPos);
-		double actualMotorRot = N + absRotorPos;
-		double turretPos = actualMotorRot * TURRET_RATIO * 2 * PI;
-		turretTalonFX.setPosition(turretPos);
-
-		turretLimitSwitch = new DigitalInput(0);
+		turretTalonFX.setPosition(TURRET_NOMINAL_POS);
 
 		// --- Hood ---
 		hoodTalonFX = new TalonFX(52);
@@ -268,40 +231,7 @@ public class ShooterHW {
 				flywheelDutyCycle,
 				flywheelTorqueCurrent);
 
-		inputs.turretLimitSwitchOn = !turretLimitSwitch.get();
 		inputs.turretPosRadians = turretPosition.getValueAsDouble();
-		if (inputs.turretLimitSwitchOn) {
-			double bestPos = Double.POSITIVE_INFINITY;
-			if (abs(inputs.turretPosRadians - ENCODER_LIM_POS1LEFT) < abs(inputs.turretPosRadians - bestPos)) {
-				bestPos = ENCODER_LIM_POS1LEFT;
-			}
-			if (abs(inputs.turretPosRadians - ENCODER_LIM_POS1RIGHT) < abs(inputs.turretPosRadians - bestPos)) {
-				bestPos = ENCODER_LIM_POS1RIGHT;
-			}
-			if (ENCODER_LIM_POS1LEFT < inputs.turretPosRadians && inputs.turretPosRadians < ENCODER_LIM_POS1RIGHT) {
-				bestPos = inputs.turretPosRadians;
-			}
-			if (abs(inputs.turretPosRadians - ENCODER_LIM_POS2LEFT) < abs(inputs.turretPosRadians - bestPos)) {
-				bestPos = ENCODER_LIM_POS2LEFT;
-			}
-			if (abs(inputs.turretPosRadians - ENCODER_LIM_POS2RIGHT) < abs(inputs.turretPosRadians - bestPos)) {
-				bestPos = ENCODER_LIM_POS2RIGHT;
-			}
-			if (ENCODER_LIM_POS2LEFT < inputs.turretPosRadians && inputs.turretPosRadians < ENCODER_LIM_POS2RIGHT) {
-				bestPos = inputs.turretPosRadians;
-			}
-			if (abs(inputs.turretPosRadians - ENCODER_LIM_POS3LEFT) < abs(inputs.turretPosRadians - bestPos)) {
-				bestPos = ENCODER_LIM_POS3LEFT;
-			}
-			if (abs(inputs.turretPosRadians - ENCODER_LIM_POS3RIGHT) < abs(inputs.turretPosRadians - bestPos)) {
-				bestPos = ENCODER_LIM_POS3RIGHT;
-			}
-			if (ENCODER_LIM_POS3LEFT < inputs.turretPosRadians && inputs.turretPosRadians < ENCODER_LIM_POS3RIGHT) {
-				bestPos = inputs.turretPosRadians;
-			}
-			turretTalonFX.setPosition(bestPos, 0);
-			inputs.turretPosRadians = bestPos;
-		}
 
 		inputs.turretVelRadiansPerSec = turretVelocity.getValueAsDouble();
 		inputs.turretVoltageVolts = turretMotorVoltage.getValueAsDouble();

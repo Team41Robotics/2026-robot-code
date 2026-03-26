@@ -147,6 +147,7 @@ public class RobotContainer {
 		Autos.init();
 		ChoreoTraj.ALL_TRAJECTORIES.forEach((name, traj) -> {
 			autoChooser.addRoutine(name, () -> Autos.buildAuto(traj));
+			Autos.startPoseChooser.addOption(name, traj.initialPoseBlue());
 		});
 
 		SmartDashboard.putData("CommandScheduler", CommandScheduler.getInstance());

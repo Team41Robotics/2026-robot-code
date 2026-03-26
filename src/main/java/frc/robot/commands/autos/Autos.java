@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.FieldConstants;
 import frc.robot.Util;
 import frc.robot.choreo.ChoreoTraj;
@@ -69,6 +70,9 @@ public class Autos {
 				ChassisSpeeds.fromFieldRelativeSpeeds(xff + xfb, yff + yfb, wff + wfb, pose.getRotation());
 
 		Logger.recordOutput("/Auto/targetPose", sample.getPose());
+		Logger.recordOutput("/Auto/targetVx", sample.vx);
+		Logger.recordOutput("/Auto/targetVy", sample.vy);
+		Logger.recordOutput("/Auto/targetOmega", sample.omega);
 		Logger.recordOutput("/Auto/xError", sample.x - pose.getX());
 		Logger.recordOutput("/Auto/yError", sample.y - pose.getY());
 
@@ -101,9 +105,10 @@ public class Autos {
 		AutoRoutine routine = factory.newRoutine(choreoTraj.name());
 		AutoTrajectory traj = choreoTraj.asAutoTraj(routine);
 
+		routine.active().onTrue(Commands.runOnce(() -> Logger.recordOutput("/Auto/selectedTrajectory", choreoTraj.name())));
 		routine.active().onTrue(new ShootTeleop());
 		routine.active().onTrue(new IntakeDown());
-		routine.active().onTrue(traj.cmd());
+		routine.active().onTrue(traj.cmd().andThen(new WaitCommand(10)));
 		routine.active().onTrue(runIndexerOnCloseSide());
 
 		return routine;

@@ -105,7 +105,8 @@ public class Autos {
 		AutoRoutine routine = factory.newRoutine(choreoTraj.name());
 		AutoTrajectory traj = choreoTraj.asAutoTraj(routine);
 
-		routine.active().onTrue(Commands.runOnce(() -> Logger.recordOutput("/Auto/selectedTrajectory", choreoTraj.name())));
+		routine.active()
+				.onTrue(Commands.runOnce(() -> Logger.recordOutput("/Auto/selectedTrajectory", choreoTraj.name())));
 		routine.active().onTrue(new ShootTeleop());
 		routine.active().onTrue(new IntakeDown());
 		routine.active().onTrue(traj.cmd().andThen(new WaitCommand(10)));

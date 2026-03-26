@@ -89,7 +89,7 @@ public class IndexerHW {
 		elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 		elevatorConfig.CurrentLimits.SupplyCurrentLimit = 20;
 		elevatorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		elevatorConfig.CurrentLimits.StatorCurrentLimit = 40;
+		elevatorConfig.CurrentLimits.StatorCurrentLimit = 80;
 		elevatorConfig.Voltage.PeakForwardVoltage = 12.0;
 		elevatorConfig.Voltage.PeakReverseVoltage = -12.0;
 		elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
@@ -114,7 +114,7 @@ public class IndexerHW {
 
 		backvatorSparkFlex = new SparkFlex(44, MotorType.kBrushless);
 		SparkFlexConfig backvatorConfig = new SparkFlexConfig();
-		backvatorConfig.smartCurrentLimit(30);
+		backvatorConfig.smartCurrentLimit(70);
 		backvatorConfig.idleMode(IdleMode.kBrake);
 		backvatorConfig.inverted(false);
 		backvatorSparkFlex.configure(backvatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

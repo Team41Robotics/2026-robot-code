@@ -264,10 +264,8 @@ public class ShooterHW {
 		if (!Robot.isReal()) return;
 
 		turretTalonFX.setControl(turretControlRequest.withPosition(turretPosition));
-		// Always clamp hood position to 0 if it goes negative
 		if (inputs.hoodPosRadians < 0) {
 			hoodTalonFX.setPosition(0);
-			hoodPosition = 0;
 		}
 		if (hoodPosition < 0.01) {
 			hoodTalonFX.setControl(hoodControlRequest.withPosition(hoodPosition).withFeedForward(-0.5));

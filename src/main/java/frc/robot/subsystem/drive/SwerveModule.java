@@ -21,7 +21,7 @@ public class SwerveModule {
 
 	public static final double MAX_VEL = 6.0; 
 
-	public static final Constraints DRIVE_CONSTRAINTS = new Constraints(10, 1e9);
+	public static final Constraints DRIVE_CONSTRAINTS = new Constraints(1e9, 1e9);
 	public static TrapezoidProfile driveProfile = new TrapezoidProfile(DRIVE_CONSTRAINTS);
 
 	public SwerveHW hw = new SwerveHW();
